@@ -1,0 +1,206 @@
+<?xml version="1.0"?>
+
+<!-- Important!! Developer needs to update the basedir -->
+<project name="kpos" default="usage">
+    <property file="build.properties"/>
+	
+	<!--<property name="basedir" value="${base.dir}"/>-->
+	<property name="name" value="kpos"/>
+	
+	<property name="appserver.lib" value="${appserver.home}/lib"/>
+	<property name="deploy.path" value="${appserver.home}/webapps"/>
+	<property name="deploy-front.path" value="${apache.home}/${name}"/>
+	
+    <property name="src.dir" value="src"/>
+    <property name="web.dir" value="war"/>
+	<property name="front.dir" value="kposFront"/>
+    <property name="build.dir" value="${web.dir}/WEB-INF/classes"/>
+	<property name="lib.dir" value="${web.dir}/WEB-INF/lib"/>
+	<property name="staging.dir" value="staging/apache-tomcat-6.0.32"/>
+	<property name="staging.internal.dir" value="staging/internal"/>
+	<property name="wsdl.dir" value="wsdl"/>
+	<property name="wsdl.out.dir" value="${src.dir}"/>
+	<property name="wsdl.js.dir" value="${wsdl.dir}/javascript"/>
+	<property name="internal.wsdl.out.dir" value="${src.dir}"/>
+	
+	<property name="aspectj.dir" value="tools/aspectJ-1.6"/>
+
+    <path id="master-classpath">
+    	<!--
+        <fileset dir="${web.dir}/WEB-INF/lib">
+            <include name="*.jar"/>
+        </fileset>
+        -->
+        <!-- We need the servlet API classes: -->
+        <!--  * for Tomcat 5/6 use servlet-api.jar -->
+        <!--  * for other app servers - check the docs -->
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement path="${build.dir}"/>
+    </path>
+
+	<path id="aspectjPath">
+    	<pathelement location="${aspectj.dir}/aspectjtools.jar"/>
+   	</path>
+	
+   	<taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties">
+      	<classpath>
+         	<pathelement location="${aspectj.dir}/aspectjtools.jar"/>
+      	</classpath>
+   	</taskdef>
+	
+   	<target name="compileAspectJ">
+   		<echo message=""/>
+	    <delete>
+	         <fileset dir="${build.dir}">
+	            <include name="**/*.class"/>
+	         </fileset>
+	    </delete>
+	
+	    <iajc sourceroots="${src.dir}" destdir="${build.dir}" classpathRef="master-classpath" aspectPathRef="aspectjPath"
+	            source="1.6" target="1.6" showWeaveInfo="true" incremental="true"/>
+	</target>
+
+
+    <target name="usage">
+        <echo message="${name} build file"/>
+        <echo message="-----------------------------------"/>
+        <echo message=""/>
+        <echo message="Available targets are:"/>
+        <echo message=""/>
+        <echo message="build     --> Build the application"/>
+    	<echo message="deployFront --> Deploy front-end PHP site to Apache server"/>
+        <echo message="deployWS    --> Deploy web service application to tomcat"/>
+        <echo message="deployWar --> Deploy web service as a WAR file"/>
+    	<echo message="undeploy --> Remove application from Tomcat"/>
+        <echo message="installTomcat  --> Install Tomcat"/>
+    	<echo message="runWSDL2Java   --> Generate web service stubs based on your wsld"/>
+        <echo message="cleanBuild     --> Clean entire build by removing all class files"/>
+    	<echo message="cleanWar     --> Clean entire app by removing all files from tomcat"/>
+    	<echo message="freshInstall   --> Do a fresh install of the web app"/>
+    </target>
+
+	<target name="installTomcat" description="Install Tomcat">
+		<mkdir dir="${tomcat.dir}"/>
+		<copy todir="${tomcat.dir}">
+			<fileset dir="${staging.dir}">
+				<include name="**/*.*"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<!--
+	<target name="installInternalTomcat" description="Install Internal Tomcat">
+		<mkdir dir="${internal.tomcat.dir}"/>
+		<copy todir="${internal.tomcat.dir}">
+			<fileset dir="${staging.dir}">
+				<include name="**/*.*"/>
+			</fileset>
+		</copy>
+		<copy file="${staging.internal.dir}/server.xml" toFile="${internal.tomcat.dir}/conf/server.xml" overwrite="true"/>
+	</target>
+	-->
+	
+    <target name="build" depends="usage" description="Compile main source tree java files">
+        <mkdir dir="${build.dir}"/>
+        <javac destdir="${build.dir}" source="1.6" target="1.6" debug="true"
+               deprecation="false" optimize="false" failonerror="true">
+            <src path="${src.dir}"/>
+            <classpath refid="master-classpath"/>
+        </javac>
+    </target>
+
+	<target name="deployFront" description="Deploy front-end PHP files">
+		<copy todir="${deploy-front.path}" preservelastmodified="true">
+			<fileset dir="${front.dir}">
+				<include name="**/*.php"/>
+			</fileset>
+		</copy>
+		<copy file="${wsdl.dir}/ebizcard.wsdl" toFile="${deploy-front.path}/ebizcard.wsdl" overwrite="true"/>
+		<copy file="${wsdl.dir}/ebizcard-internal.wsdl" toFile="${deploy-front.path}/ebizcard-internal.wsdl" overwrite="true"/>
+	</target>
+	
+    <target name="deployWS" depends="build" description="Deploy web service application">
+        <copy todir="${deploy.path}/${name}" preservelastmodified="true">
+            <fileset dir="${web.dir}">
+                <include name="**/*.*"/>
+            	<exclude name="runtime.properties"/>
+            </fileset>
+        </copy>
+    	<copy file="${web.dir}/WEB-INF/classes/META-INF/runtime.properties" toFile="${deploy.path}/${name}/WEB-INF/classes/com/ebizcard/runtime.properties" overwrite="true"/>
+    </target>
+    
+    <target name="deployWar" depends="runWSDL2Java, build" description="Deploy web service application as a WAR file">
+        <war destfile="${name}.war"
+             webxml="${web.dir}/WEB-INF/web.xml">
+            <fileset dir="${web.dir}">
+                <include name="**/*.*"/>
+            </fileset>
+        </war>
+        <copy todir="${deploy.path}" preservelastmodified="true">
+            <fileset dir=".">
+                <include name="*.war"/>
+            </fileset>
+        </copy>
+    </target>
+    
+	<target name="deployAll" depends="runWSDL2Java, deployWS" description="Deploy both front-end and web service"/>
+	
+<!-- ============================================================== -->
+<!-- Tomcat tasks - remove these if you don't have Tomcat installed -->
+<!-- ============================================================== -->
+
+    <path id="catalina-ant-classpath">
+        <!-- We need the Catalina jars for Tomcat -->
+        <!--  * for other app servers - check the docs -->
+        <fileset dir="${staging.dir}/lib">
+            <include name="catalina-ant.jar"/>
+        </fileset>
+    </path>
+
+	<target name="runWSDL2Java">
+    	<java classname="org.apache.cxf.tools.wsdlto.WSDLToJava" fork="true">
+        	<arg value="-client"/>
+         	<arg value="-d"/>
+         	<arg value="${wsdl.out.dir}"/>
+         	<arg value="${wsdl.dir}/kpos.wsdl"/>
+         	<classpath>
+            	<path refid="master-classpath"/>
+         	</classpath>
+      	</java>
+	</target>
+	
+	<target name="runWSDL2JS">
+    	<java classname="org.apache.cxf.tools.wsdlto.javascript.WSDLToJavaScript" fork="true">
+         	<arg value="-d"/>
+         	<arg value="${wsdl.js.dir}"/>
+         	<arg value="${wsdl.dir}/kpos.wsdl"/>
+         	<classpath>
+            	<path refid="master-classpath"/>
+         	</classpath>
+      	</java>
+	</target>
+	
+	<target name="cleanBuild" description="Clean output directories">
+        <delete>
+            <fileset dir="${build.dir}">
+                <include name="**/*.class"/>
+            </fileset>
+        </delete>
+    </target>
+
+	<target name="cleanWar" description="Clean tomcat webapp">
+        <delete>
+            <fileset dir="${deploy.path}/${name}">
+                <include name="**/*.*"/>
+            </fileset>
+        </delete>
+    </target>
+	
+	<target name="clean" depends="cleanBuild, cleanWar" description="clean build and tomcat webapps"/>
+	<target name="freshInstall" depends="cleanWar,cleanBuild,runWSDL2Java,build,deployWS" description="re-install the entire webapp">
+	</target>
+<!-- End Tomcat tasks -->
+
+</project>
