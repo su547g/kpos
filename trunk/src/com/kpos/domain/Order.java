@@ -42,7 +42,7 @@ public class Order extends AbstractDomainObject {
     private List<Bill> billList = new ArrayList<Bill>();
 
     @Column(name = "status")
-    @org.hibernate.annotations.Type(type = "com.kpos.domain.OrderStatusEnumAdapter")
+    @org.hibernate.annotations.Type(type = "com.kpos.domain.OrderStatusEnumAdaptor")
     @Index(name = "ORDER_FK2")
     private OrderStatusEnum status = OrderStatusEnum.INITIAL;
 
