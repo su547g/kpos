@@ -1,0 +1,77 @@
+<wsdl:definitions
+        name="KPosService"
+        targetNamespace="http://ws.kpos.com/app"
+        xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+        xmlns:tns="http://ws.kpos.com/app"
+        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <wsdl:types>
+        <xs:schema
+                targetNamespace="http://ws.kpos.com/app"
+                version="1.3"
+                xmlns:tns="http://ws.kpos.com/app"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                elementFormDefault="qualified">
+
+            <xs:element name="CreateCategoryType" type="tns:CreateCategoryType"/>
+            <xs:element name="CreateCategoryResponseType" type="tns:CreateCategoryResponseType"/>
+
+            <xs:complexType name="ResultType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="successful" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="failureReasonCode" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="exception" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="failureReason" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="CreateCategoryType">
+                <xs:sequence>
+                    <xs:element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="notes" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="CreateCategoryResponseType">
+                <xs:sequence>
+                    <xsd:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+
+    <wsdl:message name="CreateCategoryMessage">
+        <wsdl:part name="parameters" element="tns:CreateCategoryType"/>
+    </wsdl:message>
+
+    <wsdl:message name="CreateCategoryResponseMessage">
+        <wsdl:part name="parameters" element="tns:CreateCategoryResponseType"/>
+    </wsdl:message>
+
+    <wsdl:portType name="KPosPortType">
+        <wsdl:operation name="CreateCategory">
+            <wsdl:input message="tns:CreateCategoryMessage" name="CreateCategory"/>
+            <wsdl:output message="tns:CreateCategoryResponseMessage" name="CreateCategoryResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="KPosBinding" type="tns:KPosPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+        <wsdl:operation name="CreateCategory">
+            <soap:operation soapAction="http://ws.kpos.com/CreateCategory" style="document"/>
+            <wsdl:input name="CreateCategory">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="CreateCategoryResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="KPosService">
+        <wsdl:port name="KPosPort" binding="tns:KPosBinding">
+            <soap:address location="http://127.0.0.1:22080/kpos/ws/kposService"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
