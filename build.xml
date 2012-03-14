@@ -128,7 +128,7 @@
             	<exclude name="runtime.properties"/>
             </fileset>
         </copy>
-    	<copy file="${web.dir}/WEB-INF/classes/META-INF/runtime.properties" toFile="${deploy.path}/${name}/WEB-INF/classes/com/ebizcard/runtime.properties" overwrite="true"/>
+    	<copy file="${web.dir}/WEB-INF/classes/META-INF/runtime.properties" toFile="${deploy.path}/${name}/WEB-INF/classes/com/kpos/runtime.properties" overwrite="true"/>
     </target>
     
     <target name="deployWar" depends="runWSDL2Java, build" description="Deploy web service application as a WAR file">

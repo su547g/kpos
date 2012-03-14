@@ -12,6 +12,8 @@ import javax.persistence.*;
  * Author: kkwang
  * Date: 3/10/12 9:49 PM
  */
+@Entity
+@Table(name = "GLOBAL_OPTION")
 public class GlobalOption extends AbstractDomainObject {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

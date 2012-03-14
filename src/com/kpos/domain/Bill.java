@@ -10,6 +10,8 @@ import javax.persistence.*;
  * Author: kkwang
  * Date: 3/10/12 12:17 AM
  */
+@Entity
+@Table(name = "BILL")
 public class Bill extends AbstractDomainObject {
     public static enum PaymentType {
         CASH, CARD;

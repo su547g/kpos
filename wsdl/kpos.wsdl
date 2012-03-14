@@ -15,8 +15,9 @@
 
             <xs:element name="CreateCategoryType" type="tns:CreateCategoryType"/>
             <xs:element name="CreateCategoryResponseType" type="tns:CreateCategoryResponseType"/>
-
+            <!--Result object-->
             <xs:complexType name="ResultType">
+
                 <xs:sequence>
                     <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="successful" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>

@@ -50,11 +50,6 @@ public class Category extends AbstractDomainObject {
     @Column(name = "notes", nullable = true)
     private String notes;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category", orphanRemoval = true, fetch = FetchType.LAZY)
-    @ForeignKey(name = "PRINTER_2_CAT_FK")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Printer> printers = new ArrayList<Printer>();
-
     public Long getId() {
         return id;
     }
