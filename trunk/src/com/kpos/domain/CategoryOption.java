@@ -27,7 +27,7 @@ public class CategoryOption extends AbstractDomainObject {
     private double price;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "category_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Category category;
 

@@ -26,7 +26,7 @@ public class SaleItemOption extends AbstractDomainObject {
 
     //owning entity
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "sale_item_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private SaleItem saleItem;
 

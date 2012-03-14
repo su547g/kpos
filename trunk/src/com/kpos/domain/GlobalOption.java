@@ -34,7 +34,7 @@ public class GlobalOption extends AbstractDomainObject {
 
     //owning entity
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "option_cat_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private GlobalOptionCategory optionCategory;
 

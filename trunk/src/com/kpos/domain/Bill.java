@@ -30,7 +30,7 @@ public class Bill extends AbstractDomainObject {
 
     //owning entity
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "order_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Order order;
 

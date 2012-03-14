@@ -22,7 +22,7 @@ public class OrderItem extends AbstractDomainObject {
 
     //owning entity
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "sale_item_id")
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private SaleItem saleItem;
 
@@ -31,12 +31,12 @@ public class OrderItem extends AbstractDomainObject {
 
     //owning entity
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "order_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Order order;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "bill_id")
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private Bill bill;
     

@@ -40,7 +40,7 @@ public class SaleItem extends AbstractDomainObject {
 
     //owning entity
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "category_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Category category;
 
@@ -69,6 +69,16 @@ public class SaleItem extends AbstractDomainObject {
     
     @Column(name = "single_option_only")
     private boolean singleOptionOnly = false; //whether user can select only a single option or multiple
+
+    /*
+    @ManyToMany
+   @JoinTable(
+           name = "REI_SHARED_WITH",
+           joinColumns = @JoinColumn(name = "REI_ROW_INST"),
+           inverseJoinColumns = @JoinColumn(name = "DART_USER_ROW_INST")
+   )
+   @ForeignKey(name = "REI_SHARED_WITH_2_REI_FK", inverseName = "REI_SHARED_WITH_2_USER_FK")
+     */
 
     public Long getId() {
         return id;
