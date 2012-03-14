@@ -1,0 +1,1037 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" readonly="true" id="ff6cbb56-9391-4d75-9220-34c96a41cdad" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/copyright" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/scopes" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tools/aspectJ-1.6/aspectjrt.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tools/aspectJ-1.6/aspectjtools.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tools/aspectJ-1.6/aspectjweaver.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tools/aspectJ-1.6/org.aspectj.matcher.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tools/aspectJ-1.6" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tools" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/META-INF" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/dao/AbstractJpaDao$1.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/dao/AbstractJpaDao.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/dao/CategoryDao.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/dao/ICategoryDao.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/dao/IDao.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/dao" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/domain/AbstractDomainObject.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/domain/Bill$PaymentType.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/domain/Bill.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/domain/Category.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/domain/CategoryOption.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/domain/GlobalOption.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/domain/GlobalOptionCategory.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/domain/IAbstractEntity.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/domain/Order$OrderType.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/domain/Order.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/domain/OrderItem.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/domain/OrderStatusEnum.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/domain/Printer.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/domain/RestaurantTable.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/domain/SaleItem.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/domain/SaleItemOption.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/domain/SaleItemPrinterAssoc.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/domain/User.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/domain" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/service/BaseResult.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/service/ContentManagementServiceImpl.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/service/CreateResult.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/service/DeleteResult.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/service/FailureCodes$Generic.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/service/FailureCodes.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/service/FetchResult.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/service/UpdateResult.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/service" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/util/AbstractEnumToIntegerTypeAdapter.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/util/AbstractEnumToValueTypeAdapter.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/util/IIntegerMappedEnum.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/util" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/ws/app/CreateCategoryResponseType.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/ws/app/CreateCategoryType.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/ws/app/KPosPortType.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/ws/app/KPosPortType_KPosPort_Client.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/ws/app/KPosService.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/ws/app/ObjectFactory.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/ws/app/ResultType.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/ws/app/package-info.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/ws/app" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/ws/exceptions/BaseException.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/ws/exceptions" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/ws/impl/KPosPortImpl.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/ws/impl/KPosServiceProxy.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/ws/impl/KPosServlet.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/ws/impl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/ws/interceptors/AddSoapHeaderOutInterceptor.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/ws/interceptors/KPosLogRawSoapMessageInterceptor.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/ws/interceptors/KPosLogRawSoapResponseInterceptor.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/ws/interceptors/KPosRecordRawSoapMessageInterceptor.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/ws/interceptors/KPosSessionInterceptor.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/ws/interceptors" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos/ws" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com/kpos" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/com" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/XmlSchema-1.4.5.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/antlr-2.7.7.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/aopalliance-1.0.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/asm-3.3.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/aspectjweaver-1.6.10.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/axiom-api-1.2.7.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/axiom-impl-1.2.7.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/bcprov-jdk14-1.38.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/bcprov-jdk14-138.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/bcprov-jdk15-1.43.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/bctsp-jdk14-1.38.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/c3p0-0.9.1.2-jdk1.3.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/c3p0-0.9.1.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/cglib-2.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/com.springsource.edu.emory.mathcs.backport-3.1.0.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/com.springsource.javax.persistence-2.0.0.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/com.springsource.javax.transaction-1.1.0.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/com.springsource.javax.validation-1.0.0.GA.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/com.springsource.net.sf.ehcache-1.4.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/com.springsource.net.sf.jsr107cache-1.0.0.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/com.springsource.org.aopalliance-1.0.0.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/com.springsource.org.apache.commons.beanutils-1.8.0.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/com.springsource.org.apache.commons.collections-3.2.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/com.springsource.org.apache.commons.dbcp-1.2.2.osgi.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/com.springsource.org.apache.commons.digester-1.8.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/com.springsource.org.apache.commons.fileupload-1.2.0.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/com.springsource.org.apache.commons.io-1.4.0.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/com.springsource.org.apache.commons.logging-1.1.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/com.springsource.org.apache.commons.pool-1.3.0.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/com.springsource.org.apache.log4j-1.2.15.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/com.springsource.org.aspectj.runtime-1.6.6.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/com.springsource.org.hibernate.validator-4.0.0.GA.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/com.springsource.org.joda.time-1.6.0.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/com.springsource.org.tuckey.web.filters.urlrewrite-3.1.0.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/com.springsource.slf4j.api-1.5.6.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/commons-beanutils.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/commons-cli-1.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/commons-codec-1.3.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/commons-codec.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/commons-collections-3.2.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/commons-dbcp.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/commons-digester.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/commons-discovery-0.4.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/commons-discovery.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/commons-email-1.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/commons-fileupload.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/commons-httpclient-3.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/commons-httpclient.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/commons-io.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/commons-lang-2.6.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/commons-lang.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/commons-logging-1.1.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/commons-logging-api-1.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/commons-logging.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/commons-net-2.0.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/commons-pool-1.5.5.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/commons-pool.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/commons-validator.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/cxf-bundle-2.2.8.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/cxf-manifest.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/cxf-xjc-boolean-2.3.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/cxf-xjc-bug671-2.3.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/cxf-xjc-dv-2.3.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/cxf-xjc-ts-2.3.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/dom4j-1.6.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/dom4j.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/ejb3-persistence.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/geronimo-activation_1.0.2_spec-1.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/geronimo-activation_1.1_spec-1.0.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/geronimo-annotation_1.0_spec-1.1.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/geronimo-j2ee-management_1.1_spec-1.0.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/geronimo-jaxws_2.1_spec-1.0.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/geronimo-jms_1.1_spec-1.1.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/geronimo-jta_1.0.1B_spec-1.0.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/geronimo-servlet_2.5_spec-1.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/geronimo-stax-api_1.0_spec-1.0.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/geronimo-ws-metadata_2.0_spec-1.1.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/hibernate-annotations-3.5.3-Final.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/hibernate-commons-annotations-3.2.0.Final.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/hibernate-core-3.5.3-Final.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/hibernate-entitymanager-3.5.3-Final.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/hibernate-jmx-3.5.3-Final.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/hibernate-jpa-2.0-api-1.0.0.Final.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/hibernate-validator-4.1.0.Final.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/htmlparser-1.0.5.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/icu4j-4.0.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/itext-2.1.7.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/jasypt-1.6.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/javassist-3.9.0.GA.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/javax.mail-1.4.4.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/jaxb-api-2.2.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/jaxb-impl-2.2.1.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/jaxb-xjc-2.1.12.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/jaxen-1.1.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/jaxrpc-8.4.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/jdom-1.0.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/jettison-1.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/jra-1.0-alpha-4.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/js-1.7R2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/jsr311-api-1.1.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/jstl-1.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/jstl.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/jta-1.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/juel-impl-2.1.3.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/kahadb-5.4.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/log4j-1.2.14.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/mysql-connector-java-5.1.10-bin.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/neethi-2.0.4.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/ojdbc15-11.2.0.1.0.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.osgi.core-4.1.0.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.aop-3.0.5.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.asm-3.0.5.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.aspects-3.0.5.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.beans-3.0.5.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.context-3.0.5.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.context.support-3.0.5.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.core-3.0.5.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.expression-3.0.5.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.instrument-3.0.5.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.instrument.tomcat-3.0.5.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.jdbc-3.0.5.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.jms-3.0.5.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.js-2.0.8.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.orm-3.0.5.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.oxm-3.0.5.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.security.config-3.0.0.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.security.core-3.0.0.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.security.taglibs-3.0.0.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.security.web-3.0.0.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.spring-library-3.0.5.RELEASE.libd" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.test-3.0.5.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.transaction-3.0.5.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.web-3.0.5.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.web.portlet-3.0.5.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.web.servlet-3.0.5.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/org.springframework.web.struts-3.0.5.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/oro-2.0.8.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/saaj-8.4.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/saaj-api-1.3.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/saaj-impl-1.3.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/serializer-2.7.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/slf4j-api-1.5.10.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/slf4j-api-1.5.8.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/slf4j-log4j12-1.5.10.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/slf4j-simple-1.5.10.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/spring-aop-3.0.5.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/spring-osgi-core-1.2.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/spring-osgi-io-1.2.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/spring-web-2.5.6.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/spring-web-3.0.5.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/standard.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/stax2-api-3.1.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/validation-api-1.0.0.GA.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/velocity-1.6.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/velocity-1.6.4.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/wsdl4j-1.6.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/wss4j-1.5.8.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/wstx-asl-3.2.9.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/xalan-2.7.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/xbean-spring-3.7.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/xercesImpl-2.9.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/xml-apis-1.3.04.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/xml-resolver-1.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/xmlParserAPIs-2.6.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/xmlbeans-2.4.0.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/xmlschema-core-2.0.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/xmlsec-1.4.3.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/xmlsec-1.4.5.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/xmltooling-1.3.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/xom-1.0.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib/xsdlib-2010.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/lib" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/resources" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/.name" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/ant.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/gradle_settings2_config.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/lib.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/META-INF/aop.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/META-INF/persistence.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/classes/META-INF/runtime.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/resources/applicationContext-webapp.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/resources/applicationContext.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/resources/appserver.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/resources/log4j-appserver.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/urlrewrite.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/war/WEB-INF/web.xml" />
+    </list>
+    <ignored path="kpos.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="DaemonCodeAnalyzer">
+    <disable_hints />
+  </component>
+  <component name="DebuggerManager">
+    <breakpoint_any>
+      <breakpoint>
+        <option name="NOTIFY_CAUGHT" value="true" />
+        <option name="NOTIFY_UNCAUGHT" value="true" />
+        <option name="ENABLED" value="false" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint>
+        <option name="NOTIFY_CAUGHT" value="true" />
+        <option name="NOTIFY_UNCAUGHT" value="true" />
+        <option name="ENABLED" value="false" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+    </breakpoint_any>
+    <breakpoint_rules />
+    <ui_properties />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="kpos" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="web.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/war/WEB-INF/web.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="4" column="21" selection-start="346" selection-end="346" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KPosServlet.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/kpos/ws/impl/KPosServlet.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="67" column="1" selection-start="2752" selection-end="2752" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KPosLogRawSoapResponseInterceptor.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/kpos/ws/interceptors/KPosLogRawSoapResponseInterceptor.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="19" column="44" selection-start="599" selection-end="599" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KPosRecordRawSoapMessageInterceptor.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/kpos/ws/interceptors/KPosRecordRawSoapMessageInterceptor.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="45" column="51" selection-start="1610" selection-end="1610" vertical-scroll-proportion="0.5543478">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KPosPortImpl.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/kpos/ws/impl/KPosPortImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="25" column="55" selection-start="740" selection-end="740" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Category.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/kpos/domain/Category.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="103" column="5" selection-start="2738" selection-end="2738" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="build.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/build.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="19" column="72" selection-start="853" selection-end="853" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="build.properties" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/build.properties">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="applicationContext.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/war/WEB-INF/resources/applicationContext.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="68" column="68" selection-start="3909" selection-end="3909" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindManager">
+    <FindUsagesManager>
+      <setting name="OPEN_NEW_TAB" value="false" />
+    </FindUsagesManager>
+  </component>
+  <component name="Git.Settings">
+    <option name="CHECKOUT_INCLUDE_TAGS" value="false" />
+    <option name="UPDATE_CHANGES_POLICY" value="STASH" />
+    <option name="LINE_SEPARATORS_CONVERSION" value="ASK" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="changedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/src/com/kpos/ws/interceptors/AddSoapHeadOutInterceptor.java" />
+        <option value="$PROJECT_DIR$/src/com/kpos/ws/interceptors/KPosRawSoapResponseInterceptor.java" />
+        <option value="$PROJECT_DIR$/src/com/kpos/ws/interceptors/KPosSessionInterceptor.java" />
+        <option value="$PROJECT_DIR$/src/com/kpos/ws/interceptors/KPosLogRawSoapResponseInterceptor.java" />
+        <option value="$PROJECT_DIR$/src/com/kpos/ws/impl/KPosLogRawSoapMessageInterceptor.java" />
+        <option value="$PROJECT_DIR$/src/com/kpos/ws/impl/KPosServlet.java" />
+        <option value="$PROJECT_DIR$/src/com/kpos/ws/interceptors/KPosLogRawSoapMessageInterceptor.java" />
+        <option value="$PROJECT_DIR$/src/com/kpos/ws/impl/KPosPortImpl.java" />
+        <option value="$PROJECT_DIR$/src/com/kpos/ws/exceptions/BaseException.java" />
+        <option value="$PROJECT_DIR$/src/com/kpos/domain/SaleItemOption.java" />
+        <option value="$PROJECT_DIR$/src/com/kpos/domain/OrderItem.java" />
+        <option value="$PROJECT_DIR$/src/com/kpos/domain/Category.java" />
+        <option value="$PROJECT_DIR$/war/WEB-INF/web.xml" />
+        <option value="$PROJECT_DIR$/war/WEB-INF/resources/applicationContext.xml" />
+        <option value="$PROJECT_DIR$/war/WEB-INF/classes/META-INF/persistence.xml" />
+        <option value="$PROJECT_DIR$/src/com/kpos/ws/interceptors/KPosRecordRawSoapMessageInterceptor.java" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectReloadState">
+    <option name="STATE" value="0" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1" splitterProportion="0.5">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="PackagesPane" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="GoToFile.includeJavaFiles" value="false" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="OverrideImplement.combined" value="true" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="MemberChooser.sorted" value="false" />
+    <property name="options.lastSelected" value="editor.preferences.appearance" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="GoToClass.includeJavaFiles" value="false" />
+    <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
+    <property name="MemberChooser.showClasses" value="true" />
+    <property name="GoToClass.includeLibraries" value="false" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.kpos.ws.impl" />
+      <recent name="com.kpos.ws.interceptors" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
+      <option name="PROGRAM_PARAMETERS" />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
+    <list size="0" />
+    <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
+      <Host>localhost</Host>
+      <Port>5050</Port>
+    </configuration>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration" maxAnnotateRevisions="500">
+    <option name="USER" value="" />
+    <option name="PASSWORD" value="" />
+    <option name="mySSHConnectionTimeout" value="30000" />
+    <option name="mySSHReadTimeout" value="30000" />
+    <option name="LAST_MERGED_REVISION" />
+    <option name="MERGE_DRY_RUN" value="false" />
+    <option name="MERGE_DIFF_USE_ANCESTRY" value="true" />
+    <option name="UPDATE_LOCK_ON_DEMAND" value="false" />
+    <option name="IGNORE_SPACES_IN_MERGE" value="false" />
+    <option name="DETECT_NESTED_COPIES" value="true" />
+    <option name="CHECK_NESTED_FOR_QUICK_MERGE" value="false" />
+    <option name="IGNORE_SPACES_IN_ANNOTATE" value="true" />
+    <option name="SHOW_MERGE_SOURCES_IN_ANNOTATE" value="true" />
+    <option name="FORCE_UPDATE" value="false" />
+    <configuration useDefault="false">C:\Users\kkwang\AppData\Roaming\Subversion</configuration>
+    <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
+    <supportedVersion>125</supportedVersion>
+  </component>
+  <component name="SvnFileUrlMappingImpl">
+    <option name="myMappingRoots">
+      <list>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\Projects\kpos" />
+          <option name="myCopyRoot" value="C:\Projects\kpos" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\Projects\kpos" />
+          <option name="myCopyRoot" value="C:\Projects\kpos\staging\apache-tomcat-6.0.32\conf\Catalina\localhost" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\Projects\kpos" />
+          <option name="myCopyRoot" value="C:\Projects\kpos\staging\apache-tomcat-6.0.32\conf\Catalina\localhost\host-manager.xml" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\Projects\kpos" />
+          <option name="myCopyRoot" value="C:\Projects\kpos\staging\apache-tomcat-6.0.32\conf\Catalina\localhost\manager.xml" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\Projects\kpos" />
+          <option name="myCopyRoot" value="C:\Projects\kpos\staging\apache-tomcat-6.0.32\webapps\manager\images" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\Projects\kpos" />
+          <option name="myCopyRoot" value="C:\Projects\kpos\staging\apache-tomcat-6.0.32\webapps\manager\images\add.gif" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\Projects\kpos" />
+          <option name="myCopyRoot" value="C:\Projects\kpos\staging\apache-tomcat-6.0.32\webapps\manager\images\asf-logo.gif" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\Projects\kpos" />
+          <option name="myCopyRoot" value="C:\Projects\kpos\staging\apache-tomcat-6.0.32\webapps\manager\images\code.gif" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\Projects\kpos" />
+          <option name="myCopyRoot" value="C:\Projects\kpos\staging\apache-tomcat-6.0.32\webapps\manager\images\design.gif" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\Projects\kpos" />
+          <option name="myCopyRoot" value="C:\Projects\kpos\staging\apache-tomcat-6.0.32\webapps\manager\images\docs.gif" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\Projects\kpos" />
+          <option name="myCopyRoot" value="C:\Projects\kpos\staging\apache-tomcat-6.0.32\webapps\manager\images\fix.gif" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\Projects\kpos" />
+          <option name="myCopyRoot" value="C:\Projects\kpos\staging\apache-tomcat-6.0.32\webapps\manager\images\tomcat.gif" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\Projects\kpos" />
+          <option name="myCopyRoot" value="C:\Projects\kpos\staging\apache-tomcat-6.0.32\webapps\manager\images\update.gif" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\Projects\kpos" />
+          <option name="myCopyRoot" value="C:\Projects\kpos\staging\apache-tomcat-6.0.32\webapps\manager\images\void.gif" />
+        </SvnCopyRootSimple>
+      </list>
+    </option>
+    <option name="myMoreRealMappingRoots">
+      <list>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\Projects\kpos" />
+          <option name="myCopyRoot" value="C:\Projects\kpos" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\Projects\kpos" />
+          <option name="myCopyRoot" value="C:\Projects\kpos\staging\apache-tomcat-6.0.32\conf\Catalina\localhost" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\Projects\kpos" />
+          <option name="myCopyRoot" value="C:\Projects\kpos\staging\apache-tomcat-6.0.32\webapps\manager\images" />
+        </SvnCopyRootSimple>
+      </list>
+    </option>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ff6cbb56-9391-4d75-9220-34c96a41cdad" name="Default" comment="" />
+      <created>1331346993153</created>
+      <updated>1331346993153</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="false" />
+    <layout>
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32998884" sideWeight="0.49812934" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.19241047" sideWeight="0.67001116" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32998884" sideWeight="0.49812934" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32998884" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" x="24" y="372" width="1871" height="296" />
+      <window_info id="SVN Repositories" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32998884" sideWeight="0.49812934" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Gradle" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2485302" sideWeight="0.67001116" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="true" />
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <option name="myTodoPanelSettings">
+      <value>
+        <are-packages-shown value="false" />
+        <are-modules-shown value="false" />
+        <flatten-packages value="false" />
+        <is-autoscroll-to-source value="false" />
+      </value>
+    </option>
+    <option name="PERFORM_UPDATE_IN_BACKGROUND" value="true" />
+    <option name="PERFORM_COMMIT_IN_BACKGROUND" value="true" />
+    <option name="PERFORM_EDIT_IN_BACKGROUND" value="true" />
+    <option name="PERFORM_CHECKOUT_IN_BACKGROUND" value="true" />
+    <option name="PERFORM_ADD_REMOVE_IN_BACKGROUND" value="true" />
+    <option name="PERFORM_ROLLBACK_IN_BACKGROUND" value="false" />
+    <option name="CHECK_LOCALLY_CHANGED_CONFLICTS_IN_BACKGROUND" value="false" />
+    <option name="ENABLE_BACKGROUND_PROCESSES" value="false" />
+    <option name="CHANGED_ON_SERVER_INTERVAL" value="60" />
+    <option name="SHOW_ONLY_CHANGED_IN_SELECTION_DIFF" value="true" />
+    <option name="CHECK_COMMIT_MESSAGE_SPELLING" value="true" />
+    <option name="DEFAULT_PATCH_EXTENSION" value="patch" />
+    <option name="SHORT_DIFF_HORISONTALLY" value="true" />
+    <option name="SHORT_DIFF_EXTRA_LINES" value="2" />
+    <option name="SOFT_WRAPS_IN_SHORT_DIFF" value="true" />
+    <option name="INCLUDE_TEXT_INTO_PATCH" value="false" />
+    <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
+    <option name="CREATE_PATCH_EXPAND_DETAILS_DEFAULT" value="true" />
+    <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
+    <option name="LAST_COMMIT_MESSAGE" value="initial checkin" />
+    <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="REFORMAT_BEFORE_FILE_COMMIT" value="false" />
+    <option name="FILE_HISTORY_DIALOG_COMMENTS_SPLITTER_PROPORTION" value="0.8" />
+    <option name="FILE_HISTORY_DIALOG_SPLITTER_PROPORTION" value="0.5" />
+    <option name="ACTIVE_VCS_NAME" />
+    <option name="UPDATE_GROUP_BY_PACKAGES" value="false" />
+    <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
+    <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
+    <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
+    <MESSAGE value="initial checkin" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+  </component>
+  <component name="antWorkspaceConfiguration">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="FILTER_TARGETS" value="false" />
+    <buildFile url="file://$PROJECT_DIR$/build.xml">
+      <antCommandLine value="" />
+      <runInBackground value="true" />
+      <targetFilters>
+        <filter targetName="freshInstall" isVisible="true" />
+        <filter targetName="runWSDL2JS" isVisible="false" />
+        <filter targetName="cleanWar" isVisible="true" />
+        <filter targetName="deployWar" isVisible="true" />
+        <filter targetName="cleanBuild" isVisible="true" />
+        <filter targetName="deployFront" isVisible="true" />
+        <filter targetName="build" isVisible="true" />
+        <filter targetName="deployAll" isVisible="true" />
+        <filter targetName="installTomcat" isVisible="true" />
+        <filter targetName="runWSDL2Java" isVisible="false" />
+        <filter targetName="deployWS" isVisible="true" />
+        <filter targetName="clean" isVisible="true" />
+        <filter targetName="compileAspectJ" isVisible="false" />
+        <filter targetName="usage" isVisible="false" />
+      </targetFilters>
+      <treeView value="true" />
+      <verbose value="true" />
+      <viewClosedWhenNoErrors value="false" />
+      <expanded value="true" />
+    </buildFile>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/wsdl/ebizcard.wsdl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="953" column="83" selection-start="43526" selection-end="43541" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/kpos/domain/SaleItemOption.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="101" column="5" selection-start="2606" selection-end="2606" vertical-scroll-proportion="1.7213303" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/kpos/domain/OrderItem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="118" column="27" selection-start="2517" selection-end="2517" vertical-scroll-proportion="0.66284406" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/war/WEB-INF/classes/META-INF/runtime.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/war/WEB-INF/classes/META-INF/persistence.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="28" selection-start="582" selection-end="582" vertical-scroll-proportion="0.18042453" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/war/WEB-INF/resources/appserver.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.5436321" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/kpos/ws/interceptors/KPosLogRawSoapMessageInterceptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="20" selection-start="901" selection-end="901" vertical-scroll-proportion="0.6307978" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/war/WEB-INF/web.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="21" selection-start="346" selection-end="346" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/kpos/ws/impl/KPosServlet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="67" column="1" selection-start="2752" selection-end="2752" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/kpos/ws/interceptors/KPosLogRawSoapResponseInterceptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="44" selection-start="599" selection-end="599" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/kpos/ws/impl/KPosPortImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25" column="55" selection-start="740" selection-end="740" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/kpos/domain/Category.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="103" column="5" selection-start="2738" selection-end="2738" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="72" selection-start="853" selection-end="853" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/war/WEB-INF/resources/applicationContext.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="68" column="68" selection-start="3909" selection-end="3909" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/kpos/ws/interceptors/KPosRecordRawSoapMessageInterceptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="45" column="51" selection-start="1610" selection-end="1610" vertical-scroll-proportion="0.5543478">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.6</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>kpos</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.5" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>lib</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
+
