@@ -1,15 +1,14 @@
 package com.kpos.domain;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created by kpos.
  * Author: kkwang
  * Date: 3/10/12 11:18 PM
  */
+@Entity
+@Table(name = "RESTAURANT_TABLE")
 public class RestaurantTable extends AbstractDomainObject {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

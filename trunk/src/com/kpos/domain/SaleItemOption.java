@@ -10,6 +10,8 @@ import javax.persistence.*;
  * Author: kkwang
  * Date: 3/9/12 11:06 PM
  */
+@Entity
+@Table(name = "SALE_ITEM_OPTION")
 public class SaleItemOption extends AbstractDomainObject {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

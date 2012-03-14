@@ -1,9 +1,6 @@
 package com.kpos.domain;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * This class represents a global option category that can be applied to all menu items.
@@ -12,6 +9,8 @@ import javax.persistence.Id;
  * Author: kkwang
  * Date: 3/10/12 9:48 PM
  */
+@Entity
+@Table(name = "GLOBAL_OPTION_CATEGORY")
 public class GlobalOptionCategory extends AbstractDomainObject {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
