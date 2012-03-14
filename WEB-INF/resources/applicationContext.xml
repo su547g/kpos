@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:amq="http://activemq.apache.org/schema/core"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+            http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+            http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd
+            http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+   <import resource="classpath:META-INF/cxf/cxf.xml"/>
+   <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml"/>
+   <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+   
+   <!--
+       Turn on AspectJ @Configurable support. As a result, any time you
+       instantiate an object, Spring will attempt to perform dependency
+       injection on that object.
+   -->
+   <context:spring-configured/>
+
+   <!--
+       This declaration will cause Spring to locate every @Component,
+       @Repository and @Service in your application. In practical terms this
+       allows you to write a POJO and then simply annotate the new POJO as an
+       @Service and Spring will automatically detect, instantiate and
+       dependency inject your service at startup time. Importantly, you can
+       then also have your new service injected into any other class that
+       requires it simply by declaring a field for your service inside the
+       relying class and Spring will inject it.
+
+       Furthermore, this turns on @Autowired, @PostConstruct etc support. These
+       annotations allow you to use common Spring and Java Enterprise Edition
+       annotations in your classes without needing to do any special configuration.
+       The most commonly used annotation is @Autowired, which instructs Spring to
+       dependency inject an object into your class.
+   -->
+   <context:component-scan base-package="com.kpos">
+		<context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
+   </context:component-scan>
+   
+   <context:annotation-config/>
+
+   <!--org.apache.commons.dbcp.BasicDataSource-->
+   <bean class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close" id="dataSource">
+      <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+      <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/kpos?autoReconnect=true&amp;validationQuery=select%201&amp;useUnicode=true&amp;characterEncoding=UTF-8"/>
+      <property name="user" value="kpos"/>
+      <property name="password" value="FM82rw34"/>
+     <property name="idleConnectionTestPeriod" value="60"/>
+     <property name="testConnectionOnCheckin" value="true"/>
+     <property name="preferredTestQuery" value="select 1"/>
+   </bean>
+
+   <bean class="org.springframework.jdbc.core.JdbcTemplate" id="jdbcTemplate">
+      <property name="dataSource" ref="dataSource"/>
+   </bean>
+
+   <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" id="hibernateDialect"/>
+
+   <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager">
+      <property name="entityManagerFactory" ref="entityManagerFactory"/>
+      <property name="jpaDialect" ref="hibernateDialect"/>
+   </bean>
+
+   <tx:annotation-driven mode="aspectj" transaction-manager="transactionManager" proxy-target-class="true"/>
+
+   <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactory" 
+         p:dataSource-ref="dataSource">
+      <property name="persistenceUnitName" value="kpos-appserver"/>
+   </bean>
+
+   <context:load-time-weaver aspectj-weaving="on"/>
+   
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:com/kpos/runtime.properties"></property>
+	</bean>
+</beans>

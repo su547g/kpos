@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<!--
+===============================================================================
+
+   Log4j XML configuration from :
+
+      src/main/resources/META-INF/spring/log4j-appserver.xml
+
+===============================================================================
+-->
+
+<!-- $Id: -->
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+
+
+   <appender name="FILE" class="org.apache.log4j.RollingFileAppender">
+      <!--<param name="file" value="${catalina.base}/logs/dart-appserver.log"/>-->
+      <param name="file" value="C:\\Projects\\tomcat\\logs\\appserver.log"/>
+      <param name="Threshold" value="DEBUG"/>
+
+      <param name="MaxFileSize" value="10MB"/>
+      <param name="MaxBackupIndex" value="5"/>
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%d [%t] [%X{userIdentity}] %-5p [%c] %m%n"/>
+      </layout>
+   </appender>
+
+   <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+      <param name="Target" value="System.out"/>
+
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="[%X{nodeId}] [%t] [%X{userIdentity}] %-5p %m%n"/>
+      </layout>
+
+      <filter class="org.apache.log4j.varia.LevelRangeFilter">
+         <param name="LevelMin" value="DEBUG"/>
+         <param name="LevelMax" value="FATAL"/>
+      </filter>
+
+      <filter class="org.apache.log4j.varia.DenyAllFilter"/>
+
+   </appender>
+
+
+   <!-- ================ -->
+   <!-- Limit categories -->
+   <!-- ================ -->
+
+
+   <category name="org.apache.commons.digester">
+      <priority value="WARN"/>
+   </category>
+
+   <category name="org.apache">
+      <priority value="WARN"/>
+   </category>
+
+   <category name="com.opensymphony.oscache">
+      <priority value="WARN"/>
+   </category>
+   <category name="net.sf.navigator">
+      <priority value="WARN"/>
+   </category>
+
+   <category name="org.apache.commons">
+      <priority value="WARN"/>
+   </category>
+   <category name="org.apache.struts">
+      <priority value="WARN"/>
+   </category>
+   <category name="org.displaytag">
+      <priority value="WARN"/>
+   </category>
+   <category name="org.springframework">
+      <priority value="WARN"/>
+   </category>
+   <category name="com.ibatis.db">
+      <priority value="WARN"/>
+   </category>
+
+   <category name="org.apache.velocity">
+      <priority value="WARN"/>
+   </category>
+
+
+   <!-- generic top level hibernate logging -->
+   <category name="org.hibernate">
+      <priority value="DEBUG"/>
+   </category>
+
+   <!-- Log all SQL DML statements as they are executed -->
+   <category name="org.hibernate.SQL">
+      <priority value="DEBUG"/>
+   </category>
+
+   <!-- Log all JDBC parameters -->
+   <category name="org.hibernate.type">
+      <priority value="WARN"/>
+   </category>
+
+   <!-- Log the state of all entities (max 20 entities) associated with the session at flush time -->
+   <category name="org.hibernate.pretty">
+      <priority value="DEBUG"/>
+   </category>
+
+   <!-- Log all second-level cache activity -->
+   <category name="org.hibernate.cache">
+      <priority value="WARN"/>
+   </category>
+
+   <!-- Log transaction related activity -->
+   <category name="org.hibernate.transaction">
+      <priority value="DEBUG"/>
+   </category>
+
+   <!-- Log all JDBC resource acquisition -->
+   <category name="org.hibernate.jdbc">
+      <priority value="DEBUG"/>
+   </category>
+
+   <!-- Log HQL and SQL ASTs during query parsing -->
+   <category name="org.hibernate.hql.ast.AST">
+      <priority value="WARN"/>
+   </category>
+
+
+   <category name="org.hibernate.secure">
+      <priority value="WARN"/>
+   </category>
+
+   <!-- Hibernate Configuration -->
+   <category name="org.hibernate.cfg">
+      <priority value="INFO"/>
+   </category>
+
+   <!-- Schema Export (DDL statements) -->
+   <category name="org.hibernate.tool.hbm2ddl.SchemaExport">
+      <priority value="INFO"/>
+   </category>
+
+   <category name="org.jboss">
+      <priority value="WARN"/>
+   </category>
+
+   <category name="org.jboss.jbossweb">
+      <priority value="WARN"/>
+   </category>
+
+   <category name="httpclient">
+      <priority value="WARN"/>
+   </category>
+
+   <category name="org.acegisecurity">
+      <priority value="WARN"/>
+   </category>
+
+   <category name="log4j.category.org.apache.cxf">
+      <priority value="WARN"/>
+   </category>
+   
+   <category name="org.apache.cxf.interceptor">
+      <priority value="DEBUG"/>
+   </category>
+
+   <category name="org.springframework">
+      <priority value="INFO"/>
+   </category>
+
+   <category name="org.springframework.web">
+      <priority value="INFO"/>
+   </category>
+
+   <category name="org.springframework.security">
+      <priority value="WARN"/>
+   </category>
+
+   <category name="org.springframework.jdbc.datasource">
+      <priority value="INFO"/>
+   </category>
+
+   <!-- application specific categories -->
+
+   <category name="com.ebizcard">
+      <priority value="DEBUG"/>
+   </category>
+	<!--
+   <category name="com.ebizcard.util.HibernateSessionPerThreadHelper">
+      <priority value="INFO"/>
+   </category>
+	-->
+   <!-- ======================= -->
+   <!-- Setup the Root category -->
+   <!-- ======================= -->
+
+   <root>
+      <appender-ref ref="FILE"/>
+   </root>
+
+</log4j:configuration>
+
+
