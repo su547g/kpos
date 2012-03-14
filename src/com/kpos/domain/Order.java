@@ -57,7 +57,7 @@ public class Order extends AbstractDomainObject {
 
     //owning entity
     @ManyToOne(cascade = CascadeType.REFRESH)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "table_id")
     private RestaurantTable table;
 
     public Long getId() {
