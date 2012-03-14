@@ -1,0 +1,957 @@
+<wsdl:definitions
+        name="DartService"
+        targetNamespace="http://ws.ebizcard.com/app"
+        xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+        xmlns:tns="http://ws.ebizcard.com/app"
+        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <wsdl:types>
+		 <xs:schema
+              targetNamespace="http://ws.ebizcard.com/app"
+              version="1.3"
+              xmlns:tns="http://ws.ebizcard.com/app"
+              xmlns:xs="http://www.w3.org/2001/XMLSchema"
+              elementFormDefault="qualified">
+			
+			<!-- This function is used login a user by his email or external site id (i.e., facebook). -->
+			<xs:element name="AuthenticateUserType" type="tns:AuthenticateUserType"/>
+			<xs:element name="AuthenticateUserResponseType" type="tns:AuthenticateUserResponseType"/>
+			
+			<!-- This function is used to register a new user in our system. -->
+			<xs:element name="RegisterUserType" type="tns:RegisterUserType"/>
+			<xs:element name="RegisterUserResponseType" type="tns:RegisterUserResponseType"/>
+			
+			<!-- This function is used to find an existing user, returns null if user doesn't exist. -->
+			<xs:element name="GetUserType" type="tns:GetUserType"/>
+			<xs:element name="GetUserResponseType" type="tns:GetUserResponseType"/>
+			
+			<!-- This function is used to send out an exchange card request with another user. -->
+			<xs:element name="ExchangeCardType" type="tns:ExchangeCardType"/>
+			<xs:element name="ExchangeCardResponseType" type="tns:ExchangeCardResponseType"/>
+			
+			<xs:element name="RequestCardType" type="tns:RequestCardType"/>
+			<xs:element name="RequestCardResponseType" type="tns:RequestCardResponseType"/>
+            
+			<!-- This function is used to fetch a user's card based on the card id. -->
+			<xs:element name="GetFriendCardType" type="tns:GetFriendCardType"/>
+			<xs:element name="GetFriendCardResponseType" type="tns:GetFriendCardResponseType"/>
+			
+			<!-- This function is used to fetch ALL of a user's cards that he/she has received. -->
+			<xs:element name="ListFriendCardsType" type="tns:ListFriendCardsType"/>
+			<xs:element name="ListFriendCardsResponseType" type="tns:ListFriendCardsResponseType"/>
+			
+			<!-- This function is used to fetch ALL of a user's cards that he/she has received. -->
+			<xs:element name="ListFriendCardsFullType" type="tns:ListFriendCardsFullType"/>
+			<xs:element name="ListFriendCardsFullResponseType" type="tns:ListFriendCardsFullResponseType"/>
+			
+			<!-- This function is used to fetch a user's OWN card based on the user id. -->
+			<xs:element name="GetOwnCardType" type="tns:GetOwnCardType"/>
+			<xs:element name="GetOwnCardResponseType" type="tns:GetOwnCardResponseType"/>
+			
+			<!-- This function is used to delete a user' card, but not his own card. -->
+			<xs:element name="DeleteFriendCardType" type="tns:DeleteFriendCardType"/>
+			<xs:element name="DeleteFriendCardResponseType" type="tns:DeleteFriendCardResponseType"/>
+			
+			<!-- This function is used to update a user's card. Not his own card, but a card that he/she received from another user. -->
+			<xs:element name="UpdateFriendCardType" type="tns:UpdateFriendCardType"/>
+			<xs:element name="UpdateFriendCardResponseType" type="tns:UpdateFriendCardResponseType"/>
+			
+			<!-- This function is used to update a user's own card -->
+			<xs:element name="UpdateOwnCardType" type="tns:UpdateOwnCardType"/>
+			<xs:element name="UpdateOwnCardResponseType" type="tns:UpdateOwnCardResponseType"/>
+			
+			<!-- This function is used to fetch ALL of a user's card requests that he/she has received. -->
+			<xs:element name="ListFriendCardRequestsResponseType" type="tns:ListFriendCardRequestsResponseType"/>
+			<!-- This function is used to fetch a user's card requests AFTER he's logged in. -->
+			<xs:element name="ListFriendCardRequestsSecureType" type="tns:ListFriendCardRequestsSecureType"/>
+			
+			<!-- This function is used to accept, reject, or ignore a user's card request based on the request id. -->
+			<xs:element name="AcceptFriendCardRequestType" type="tns:AcceptFriendCardRequestType"/>
+			<xs:element name="AcceptFriendCardRequestResponseType" type="tns:AcceptFriendCardRequestResponseType"/>
+			
+			<!-- This function is used to update a user's login email and password. -->
+			<xs:element name="UpdateUserAccountType" type="tns:UpdateUserAccountType"/>
+			<xs:element name="UpdateUserAccountResponseType" type="tns:UpdateUserAccountResponseType"/>
+			
+			<!-- This function is used to logout the current user from our system. It clears the session key. -->
+			<xs:element name="LogoutType" type="tns:LogoutType"/>
+			<xs:element name="LogoutResponseType" type="tns:LogoutResponseType"/>
+			
+			<!-- This function is used to retrieve a user's password and send it to his/her email. -->
+			<xs:element name="RetrievePasswordType" type="tns:RetrievePasswordType"/>
+			<xs:element name="RetrievePasswordResponseType" type="tns:RetrievePasswordResponseType"/>
+			
+			<!-- This function is used to search users whose names start with the given value. -->
+			<xs:element name="SearchCardsByNameType" type="tns:SearchCardsByNameType"/>
+			<xs:element name="SearchCardsByNameResponseType" type="tns:SearchCardsByNameResponseType"/>
+			
+			<!-- This function is used to fetch a user's default profile card. -->
+			<xs:element name="GetUserProfileCardType" type="tns:GetUserProfileCardType"/>
+			<xs:element name="GetUserProfileCardResponseType" type="tns:GetUserProfileCardResponseType"/>
+			
+			<xs:complexType name="ResultType">
+            	<xs:sequence>
+               		<xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+               		<xs:element name="successful" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+               		<xs:element name="failureReasonCode" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+               		<xs:element name="exception" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+               		<xs:element name="failureReason" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            	</xs:sequence>
+         	</xs:complexType>
+         	
+         	<xs:complexType name="AddressType">
+         		<xs:sequence>
+         			<xs:element name="address1" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+         			<xs:element name="address2" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+         			<xs:element name="address3" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+         			<xs:element name="city" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+         			<xs:element name="state" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+         			<xs:element name="country" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+         			<xs:element name="zipcode" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+         		</xs:sequence>
+         	</xs:complexType>
+         	
+			<xsd:complexType name="BizCardType">
+    			<xsd:sequence>
+    				<xsd:element name="CardId"				type="xsd:long"/> 	<!-- internal private id -->
+    				<xsd:element name="Name"				type="xsd:string"/> <!-- name of the card -->
+    				<xsd:element name="Owner" 				type="tns:UserType" minOccurs="0"/> <!-- the user who received this card. When card is downloaded from iphone, owner is null -->
+    				<xsd:element name="FirstName"			type="xsd:string"/>
+    				<xsd:element name="MiddleName"			type="xsd:string" minOccurs="0"/>
+    				<xsd:element name="LastName"			type="xsd:string"/>
+    				<xsd:element name="JobTitle"			type="xsd:string" minOccurs="0"/>
+    				<xsd:element name="Employer"			type="xsd:string" minOccurs="0"/>
+    				<xsd:element name="BizTelephone" 		type="xsd:string" minOccurs="0"/>
+    				<xsd:element name="HomeTelephone" 		type="xsd:string" minOccurs="0"/>
+    				<xsd:element name="MobileTelephone" 	type="xsd:string" minOccurs="0"/>
+    				<xsd:element name="Fax" 				type="xsd:string" minOccurs="0"/>
+    				<xsd:element name="Address" 			type="tns:AddressType" minOccurs="0"/>
+					<xsd:element name="Email" 				type="xsd:string" minOccurs="0"/>
+					<xsd:element name="URL" 				type="xsd:string" minOccurs="0"/>
+    				<xsd:element name="CardTemplateId"		type="xsd:long" minOccurs="1" maxOccurs="1"/> <!-- id of the card template -->
+    			</xsd:sequence>	
+    		</xsd:complexType>
+			
+			<xsd:complexType name="UserInfoType">
+    			<xsd:sequence>
+    				<xsd:element name="Name"				type="xsd:string"/> <!-- name of the profile -->
+    				<xsd:element name="FirstName"			type="xsd:string" minOccurs="1" maxOccurs="1"/>
+    				<xsd:element name="MiddleName"			type="xsd:string" minOccurs="0"/>
+    				<xsd:element name="LastName"			type="xsd:string" minOccurs="1" maxOccurs="1"/>
+    				<xsd:element name="JobTitle"			type="xsd:string" minOccurs="0"/>
+    				<xsd:element name="Employer"			type="xsd:string" minOccurs="0"/>
+    				<xsd:element name="BizTelephone" 		type="xsd:string" minOccurs="0"/>
+    				<xsd:element name="HomeTelephone" 		type="xsd:string" minOccurs="0"/>
+    				<xsd:element name="MobileTelephone" 	type="xsd:string" minOccurs="0"/>
+    				<xsd:element name="Fax" 				type="xsd:string" minOccurs="0"/>
+    				<xsd:element name="Address" 			type="tns:AddressType" minOccurs="0"/>
+					<xsd:element name="Email" 				type="xsd:string" minOccurs="0"/>
+					<xsd:element name="URL" 				type="xsd:string" minOccurs="0"/>
+					<xsd:element name="IsPublic"            type="xsd:boolean" default="true"/> <!-- if true, user info is searchable by the public -->
+					<xsd:element name="IsRequestable"       type="xsd:boolean" default="false"/> <!-- if true, any one can request a card from this user -->
+    			</xsd:sequence>	
+    		</xsd:complexType>
+    		
+    		<xsd:complexType name="UserIdType"><!--A type that uniquely defines a user. Used for locating user -->
+    			<xsd:sequence> <!--Should be choice, but it's not supported by wsdl2Javascript-->
+              <xsd:element name="UserId"			type="xsd:long" minOccurs="0"/> <!-- internal private id -->
+        			<xsd:element name="EmailAddress"	type="xsd:string" minOccurs="0"/> <!-- when request is sent to a public email address -->
+       				<xsd:element name="ExternalId"		type="xsd:string" minOccurs="0"/> <!-- when request is sent to a social network id -->
+     			</xsd:sequence>
+    		</xsd:complexType>
+    		
+        	<xsd:complexType name="CardRequestType">
+        		<xsd:sequence>
+        			<xsd:element name="Id"					type="xsd:long" minOccurs="0" maxOccurs="1"/> <!-- internal id of this request --> 
+        			<xsd:element name="RequesterId"			type="xsd:long"	minOccurs="1" maxOccurs="1"/>
+        			<xsd:element name="TargetUserId"		type="tns:UserIdType" minOccurs="1"/>
+        			<xsd:element name="Message"				type="xsd:string" />
+        			<xsd:element name="AutoAccepts" 		type="xsd:boolean" default="false"/> <!-- if true, requester will accept the return card automatically -->
+        			<xsd:element name="RequestsReturnCard"  type="xsd:boolean" default="false"/> <!-- used when "exchange card" is requested -->
+        		</xsd:sequence>
+        	</xsd:complexType> 
+        
+      		<xsd:complexType name="UserType">
+      			<xsd:sequence>
+      				<xsd:element name="UserId" 			type="xsd:long"/>   <!-- internal private id -->
+      				<xsd:element name="Email" 			type="xsd:string"/> <!-- user's email as user name -->
+					<xsd:element name="Password"		type="xsd:string"/> <!-- user's password -->
+      				<xsd:element name="ExternalId" 		type="xsd:string" minOccurs="0"/> <!-- prefexed external ids. facebook_* for facebook ids -->
+					<xsd:element name="LastLoginTS"		type="xsd:string"/> <!-- timestamp of the last login -->
+      			</xsd:sequence>
+     		</xsd:complexType>
+     	
+			<xsd:complexType name="LoginCredentialType">
+				<xsd:sequence>
+					<xsd:element name="UserEmail" 	type="xsd:string" minOccurs="1" maxOccurs="1"/>
+           			<xsd:element name="Password"	type="xsd:string" minOccurs="1" maxOccurs="1"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			
+     		<xsd:complexType name="AuthenticateUserType">
+        		<xsd:sequence>
+           			<xsd:element name="LoginCredential" type="tns:LoginCredentialType" minOccurs="1" maxOccurs="1"/>
+       			</xsd:sequence>
+        	</xsd:complexType>
+        	
+        	<xsd:complexType name="AuthenticateUserResponseType">
+        		<xsd:sequence>
+           			<xsd:element name="Result" 		type="tns:ResultType" minOccurs="1" maxOccurs="1"/>
+           			<xsd:element name="UserId"		type="xsd:long" minOccurs="1" maxOccurs="1"/>
+					<xsd:element name="SessionKey" 	type="xsd:string" minOccurs="1" maxOccurs="1"/>
+       			</xsd:sequence>
+        	</xsd:complexType>
+        	
+      		<xsd:complexType name="RegisterUserType">
+        		<xsd:sequence>
+           			<xsd:element name="Credentials" 	type="tns:LoginCredentialType" minOccurs="1" maxOccurs="1"/>
+					<xsd:element name="FacebookId"		type="xsd:string" minOccurs="0" maxOccurs="1"/>
+           			<xsd:element name="UserInfo"		type="tns:UserInfoType" minOccurs="1" maxOccurs="1"/>
+       			</xsd:sequence>
+        	</xsd:complexType>
+      
+      		<xsd:complexType name="RegisterUserResponseType">
+      			<xsd:sequence>
+      				<xsd:element name="UserId" type="xsd:long"/>
+      				<xsd:element name="Result" type="tns:ResultType"/>
+      			</xsd:sequence>
+      		</xsd:complexType>
+      	
+      		<xsd:complexType name="GetUserType">
+      			<xsd:sequence>
+					<xsd:element name="SessionKey" type="xsd:string"/>
+      				<xsd:element name="SearchKey" type="tns:UserIdType"/>
+      			</xsd:sequence>
+   			</xsd:complexType>
+      	
+      		<!-- If user doesn't exist, return success with null ResultUser -->
+      		<xsd:complexType name="GetUserResponseType">
+      			<xsd:sequence>
+      				<xsd:element name="ResultUser"	type="tns:UserType" minOccurs="0"/>
+      				<xsd:element name="Result" 		type="tns:ResultType"/> 
+      			</xsd:sequence>
+      		</xsd:complexType>
+      	
+      		<xsd:complexType name="ExchangeCardType">
+      			<xsd:sequence>
+					<xsd:element name="SessionKey" 	type="xsd:string"/>
+					<xsd:element name="UserId" 		type="xsd:long"/>
+      				<xsd:element name="Requests" 	type="tns:CardRequestType" minOccurs="0" maxOccurs="50"/>
+      			</xsd:sequence>
+      		</xsd:complexType>
+      		
+      		<xsd:complexType name="ExchangeCardResponseType">
+      			<xsd:sequence>
+      				<xsd:element name="Result" type="tns:ResultType"/>
+      			</xsd:sequence>
+      		</xsd:complexType>
+      		
+      		<xsd:complexType name="RequestCardType">
+                <xsd:sequence>
+                    <xsd:element name="SessionKey"  	type="xsd:string"/>
+                    <xsd:element name="UserId"      	type="xsd:long"/>
+		    <xsd:element name="TargetUserId"	type="xsd:long"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            
+            <xsd:complexType name="RequestCardResponseType">
+                <xsd:sequence>
+                    <xsd:element name="Result" type="tns:ResultType"/>
+                </xsd:sequence>
+            </xsd:complexType>
+			
+			<xsd:complexType name="GetFriendCardType">
+      			<xsd:sequence>
+					<xsd:element name="SessionKey" type="xsd:string"/>
+					<xsd:element name="UserId"	type="xsd:long" minOccurs="1" maxOccurs="1"/>
+      				<xsd:element name="CardId" 	type="xsd:long" minOccurs="1" maxOccurs="1"/>
+      			</xsd:sequence>
+      		</xsd:complexType>
+      		
+      		<xsd:complexType name="GetFriendCardResponseType">
+      			<xsd:sequence>
+      				<xsd:element name="Result" 	type="tns:ResultType"/>
+					<xsd:element name="Card" 	type="tns:BizCardType"/>
+      			</xsd:sequence>
+      		</xsd:complexType>
+			
+			<xsd:complexType name="ListFriendCardsType">
+      			<xsd:sequence>
+					<xsd:element name="SessionKey" type="xsd:string"/>
+      				<xsd:element name="UserId"	   type="xsd:long" minOccurs="1" maxOccurs="1"/>
+      				<xsd:element name="IsAscending"   type="xsd:boolean" default="true"/>
+      				<xsd:element name="PageNum"    type="xsd:int" default="0"/>
+      			</xsd:sequence>
+      		</xsd:complexType>
+      		
+      		<xsd:complexType name="ListFriendCardsResponseType">
+      			<xsd:sequence>
+      				<xsd:element name="Result"	type="tns:ResultType"/>
+					<xsd:element name="Cards"	type="tns:CardSummaryType" minOccurs="0" maxOccurs="unbounded"/>
+					<xsd:element name="TotalPage"  type="xsd:int"/>
+					<xsd:element name="CurrentPage" type="xsd:int"/>
+      			</xsd:sequence>
+      		</xsd:complexType>
+      		
+			<xsd:complexType name="CardSummaryType">
+				<xsd:sequence>
+					<xsd:element name="CardId"		type="xsd:long"/>
+					<xsd:element name="PersonName"	type="xsd:string"/>
+					<xsd:element name="Phone"		type="xsd:string"/>
+					<xsd:element name="Email"		type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="ListFriendCardsFullType">
+      			<xsd:sequence>
+					<xsd:element name="SessionKey" type="xsd:string"/>
+      				<xsd:element name="UserId"	   type="xsd:long" minOccurs="1" maxOccurs="1"/>
+      				<xsd:element name="IsAscending"   type="xsd:boolean" default="true"/>
+      				<xsd:element name="PageNum"    type="xsd:int" default="0"/>
+      			</xsd:sequence>
+      		</xsd:complexType>
+      		
+      		<xsd:complexType name="ListFriendCardsFullResponseType">
+      			<xsd:sequence>
+      				<xsd:element name="Result"	type="tns:ResultType"/>
+					<xsd:element name="Cards"	type="tns:BizCardType" minOccurs="0" maxOccurs="unbounded"/>
+					<xsd:element name="TotalPage"  type="xsd:int"/>
+					<xsd:element name="CurrentPage" type="xsd:int"/>
+      			</xsd:sequence>
+      		</xsd:complexType>
+			
+			<xsd:complexType name="GetOwnCardType">
+      			<xsd:sequence>
+					<xsd:element name="SessionKey" type="xsd:string"/>
+      				<xsd:element name="UserId"	type="xsd:long" minOccurs="1" maxOccurs="1"/>
+      			</xsd:sequence>
+      		</xsd:complexType>
+      		
+      		<xsd:complexType name="GetOwnCardResponseType">
+      			<xsd:sequence>
+      				<xsd:element name="Result"		type="tns:ResultType"/>
+					<xsd:element name="UserInfo" 	type="tns:UserInfoType"/>
+      			</xsd:sequence>
+      		</xsd:complexType>
+			
+      		<xsd:complexType name="DeleteFriendCardType">
+      			<xsd:sequence>
+					<xsd:element name="SessionKey" type="xsd:string"/>
+					<xsd:element name="UserId"	type="xsd:long" minOccurs="1" maxOccurs="1"/>
+      				<xsd:element name="CardId"	type="xsd:long" minOccurs="0" maxOccurs="unbounded"/>
+      			</xsd:sequence>
+      		</xsd:complexType>
+      		
+      		<xsd:complexType name="DeleteFriendCardResponseType">
+      			<xsd:sequence>
+      				<xsd:element name="Result" type="tns:ResultType"/>
+      			</xsd:sequence>
+      		</xsd:complexType>
+      		
+      		<xsd:complexType name="UpdateFriendCardType">
+      			<xsd:sequence>
+					<xsd:element name="SessionKey" type="xsd:string"/>
+					<xsd:element name="UserId" 	type="xsd:long" minOccurs="1" maxOccurs="1"/>
+      				<xsd:element name="Card" 	type="tns:BizCardType" minOccurs="1" maxOccurs="1"/>
+      			</xsd:sequence>
+      		</xsd:complexType>
+      		
+      		<xsd:complexType name="UpdateFriendCardResponseType">
+      			<xsd:sequence>
+      				<xsd:element name="Result" 	type="tns:ResultType"/>
+      				<xsd:element name="Card" 	type="tns:BizCardType" minOccurs="1" maxOccurs="1"/>
+      			</xsd:sequence>
+      		</xsd:complexType>
+      		
+      		<xsd:complexType name="UpdateOwnCardType">
+      			<xsd:sequence>
+					<xsd:element name="SessionKey" type="xsd:string"/>
+					<xsd:element name="UserId" 		type="xsd:long" minOccurs="1" maxOccurs="1"/>
+      				<xsd:element name="UserInfo" 	type="tns:UserInfoType" minOccurs="1" maxOccurs="1"/>
+      			</xsd:sequence>
+      		</xsd:complexType>
+      		
+      		<xsd:complexType name="UpdateOwnCardResponseType">
+      			<xsd:sequence>
+      				<xsd:element name="Result" 		type="tns:ResultType"/>
+      				<xsd:element name="UserInfo"	type="tns:UserInfoType" minOccurs="1" maxOccurs="1"/>
+      			</xsd:sequence>
+      		</xsd:complexType>
+			
+      		<xsd:complexType name="ListFriendCardRequestsSecureType">
+      			<xsd:sequence>
+      				<xsd:element name="SessionKey" type="xsd:string"/>
+					<xsd:element name="UserId"		type="xsd:long" minOccurs="1" maxOccurs="1"/>
+					<xsd:element name="PageNum"    type="xsd:int" default="0"/>
+      			</xsd:sequence>
+      		</xsd:complexType>
+      		
+      		<xsd:complexType name="ListFriendCardRequestsResponseType">
+      			<xsd:sequence>
+      				<xsd:element name="Result" type="tns:ResultType"/>
+					<xsd:element name="CardRequestResponse" type="tns:CardRequestResponseType" minOccurs="0" maxOccurs="unbounded"/>
+      			</xsd:sequence>
+      		</xsd:complexType>
+			
+			<xsd:complexType name="CardRequestResponseType">
+				<xsd:sequence>
+					<xsd:element name="CardRequest" type="tns:CardRequestType" minOccurs="1" maxOccurs="1"/>
+					<xsd:element name="Card" type="tns:BizCardType" minOccurs="1" maxOccurs="1"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="AcceptFriendCardRequestType">
+      			<xsd:sequence>
+					<xsd:element name="SessionKey" type="xsd:string"/>
+					<xsd:element name="UserId"			type="xsd:long" minOccurs="1" maxOccurs="1"/>
+      				<xsd:element name="CardRequestId" 	type="xsd:long" minOccurs="1" maxOccurs="1"/>
+					<xsd:element name="isAccepted"		type="xsd:boolean"/>
+					<xsd:element name="isRejected"		type="xsd:boolean"/>
+					<xsd:element name="isIgnored"		type="xsd:boolean"/>
+      			</xsd:sequence>
+      		</xsd:complexType>
+      		
+      		<xsd:complexType name="AcceptFriendCardRequestResponseType">
+      			<xsd:sequence>
+      				<xsd:element name="Result" type="tns:ResultType"/>
+      			</xsd:sequence>
+      		</xsd:complexType>
+			
+			<xsd:complexType name="UpdateUserAccountType">
+				<xsd:sequence>
+					<xsd:element name="SessionKey" type="xsd:string"/>
+					<xsd:element name="Login"	type="tns:LoginCredentialType" minOccurs="1" maxOccurs="1"/>
+					<xsd:element name="UserId"	type="xsd:long" minOccurs="1" maxOccurs="1"/>
+					<xsd:element name="NewEmail"	type="xsd:string" minOccurs="0" maxOccurs="1"/>
+					<xsd:element name="NewPassword"	type="xsd:string" minOccurs="0" maxOccurs="1"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="UpdateUserAccountResponseType">
+				<xsd:sequence>
+					<xsd:element name="Result" type="tns:ResultType"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="LogoutType">
+				<xsd:sequence>
+					<xsd:element name="SessionKey"	type="xsd:string"/>
+					<xsd:element name="UserId" 		type="xsd:long"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="LogoutResponseType">
+				<xsd:sequence>
+					<xsd:element name="Result" type="tns:ResultType"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="RetrievePasswordType">
+				<xsd:sequence>
+					<xsd:element name="Email"	type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="RetrievePasswordResponseType">
+				<xsd:sequence>
+					<xsd:element name="Result" type="tns:ResultType"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="SearchCardsByNameType">
+			    <xsd:sequence>
+			        <xsd:element name="SessionKey"  type="xsd:string"/>
+                    <xsd:element name="UserId"      type="xsd:long"/>
+                    <xsd:element name="FirstName"   type="xsd:string"/>
+                    <xsd:element name="LastName"    type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="IsAsc"       type="xsd:boolean" default="true"/>
+                    <xsd:element name="startPage"   type="xsd:int" default="0"/>
+			    </xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="SearchCardsByNameResponseType">
+			    <xsd:sequence>
+			        <xsd:element name="Result"           type="tns:ResultType"/>
+			        <xsd:element name="Size"             type="xsd:int" default="0"/>
+			        <xsd:element name="CardSummaries"    type="tns:CardSummaryType" minOccurs="0" maxOccurs="unbounded"/>
+			    </xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="UserSummaryType">
+			    <xsd:sequence>
+			        <xsd:element name="UserId"       type="xsd:long"/>
+			        <xsd:element name="FirstName"    type="xsd:string"/>
+			        <xsd:element name="MiddleName"   type="xsd:string" minOccurs="0"/>
+			        <xsd:element name="LastName"     type="xsd:string" minOccurs="0"/>
+			        <xsd:element name="Company"      type="xsd:string" minOccurs="0"/>
+			    </xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="GetUserProfileCardType">
+			    <xsd:sequence>
+			        <xsd:element name="SessionKey"   type="xsd:string"/>
+                    <xsd:element name="UserId"       type="xsd:long"/>
+                    <xsd:element name="TargetUserId" type="xsd:long"/>
+			    </xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="GetUserProfileCardResponseType">
+			    <xsd:sequence>
+			        <xsd:element name="Result"   type="tns:ResultType"/>
+			        <xsd:element name="FullName" type="xsd:string"/>
+			        <xsd:element name="Card"     type="tns:BizCardType" minOccurs="0" maxOccurs="1"/>
+			    </xsd:sequence>
+			</xsd:complexType>
+		</xs:schema>
+	</wsdl:types>
+	
+	<!-- wsdl message parts -->
+	<wsdl:message name="AuthenticateUserMessage">
+  		<wsdl:part name="parameters" element="tns:AuthenticateUserType"/>
+  	</wsdl:message>
+  	
+  	<wsdl:message name="AuthenticateUserResponseMessage">
+    	<wsdl:part name="parameters" element="tns:AuthenticateUserResponseType"/>
+  	</wsdl:message>
+  	
+	<wsdl:message name="RegisterUserMessage">
+  		<wsdl:part name="parameters" element="tns:RegisterUserType"/>
+  	</wsdl:message>
+  	
+  	<wsdl:message name="RegisterUserResponseMessage">
+    	<wsdl:part name="parameters" element="tns:RegisterUserResponseType"/>
+  	</wsdl:message>
+  	
+  	<wsdl:message name="GetUserMessage">
+  		<wsdl:part name="parameters" element="tns:GetUserType"/>
+  	</wsdl:message>
+  
+  	<wsdl:message name="GetUserResponseMessage">
+    	<wsdl:part name="parameters" element="tns:GetUserResponseType"/>
+  	</wsdl:message>
+  
+  	<wsdl:message name="ExchangeCardMessage">
+  		<wsdl:part name="parameters" element="tns:ExchangeCardType"/>
+  	</wsdl:message>
+  	
+  	<wsdl:message name="ExchangeCardResponseMessage">
+    	<wsdl:part name="parameters" element="tns:ExchangeCardResponseType"/>
+  	</wsdl:message>
+  	
+  	<wsdl:message name="RequestCardMessage">
+        <wsdl:part name="parameters" element="tns:RequestCardType"/>
+    </wsdl:message>
+    
+    <wsdl:message name="RequestCardResponseMessage">
+        <wsdl:part name="parameters" element="tns:RequestCardResponseType"/>
+    </wsdl:message>
+   
+    <wsdl:message name="GetFriendCardMessage">
+  		<wsdl:part name="parameters" element="tns:GetFriendCardType"/>
+  	</wsdl:message>
+  	
+  	<wsdl:message name="GetFriendCardResponseMessage">
+    	<wsdl:part name="parameters" element="tns:GetFriendCardResponseType"/>
+  	</wsdl:message>
+	
+	<wsdl:message name="ListFriendCardsMessage">
+  		<wsdl:part name="parameters" element="tns:ListFriendCardsType"/>
+  	</wsdl:message>
+  	
+  	<wsdl:message name="ListFriendCardsResponseMessage">
+    	<wsdl:part name="parameters" element="tns:ListFriendCardsResponseType"/>
+  	</wsdl:message>
+	
+	<wsdl:message name="ListFriendCardsFullMessage">
+  		<wsdl:part name="parameters" element="tns:ListFriendCardsFullType"/>
+  	</wsdl:message>
+  	
+  	<wsdl:message name="ListFriendCardsFullResponseMessage">
+    	<wsdl:part name="parameters" element="tns:ListFriendCardsFullResponseType"/>
+  	</wsdl:message>
+	
+	<wsdl:message name="GetOwnCardMessage">
+  		<wsdl:part name="parameters" element="tns:GetOwnCardType"/>
+  	</wsdl:message>
+  	
+  	<wsdl:message name="GetOwnCardResponseMessage">
+    	<wsdl:part name="parameters" element="tns:GetOwnCardResponseType"/>
+  	</wsdl:message>
+	
+    <wsdl:message name="DeleteFriendCardMessage">
+  		<wsdl:part name="parameters" element="tns:DeleteFriendCardType"/>
+  	</wsdl:message>
+  	
+  	<wsdl:message name="DeleteFriendCardResponseMessage">
+    	<wsdl:part name="parameters" element="tns:DeleteFriendCardResponseType"/>
+  	</wsdl:message>
+  	
+  	<wsdl:message name="UpdateFriendCardMessage">
+  		<wsdl:part name="parameters" element="tns:UpdateFriendCardType"/>
+  	</wsdl:message>
+  	
+  	<wsdl:message name="UpdateFriendCardResponseMessage">
+    	<wsdl:part name="parameters" element="tns:UpdateFriendCardResponseType"/>
+  	</wsdl:message>
+  	
+	<wsdl:message name="UpdateOwnCardMessage">
+  		<wsdl:part name="parameters" element="tns:UpdateOwnCardType"/>
+  	</wsdl:message>
+  	
+  	<wsdl:message name="UpdateOwnCardResponseMessage">
+    	<wsdl:part name="parameters" element="tns:UpdateOwnCardResponseType"/>
+  	</wsdl:message>
+
+  	<wsdl:message name="ListFriendCardRequestsResponseMessage">
+    	<wsdl:part name="parameters" element="tns:ListFriendCardRequestsResponseType"/>
+  	</wsdl:message>
+  	
+  	<wsdl:message name="ListFriendCardRequestsSecureMessage">
+  		<wsdl:part name="parameters" element="tns:ListFriendCardRequestsSecureType"/>
+  	</wsdl:message>
+  	
+	<wsdl:message name="AcceptFriendCardRequestMessage">
+  		<wsdl:part name="parameters" element="tns:AcceptFriendCardRequestType"/>
+  	</wsdl:message>
+  	
+  	<wsdl:message name="AcceptFriendCardRequestResponseMessage">
+    	<wsdl:part name="parameters" element="tns:AcceptFriendCardRequestResponseType"/>
+  	</wsdl:message>
+	
+	<wsdl:message name="UpdateUserAccountMessage">
+  		<wsdl:part name="parameters" element="tns:UpdateUserAccountType"/>
+  	</wsdl:message>
+	
+	<wsdl:message name="UpdateUserAccountResponseMessage">
+  		<wsdl:part name="parameters" element="tns:UpdateUserAccountResponseType"/>
+  	</wsdl:message>
+	
+	<wsdl:message name="LogoutMessage">
+  		<wsdl:part name="parameters" element="tns:LogoutType"/>
+  	</wsdl:message>
+	
+	<wsdl:message name="LogoutResponseMessage">
+  		<wsdl:part name="parameters" element="tns:LogoutResponseType"/>
+  	</wsdl:message>
+	
+	<wsdl:message name="RetrievePasswordMessage">
+  		<wsdl:part name="parameters" element="tns:RetrievePasswordType"/>
+  	</wsdl:message>
+	
+	<wsdl:message name="RetrievePasswordResponseMessage">
+  		<wsdl:part name="parameters" element="tns:RetrievePasswordResponseType"/>
+  	</wsdl:message>
+	
+	<wsdl:message name="SearchCardsByNameMessage">
+	    <wsdl:part name="parameters" element="tns:SearchCardsByNameType"/>
+	</wsdl:message>
+	
+	<wsdl:message name="SearchCardsByNameResponseMessage">
+	    <wsdl:part name="parameters" element="tns:SearchCardsByNameResponseType"/>
+	</wsdl:message>
+	
+	<wsdl:message name="GetUserProfileCardMessage">
+	    <wsdl:part name="parameters" element="tns:GetUserProfileCardType"/>
+	</wsdl:message>
+	
+	<wsdl:message name="GetUserProfileCardResponseMessage">
+        <wsdl:part name="parameters" element="tns:GetUserProfileCardResponseType"/>
+    </wsdl:message>
+    
+    <wsdl:portType name="BizCardPortType">
+    	<wsdl:operation name="AuthenticateUser">
+      		<wsdl:input message="tns:AuthenticateUserMessage" name="AuthenticateUser"/>
+      		<wsdl:output message="tns:AuthenticateUserResponseMessage" name="AuthenticateUserResponse"/>
+    	</wsdl:operation>
+    	
+		<wsdl:operation name="RegisterUser">
+      		<wsdl:input message="tns:RegisterUserMessage" name="RegisterUser"/>
+      		<wsdl:output message="tns:RegisterUserResponseMessage" name="RegisterUserResponse"/>
+    	</wsdl:operation>
+    	
+    	<wsdl:operation name="GetUser">
+      		<wsdl:input message="tns:GetUserMessage" name="GetUser"/>
+      		<wsdl:output message="tns:GetUserResponseMessage" name="GetUserResponse"/>
+    	</wsdl:operation>
+    	
+    	<wsdl:operation name="ExchangeCard">
+      		<wsdl:input message="tns:ExchangeCardMessage" name="ExchangeCard"/>
+      		<wsdl:output message="tns:ExchangeCardResponseMessage" name="ExchangeCardResponse"/>
+    	</wsdl:operation>
+    	
+    	<wsdl:operation name="RequestCard">
+            <wsdl:input message="tns:RequestCardMessage" name="RequestCard"/>
+            <wsdl:output message="tns:RequestCardResponseMessage" name="RequestCardResponse"/>
+        </wsdl:operation>
+    	
+		<wsdl:operation name="GetFriendCard">
+      		<wsdl:input message="tns:GetFriendCardMessage" name="GetFriendCard"/>
+      		<wsdl:output message="tns:GetFriendCardResponseMessage" name="GetFriendCardResponse"/>
+    	</wsdl:operation>
+		
+		<wsdl:operation name="ListFriendCards">
+      		<wsdl:input message="tns:ListFriendCardsMessage" name="ListFriendCards"/>
+      		<wsdl:output message="tns:ListFriendCardsResponseMessage" name="ListFriendCardsResponse"/>
+    	</wsdl:operation>
+		
+		<wsdl:operation name="ListFriendCardsFull">
+      		<wsdl:input message="tns:ListFriendCardsFullMessage" name="ListFriendCardsFull"/>
+      		<wsdl:output message="tns:ListFriendCardsFullResponseMessage" name="ListFriendCardsFullResponse"/>
+    	</wsdl:operation>
+		
+		<wsdl:operation name="GetOwnCard">
+      		<wsdl:input message="tns:GetOwnCardMessage" name="GetOwnCard"/>
+      		<wsdl:output message="tns:GetOwnCardResponseMessage" name="GetOwnCardResponse"/>
+    	</wsdl:operation>
+		
+    	<wsdl:operation name="DeleteFriendCard">
+      		<wsdl:input message="tns:DeleteFriendCardMessage" name="DeleteFriendCard"/>
+      		<wsdl:output message="tns:DeleteFriendCardResponseMessage" name="DeleteFriendCardResponse"/>
+    	</wsdl:operation>
+    	
+    	<wsdl:operation name="UpdateFriendCard">
+      		<wsdl:input message="tns:UpdateFriendCardMessage" name="UpdateFriendCard"/>
+      		<wsdl:output message="tns:UpdateFriendCardResponseMessage" name="UpdateFriendCardResponse"/>
+    	</wsdl:operation>
+		
+		<wsdl:operation name="UpdateOwnCard">
+      		<wsdl:input message="tns:UpdateOwnCardMessage" name="UpdateOwnCard"/>
+      		<wsdl:output message="tns:UpdateOwnCardResponseMessage" name="UpdateOwnCardResponse"/>
+    	</wsdl:operation>
+		
+    	<wsdl:operation name="ListFriendCardRequestsSecure">
+      		<wsdl:input message="tns:ListFriendCardRequestsSecureMessage" name="ListFriendCardRequestsSecure"/>
+      		<wsdl:output message="tns:ListFriendCardRequestsResponseMessage" name="ListFriendCardRequestsResponse"/>
+    	</wsdl:operation>
+    	
+		<wsdl:operation name="AcceptFriendCardRequest">
+      		<wsdl:input message="tns:AcceptFriendCardRequestMessage" name="AcceptFriendCardRequest"/>
+      		<wsdl:output message="tns:AcceptFriendCardRequestResponseMessage" name="AcceptFriendCardRequestResponse"/>
+    	</wsdl:operation>
+		
+		<wsdl:operation name="UpdateUserAccount">
+      		<wsdl:input message="tns:UpdateUserAccountMessage" name="UpdateUserAccount"/>
+      		<wsdl:output message="tns:UpdateUserAccountResponseMessage" name="UpdateUserAccountResponse"/>
+    	</wsdl:operation>
+		
+		<wsdl:operation name="Logout">
+      		<wsdl:input message="tns:LogoutMessage" name="Logout"/>
+      		<wsdl:output message="tns:LogoutResponseMessage" name="LogoutResponse"/>
+    	</wsdl:operation>
+		
+		<wsdl:operation name="RetrievePassword">
+      		<wsdl:input message="tns:RetrievePasswordMessage" name="RetrievePassword"/>
+      		<wsdl:output message="tns:RetrievePasswordResponseMessage" name="RetrievePasswordResponse"/>
+    	</wsdl:operation>
+    	
+    	<wsdl:operation name="SearchCardsByName">
+            <wsdl:input message="tns:SearchCardsByNameMessage" name="SearchCardsByName"/>
+            <wsdl:output message="tns:SearchCardsByNameResponseMessage" name="SearchCardsByNameResponse"/>
+        </wsdl:operation>
+        
+        <wsdl:operation name="GetUserProfileCard">
+            <wsdl:input message="tns:GetUserProfileCardMessage" name="GetUserProfileCard"/>
+            <wsdl:output message="tns:GetUserProfileCardResponseMessage" name="GetUserProfileCardResponse"/>
+        </wsdl:operation>
+	</wsdl:portType>
+	
+	<wsdl:binding name="BizCardBinding" type="tns:BizCardPortType">
+    	<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		
+		<wsdl:operation name="AuthenticateUser">
+      		<soap:operation soapAction="http://ws.ebizcard.com/AuthenticateUser" style="document"/>
+      		<wsdl:input name="AuthenticateUser">
+        		<soap:body use="literal"/>
+      		</wsdl:input>
+      		<wsdl:output name="AuthenticateUserResponse">
+        		<soap:body use="literal"/>
+      		</wsdl:output>
+    	</wsdl:operation>
+    	
+		<wsdl:operation name="RegisterUser">
+      		<soap:operation soapAction="http://ws.ebizcard.com/RegisterUser" style="document"/>
+      		<wsdl:input name="RegisterUser">
+        		<soap:body use="literal"/>
+      		</wsdl:input>
+      		<wsdl:output name="RegisterUserResponse">
+        		<soap:body use="literal"/>
+      		</wsdl:output>
+    	</wsdl:operation>
+    
+    	<wsdl:operation name="GetUser">
+      		<soap:operation soapAction="http://ws.ebizcard.com/GetUser" style="document"/>
+      		<wsdl:input name="GetUser">
+        		<soap:body use="literal"/>
+      		</wsdl:input>
+      		<wsdl:output name="GetUserResponse">
+        		<soap:body use="literal"/>
+      		</wsdl:output>
+    	</wsdl:operation>
+    
+	    <wsdl:operation name="ExchangeCard">
+      		<soap:operation soapAction="http://ws.ebizcard.com/ExchangeCard" style="document"/>
+      		<wsdl:input name="ExchangeCard">
+        		<soap:body use="literal"/>
+      		</wsdl:input>
+      		<wsdl:output name="ExchangeCardResponse">
+        		<soap:body use="literal"/>
+      		</wsdl:output>
+    	</wsdl:operation>
+		
+		<wsdl:operation name="RequestCard">
+            <soap:operation soapAction="http://ws.ebizcard.com/RequestCard" style="document"/>
+            <wsdl:input name="RequestCard">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="RequestCardResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        
+		<wsdl:operation name="GetFriendCard">
+      		<soap:operation soapAction="http://ws.ebizcard.com/GetFriendCard" style="document"/>
+      		<wsdl:input name="GetFriendCard">
+        		<soap:body use="literal"/>
+      		</wsdl:input>
+      		<wsdl:output name="GetFriendCardResponse">
+        		<soap:body use="literal"/>
+      		</wsdl:output>
+    	</wsdl:operation>
+		
+		<wsdl:operation name="ListFriendCards">
+      		<soap:operation soapAction="http://ws.ebizcard.com/ListFriendCards" style="document"/>
+      		<wsdl:input name="ListFriendCards">
+        		<soap:body use="literal"/>
+      		</wsdl:input>
+      		<wsdl:output name="ListFriendCardsResponse">
+        		<soap:body use="literal"/>
+      		</wsdl:output>
+    	</wsdl:operation>
+    	
+		<wsdl:operation name="ListFriendCardsFull">
+      		<soap:operation soapAction="http://ws.ebizcard.com/ListFriendCardsFull" style="document"/>
+      		<wsdl:input name="ListFriendCardsFull">
+        		<soap:body use="literal"/>
+      		</wsdl:input>
+      		<wsdl:output name="ListFriendCardsFullResponse">
+        		<soap:body use="literal"/>
+      		</wsdl:output>
+    	</wsdl:operation>
+		
+		<wsdl:operation name="GetOwnCard">
+      		<soap:operation soapAction="http://ws.ebizcard.com/GetOwnCard" style="document"/>
+      		<wsdl:input name="GetOwnCard">
+        		<soap:body use="literal"/>
+      		</wsdl:input>
+      		<wsdl:output name="GetOwnCardResponse">
+        		<soap:body use="literal"/>
+      		</wsdl:output>
+    	</wsdl:operation>
+		
+    	<wsdl:operation name="DeleteFriendCard">
+      		<soap:operation soapAction="http://ws.ebizcard.com/DeleteFriendCard" style="document"/>
+      		<wsdl:input name="DeleteFriendCard">
+        		<soap:body use="literal"/>
+      		</wsdl:input>
+      		<wsdl:output name="DeleteFriendCardResponse">
+        		<soap:body use="literal"/>
+      		</wsdl:output>
+    	</wsdl:operation>
+    	
+    	<wsdl:operation name="UpdateFriendCard">
+      		<soap:operation soapAction="http://ws.ebizcard.com/UpdateFriendCard" style="document"/>
+      		<wsdl:input name="UpdateFriendCard">
+        		<soap:body use="literal"/>
+      		</wsdl:input>
+      		<wsdl:output name="UpdateFriendCardResponse">
+        		<soap:body use="literal"/>
+      		</wsdl:output>
+    	</wsdl:operation>
+		
+		<wsdl:operation name="UpdateOwnCard">
+      		<soap:operation soapAction="http://ws.ebizcard.com/UpdateOwnCard" style="document"/>
+      		<wsdl:input name="UpdateOwnCard">
+        		<soap:body use="literal"/>
+      		</wsdl:input>
+      		<wsdl:output name="UpdateOwnCardResponse">
+        		<soap:body use="literal"/>
+      		</wsdl:output>
+    	</wsdl:operation>
+
+    	<wsdl:operation name="ListFriendCardRequestsSecure">
+      		<soap:operation soapAction="http://ws.ebizcard.com/ListFriendCardRequestsSecure" style="document"/>
+      		<wsdl:input name="ListFriendCardRequestsSecure">
+        		<soap:body use="literal"/>
+      		</wsdl:input>
+      		<wsdl:output name="ListFriendCardRequestsResponse">
+        		<soap:body use="literal"/>
+      		</wsdl:output>
+    	</wsdl:operation>
+    	
+		<wsdl:operation name="AcceptFriendCardRequest">
+      		<soap:operation soapAction="http://ws.ebizcard.com/AcceptFriendCardRequest" style="document"/>
+      		<wsdl:input name="AcceptFriendCardRequest">
+        		<soap:body use="literal"/>
+      		</wsdl:input>
+      		<wsdl:output name="AcceptFriendCardRequestResponse">
+        		<soap:body use="literal"/>
+      		</wsdl:output>
+    	</wsdl:operation>
+		
+		<wsdl:operation name="UpdateUserAccount">
+      		<soap:operation soapAction="http://ws.ebizcard.com/UpdateUserAccount" style="document"/>
+      		<wsdl:input name="UpdateUserAccount">
+        		<soap:body use="literal"/>
+      		</wsdl:input>
+      		<wsdl:output name="UpdateUserAccountResponse">
+        		<soap:body use="literal"/>
+      		</wsdl:output>
+    	</wsdl:operation>
+		
+		<wsdl:operation name="Logout">
+			<soap:operation soapAction="http://ws.ebizcard.com/Logout" style="document"/>
+      		<wsdl:input name="Logout">
+        		<soap:body use="literal"/>
+      		</wsdl:input>
+      		<wsdl:output name="LogoutResponse">
+        		<soap:body use="literal"/>
+      		</wsdl:output>
+		</wsdl:operation>
+		
+		<wsdl:operation name="RetrievePassword">
+			<soap:operation soapAction="http://ws.ebizcard.com/RetrievePassword" style="document"/>
+      		<wsdl:input name="RetrievePassword">
+        		<soap:body use="literal"/>
+      		</wsdl:input>
+      		<wsdl:output name="RetrievePasswordResponse">
+        		<soap:body use="literal"/>
+      		</wsdl:output>
+		</wsdl:operation>
+		
+		<wsdl:operation name="SearchCardsByName">
+		    <soap:operation soapAction="http://ws.ebizcard.com/SearchCardsByName" style="document"/>
+            <wsdl:input name="SearchCardsByName">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="SearchCardsByNameResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+		</wsdl:operation>
+		
+		<wsdl:operation name="GetUserProfileCard">
+		    <soap:operation soapAction="http://ws.ebizcard.com/GetUserProfileCard" style="document"/>
+            <wsdl:input name="GetUserProfileCard">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="GetUserProfileCardResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	
+	<wsdl:service name="BizCardService">
+      <wsdl:port name="BizCardPort" binding="tns:BizCardBinding">
+         <soap:address location="http://127.0.0.1:22080/eBizCard/ws/eBizCardService"/>
+      </wsdl:port>
+   </wsdl:service>
+</wsdl:definitions>
