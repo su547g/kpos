@@ -34,9 +34,6 @@ public class Category extends AbstractDomainObject {
     @Column(name = "hh_rate", nullable = true)
     private double hhRate = 1; //happy hour rate
 
-    @Column(name = "hh_price", nullable = true)
-    private double hh_price;
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category", orphanRemoval = true, fetch = FetchType.LAZY)
     @ForeignKey(name = "OPTION_2_CAT_FK")
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -90,14 +87,6 @@ public class Category extends AbstractDomainObject {
         this.hhRate = hhRate;
     }
 
-    public double getHh_price() {
-        return hh_price;
-    }
-
-    public void setHh_price(double hh_price) {
-        this.hh_price = hh_price;
-    }
-
     public String getNotes() {
         return notes;
     }
@@ -130,7 +119,6 @@ public class Category extends AbstractDomainObject {
         Category category = (Category) o;
 
         if (Double.compare(category.hhRate, hhRate) != 0) return false;
-        if (Double.compare(category.hh_price, hh_price) != 0) return false;
         if (isAllowedHH != category.isAllowedHH) return false;
         if (Double.compare(category.taxRate, taxRate) != 0) return false;
         if (id != null ? !id.equals(category.id) : category.id != null) return false;
@@ -150,7 +138,6 @@ public class Category extends AbstractDomainObject {
         result = 31 * result + (isAllowedHH ? 1 : 0);
         temp = hhRate != +0.0d ? Double.doubleToLongBits(hhRate) : 0L;
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = hh_price != +0.0d ? Double.doubleToLongBits(hh_price) : 0L;
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
