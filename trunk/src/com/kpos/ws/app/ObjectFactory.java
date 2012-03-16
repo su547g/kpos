@@ -35,11 +35,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CreateCategoryResponseType }
+     * Create an instance of {@link CreateCategoryType }
      * 
      */
-    public CreateCategoryResponseType createCreateCategoryResponseType() {
-        return new CreateCategoryResponseType();
+    public CreateCategoryType createCreateCategoryType() {
+        return new CreateCategoryType();
     }
 
     /**
@@ -51,11 +51,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CreateCategoryType }
+     * Create an instance of {@link CreateCategoryResponseType }
      * 
      */
-    public CreateCategoryType createCreateCategoryType() {
-        return new CreateCategoryType();
+    public CreateCategoryResponseType createCreateCategoryResponseType() {
+        return new CreateCategoryResponseType();
     }
 
     /**

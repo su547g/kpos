@@ -6,5 +6,6 @@
 	 <include within="com.kpos.dao..*"/>
 	 <include within="com.kpos.dao.*"/>
 	 <include within="com.kpos..*"/>
+     <include within="com.kpos.service.*"/>
    </weaver>
 </aspectj>
