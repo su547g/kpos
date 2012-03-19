@@ -3,10 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="ff6cbb56-9391-4d75-9220-34c96a41cdad" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kpos/dao/ISaleItemDao.java" afterPath="$PROJECT_DIR$/src/com/kpos/dao/ISaleItemDao.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kpos/dao/SaleItemDao.java" afterPath="$PROJECT_DIR$/src/com/kpos/dao/SaleItemDao.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kpos/domain/SaleItem.java" afterPath="$PROJECT_DIR$/src/com/kpos/domain/SaleItem.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kpos/ws/app/CreateCategoryType.java" afterPath="$PROJECT_DIR$/src/com/kpos/ws/app/CreateCategoryType.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kpos/ws/app/KPosPortType.java" afterPath="$PROJECT_DIR$/src/com/kpos/ws/app/KPosPortType.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kpos/ws/app/KPosPortType_KPosPort_Client.java" afterPath="$PROJECT_DIR$/src/com/kpos/ws/app/KPosPortType_KPosPort_Client.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kpos/ws/app/KPosService.java" afterPath="$PROJECT_DIR$/src/com/kpos/ws/app/KPosService.java" />
@@ -31,7 +27,7 @@
   </component>
   <component name="DebuggerManager">
     <line_breakpoints>
-      <breakpoint url="file://$PROJECT_DIR$/src/com/kpos/ws/impl/KPosPortImpl.java" line="111" class="com.kpos.ws.impl.KPosPortImpl" package="com.kpos.ws.impl">
+      <breakpoint url="file://$PROJECT_DIR$/src/com/kpos/ws/impl/KPosPortImpl.java" line="117" class="com.kpos.ws.impl.KPosPortImpl" package="com.kpos.ws.impl">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -115,7 +111,7 @@
       <file leaf-file-name="KPosPortImpl.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/kpos/ws/impl/KPosPortImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="131" column="12" selection-start="5242" selection-end="5242" vertical-scroll-proportion="0.8057143">
+            <state line="87" column="83" selection-start="3176" selection-end="3176" vertical-scroll-proportion="-0.39885715">
               <folding />
             </state>
           </provider>
@@ -160,7 +156,7 @@
       <file leaf-file-name="kpos.wsdl" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wsdl/kpos.wsdl">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="265" column="50" selection-start="12809" selection-end="12809" vertical-scroll-proportion="0.0">
+            <state line="246" column="29" selection-start="11938" selection-end="11938" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -723,7 +719,7 @@
     <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
     <option name="CREATE_PATCH_EXPAND_DETAILS_DEFAULT" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding new DAO" />
+    <option name="LAST_COMMIT_MESSAGE" value="add new admin functions" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -742,6 +738,7 @@
     <MESSAGE value="fix build error" />
     <MESSAGE value="new code" />
     <MESSAGE value="adding new DAO" />
+    <MESSAGE value="add new admin functions" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -853,14 +850,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/wsdl/kpos.wsdl">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="265" column="50" selection-start="12809" selection-end="12809" vertical-scroll-proportion="0.0">
+        <state line="246" column="29" selection-start="11938" selection-end="11938" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/kpos/ws/impl/KPosPortImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="131" column="12" selection-start="5242" selection-end="5242" vertical-scroll-proportion="0.8057143">
+        <state line="87" column="83" selection-start="3176" selection-end="3176" vertical-scroll-proportion="-0.39885715">
           <folding />
         </state>
       </provider>

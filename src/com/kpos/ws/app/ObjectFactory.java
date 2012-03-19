@@ -26,14 +26,20 @@ public class ObjectFactory {
 
     private final static QName _CreateSaleItemType_QNAME = new QName("http://ws.kpos.com/app", "CreateSaleItemType");
     private final static QName _DeleteCategoryResponseType_QNAME = new QName("http://ws.kpos.com/app", "DeleteCategoryResponseType");
-    private final static QName _CreateSaleItemResponseType_QNAME = new QName("http://ws.kpos.com/app", "CreateSaleItemResponseType");
+    private final static QName _UpdateSaleItemType_QNAME = new QName("http://ws.kpos.com/app", "UpdateSaleItemType");
     private final static QName _ListCategoryType_QNAME = new QName("http://ws.kpos.com/app", "ListCategoryType");
+    private final static QName _UpdateCategoryType_QNAME = new QName("http://ws.kpos.com/app", "UpdateCategoryType");
+    private final static QName _CreateSaleItemResponseType_QNAME = new QName("http://ws.kpos.com/app", "CreateSaleItemResponseType");
+    private final static QName _DeleteSaleItemType_QNAME = new QName("http://ws.kpos.com/app", "DeleteSaleItemType");
+    private final static QName _FetchSaleItemResponseType_QNAME = new QName("http://ws.kpos.com/app", "FetchSaleItemResponseType");
     private final static QName _CreateCategoryResponseType_QNAME = new QName("http://ws.kpos.com/app", "CreateCategoryResponseType");
     private final static QName _DeleteCategoryType_QNAME = new QName("http://ws.kpos.com/app", "DeleteCategoryType");
     private final static QName _ListCategoryResponseType_QNAME = new QName("http://ws.kpos.com/app", "ListCategoryResponseType");
     private final static QName _ListSaleItemsForCategoryType_QNAME = new QName("http://ws.kpos.com/app", "ListSaleItemsForCategoryType");
     private final static QName _UpdateCategoryResponseType_QNAME = new QName("http://ws.kpos.com/app", "UpdateCategoryResponseType");
-    private final static QName _UpdateCategoryType_QNAME = new QName("http://ws.kpos.com/app", "UpdateCategoryType");
+    private final static QName _UpdateSaleItemResponseType_QNAME = new QName("http://ws.kpos.com/app", "UpdateSaleItemResponseType");
+    private final static QName _DeleteSaleItemResponseType_QNAME = new QName("http://ws.kpos.com/app", "DeleteSaleItemResponseType");
+    private final static QName _FetchSaleItemType_QNAME = new QName("http://ws.kpos.com/app", "FetchSaleItemType");
     private final static QName _ListSaleItemsForCategoryResponseType_QNAME = new QName("http://ws.kpos.com/app", "ListSaleItemsForCategoryResponseType");
     private final static QName _CreateCategoryType_QNAME = new QName("http://ws.kpos.com/app", "CreateCategoryType");
 
@@ -45,19 +51,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ListSaleItemsForCategoryResponseType }
+     * Create an instance of {@link CategoryType }
      * 
      */
-    public ListSaleItemsForCategoryResponseType createListSaleItemsForCategoryResponseType() {
-        return new ListSaleItemsForCategoryResponseType();
-    }
-
-    /**
-     * Create an instance of {@link DeleteCategoryType }
-     * 
-     */
-    public DeleteCategoryType createDeleteCategoryType() {
-        return new DeleteCategoryType();
+    public CategoryType createCategoryType() {
+        return new CategoryType();
     }
 
     /**
@@ -69,19 +67,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ListCategoryResponseType }
+     * Create an instance of {@link ResultType }
      * 
      */
-    public ListCategoryResponseType createListCategoryResponseType() {
-        return new ListCategoryResponseType();
+    public ResultType createResultType() {
+        return new ResultType();
     }
 
     /**
-     * Create an instance of {@link UpdateCategoryType }
+     * Create an instance of {@link UpdateSaleItemResponseType }
      * 
      */
-    public UpdateCategoryType createUpdateCategoryType() {
-        return new UpdateCategoryType();
+    public UpdateSaleItemResponseType createUpdateSaleItemResponseType() {
+        return new UpdateSaleItemResponseType();
     }
 
     /**
@@ -101,6 +99,46 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link UpdateSaleItemType }
+     * 
+     */
+    public UpdateSaleItemType createUpdateSaleItemType() {
+        return new UpdateSaleItemType();
+    }
+
+    /**
+     * Create an instance of {@link SaleItemType }
+     * 
+     */
+    public SaleItemType createSaleItemType() {
+        return new SaleItemType();
+    }
+
+    /**
+     * Create an instance of {@link DeleteSaleItemType }
+     * 
+     */
+    public DeleteSaleItemType createDeleteSaleItemType() {
+        return new DeleteSaleItemType();
+    }
+
+    /**
+     * Create an instance of {@link FetchSaleItemType }
+     * 
+     */
+    public FetchSaleItemType createFetchSaleItemType() {
+        return new FetchSaleItemType();
+    }
+
+    /**
+     * Create an instance of {@link FetchSaleItemResponseType }
+     * 
+     */
+    public FetchSaleItemResponseType createFetchSaleItemResponseType() {
+        return new FetchSaleItemResponseType();
+    }
+
+    /**
      * Create an instance of {@link CreateSaleItemResponseType }
      * 
      */
@@ -109,19 +147,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link UpdateCategoryResponseType }
+     * Create an instance of {@link DeleteSaleItemResponseType }
      * 
      */
-    public UpdateCategoryResponseType createUpdateCategoryResponseType() {
-        return new UpdateCategoryResponseType();
+    public DeleteSaleItemResponseType createDeleteSaleItemResponseType() {
+        return new DeleteSaleItemResponseType();
     }
 
     /**
-     * Create an instance of {@link CreateCategoryResponseType }
+     * Create an instance of {@link UpdateCategoryType }
      * 
      */
-    public CreateCategoryResponseType createCreateCategoryResponseType() {
-        return new CreateCategoryResponseType();
+    public UpdateCategoryType createUpdateCategoryType() {
+        return new UpdateCategoryType();
+    }
+
+    /**
+     * Create an instance of {@link DeleteCategoryType }
+     * 
+     */
+    public DeleteCategoryType createDeleteCategoryType() {
+        return new DeleteCategoryType();
     }
 
     /**
@@ -141,27 +187,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SaleItemType }
+     * Create an instance of {@link ListSaleItemsForCategoryResponseType }
      * 
      */
-    public SaleItemType createSaleItemType() {
-        return new SaleItemType();
+    public ListSaleItemsForCategoryResponseType createListSaleItemsForCategoryResponseType() {
+        return new ListSaleItemsForCategoryResponseType();
     }
 
     /**
-     * Create an instance of {@link ResultType }
+     * Create an instance of {@link ListCategoryResponseType }
      * 
      */
-    public ResultType createResultType() {
-        return new ResultType();
+    public ListCategoryResponseType createListCategoryResponseType() {
+        return new ListCategoryResponseType();
     }
 
     /**
-     * Create an instance of {@link CategoryType }
+     * Create an instance of {@link UpdateCategoryResponseType }
      * 
      */
-    public CategoryType createCategoryType() {
-        return new CategoryType();
+    public UpdateCategoryResponseType createUpdateCategoryResponseType() {
+        return new UpdateCategoryResponseType();
+    }
+
+    /**
+     * Create an instance of {@link CreateCategoryResponseType }
+     * 
+     */
+    public CreateCategoryResponseType createCreateCategoryResponseType() {
+        return new CreateCategoryResponseType();
     }
 
     /**
@@ -183,12 +237,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link CreateSaleItemResponseType }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link UpdateSaleItemType }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://ws.kpos.com/app", name = "CreateSaleItemResponseType")
-    public JAXBElement<CreateSaleItemResponseType> createCreateSaleItemResponseType(CreateSaleItemResponseType value) {
-        return new JAXBElement<CreateSaleItemResponseType>(_CreateSaleItemResponseType_QNAME, CreateSaleItemResponseType.class, null, value);
+    @XmlElementDecl(namespace = "http://ws.kpos.com/app", name = "UpdateSaleItemType")
+    public JAXBElement<UpdateSaleItemType> createUpdateSaleItemType(UpdateSaleItemType value) {
+        return new JAXBElement<UpdateSaleItemType>(_UpdateSaleItemType_QNAME, UpdateSaleItemType.class, null, value);
     }
 
     /**
@@ -198,6 +252,42 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://ws.kpos.com/app", name = "ListCategoryType")
     public JAXBElement<ListCategoryType> createListCategoryType(ListCategoryType value) {
         return new JAXBElement<ListCategoryType>(_ListCategoryType_QNAME, ListCategoryType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link UpdateCategoryType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.kpos.com/app", name = "UpdateCategoryType")
+    public JAXBElement<UpdateCategoryType> createUpdateCategoryType(UpdateCategoryType value) {
+        return new JAXBElement<UpdateCategoryType>(_UpdateCategoryType_QNAME, UpdateCategoryType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CreateSaleItemResponseType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.kpos.com/app", name = "CreateSaleItemResponseType")
+    public JAXBElement<CreateSaleItemResponseType> createCreateSaleItemResponseType(CreateSaleItemResponseType value) {
+        return new JAXBElement<CreateSaleItemResponseType>(_CreateSaleItemResponseType_QNAME, CreateSaleItemResponseType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link DeleteSaleItemType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.kpos.com/app", name = "DeleteSaleItemType")
+    public JAXBElement<DeleteSaleItemType> createDeleteSaleItemType(DeleteSaleItemType value) {
+        return new JAXBElement<DeleteSaleItemType>(_DeleteSaleItemType_QNAME, DeleteSaleItemType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link FetchSaleItemResponseType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.kpos.com/app", name = "FetchSaleItemResponseType")
+    public JAXBElement<FetchSaleItemResponseType> createFetchSaleItemResponseType(FetchSaleItemResponseType value) {
+        return new JAXBElement<FetchSaleItemResponseType>(_FetchSaleItemResponseType_QNAME, FetchSaleItemResponseType.class, null, value);
     }
 
     /**
@@ -246,12 +336,30 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link UpdateCategoryType }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link UpdateSaleItemResponseType }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://ws.kpos.com/app", name = "UpdateCategoryType")
-    public JAXBElement<UpdateCategoryType> createUpdateCategoryType(UpdateCategoryType value) {
-        return new JAXBElement<UpdateCategoryType>(_UpdateCategoryType_QNAME, UpdateCategoryType.class, null, value);
+    @XmlElementDecl(namespace = "http://ws.kpos.com/app", name = "UpdateSaleItemResponseType")
+    public JAXBElement<UpdateSaleItemResponseType> createUpdateSaleItemResponseType(UpdateSaleItemResponseType value) {
+        return new JAXBElement<UpdateSaleItemResponseType>(_UpdateSaleItemResponseType_QNAME, UpdateSaleItemResponseType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link DeleteSaleItemResponseType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.kpos.com/app", name = "DeleteSaleItemResponseType")
+    public JAXBElement<DeleteSaleItemResponseType> createDeleteSaleItemResponseType(DeleteSaleItemResponseType value) {
+        return new JAXBElement<DeleteSaleItemResponseType>(_DeleteSaleItemResponseType_QNAME, DeleteSaleItemResponseType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link FetchSaleItemType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.kpos.com/app", name = "FetchSaleItemType")
+    public JAXBElement<FetchSaleItemType> createFetchSaleItemType(FetchSaleItemType value) {
+        return new JAXBElement<FetchSaleItemType>(_FetchSaleItemType_QNAME, FetchSaleItemType.class, null, value);
     }
 
     /**
