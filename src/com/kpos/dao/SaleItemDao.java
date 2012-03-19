@@ -12,4 +12,24 @@ public class SaleItemDao extends AbstractJpaDao<SaleItem> implements ISaleItemDa
     protected Class getEntityClass() {
         return SaleItem.class;
     }
+
+    @Override
+    public void insertSaleItem(SaleItem aItem) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public SaleItem findSaleItem(long id) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public SaleItem udpateSaleItem(SaleItem aItem) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public SaleItem deleteSaleItem(SaleItem aItem) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

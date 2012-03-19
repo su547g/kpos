@@ -2,10 +2,7 @@ package com.kpos.ws.impl;
 
 import com.kpos.domain.Category;
 import com.kpos.service.*;
-import com.kpos.ws.app.CreateCategoryResponseType;
-import com.kpos.ws.app.CreateCategoryType;
-import com.kpos.ws.app.KPosPortType;
-import com.kpos.ws.app.ResultType;
+import com.kpos.ws.app.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,16 +83,29 @@ public class KPosPortImpl implements KPosPortType {
     }
 
     @Override
+    public DeleteCategoryResponseType deleteCategory(
+            @WebParam(partName = "parameters", name = "DeleteCategoryType", targetNamespace = NS) DeleteCategoryType parameters) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public ListCategoryResponseType listCategory(
+            @WebParam(partName = "parameters", name = "ListCategoryType", targetNamespace = NS) ListCategoryType parameters) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
     public CreateCategoryResponseType createCategory(
             @WebParam(partName = "parameters", name = "CreateCategoryType", targetNamespace = NS) CreateCategoryType soapCategory) {
         Category category = new Category();
-        category.setName(soapCategory.getName());
-        category.setNotes(soapCategory.getNotes());
-        if(soapCategory.getIsAllowedHappyHour() != null) {
-            category.setAllowedHH(soapCategory.getIsAllowedHappyHour());
+        CategoryType soapType = soapCategory.getCategory();
+        category.setName(soapType.getName());
+        category.setNotes(soapType.getNotes());
+        if(soapType.getIsAllowedHappyHour() != null) {
+            category.setAllowedHH(soapType.getIsAllowedHappyHour());
         }
-        if(soapCategory.getHappyHourRate() != null) {
-            category.setHhRate(soapCategory.getHappyHourRate());
+        if(soapType.getHappyHourRate() != null) {
+            category.setHhRate(soapType.getHappyHourRate());
         }
         category.setCreatedOn(new Date());
         category.setLastUpdated(new Date());
@@ -103,5 +113,23 @@ public class KPosPortImpl implements KPosPortType {
         CreateCategoryResponseType responseType = new CreateCategoryResponseType();
         responseType.setResult(getSoapResult(result));
         return responseType;
+    }
+
+    @Override
+    public ListSaleItemsForCategoryResponseType listSaleItemsForCategory(
+            @WebParam(partName = "parameters", name = "ListSaleItemsForCategoryType", targetNamespace = NS) ListSaleItemsForCategoryType parameters) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public UpdateCategoryResponseType updateCategory(
+            @WebParam(partName = "parameters", name = "UpdateCategoryType", targetNamespace = NS) UpdateCategoryType parameters) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public CreateSaleItemResponseType createSaleItem(
+            @WebParam(partName = "parameters", name = "CreateSaleItemType", targetNamespace = NS) CreateSaleItemType parameters) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }
