@@ -89,6 +89,12 @@ public class KPosPortImpl implements KPosPortType {
     }
 
     @Override
+    public DeleteSaleItemResponseType deleteSaleItem(
+            @WebParam(partName = "parameters", name = "DeleteSaleItemType", targetNamespace = NS) DeleteSaleItemType parameters) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
     public ListCategoryResponseType listCategory(
             @WebParam(partName = "parameters", name = "ListCategoryType", targetNamespace = NS) ListCategoryType parameters) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
@@ -116,14 +122,26 @@ public class KPosPortImpl implements KPosPortType {
     }
 
     @Override
+    public UpdateCategoryResponseType updateCategory(
+            @WebParam(partName = "parameters", name = "UpdateCategoryType", targetNamespace = NS) UpdateCategoryType parameters) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
     public ListSaleItemsForCategoryResponseType listSaleItemsForCategory(
             @WebParam(partName = "parameters", name = "ListSaleItemsForCategoryType", targetNamespace = NS) ListSaleItemsForCategoryType parameters) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public UpdateCategoryResponseType updateCategory(
-            @WebParam(partName = "parameters", name = "UpdateCategoryType", targetNamespace = NS) UpdateCategoryType parameters) {
+    public UpdateSaleItemResponseType updateSaleItem(
+            @WebParam(partName = "parameters", name = "UpdateSaleItemType", targetNamespace = NS) UpdateSaleItemType parameters) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public FetchSaleItemResponseType fetchSaleItem(
+            @WebParam(partName = "parameters", name = "FetchSaleItemType", targetNamespace = NS) FetchSaleItemType parameters) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
