@@ -49,24 +49,9 @@ public class SaleItem extends AbstractDomainObject {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<SaleItemOption> optionList = new ArrayList<SaleItemOption>();
 
-    @Column(name = "large_in_price")
-    private double largeInPrice;
+    @Column(name = "out_price")
+    private double outPrice; //take-out price
 
-    @Column(name = "medium_in_price")
-    private double mediumInPrice;
-
-    @Column(name = "small_in_price")
-    private double smallInPrice;
-    
-    @Column(name = "large_out_price")
-    private double largeOutPrice;
-    
-    @Column(name = "medium_out_price")
-    private double mediumOutPrice;
-    
-    @Column(name = "small_out_price")
-    private double smallOutPrice;
-    
     @Column(name = "single_option_only")
     private boolean singleOptionOnly = false; //whether user can select only a single option or multiple
 
@@ -144,52 +129,12 @@ public class SaleItem extends AbstractDomainObject {
         this.optionList = optionList;
     }
 
-    public double getLargeInPrice() {
-        return largeInPrice;
+    public double getOutPrice() {
+        return outPrice;
     }
 
-    public void setLargeInPrice(double largeInPrice) {
-        this.largeInPrice = largeInPrice;
-    }
-
-    public double getMediumInPrice() {
-        return mediumInPrice;
-    }
-
-    public void setMediumInPrice(double mediumInPrice) {
-        this.mediumInPrice = mediumInPrice;
-    }
-
-    public double getSmallInPrice() {
-        return smallInPrice;
-    }
-
-    public void setSmallInPrice(double smallInPrice) {
-        this.smallInPrice = smallInPrice;
-    }
-
-    public double getLargeOutPrice() {
-        return largeOutPrice;
-    }
-
-    public void setLargeOutPrice(double largeOutPrice) {
-        this.largeOutPrice = largeOutPrice;
-    }
-
-    public double getMediumOutPrice() {
-        return mediumOutPrice;
-    }
-
-    public void setMediumOutPrice(double mediumOutPrice) {
-        this.mediumOutPrice = mediumOutPrice;
-    }
-
-    public double getSmallOutPrice() {
-        return smallOutPrice;
-    }
-
-    public void setSmallOutPrice(double smallOutPrice) {
-        this.smallOutPrice = smallOutPrice;
+    public void setOutPrice(double outPrice) {
+        this.outPrice = outPrice;
     }
 
     public boolean isSingleOptionOnly() {

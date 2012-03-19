@@ -2,11 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="ff6cbb56-9391-4d75-9220-34c96a41cdad" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/kpos/dao/ISaleItemDao.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/kpos/dao/SaleItemDao.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/adminCategory.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kpos/dao/ISaleItemDao.java" afterPath="$PROJECT_DIR$/src/com/kpos/dao/ISaleItemDao.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kpos/dao/SaleItemDao.java" afterPath="$PROJECT_DIR$/src/com/kpos/dao/SaleItemDao.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kpos/domain/SaleItem.java" afterPath="$PROJECT_DIR$/src/com/kpos/domain/SaleItem.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kpos/ws/app/CreateCategoryType.java" afterPath="$PROJECT_DIR$/src/com/kpos/ws/app/CreateCategoryType.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kpos/ws/app/KPosPortType.java" afterPath="$PROJECT_DIR$/src/com/kpos/ws/app/KPosPortType.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kpos/ws/app/KPosPortType_KPosPort_Client.java" afterPath="$PROJECT_DIR$/src/com/kpos/ws/app/KPosPortType_KPosPort_Client.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kpos/ws/app/KPosService.java" afterPath="$PROJECT_DIR$/src/com/kpos/ws/app/KPosService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kpos/ws/app/ObjectFactory.java" afterPath="$PROJECT_DIR$/src/com/kpos/ws/app/ObjectFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/kpos/ws/impl/KPosPortImpl.java" afterPath="$PROJECT_DIR$/src/com/kpos/ws/impl/KPosPortImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wsdl/kpos.wsdl" afterPath="$PROJECT_DIR$/wsdl/kpos.wsdl" />
     </list>
     <ignored path="kpos.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -25,7 +31,7 @@
   </component>
   <component name="DebuggerManager">
     <line_breakpoints>
-      <breakpoint url="file://$PROJECT_DIR$/src/com/kpos/ws/impl/KPosPortImpl.java" line="101" class="com.kpos.ws.impl.KPosPortImpl" package="com.kpos.ws.impl">
+      <breakpoint url="file://$PROJECT_DIR$/src/com/kpos/ws/impl/KPosPortImpl.java" line="111" class="com.kpos.ws.impl.KPosPortImpl" package="com.kpos.ws.impl">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -82,7 +88,7 @@
       <file leaf-file-name="SaleItem.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/kpos/domain/SaleItem.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="79" column="33" selection-start="2342" selection-end="2342" vertical-scroll-proportion="0.0">
+            <state line="37" column="28" selection-start="978" selection-end="986" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -106,10 +112,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="KPosPortImpl.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="KPosPortImpl.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/kpos/ws/impl/KPosPortImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="102" column="0" selection-start="3835" selection-end="3835" vertical-scroll-proportion="0.0">
+            <state line="131" column="12" selection-start="5242" selection-end="5242" vertical-scroll-proportion="0.8057143">
               <folding />
             </state>
           </provider>
@@ -124,10 +130,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SaleItemDao.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="SaleItemDao.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/kpos/dao/SaleItemDao.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="0" selection-start="23" selection-end="23" vertical-scroll-proportion="0.038288288">
+            <state line="17" column="8" selection-start="375" selection-end="375" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -136,7 +142,7 @@
       <file leaf-file-name="ISaleItemDao.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/kpos/dao/ISaleItemDao.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="29" selection-start="124" selection-end="124" vertical-scroll-proportion="0.0">
+            <state line="18" column="44" selection-start="354" selection-end="354" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -154,7 +160,7 @@
       <file leaf-file-name="kpos.wsdl" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wsdl/kpos.wsdl">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="42" column="96" selection-start="2227" selection-end="2227" vertical-scroll-proportion="0.0">
+            <state line="265" column="50" selection-start="12809" selection-end="12809" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -163,7 +169,7 @@
       <file leaf-file-name="ICategoryDao.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/kpos/dao/ICategoryDao.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="36" selection-start="404" selection-end="404" vertical-scroll-proportion="0.0">
+            <state line="16" column="50" selection-start="328" selection-end="328" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -184,22 +190,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/com/kpos/domain/OrderItem.java" />
         <option value="$PROJECT_DIR$/src/com/kpos/domain/GlobalOption.java" />
         <option value="$PROJECT_DIR$/src/com/kpos/domain/CategoryOption.java" />
         <option value="$PROJECT_DIR$/src/com/kpos/domain/Bill.java" />
-        <option value="$PROJECT_DIR$/src/com/kpos/domain/SaleItem.java" />
-        <option value="$PROJECT_DIR$/wsdl/kpos.wsdl" />
         <option value="$PROJECT_DIR$/src/com/kpos/domain/Category.java" />
         <option value="$PROJECT_DIR$/src/com/kpos/ws/app/CreateCategoryType.java" />
         <option value="$PROJECT_DIR$/war/WEB-INF/classes/META-INF/aop.xml" />
-        <option value="$PROJECT_DIR$/src/com/kpos/ws/impl/KPosPortImpl.java" />
         <option value="$PROJECT_DIR$/src/com/kpos/service/IContentManagementService.java" />
         <option value="$PROJECT_DIR$/src/com/kpos/dao/ICategoryDao.java" />
         <option value="$PROJECT_DIR$/src/com/kpos/dao/CategoryDao.java" />
         <option value="$PROJECT_DIR$/src/com/kpos/service/ContentManagementServiceImpl.java" />
         <option value="$PROJECT_DIR$/www/adminCategory.html" />
+        <option value="$PROJECT_DIR$/src/com/kpos/dao/ISaleItemDao.java" />
         <option value="$PROJECT_DIR$/src/com/kpos/dao/SaleItemDao.java" />
+        <option value="$PROJECT_DIR$/src/com/kpos/domain/SaleItem.java" />
+        <option value="$PROJECT_DIR$/wsdl/kpos.wsdl" />
+        <option value="$PROJECT_DIR$/src/com/kpos/ws/impl/KPosPortImpl.java" />
       </list>
     </option>
   </component>
@@ -338,6 +344,54 @@
               <option name="myItemId" value="kpos" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ws" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ws" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="impl" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kpos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -405,8 +459,8 @@
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
@@ -439,24 +493,6 @@
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <method>
-        <option name="AntTarget" enabled="false" />
-        <option name="BuildArtifacts" enabled="false" />
-        <option name="Make" enabled="true" />
-        <option name="Maven.BeforeRunTask" enabled="false" />
-      </method>
-    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <module name="" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -482,6 +518,24 @@
       <envs />
       <properties />
       <listeners />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
@@ -612,22 +666,22 @@
     <layout>
       <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="true" weight="0.32977587" sideWeight="0.49385357" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.10005528" sideWeight="0.68196374" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.10005528" sideWeight="0.67022413" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3180363" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32998884" sideWeight="0.5024051" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.49171567" order="7" side_tool="false" content_ui="tabs" x="24" y="372" width="1871" height="296" />
       <window_info id="Gradle" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25538972" sideWeight="0.67022413" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25483692" sideWeight="0.67022413" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.49171567" order="7" side_tool="false" content_ui="tabs" x="24" y="372" width="1871" height="296" />
       <window_info id="SVN Repositories" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32998884" sideWeight="0.49812934" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="soapUI Navigator" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2432283" sideWeight="0.68196374" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -669,7 +723,7 @@
     <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
     <option name="CREATE_PATCH_EXPAND_DETAILS_DEFAULT" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="new code" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding new DAO" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -687,6 +741,7 @@
     <MESSAGE value="delete files" />
     <MESSAGE value="fix build error" />
     <MESSAGE value="new code" />
+    <MESSAGE value="adding new DAO" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -740,9 +795,14 @@
         <state line="13" column="22" selection-start="218" selection-end="218" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/kpos/domain/SaleItem.java">
+    <entry file="file://$PROJECT_DIR$/www/adminCategory.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="79" column="33" selection-start="2342" selection-end="2342" vertical-scroll-proportion="0.0" />
+        <state line="16" column="45" selection-start="414" selection-end="414" vertical-scroll-proportion="0.21113689" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/war/WEB-INF/resources/applicationContext.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="67" column="27" selection-start="3840" selection-end="3840" vertical-scroll-proportion="0.5213964" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/kpos/service/ContentManagementServiceImpl.java">
@@ -755,9 +815,9 @@
         <state line="20" column="50" selection-start="498" selection-end="498" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/kpos/ws/impl/KPosPortImpl.java">
+    <entry file="file://$PROJECT_DIR$/src/com/kpos/dao/CategoryDao.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="102" column="0" selection-start="3835" selection-end="3835" vertical-scroll-proportion="0.0" />
+        <state line="18" column="7" selection-start="341" selection-end="426" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/kpos/domain/Category.java">
@@ -767,47 +827,40 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/kpos/dao/ICategoryDao.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="36" selection-start="404" selection-end="404" vertical-scroll-proportion="0.0" />
+        <state line="16" column="50" selection-start="328" selection-end="328" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/www/adminCategory.html">
+    <entry file="file://$PROJECT_DIR$/src/com/kpos/dao/SaleItemDao.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="45" selection-start="414" selection-end="414" vertical-scroll-proportion="0.21113689">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wsdl/kpos.wsdl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="42" column="96" selection-start="2227" selection-end="2227" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/war/WEB-INF/resources/applicationContext.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="67" column="27" selection-start="3840" selection-end="3840" vertical-scroll-proportion="0.5213964">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/kpos/dao/CategoryDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="7" selection-start="341" selection-end="426" vertical-scroll-proportion="0.0">
+        <state line="17" column="8" selection-start="375" selection-end="375" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/kpos/dao/ISaleItemDao.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="29" selection-start="124" selection-end="124" vertical-scroll-proportion="0.0">
+        <state line="18" column="44" selection-start="354" selection-end="354" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/kpos/dao/SaleItemDao.java">
+    <entry file="file://$PROJECT_DIR$/src/com/kpos/domain/SaleItem.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="0" selection-start="23" selection-end="23" vertical-scroll-proportion="0.038288288">
+        <state line="37" column="28" selection-start="978" selection-end="986" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wsdl/kpos.wsdl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="265" column="50" selection-start="12809" selection-end="12809" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/kpos/ws/impl/KPosPortImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="131" column="12" selection-start="5242" selection-end="5242" vertical-scroll-proportion="0.8057143">
           <folding />
         </state>
       </provider>

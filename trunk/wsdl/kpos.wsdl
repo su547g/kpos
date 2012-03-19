@@ -15,9 +15,24 @@
 
             <xs:element name="CreateCategoryType" type="tns:CreateCategoryType"/>
             <xs:element name="CreateCategoryResponseType" type="tns:CreateCategoryResponseType"/>
+
+            <xs:element name="UpdateCategoryType" type="tns:UpdateCategoryType"/>
+            <xs:element name="UpdateCategoryResponseType" type="tns:UpdateCategoryResponseType"/>
+
+            <xs:element name="DeleteCategoryType" type="tns:DeleteCategoryType"/>
+            <xs:element name="DeleteCategoryResponseType" type="tns:DeleteCategoryResponseType"/>
+
+            <xs:element name="ListCategoryType" type="tns:ListCategoryType"/>
+            <xs:element name="ListCategoryResponseType" type="tns:ListCategoryResponseType"/>
+
+            <xs:element name="CreateSaleItemType" type="tns:CreateSaleItemType"/>
+            <xs:element name="CreateSaleItemResponseType" type="tns:CreateSaleItemResponseType"/>
+
+            <xs:element name="ListSaleItemsForCategoryType" type="tns:ListSaleItemsForCategoryType"/>
+            <xs:element name="ListSaleItemsForCategoryResponseType" type="tns:ListSaleItemsForCategoryResponseType"/>
+
             <!--Result object-->
             <xs:complexType name="ResultType">
-
                 <xs:sequence>
                     <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="successful" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
@@ -27,12 +42,37 @@
                 </xs:sequence>
             </xs:complexType>
 
-            <xs:complexType name="CreateCategoryType">
+            <!--Define data structures below-->
+
+            <xs:complexType name="CategoryType">
                 <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="notes" type="xsd:string" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="isAllowedHappyHour" type="xsd:boolean" minOccurs="0" maxOccurs="1" default="false"/>
                     <xs:element name="happyHourRate" type="xsd:double" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="SaleItemType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="catId" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="normalPrice" type="xsd:double" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="takeoutPrice" type="xsd:double" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="isAllowedHH" type="xsd:boolean" minOccurs="0" maxOccurs="1" default="false"/>
+                    <xs:element name="hhPrice" type="xsd:double" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="hhRate" type="xsd:double" minOccurs="0" maxOccurs="1" default="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <!--End of data structures-->
+
+            <!--Define operations below-->
+
+            <xs:complexType name="CreateCategoryType">
+                <xs:sequence>
+                    <xs:element name="category" type="tns:CategoryType" minOccurs="1" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="CreateCategoryResponseType">
@@ -40,21 +80,140 @@
                     <xsd:element name="Result" type="tns:ResultType"/>
                 </xs:sequence>
             </xs:complexType>
+
+            <xs:complexType name="UpdateCategoryType">
+                <xs:sequence>
+                    <xs:element name="category" type="tns:CategoryType" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="UpdateCategoryResponseType">
+                <xs:sequence>
+                    <xsd:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="DeleteCategoryType">
+                <xs:sequence>
+                    <xs:element name="categoryId" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeleteCategoryResponseType">
+                <xs:sequence>
+                    <xsd:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="ListCategoryType">
+                <xs:sequence>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListCategoryResponseType">
+                <xs:sequence>
+                    <xsd:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="total" type="xs:int" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="categories" type="tns:CategoryType" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="CreateSaleItemType">
+                <xs:sequence>
+                    <xs:element name="saleItemList" type="tns:SaleItemType" minOccurs="1" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="CreateSaleItemResponseType">
+                <xs:sequence>
+                    <xsd:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+            
+            <xs:complexType name="ListSaleItemsForCategoryType">
+                <xs:sequence>
+                    <xs:element name="categoryId" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListSaleItemsForCategoryResponseType">
+                <xs:sequence>
+                    <xsd:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="total" type="xs:int" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="saleItems" type="tns:SaleItemType" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:complexType>
+            
+            <!--End of operations-->
         </xs:schema>
     </wsdl:types>
 
     <wsdl:message name="CreateCategoryMessage">
         <wsdl:part name="parameters" element="tns:CreateCategoryType"/>
     </wsdl:message>
-
     <wsdl:message name="CreateCategoryResponseMessage">
         <wsdl:part name="parameters" element="tns:CreateCategoryResponseType"/>
+    </wsdl:message>
+
+    <wsdl:message name="UpdateCategoryMessage">
+        <wsdl:part name="parameters" element="tns:UpdateCategoryType"/>
+    </wsdl:message>
+    <wsdl:message name="UpdateCategoryResponseMessage">
+        <wsdl:part name="parameters" element="tns:UpdateCategoryResponseType"/>
+    </wsdl:message>
+
+    <wsdl:message name="DeleteCategoryMessage">
+        <wsdl:part name="parameters" element="tns:DeleteCategoryType"/>
+    </wsdl:message>
+    <wsdl:message name="DeleteCategoryResponseMessage">
+        <wsdl:part name="parameters" element="tns:DeleteCategoryResponseType"/>
+    </wsdl:message>
+
+    <wsdl:message name="ListCategoryMessage">
+        <wsdl:part name="parameters" element="tns:ListCategoryType"/>
+    </wsdl:message>
+    <wsdl:message name="ListCategoryResponseMessage">
+        <wsdl:part name="parameters" element="tns:ListCategoryResponseType"/>
+    </wsdl:message>
+
+    <wsdl:message name="CreateSaleItemMessage">
+        <wsdl:part name="parameters" element="tns:CreateSaleItemType"/>
+    </wsdl:message>
+    <wsdl:message name="CreateSaleItemResponseMessage">
+        <wsdl:part name="parameters" element="tns:CreateSaleItemResponseType"/>
+    </wsdl:message>
+
+    <wsdl:message name="ListSaleItemsForCategoryMessage">
+        <wsdl:part name="parameters" element="tns:ListSaleItemsForCategoryType"/>
+    </wsdl:message>
+    <wsdl:message name="ListSaleItemsForCategoryResponseMessage">
+        <wsdl:part name="parameters" element="tns:ListSaleItemsForCategoryResponseType"/>
     </wsdl:message>
 
     <wsdl:portType name="KPosPortType">
         <wsdl:operation name="CreateCategory">
             <wsdl:input message="tns:CreateCategoryMessage" name="CreateCategory"/>
             <wsdl:output message="tns:CreateCategoryResponseMessage" name="CreateCategoryResponse"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="UpdateCategory">
+            <wsdl:input message="tns:UpdateCategoryMessage" name="UpdateCategory"/>
+            <wsdl:output message="tns:UpdateCategoryResponseMessage" name="UpdateCategoryResponse"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="DeleteCategory">
+            <wsdl:input message="tns:DeleteCategoryMessage" name="DeleteCategory"/>
+            <wsdl:output message="tns:DeleteCategoryResponseMessage" name="DeleteCategoryResponse"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="ListCategory">
+            <wsdl:input message="tns:ListCategoryMessage" name="ListCategory"/>
+            <wsdl:output message="tns:ListCategoryResponseMessage" name="ListCategoryResponse"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="CreateSaleItem">
+            <wsdl:input message="tns:CreateSaleItemMessage" name="CreateSaleItem"/>
+            <wsdl:output message="tns:CreateSaleItemResponseMessage" name="CreateSaleItemResponse"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="ListSaleItemsForCategory">
+            <wsdl:input message="tns:ListSaleItemsForCategoryMessage" name="ListSaleItemsForCategory"/>
+            <wsdl:output message="tns:ListSaleItemsForCategoryResponseMessage" name="ListSaleItemsForCategoryResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -67,6 +226,56 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="CreateCategoryResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="UpdateCategory">
+            <soap:operation soapAction="http://ws.kpos.com/UpdateCategory" style="document"/>
+            <wsdl:input name="UpdateCategory">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="UpdateCategoryResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="DeleteCategory">
+            <soap:operation soapAction="http://ws.kpos.com/DeleteCategory" style="document"/>
+            <wsdl:input name="DeleteCategory">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DeleteCategoryResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="ListCategory">
+            <soap:operation soapAction="http://ws.kpos.com/ListCategory" style="document"/>
+            <wsdl:input name="ListCategory">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="ListCategoryResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="CreateSaleItem">
+            <soap:operation soapAction="http://ws.kpos.com/CreateSaleItem" style="document"/>
+            <wsdl:input name="CreateSaleItem">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="CreateSaleItemResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="ListSaleItemsForCategory">
+            <soap:operation soapAction="http://ws.kpos.com/ListSaleItemsForCategory" style="document"/>
+            <wsdl:input name="ListSaleItemsForCategory">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="ListSaleItemsForCategoryResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
