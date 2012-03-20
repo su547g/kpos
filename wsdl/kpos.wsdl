@@ -83,6 +83,7 @@
                     <xs:element name="hhPrice" type="xsd:double" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="hhRate" type="xsd:double" minOccurs="0" maxOccurs="1" default="1"/>
                     <xs:element name="options" type="tns:SaleItemOptionType" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="isSingleOption" type="xsd:boolean" minOccurs="0" maxOccurs="1" default="false"/>
                 </xs:sequence>
             </xs:complexType>
 
