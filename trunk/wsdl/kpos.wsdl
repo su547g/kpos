@@ -40,6 +40,15 @@
             <xs:element name="ListSaleItemsForCategoryType" type="tns:ListSaleItemsForCategoryType"/>
             <xs:element name="ListSaleItemsForCategoryResponseType" type="tns:ListSaleItemsForCategoryResponseType"/>
 
+            <xs:element name="CreateSaleItemOptionType" type="tns:CreateSaleItemOptionType"/>
+            <xs:element name="CreateSaleItemOptionResponseType" type="tns:CreateSaleItemOptionResponseType"/>
+
+            <xs:element name="UpdateSaleItemOptionType" type="tns:UpdateSaleItemOptionType"/>
+            <xs:element name="UpdateSaleItemOptionResponseType" type="tns:UpdateSaleItemOptionResponseType"/>
+
+            <xs:element name="DeleteSaleItemOptionType" type="tns:DeleteSaleItemOptionType"/>
+            <xs:element name="DeleteSaleItemOptionResponseType" type="tns:DeleteSaleItemOptionResponseType"/>
+
             <!--Result object-->
             <xs:complexType name="ResultType">
                 <xs:sequence>
@@ -73,6 +82,17 @@
                     <xs:element name="isAllowedHH" type="xsd:boolean" minOccurs="0" maxOccurs="1" default="false"/>
                     <xs:element name="hhPrice" type="xsd:double" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="hhRate" type="xsd:double" minOccurs="0" maxOccurs="1" default="1"/>
+                    <xs:element name="options" type="tns:SaleItemOptionType" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="SaleItemOptionType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="saleItemId" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="price" type="xsd:double" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="takeoutPrice" type="xsd:double" minOccurs="0" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
             <!--End of data structures-->
@@ -86,7 +106,7 @@
             </xs:complexType>
             <xs:complexType name="CreateCategoryResponseType">
                 <xs:sequence>
-                    <xsd:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="Result" type="tns:ResultType"/>
                 </xs:sequence>
             </xs:complexType>
 
@@ -97,7 +117,7 @@
             </xs:complexType>
             <xs:complexType name="UpdateCategoryResponseType">
                 <xs:sequence>
-                    <xsd:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="Result" type="tns:ResultType"/>
                 </xs:sequence>
             </xs:complexType>
 
@@ -108,7 +128,7 @@
             </xs:complexType>
             <xs:complexType name="DeleteCategoryResponseType">
                 <xs:sequence>
-                    <xsd:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="Result" type="tns:ResultType"/>
                 </xs:sequence>
             </xs:complexType>
 
@@ -118,7 +138,7 @@
             </xs:complexType>
             <xs:complexType name="ListCategoryResponseType">
                 <xs:sequence>
-                    <xsd:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="Result" type="tns:ResultType"/>
                     <xs:element name="total" type="xs:int" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="categories" type="tns:CategoryType" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
@@ -131,7 +151,7 @@
             </xs:complexType>
             <xs:complexType name="CreateSaleItemResponseType">
                 <xs:sequence>
-                    <xsd:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="Result" type="tns:ResultType"/>
                 </xs:sequence>
             </xs:complexType>
             
@@ -142,7 +162,7 @@
             </xs:complexType>
             <xs:complexType name="ListSaleItemsForCategoryResponseType">
                 <xs:sequence>
-                    <xsd:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="Result" type="tns:ResultType"/>
                     <xs:element name="total" type="xs:int" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="saleItems" type="tns:SaleItemType" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
@@ -155,7 +175,7 @@
             </xs:complexType>
             <xs:complexType name="UpdateSaleItemResponseType">
                 <xs:sequence>
-                    <xsd:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="Result" type="tns:ResultType"/>
                 </xs:sequence>
             </xs:complexType>
 
@@ -166,7 +186,7 @@
             </xs:complexType>
             <xs:complexType name="DeleteSaleItemResponseType">
                 <xs:sequence>
-                    <xsd:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="Result" type="tns:ResultType"/>
                 </xs:sequence>
             </xs:complexType>
 
@@ -177,8 +197,42 @@
             </xs:complexType>
             <xs:complexType name="FetchSaleItemResponseType">
                 <xs:sequence>
-                    <xsd:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="Result" type="tns:ResultType"/>
                     <xs:element name="saleItem" type="tns:SaleItemType" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="CreateSaleItemOptionType">
+                <xs:sequence>
+                    <xs:element name="itemOption" type="tns:SaleItemOptionType" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="CreateSaleItemOptionResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="itemOption" type="tns:SaleItemOptionType" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="UpdateSaleItemOptionType">
+                <xs:sequence>
+                    <xs:element name="itemOption" type="tns:SaleItemOptionType" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="UpdateSaleItemOptionResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="DeleteSaleItemOptionType">
+                <xs:sequence>
+                    <xs:element name="id" type="xs:long" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeleteSaleItemOptionResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
                 </xs:sequence>
             </xs:complexType>
             <!--End of operations-->
@@ -248,6 +302,27 @@
         <wsdl:part name="parameters" element="tns:FetchSaleItemResponseType"/>
     </wsdl:message>
 
+    <wsdl:message name="CreateSaleItemOptionMessage">
+        <wsdl:part name="parameters" element="tns:CreateSaleItemOptionType"/>
+    </wsdl:message>
+    <wsdl:message name="CreateSaleItemOptionResponseMessage">
+        <wsdl:part name="parameters" element="tns:CreateSaleItemOptionResponseType"/>
+    </wsdl:message>
+
+    <wsdl:message name="UpdateSaleItemOptionMessage">
+        <wsdl:part name="parameters" element="tns:UpdateSaleItemOptionType"/>
+    </wsdl:message>
+    <wsdl:message name="UpdateSaleItemOptionResponseMessage">
+        <wsdl:part name="parameters" element="tns:UpdateSaleItemOptionResponseType"/>
+    </wsdl:message>
+
+    <wsdl:message name="DeleteSaleItemOptionMessage">
+        <wsdl:part name="parameters" element="tns:DeleteSaleItemOptionType"/>
+    </wsdl:message>
+    <wsdl:message name="DeleteSaleItemOptionResponseMessage">
+        <wsdl:part name="parameters" element="tns:DeleteSaleItemOptionResponseType"/>
+    </wsdl:message>
+
     <wsdl:portType name="KPosPortType">
         <wsdl:operation name="CreateCategory">
             <wsdl:input message="tns:CreateCategoryMessage" name="CreateCategory"/>
@@ -292,6 +367,21 @@
         <wsdl:operation name="FetchSaleItem">
             <wsdl:input message="tns:FetchSaleItemMessage" name="FetchSaleItem"/>
             <wsdl:output message="tns:FetchSaleItemResponseMessage" name="FetchSaleItemResponse"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="CreateSaleItemOption">
+            <wsdl:input message="tns:CreateSaleItemOptionMessage" name="CreateSaleItemOption"/>
+            <wsdl:output message="tns:CreateSaleItemOptionResponseMessage" name="CreateSaleItemOptionResponse"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="UpdateSaleItemOption">
+            <wsdl:input message="tns:UpdateSaleItemOptionMessage" name="UpdateSaleItemOption"/>
+            <wsdl:output message="tns:UpdateSaleItemOptionResponseMessage" name="UpdateSaleItemOptionResponse"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="DeleteSaleItemOption">
+            <wsdl:input message="tns:DeleteSaleItemOptionMessage" name="DeleteSaleItemOption"/>
+            <wsdl:output message="tns:DeleteSaleItemOptionResponseMessage" name="DeleteSaleItemOptionResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -384,6 +474,36 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="FetchSaleItemResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="CreateSaleItemOption">
+            <soap:operation soapAction="http://ws.kpos.com/CreateSaleItemOption" style="document"/>
+            <wsdl:input name="CreateSaleItemOption">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="CreateSaleItemOptionResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="UpdateSaleItemOption">
+            <soap:operation soapAction="http://ws.kpos.com/UpdateSaleItemOption" style="document"/>
+            <wsdl:input name="UpdateSaleItemOption">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="UpdateSaleItemOptionResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="DeleteSaleItemOption">
+            <soap:operation soapAction="http://ws.kpos.com/DeleteSaleItemOption" style="document"/>
+            <wsdl:input name="DeleteSaleItemOption">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DeleteSaleItemOptionResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>

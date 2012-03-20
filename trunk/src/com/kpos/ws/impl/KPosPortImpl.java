@@ -150,4 +150,22 @@ public class KPosPortImpl implements KPosPortType {
             @WebParam(partName = "parameters", name = "CreateSaleItemType", targetNamespace = NS) CreateSaleItemType parameters) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
+
+    @Override
+    public CreateSaleItemOptionResponseType createSaleItemOption(
+            @WebParam(partName = "parameters", name = "CreateSaleItemOptionType", targetNamespace = NS) CreateSaleItemOptionType parameters) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public UpdateSaleItemOptionResponseType updateSaleItemOption(
+            @WebParam(partName = "parameters", name = "UpdateSaleItemOptionType", targetNamespace = NS) UpdateSaleItemOptionType parameters) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public DeleteSaleItemOptionResponseType deleteSaleItemOption(
+            @WebParam(partName = "parameters", name = "DeleteSaleItemOptionType", targetNamespace = NS) DeleteSaleItemOptionType parameters) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }
