@@ -1,8 +1,11 @@
 package com.kpos.service;
 
 import com.kpos.dao.ICategoryDao;
+import com.kpos.dao.ISaleItemDao;
 import com.kpos.domain.Category;
+import com.kpos.domain.SaleItem;
 import com.kpos.ws.app.CategoryType;
+import com.kpos.ws.app.SaleItemType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,9 @@ public class ContentManagementServiceImpl implements IContentManagementService {
 
     @Autowired
     private ICategoryDao categoryDao;
+
+    @Autowired
+    private ISaleItemDao saleItemDao;
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public CreateResult<Category> createMenuCategory(Category aCategory) {
@@ -50,7 +56,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         FetchResult<Category> fetchResult = new FetchResult<Category>();
         Category category = categoryDao.findCategory(aCategoryId);
         fetchResult.setTarget(category);
-        fetchResult.setSuccessful(true);
+        fetchResult.setSuccessful(category != null);
         return fetchResult;
     }
 
@@ -81,10 +87,45 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         Category category = categoryDao.findCategory(aCategoryId);
         if(category != null) {
             categoryDao.deleteCategory(category);
+            deleteResult.setSuccessful(true);
         } else {
             deleteResult.setSuccessful(false);
             log.warn("can't find category with id " + aCategoryId);
         }
         return deleteResult;
+    }
+
+    @Override
+    public FetchResult<SaleItem> fetchSaleItem(long aId) {
+        SaleItem saleItem = saleItemDao.findSaleItem(aId);
+        FetchResult<SaleItem> fetchResult = new FetchResult<SaleItem>();
+        fetchResult.setTarget(saleItem);
+        fetchResult.setSuccessful(saleItem != null);
+        return fetchResult;
+    }
+
+    @Override
+    public UpdateResult<SaleItem> updateSaleItem(SaleItemType aSaleItemType) {
+        //TODO:
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public DeleteResult deleteSaleItem(long aId) {
+        DeleteResult deleteResult = new DeleteResult();
+        SaleItem saleItem = saleItemDao.findSaleItem(aId);
+        if(saleItem != null) {
+            saleItemDao.deleteSaleItem(saleItem);
+            deleteResult.setSuccessful(true);
+        } else {
+            deleteResult.setSuccessful(false);
+        }
+        return deleteResult;
+    }
+
+    @Override
+    public FetchResult<List<SaleItem>> listSaleItemsForCategory(long aCategoryId) {
+        //TODO:
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }
