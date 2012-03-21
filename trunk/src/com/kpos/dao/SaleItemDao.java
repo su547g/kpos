@@ -15,27 +15,34 @@ public class SaleItemDao extends AbstractJpaDao<SaleItem> implements ISaleItemDa
 
     @Override
     public void insertSaleItem(SaleItem aItem) {
-        //TODO: Check if item already exists before inserting
-
+        //Check if item already exists before inserting
+        if(aItem.getId() == null) {
+            super.insert(aItem);
+        } else {
+            SaleItem temp = super.findById(aItem.getId());
+            if(temp == null) {
+                aItem.setId(null);
+                super.insert(aItem);
+            }
+        }
     }
 
     @Override
     public SaleItem findSaleItem(long id) {
-        //TODO:
         SaleItem item = this.findById(id);
         return item;
     }
 
     @Override
     public SaleItem udpateSaleItem(SaleItem aItem) {
-        //TODO:
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        SaleItem item = super.update(aItem);
+        return item;
     }
 
     @Override
     public boolean deleteSaleItem(SaleItem aItem) {
         if(aItem.getId() != null) {
-            return this.delete(aItem);
+            return super.delete(aItem);
         }
         return false;
     }
