@@ -19,12 +19,23 @@ public class CategoryDao extends AbstractJpaDao<Category> implements ICategoryDa
     }
 
     public void insertCategory(Category aCategory) {
-        this.insert(aCategory);
+        if(aCategory.getId() == null) {
+            this.insert(aCategory);
+        } else {
+            Category temp = this.findById(aCategory.getId());
+            if(temp == null) {
+                aCategory.setId(null);
+                this.insert(aCategory);
+            }
+        }
     }
 
     @Override
     public boolean deleteCategory(Category aCategory) {
-        return this.delete(aCategory);
+        if(aCategory.getId() != null) {
+            return this.delete(aCategory);
+        }
+        return false;
     }
 
     @Override
