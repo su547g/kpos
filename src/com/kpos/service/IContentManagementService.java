@@ -1,6 +1,7 @@
 package com.kpos.service;
 
 import com.kpos.domain.Category;
+import com.kpos.ws.app.CategoryType;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public interface IContentManagementService {
 
     FetchResult<Category> fetchCategory(long aCategoryId);
 
-    UpdateResult<Category> updateCategory(Category aCategory);
+    UpdateResult<Category> updateCategory(CategoryType aCategoryType);
 
     DeleteResult deleteCategory(long aCategoryId);
 }

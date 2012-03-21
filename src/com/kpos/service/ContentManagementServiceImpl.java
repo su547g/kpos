@@ -2,6 +2,7 @@ package com.kpos.service;
 
 import com.kpos.dao.ICategoryDao;
 import com.kpos.domain.Category;
+import com.kpos.ws.app.CategoryType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,11 +56,21 @@ public class ContentManagementServiceImpl implements IContentManagementService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
-    public UpdateResult<Category> updateCategory(Category aCategory) {
+    public UpdateResult<Category> updateCategory(CategoryType aCategoryType) {
         UpdateResult<Category> updateResult = new UpdateResult<Category>();
-        Category category = categoryDao.updateCategory(aCategory);
-        updateResult.setManagedObject(category);
-        updateResult.setSuccessful(true);
+        if(aCategoryType.getId() == null) {
+            updateResult.setSuccessful(false);
+        } else {
+            Category aCategory = categoryDao.findCategory(aCategoryType.getId());
+            aCategory.setAllowedHH(aCategoryType.getIsAllowedHappyHour());
+            aCategory.setHhRate(aCategoryType.getHappyHourRate());
+            aCategory.setName(aCategoryType.getName());
+            aCategory.setNotes(aCategoryType.getNotes());
+
+            Category category = categoryDao.updateCategory(aCategory);
+            updateResult.setManagedObject(category);
+            updateResult.setSuccessful(true);
+        }
         return updateResult;
     }
 

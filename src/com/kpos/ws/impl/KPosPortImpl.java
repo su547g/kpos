@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import javax.jws.WebParam;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by kpos.
@@ -85,7 +87,11 @@ public class KPosPortImpl implements KPosPortType {
     @Override
     public DeleteCategoryResponseType deleteCategory(
             @WebParam(partName = "parameters", name = "DeleteCategoryType", targetNamespace = NS) DeleteCategoryType parameters) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        long categoryId = parameters.getCategoryId();
+        DeleteResult result = contentManagementService.deleteCategory(categoryId);
+        DeleteCategoryResponseType responseType = new DeleteCategoryResponseType();
+        responseType.setResult(getSoapResult(result));
+        return responseType;
     }
 
     @Override
@@ -97,7 +103,22 @@ public class KPosPortImpl implements KPosPortType {
     @Override
     public ListCategoryResponseType listCategory(
             @WebParam(partName = "parameters", name = "ListCategoryType", targetNamespace = NS) ListCategoryType parameters) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        FetchResult<List<Category>> fetchResult = contentManagementService.listAllCategories();
+        List<Category> categoryList = fetchResult.getTarget();
+        List<CategoryType> categoryTypes = new ArrayList<CategoryType>();
+        for(Category category : categoryList) {
+            CategoryType type = new CategoryType();
+            type.setHappyHourRate(category.getHhRate());
+            type.setId(category.getId());
+            type.setIsAllowedHappyHour(category.isAllowedHH());
+            type.setName(category.getName());
+            type.setNotes(category.getNotes());
+            categoryTypes.add(type);
+        }
+        ListCategoryResponseType responseType = new ListCategoryResponseType();
+        responseType.setTotal(categoryTypes.size());
+        responseType.setResult(getSoapResult(fetchResult));
+        return responseType;
     }
 
     @Override
@@ -124,7 +145,10 @@ public class KPosPortImpl implements KPosPortType {
     @Override
     public UpdateCategoryResponseType updateCategory(
             @WebParam(partName = "parameters", name = "UpdateCategoryType", targetNamespace = NS) UpdateCategoryType parameters) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        UpdateResult<Category> result = contentManagementService.updateCategory(parameters.getCategory());
+        UpdateCategoryResponseType responseType = new UpdateCategoryResponseType();
+        responseType.setResult(getSoapResult(result));
+        return responseType;
     }
 
     @Override
