@@ -14,7 +14,7 @@ public interface ISaleItemDao {
 
     SaleItem findSaleItem(long id);
 
-    SaleItem udpateSaleItem(SaleItem aItem);
+    SaleItem updateSaleItem(SaleItem aItem);
 
     boolean deleteSaleItem(SaleItem aItem);
 }

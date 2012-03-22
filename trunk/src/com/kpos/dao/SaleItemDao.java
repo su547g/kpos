@@ -34,7 +34,7 @@ public class SaleItemDao extends AbstractJpaDao<SaleItem> implements ISaleItemDa
     }
 
     @Override
-    public SaleItem udpateSaleItem(SaleItem aItem) {
+    public SaleItem updateSaleItem(SaleItem aItem) {
         SaleItem item = super.update(aItem);
         return item;
     }

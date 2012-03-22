@@ -1,6 +1,8 @@
 package com.kpos.ws.impl;
 
 import com.kpos.domain.Category;
+import com.kpos.domain.SaleItem;
+import com.kpos.domain.SaleItemOption;
 import com.kpos.service.*;
 import com.kpos.ws.app.*;
 import org.slf4j.Logger;
@@ -97,7 +99,10 @@ public class KPosPortImpl implements KPosPortType {
     @Override
     public DeleteSaleItemResponseType deleteSaleItem(
             @WebParam(partName = "parameters", name = "DeleteSaleItemType", targetNamespace = NS) DeleteSaleItemType parameters) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        DeleteResult result = contentManagementService.deleteSaleItem(parameters.getItemId());
+        DeleteSaleItemResponseType responseType = new DeleteSaleItemResponseType();
+        responseType.setResult(getSoapResult(result));
+        return responseType;
     }
 
     @Override
@@ -154,19 +159,73 @@ public class KPosPortImpl implements KPosPortType {
     @Override
     public ListSaleItemsForCategoryResponseType listSaleItemsForCategory(
             @WebParam(partName = "parameters", name = "ListSaleItemsForCategoryType", targetNamespace = NS) ListSaleItemsForCategoryType parameters) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        ListSaleItemsForCategoryResponseType responseType = new ListSaleItemsForCategoryResponseType();
+        long categoryId = parameters.getCategoryId();
+        FetchResult<List<SaleItem>> fetchResult = contentManagementService.listSaleItemsForCategory(categoryId);
+        if(fetchResult.isSuccessful()) {
+            List<SaleItem> saleItems = fetchResult.getTarget();
+            responseType.setTotal(saleItems.size());
+            List<SaleItemType> saleItemTypes = responseType.getSaleItems();
+            for(SaleItem item : saleItems) {
+                SaleItemType itemType = new SaleItemType();
+                itemType.setCatId(categoryId);
+                itemType.setHhPrice(item.getHh_price());
+                itemType.setHhRate(item.getHhRate());
+                itemType.setId(item.getId());
+                itemType.setIsAllowedHH(item.isAllowedHH());
+                itemType.setIsSingleOption(item.isSingleOptionOnly());
+                itemType.setName(item.getName());
+                itemType.setNormalPrice(item.getPrice());
+                itemType.setTakeoutPrice(item.getOutPrice());
+                saleItemTypes.add(itemType);
+            }
+        } else {
+            responseType.setTotal(0);
+        }
+        responseType.setResult(getSoapResult(fetchResult));
+
+        return responseType;
     }
 
     @Override
     public UpdateSaleItemResponseType updateSaleItem(
             @WebParam(partName = "parameters", name = "UpdateSaleItemType", targetNamespace = NS) UpdateSaleItemType parameters) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        UpdateSaleItemResponseType responseType = new UpdateSaleItemResponseType();
+        UpdateResult<SaleItem> result = contentManagementService.updateSaleItem(parameters.getSaleItem());
+        responseType.setResult(getSoapResult(result));
+        return responseType;
     }
 
     @Override
     public FetchSaleItemResponseType fetchSaleItem(
             @WebParam(partName = "parameters", name = "FetchSaleItemType", targetNamespace = NS) FetchSaleItemType parameters) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        FetchSaleItemResponseType responseType = new FetchSaleItemResponseType();
+        FetchResult<SaleItem> fetchResult = contentManagementService.fetchSaleItem(parameters.getItemId());
+        SaleItem item = fetchResult.getTarget();
+        SaleItemType soapType = new SaleItemType();
+        soapType.setHhRate(item.getHhRate());
+        soapType.setHhPrice(item.getHh_price());
+        soapType.setId(item.getId());
+        soapType.setIsAllowedHH(item.isAllowedHH());
+        soapType.setIsSingleOption(item.isSingleOptionOnly());
+        soapType.setName(item.getName());
+        soapType.setNormalPrice(item.getPrice());
+        soapType.setTakeoutPrice(item.getOutPrice());
+        soapType.setCatId(item.getCategory().getId());
+        
+        List<SaleItemOption> itemOptions = item.getOptionList();
+        for(SaleItemOption option : itemOptions) {
+            SaleItemOptionType optionType = new SaleItemOptionType();
+            optionType.setId(option.getId());
+            optionType.setName(option.getName());
+            optionType.setPrice(option.getPrice());
+            optionType.setSaleItemId(item.getId());
+            optionType.setTakeoutPrice(option.getOutPrice());
+            soapType.getOptions().add(optionType);
+        }
+        responseType.setSaleItem(soapType);
+        responseType.setResult(getSoapResult(fetchResult));
+        return responseType;
     }
 
     @Override

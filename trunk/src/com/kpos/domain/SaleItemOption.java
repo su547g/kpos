@@ -24,6 +24,9 @@ public class SaleItemOption extends AbstractDomainObject {
     @Column(name = "price", nullable = true)
     private double price;
 
+    @Column(name = "out_price", nullable = true)
+    private double outPrice;
+
     //owning entity
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "sale_item_id")
@@ -56,6 +59,14 @@ public class SaleItemOption extends AbstractDomainObject {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public double getOutPrice() {
+        return outPrice;
+    }
+
+    public void setOutPrice(double outPrice) {
+        this.outPrice = outPrice;
     }
 
     public SaleItem getSaleItem() {
