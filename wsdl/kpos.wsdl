@@ -108,6 +108,7 @@
             <xs:complexType name="CreateCategoryResponseType">
                 <xs:sequence>
                     <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="categoryId" type="xs:long" minOccurs="0" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
 
@@ -147,12 +148,13 @@
 
             <xs:complexType name="CreateSaleItemType">
                 <xs:sequence>
-                    <xs:element name="saleItemList" type="tns:SaleItemType" minOccurs="1" maxOccurs="unbounded"/>
+                    <xs:element name="saleItem" type="tns:SaleItemType" minOccurs="1" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="CreateSaleItemResponseType">
                 <xs:sequence>
                     <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="saleItemId" type="xs:long" minOccurs="0" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
             
@@ -211,7 +213,7 @@
             <xs:complexType name="CreateSaleItemOptionResponseType">
                 <xs:sequence>
                     <xs:element name="Result" type="tns:ResultType"/>
-                    <xs:element name="itemOption" type="tns:SaleItemOptionType" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="itemOptionId" type="xs:long" minOccurs="0" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
 
