@@ -4,7 +4,9 @@ import com.kpos.dao.ICategoryDao;
 import com.kpos.dao.ISaleItemDao;
 import com.kpos.domain.Category;
 import com.kpos.domain.SaleItem;
+import com.kpos.domain.SaleItemOption;
 import com.kpos.ws.app.CategoryType;
+import com.kpos.ws.app.SaleItemOptionType;
 import com.kpos.ws.app.SaleItemType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -189,5 +191,20 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         }
 
         return fetchResult;
+    }
+
+    @Override
+    public CreateResult<SaleItemOption> addSaleItemOption(SaleItemOptionType soapType) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public UpdateResult<SaleItemOption> updateSaleItemOption(SaleItemOptionType soapType) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public DeleteResult deleteSaleItemOption(long aId) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

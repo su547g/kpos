@@ -2,7 +2,9 @@ package com.kpos.service;
 
 import com.kpos.domain.Category;
 import com.kpos.domain.SaleItem;
+import com.kpos.domain.SaleItemOption;
 import com.kpos.ws.app.CategoryType;
+import com.kpos.ws.app.SaleItemOptionType;
 import com.kpos.ws.app.SaleItemType;
 
 import java.util.List;
@@ -32,4 +34,10 @@ public interface IContentManagementService {
     DeleteResult deleteSaleItem(long aId);
     
     FetchResult<List<SaleItem>> listSaleItemsForCategory(long aCategoryId);
+    
+    CreateResult<SaleItemOption> addSaleItemOption(SaleItemOptionType soapType);
+
+    UpdateResult<SaleItemOption> updateSaleItemOption(SaleItemOptionType soapType);
+
+    DeleteResult deleteSaleItemOption(long aId);
 }
