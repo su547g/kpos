@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -106,8 +107,30 @@ public class ContentManagementServiceImpl implements IContentManagementService {
 
     @Override
     public UpdateResult<SaleItem> updateSaleItem(SaleItemType aSaleItemType) {
-        //TODO:
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        UpdateResult<SaleItem> updateResult = new UpdateResult<SaleItem>();
+        SaleItem saleItem = saleItemDao.findSaleItem(aSaleItemType.getId());
+        if(saleItem != null) {
+            saleItem.setAllowedHH(aSaleItemType.getIsAllowedHH());
+            saleItem.setHh_price(aSaleItemType.getHhPrice());
+            saleItem.setHhRate(aSaleItemType.getHhRate());
+            saleItem.setOutPrice(aSaleItemType.getTakeoutPrice());
+            saleItem.setPrice(aSaleItemType.getNormalPrice());
+            saleItem.setName(aSaleItemType.getName());
+            saleItem.setSingleOptionOnly(aSaleItemType.getIsSingleOption());
+            Category newCategory = categoryDao.findCategory(aSaleItemType.getCatId());
+            if(newCategory != null) {
+                saleItem.setCategory(newCategory);
+            } else {
+                log.debug("Failed to find category with id [" + aSaleItemType.getCatId() + "]");
+            }
+            saleItemDao.updateSaleItem(saleItem);
+            updateResult.setSuccessful(true);
+            updateResult.setManagedObject(saleItem);
+        } else {
+            log.warn("Failed to find sale item with id [" + aSaleItemType.getId() + "]");
+            updateResult.setSuccessful(false);
+        }
+        return updateResult;
     }
 
     @Override
@@ -125,7 +148,20 @@ public class ContentManagementServiceImpl implements IContentManagementService {
 
     @Override
     public FetchResult<List<SaleItem>> listSaleItemsForCategory(long aCategoryId) {
-        //TODO:
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        FetchResult<List<SaleItem>> fetchResult = new FetchResult<List<SaleItem>>();
+        Category category = categoryDao.findCategory(aCategoryId);
+        List<SaleItem> saleItems;
+        if(category == null) {
+            log.warn("Can't find category id [" + aCategoryId + "]");
+            saleItems = new ArrayList<SaleItem>();
+            fetchResult.setSuccessful(false);
+            fetchResult.setFailure(1, "Category doesn't exist!");
+        } else {
+            saleItems = category.getSaleItems();
+            fetchResult.setTarget(saleItems);
+            fetchResult.setSuccessful(true);
+        }
+
+        return fetchResult;
     }
 }
