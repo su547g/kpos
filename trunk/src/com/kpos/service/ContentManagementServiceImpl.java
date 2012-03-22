@@ -106,6 +106,31 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public CreateResult<SaleItem> createSaleItem(SaleItemType aSaleItemType) {
+        CreateResult<SaleItem> result = new CreateResult<SaleItem>();
+        Category category = categoryDao.findCategory(aSaleItemType.getCatId());
+        if(category != null) {
+            SaleItem saleItem = new SaleItem();
+            saleItem.setAllowedHH(aSaleItemType.getIsAllowedHH());
+            saleItem.setHh_price(aSaleItemType.getHhPrice());
+            saleItem.setHhRate(aSaleItemType.getHhRate());
+            saleItem.setOutPrice(aSaleItemType.getTakeoutPrice());
+            saleItem.setPrice(aSaleItemType.getNormalPrice());
+            saleItem.setName(aSaleItemType.getName());
+            saleItem.setSingleOptionOnly(aSaleItemType.getIsSingleOption());
+            saleItem.setCategory(category);
+            saleItemDao.insertSaleItem(saleItem);
+            result.setCreated(saleItem);
+        } else {
+            result.setSuccessful(false);
+            result.setException(new Exception("Category ["+aSaleItemType.getCatId()+"] can't be found!"));
+        }
+        return result;
+    }
+    
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public UpdateResult<SaleItem> updateSaleItem(SaleItemType aSaleItemType) {
         UpdateResult<SaleItem> updateResult = new UpdateResult<SaleItem>();
         SaleItem saleItem = saleItemDao.findSaleItem(aSaleItemType.getId());
@@ -134,6 +159,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public DeleteResult deleteSaleItem(long aId) {
         DeleteResult deleteResult = new DeleteResult();
         SaleItem saleItem = saleItemDao.findSaleItem(aId);

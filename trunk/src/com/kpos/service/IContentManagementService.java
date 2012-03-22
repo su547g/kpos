@@ -22,7 +22,9 @@ public interface IContentManagementService {
     UpdateResult<Category> updateCategory(CategoryType aCategoryType);
 
     DeleteResult deleteCategory(long aCategoryId);
-    
+
+    CreateResult<SaleItem> createSaleItem(SaleItemType aSaleItemType);
+
     FetchResult<SaleItem> fetchSaleItem(long aId);
     
     UpdateResult<SaleItem> updateSaleItem(SaleItemType aSaleItemType);

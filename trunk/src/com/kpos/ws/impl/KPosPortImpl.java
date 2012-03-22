@@ -86,6 +86,19 @@ public class KPosPortImpl implements KPosPortType {
         return resultType;
     }
 
+    private SaleItemType convertSaleItemToSoap(SaleItem item) {
+        SaleItemType itemType = new SaleItemType();
+        itemType.setHhPrice(item.getHh_price());
+        itemType.setHhRate(item.getHhRate());
+        itemType.setId(item.getId());
+        itemType.setIsAllowedHH(item.isAllowedHH());
+        itemType.setIsSingleOption(item.isSingleOptionOnly());
+        itemType.setName(item.getName());
+        itemType.setNormalPrice(item.getPrice());
+        itemType.setTakeoutPrice(item.getOutPrice());
+        return itemType;
+    }
+
     @Override
     public DeleteCategoryResponseType deleteCategory(
             @WebParam(partName = "parameters", name = "DeleteCategoryType", targetNamespace = NS) DeleteCategoryType parameters) {
@@ -143,6 +156,9 @@ public class KPosPortImpl implements KPosPortType {
         category.setLastUpdated(new Date());
         CreateResult<Category> result = contentManagementService.createMenuCategory(category);
         CreateCategoryResponseType responseType = new CreateCategoryResponseType();
+        if(result.isSuccessful() && result.getCreated() != null) {
+            responseType.setCategoryId(result.getCreated().getId());
+        }
         responseType.setResult(getSoapResult(result));
         return responseType;
     }
@@ -167,16 +183,8 @@ public class KPosPortImpl implements KPosPortType {
             responseType.setTotal(saleItems.size());
             List<SaleItemType> saleItemTypes = responseType.getSaleItems();
             for(SaleItem item : saleItems) {
-                SaleItemType itemType = new SaleItemType();
+                SaleItemType itemType = convertSaleItemToSoap(item);
                 itemType.setCatId(categoryId);
-                itemType.setHhPrice(item.getHh_price());
-                itemType.setHhRate(item.getHhRate());
-                itemType.setId(item.getId());
-                itemType.setIsAllowedHH(item.isAllowedHH());
-                itemType.setIsSingleOption(item.isSingleOptionOnly());
-                itemType.setName(item.getName());
-                itemType.setNormalPrice(item.getPrice());
-                itemType.setTakeoutPrice(item.getOutPrice());
                 saleItemTypes.add(itemType);
             }
         } else {
@@ -202,15 +210,7 @@ public class KPosPortImpl implements KPosPortType {
         FetchSaleItemResponseType responseType = new FetchSaleItemResponseType();
         FetchResult<SaleItem> fetchResult = contentManagementService.fetchSaleItem(parameters.getItemId());
         SaleItem item = fetchResult.getTarget();
-        SaleItemType soapType = new SaleItemType();
-        soapType.setHhRate(item.getHhRate());
-        soapType.setHhPrice(item.getHh_price());
-        soapType.setId(item.getId());
-        soapType.setIsAllowedHH(item.isAllowedHH());
-        soapType.setIsSingleOption(item.isSingleOptionOnly());
-        soapType.setName(item.getName());
-        soapType.setNormalPrice(item.getPrice());
-        soapType.setTakeoutPrice(item.getOutPrice());
+        SaleItemType soapType = convertSaleItemToSoap(item);
         soapType.setCatId(item.getCategory().getId());
         
         List<SaleItemOption> itemOptions = item.getOptionList();
@@ -231,7 +231,14 @@ public class KPosPortImpl implements KPosPortType {
     @Override
     public CreateSaleItemResponseType createSaleItem(
             @WebParam(partName = "parameters", name = "CreateSaleItemType", targetNamespace = NS) CreateSaleItemType parameters) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        CreateSaleItemResponseType responseType = new CreateSaleItemResponseType();
+        SaleItemType soapType = parameters.getSaleItem();
+        CreateResult<SaleItem> result = contentManagementService.createSaleItem(soapType);
+        if(result.isSuccessful() && result.getCreated() != null) {
+            responseType.setSaleItemId(result.getCreated().getId());
+        }
+        responseType.setResult(getSoapResult(result));
+        return responseType;
     }
 
     @Override
