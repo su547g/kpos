@@ -8,11 +8,13 @@ import com.kpos.domain.SaleItemOption;
  * Date: 3/21/12 11:39 PM
  */
 public interface ISaleItemOptionDao {
-    void insertSaleItem(SaleItemOption aItem);
+    void insertSaleItemOption(SaleItemOption aItem);
 
-    SaleItemOption findSaleItem(long id);
+    SaleItemOption findSaleItemOption(long id);
 
-    SaleItemOption updateSaleItem(SaleItemOption aItem);
+    SaleItemOption updateSaleItemOption(SaleItemOption aItem);
 
-    boolean deleteSaleItem(SaleItemOption aItem);
+    boolean deleteSaleItemOption(SaleItemOption aItem);
+
+    boolean deleteSaleItemOption(long aId);
 }
