@@ -86,6 +86,19 @@ public class KPosPortImpl implements KPosPortType {
         return resultType;
     }
 
+    /*protected void setSoapFaultHolder (Holder<ResultType> holder, Throwable t) {
+      holder.value = getSoapFaultResult(t);
+    }*/
+
+    protected ResultType getSoapFaultResult (Throwable t) {
+      BbDataActLog.error(t.getMessage(), t, log);
+      ResultType result = new ResultType();
+      result.setFailureReason(t.getMessage());
+      result.setSuccessful(false);
+      result.setException(t.getClass().toString());
+      return result;
+    }
+   
     private SaleItemType convertSaleItemToSoap(SaleItem item) {
         SaleItemType itemType = new SaleItemType();
         itemType.setHhPrice(item.getHh_price());
