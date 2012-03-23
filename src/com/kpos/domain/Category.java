@@ -46,6 +46,9 @@ public class Category extends AbstractDomainObject {
 
     @Column(name = "notes", nullable = true)
     private String notes;
+    
+    @Column(name = "thumb_path", nullable = true)
+    private String thumbPath;
 
     public Long getId() {
         return id;
@@ -111,6 +114,14 @@ public class Category extends AbstractDomainObject {
         this.saleItems = saleItems;
     }
 
+    public String getThumbPath() {
+        return thumbPath;
+    }
+
+    public void setThumbPath(String thumbPath) {
+        this.thumbPath = thumbPath;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -123,7 +134,7 @@ public class Category extends AbstractDomainObject {
         if (Double.compare(category.taxRate, taxRate) != 0) return false;
         if (id != null ? !id.equals(category.id) : category.id != null) return false;
         if (name != null ? !name.equals(category.name) : category.name != null) return false;
-        
+        if (thumbPath != null ? !thumbPath.equals(category.thumbPath) : category.thumbPath != null) return false;
         return true;
     }
 
@@ -133,6 +144,7 @@ public class Category extends AbstractDomainObject {
         long temp;
         result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (thumbPath != null ? thumbPath.hashCode() : 0);
         temp = taxRate != +0.0d ? Double.doubleToLongBits(taxRate) : 0L;
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (isAllowedHH ? 1 : 0);

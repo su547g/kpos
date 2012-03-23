@@ -96,6 +96,8 @@ public class KPosPortImpl implements KPosPortType {
         itemType.setName(item.getName());
         itemType.setNormalPrice(item.getPrice());
         itemType.setTakeoutPrice(item.getOutPrice());
+        itemType.setThumbPath(item.getThumbPath());
+        itemType.setDescription(item.getDescription());
         return itemType;
     }
 
@@ -131,6 +133,7 @@ public class KPosPortImpl implements KPosPortType {
             type.setIsAllowedHappyHour(category.isAllowedHH());
             type.setName(category.getName());
             type.setNotes(category.getNotes());
+            type.setThumbPath(category.getThumbPath());
             categoryTypes.add(type);
         }
         ListCategoryResponseType responseType = new ListCategoryResponseType();
@@ -146,6 +149,7 @@ public class KPosPortImpl implements KPosPortType {
         CategoryType soapType = soapCategory.getCategory();
         category.setName(soapType.getName());
         category.setNotes(soapType.getNotes());
+        category.setThumbPath(soapType.getThumbPath());
         if(soapType.getIsAllowedHappyHour() != null) {
             category.setAllowedHH(soapType.getIsAllowedHappyHour());
         }
