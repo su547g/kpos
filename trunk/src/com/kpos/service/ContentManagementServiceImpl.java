@@ -75,7 +75,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             aCategory.setHhRate(aCategoryType.getHappyHourRate());
             aCategory.setName(aCategoryType.getName());
             aCategory.setNotes(aCategoryType.getNotes());
-
+            aCategory.setThumbPath(aCategoryType.getThumbPath());
             Category category = categoryDao.updateCategory(aCategory);
             updateResult.setManagedObject(category);
             updateResult.setSuccessful(true);
@@ -107,6 +107,18 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         return fetchResult;
     }
 
+    private void convertSoapItemToSaleItem(SaleItem saleItem, SaleItemType aSaleItemType) {
+        saleItem.setAllowedHH(aSaleItemType.getIsAllowedHH());
+        saleItem.setHh_price(aSaleItemType.getHhPrice());
+        saleItem.setHhRate(aSaleItemType.getHhRate());
+        saleItem.setOutPrice(aSaleItemType.getTakeoutPrice());
+        saleItem.setPrice(aSaleItemType.getNormalPrice());
+        saleItem.setName(aSaleItemType.getName());
+        saleItem.setDescription(aSaleItemType.getDescription());
+        saleItem.setSingleOptionOnly(aSaleItemType.getIsSingleOption());
+        saleItem.setThumbPath(aSaleItemType.getThumbPath());
+    }
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public CreateResult<SaleItem> createSaleItem(SaleItemType aSaleItemType) {
@@ -114,13 +126,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         Category category = categoryDao.findCategory(aSaleItemType.getCatId());
         if(category != null) {
             SaleItem saleItem = new SaleItem();
-            saleItem.setAllowedHH(aSaleItemType.getIsAllowedHH());
-            saleItem.setHh_price(aSaleItemType.getHhPrice());
-            saleItem.setHhRate(aSaleItemType.getHhRate());
-            saleItem.setOutPrice(aSaleItemType.getTakeoutPrice());
-            saleItem.setPrice(aSaleItemType.getNormalPrice());
-            saleItem.setName(aSaleItemType.getName());
-            saleItem.setSingleOptionOnly(aSaleItemType.getIsSingleOption());
+            convertSoapItemToSaleItem(saleItem, aSaleItemType);
             saleItem.setCategory(category);
             saleItemDao.insertSaleItem(saleItem);
             result.setCreated(saleItem);
@@ -137,13 +143,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         UpdateResult<SaleItem> updateResult = new UpdateResult<SaleItem>();
         SaleItem saleItem = saleItemDao.findSaleItem(aSaleItemType.getId());
         if(saleItem != null) {
-            saleItem.setAllowedHH(aSaleItemType.getIsAllowedHH());
-            saleItem.setHh_price(aSaleItemType.getHhPrice());
-            saleItem.setHhRate(aSaleItemType.getHhRate());
-            saleItem.setOutPrice(aSaleItemType.getTakeoutPrice());
-            saleItem.setPrice(aSaleItemType.getNormalPrice());
-            saleItem.setName(aSaleItemType.getName());
-            saleItem.setSingleOptionOnly(aSaleItemType.getIsSingleOption());
+            convertSoapItemToSaleItem(saleItem, aSaleItemType);
             Category newCategory = categoryDao.findCategory(aSaleItemType.getCatId());
             if(newCategory != null) {
                 saleItem.setCategory(newCategory);
@@ -195,6 +195,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
 
     @Override
     public CreateResult<SaleItemOption> addSaleItemOption(SaleItemOptionType soapType) {
+
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

@@ -55,6 +55,12 @@ public class SaleItem extends AbstractDomainObject {
     @Column(name = "single_option_only")
     private boolean singleOptionOnly = false; //whether user can select only a single option or multiple
 
+    @Column(name = "thumb_path", nullable = true)
+    private String thumbPath;
+
+    @Column(name = "description", nullable = true)
+    private String description;
+
     /*
     @ManyToMany
    @JoinTable(
@@ -145,6 +151,22 @@ public class SaleItem extends AbstractDomainObject {
         this.singleOptionOnly = singleOptionOnly;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getThumbPath() {
+        return thumbPath;
+    }
+
+    public void setThumbPath(String thumbPath) {
+        this.thumbPath = thumbPath;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -159,7 +181,8 @@ public class SaleItem extends AbstractDomainObject {
         if (category != null ? !category.equals(saleItem.category) : saleItem.category != null) return false;
         if (id != null ? !id.equals(saleItem.id) : saleItem.id != null) return false;
         if (name != null ? !name.equals(saleItem.name) : saleItem.name != null) return false;
-
+        if (description != null ? !description.equals(saleItem.description) : saleItem.description != null) return false;
+        if (thumbPath != null ? !thumbPath.equals(saleItem.thumbPath) : saleItem.thumbPath != null) return false;
         return true;
     }
 
@@ -169,6 +192,8 @@ public class SaleItem extends AbstractDomainObject {
         long temp;
         result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (thumbPath != null ? thumbPath.hashCode() : 0);
         temp = price != +0.0d ? Double.doubleToLongBits(price) : 0L;
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (isAllowedHH ? 1 : 0);

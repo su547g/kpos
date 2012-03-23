@@ -69,6 +69,7 @@
                     <xs:element name="notes" type="xsd:string" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="isAllowedHappyHour" type="xsd:boolean" minOccurs="0" maxOccurs="1" default="false"/>
                     <xs:element name="happyHourRate" type="xsd:double" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="thumbPath" type="xsd:string" minOccurs="0" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
 
@@ -77,6 +78,7 @@
                     <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="catId" type="xsd:long" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="description" type="xsd:string" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="normalPrice" type="xsd:double" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="takeoutPrice" type="xsd:double" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="isAllowedHH" type="xsd:boolean" minOccurs="0" maxOccurs="1" default="false"/>
@@ -84,6 +86,7 @@
                     <xs:element name="hhRate" type="xsd:double" minOccurs="0" maxOccurs="1" default="1"/>
                     <xs:element name="options" type="tns:SaleItemOptionType" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="isSingleOption" type="xsd:boolean" minOccurs="0" maxOccurs="1" default="false"/>
+                    <xs:element name="thumbPath" type="xsd:string" minOccurs="0" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
 

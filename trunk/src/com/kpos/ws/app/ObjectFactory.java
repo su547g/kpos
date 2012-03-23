@@ -57,75 +57,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link UpdateCategoryType }
-     * 
-     */
-    public UpdateCategoryType createUpdateCategoryType() {
-        return new UpdateCategoryType();
-    }
-
-    /**
-     * Create an instance of {@link FetchSaleItemType }
-     * 
-     */
-    public FetchSaleItemType createFetchSaleItemType() {
-        return new FetchSaleItemType();
-    }
-
-    /**
-     * Create an instance of {@link ResultType }
-     * 
-     */
-    public ResultType createResultType() {
-        return new ResultType();
-    }
-
-    /**
-     * Create an instance of {@link ListCategoryType }
-     * 
-     */
-    public ListCategoryType createListCategoryType() {
-        return new ListCategoryType();
-    }
-
-    /**
-     * Create an instance of {@link ListCategoryResponseType }
-     * 
-     */
-    public ListCategoryResponseType createListCategoryResponseType() {
-        return new ListCategoryResponseType();
-    }
-
-    /**
      * Create an instance of {@link CategoryType }
      * 
      */
     public CategoryType createCategoryType() {
         return new CategoryType();
-    }
-
-    /**
-     * Create an instance of {@link ListSaleItemsForCategoryResponseType }
-     * 
-     */
-    public ListSaleItemsForCategoryResponseType createListSaleItemsForCategoryResponseType() {
-        return new ListSaleItemsForCategoryResponseType();
-    }
-
-    /**
-     * Create an instance of {@link UpdateSaleItemOptionResponseType }
-     * 
-     */
-    public UpdateSaleItemOptionResponseType createUpdateSaleItemOptionResponseType() {
-        return new UpdateSaleItemOptionResponseType();
-    }
-
-    /**
-     * Create an instance of {@link DeleteSaleItemType }
-     * 
-     */
-    public DeleteSaleItemType createDeleteSaleItemType() {
-        return new DeleteSaleItemType();
     }
 
     /**
@@ -137,83 +73,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SaleItemOptionType }
+     * Create an instance of {@link DeleteSaleItemType }
      * 
      */
-    public SaleItemOptionType createSaleItemOptionType() {
-        return new SaleItemOptionType();
+    public DeleteSaleItemType createDeleteSaleItemType() {
+        return new DeleteSaleItemType();
     }
 
     /**
-     * Create an instance of {@link CreateSaleItemType }
+     * Create an instance of {@link ListSaleItemsForCategoryType }
      * 
      */
-    public CreateSaleItemType createCreateSaleItemType() {
-        return new CreateSaleItemType();
+    public ListSaleItemsForCategoryType createListSaleItemsForCategoryType() {
+        return new ListSaleItemsForCategoryType();
     }
 
     /**
-     * Create an instance of {@link UpdateSaleItemType }
+     * Create an instance of {@link UpdateSaleItemOptionResponseType }
      * 
      */
-    public UpdateSaleItemType createUpdateSaleItemType() {
-        return new UpdateSaleItemType();
-    }
-
-    /**
-     * Create an instance of {@link CreateSaleItemOptionType }
-     * 
-     */
-    public CreateSaleItemOptionType createCreateSaleItemOptionType() {
-        return new CreateSaleItemOptionType();
-    }
-
-    /**
-     * Create an instance of {@link UpdateCategoryResponseType }
-     * 
-     */
-    public UpdateCategoryResponseType createUpdateCategoryResponseType() {
-        return new UpdateCategoryResponseType();
-    }
-
-    /**
-     * Create an instance of {@link UpdateSaleItemOptionType }
-     * 
-     */
-    public UpdateSaleItemOptionType createUpdateSaleItemOptionType() {
-        return new UpdateSaleItemOptionType();
-    }
-
-    /**
-     * Create an instance of {@link CreateSaleItemResponseType }
-     * 
-     */
-    public CreateSaleItemResponseType createCreateSaleItemResponseType() {
-        return new CreateSaleItemResponseType();
-    }
-
-    /**
-     * Create an instance of {@link CreateCategoryType }
-     * 
-     */
-    public CreateCategoryType createCreateCategoryType() {
-        return new CreateCategoryType();
-    }
-
-    /**
-     * Create an instance of {@link UpdateSaleItemResponseType }
-     * 
-     */
-    public UpdateSaleItemResponseType createUpdateSaleItemResponseType() {
-        return new UpdateSaleItemResponseType();
-    }
-
-    /**
-     * Create an instance of {@link DeleteCategoryType }
-     * 
-     */
-    public DeleteCategoryType createDeleteCategoryType() {
-        return new DeleteCategoryType();
+    public UpdateSaleItemOptionResponseType createUpdateSaleItemOptionResponseType() {
+        return new UpdateSaleItemOptionResponseType();
     }
 
     /**
@@ -225,19 +105,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SaleItemType }
+     * Create an instance of {@link CreateCategoryResponseType }
      * 
      */
-    public SaleItemType createSaleItemType() {
-        return new SaleItemType();
+    public CreateCategoryResponseType createCreateCategoryResponseType() {
+        return new CreateCategoryResponseType();
     }
 
     /**
-     * Create an instance of {@link CreateSaleItemOptionResponseType }
+     * Create an instance of {@link SaleItemOptionType }
      * 
      */
-    public CreateSaleItemOptionResponseType createCreateSaleItemOptionResponseType() {
-        return new CreateSaleItemOptionResponseType();
+    public SaleItemOptionType createSaleItemOptionType() {
+        return new SaleItemOptionType();
+    }
+
+    /**
+     * Create an instance of {@link ListCategoryType }
+     * 
+     */
+    public ListCategoryType createListCategoryType() {
+        return new ListCategoryType();
     }
 
     /**
@@ -249,19 +137,43 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CreateCategoryResponseType }
+     * Create an instance of {@link ResultType }
      * 
      */
-    public CreateCategoryResponseType createCreateCategoryResponseType() {
-        return new CreateCategoryResponseType();
+    public ResultType createResultType() {
+        return new ResultType();
     }
 
     /**
-     * Create an instance of {@link DeleteSaleItemOptionResponseType }
+     * Create an instance of {@link CreateSaleItemOptionResponseType }
      * 
      */
-    public DeleteSaleItemOptionResponseType createDeleteSaleItemOptionResponseType() {
-        return new DeleteSaleItemOptionResponseType();
+    public CreateSaleItemOptionResponseType createCreateSaleItemOptionResponseType() {
+        return new CreateSaleItemOptionResponseType();
+    }
+
+    /**
+     * Create an instance of {@link UpdateCategoryResponseType }
+     * 
+     */
+    public UpdateCategoryResponseType createUpdateCategoryResponseType() {
+        return new UpdateCategoryResponseType();
+    }
+
+    /**
+     * Create an instance of {@link FetchSaleItemType }
+     * 
+     */
+    public FetchSaleItemType createFetchSaleItemType() {
+        return new FetchSaleItemType();
+    }
+
+    /**
+     * Create an instance of {@link UpdateSaleItemType }
+     * 
+     */
+    public UpdateSaleItemType createUpdateSaleItemType() {
+        return new UpdateSaleItemType();
     }
 
     /**
@@ -273,11 +185,99 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ListSaleItemsForCategoryType }
+     * Create an instance of {@link DeleteCategoryType }
      * 
      */
-    public ListSaleItemsForCategoryType createListSaleItemsForCategoryType() {
-        return new ListSaleItemsForCategoryType();
+    public DeleteCategoryType createDeleteCategoryType() {
+        return new DeleteCategoryType();
+    }
+
+    /**
+     * Create an instance of {@link UpdateSaleItemResponseType }
+     * 
+     */
+    public UpdateSaleItemResponseType createUpdateSaleItemResponseType() {
+        return new UpdateSaleItemResponseType();
+    }
+
+    /**
+     * Create an instance of {@link ListCategoryResponseType }
+     * 
+     */
+    public ListCategoryResponseType createListCategoryResponseType() {
+        return new ListCategoryResponseType();
+    }
+
+    /**
+     * Create an instance of {@link ListSaleItemsForCategoryResponseType }
+     * 
+     */
+    public ListSaleItemsForCategoryResponseType createListSaleItemsForCategoryResponseType() {
+        return new ListSaleItemsForCategoryResponseType();
+    }
+
+    /**
+     * Create an instance of {@link UpdateSaleItemOptionType }
+     * 
+     */
+    public UpdateSaleItemOptionType createUpdateSaleItemOptionType() {
+        return new UpdateSaleItemOptionType();
+    }
+
+    /**
+     * Create an instance of {@link DeleteSaleItemOptionResponseType }
+     * 
+     */
+    public DeleteSaleItemOptionResponseType createDeleteSaleItemOptionResponseType() {
+        return new DeleteSaleItemOptionResponseType();
+    }
+
+    /**
+     * Create an instance of {@link SaleItemType }
+     * 
+     */
+    public SaleItemType createSaleItemType() {
+        return new SaleItemType();
+    }
+
+    /**
+     * Create an instance of {@link CreateCategoryType }
+     * 
+     */
+    public CreateCategoryType createCreateCategoryType() {
+        return new CreateCategoryType();
+    }
+
+    /**
+     * Create an instance of {@link UpdateCategoryType }
+     * 
+     */
+    public UpdateCategoryType createUpdateCategoryType() {
+        return new UpdateCategoryType();
+    }
+
+    /**
+     * Create an instance of {@link CreateSaleItemOptionType }
+     * 
+     */
+    public CreateSaleItemOptionType createCreateSaleItemOptionType() {
+        return new CreateSaleItemOptionType();
+    }
+
+    /**
+     * Create an instance of {@link CreateSaleItemResponseType }
+     * 
+     */
+    public CreateSaleItemResponseType createCreateSaleItemResponseType() {
+        return new CreateSaleItemResponseType();
+    }
+
+    /**
+     * Create an instance of {@link CreateSaleItemType }
+     * 
+     */
+    public CreateSaleItemType createCreateSaleItemType() {
+        return new CreateSaleItemType();
     }
 
     /**
