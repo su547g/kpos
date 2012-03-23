@@ -14,7 +14,7 @@ public class SaleItemOptionDao extends AbstractJpaDao<SaleItemOption> implements
     }
 
     @Override
-    public void insertSaleItem(SaleItemOption aItem) {
+    public void insertSaleItemOption(SaleItemOption aItem) {
         if(aItem.getId() == null) {
             super.insert(aItem);
         } else {
@@ -27,22 +27,27 @@ public class SaleItemOptionDao extends AbstractJpaDao<SaleItemOption> implements
     }
 
     @Override
-    public SaleItemOption findSaleItem(long id) {
+    public SaleItemOption findSaleItemOption(long id) {
         SaleItemOption item = this.findById(id);
         return item;
     }
 
     @Override
-    public SaleItemOption updateSaleItem(SaleItemOption aItem) {
+    public SaleItemOption updateSaleItemOption(SaleItemOption aItem) {
         SaleItemOption item = super.update(aItem);
         return item;
     }
 
     @Override
-    public boolean deleteSaleItem(SaleItemOption aItem) {
+    public boolean deleteSaleItemOption(SaleItemOption aItem) {
         if(aItem.getId() != null) {
             return super.delete(aItem);
         }
         return false;
+    }
+
+    @Override
+    public boolean deleteSaleItemOption(long aId) {
+        return super.delete(aId);
     }
 }

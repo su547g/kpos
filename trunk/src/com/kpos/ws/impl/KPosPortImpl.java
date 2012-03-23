@@ -98,6 +98,19 @@ public class KPosPortImpl implements KPosPortType {
         itemType.setTakeoutPrice(item.getOutPrice());
         itemType.setThumbPath(item.getThumbPath());
         itemType.setDescription(item.getDescription());
+        //Load item options
+        List<SaleItemOptionType> optionTypes = itemType.getOptions();
+        List<SaleItemOption> options = item.getOptionList();
+        for(SaleItemOption option : options) {
+            SaleItemOptionType optionType = new SaleItemOptionType();
+            optionType.setId(option.getId());
+            optionType.setName(option.getName());
+            optionType.setPrice(option.getPrice());
+            optionType.setSaleItemId(item.getId());
+            optionType.setTakeoutPrice(option.getOutPrice());
+            optionType.setIsRequired(option.isRequired());
+            optionTypes.add(optionType);
+        }
         return itemType;
     }
 
@@ -248,18 +261,30 @@ public class KPosPortImpl implements KPosPortType {
     @Override
     public CreateSaleItemOptionResponseType createSaleItemOption(
             @WebParam(partName = "parameters", name = "CreateSaleItemOptionType", targetNamespace = NS) CreateSaleItemOptionType parameters) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        CreateSaleItemOptionResponseType responseType = new CreateSaleItemOptionResponseType();
+        CreateResult<SaleItemOption> result = contentManagementService.addSaleItemOption(parameters.getItemOption());
+        if(result.isSuccessful() && result.getCreated() != null) {
+            responseType.setItemOptionId(result.getCreated().getId());
+        } else {
+            responseType.setItemOptionId(-1L);
+        }
+        responseType.setResult(getSoapResult(result));
+        return responseType;
     }
 
     @Override
     public UpdateSaleItemOptionResponseType updateSaleItemOption(
             @WebParam(partName = "parameters", name = "UpdateSaleItemOptionType", targetNamespace = NS) UpdateSaleItemOptionType parameters) {
+        //TODO
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public DeleteSaleItemOptionResponseType deleteSaleItemOption(
             @WebParam(partName = "parameters", name = "DeleteSaleItemOptionType", targetNamespace = NS) DeleteSaleItemOptionType parameters) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        DeleteSaleItemOptionResponseType responseType = new DeleteSaleItemOptionResponseType();
+        DeleteResult result = contentManagementService.deleteSaleItem(parameters.getId());
+        responseType.setResult(getSoapResult(result));
+        return responseType;
     }
 }

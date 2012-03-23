@@ -2,6 +2,7 @@ package com.kpos.service;
 
 import com.kpos.dao.ICategoryDao;
 import com.kpos.dao.ISaleItemDao;
+import com.kpos.dao.ISaleItemOptionDao;
 import com.kpos.domain.Category;
 import com.kpos.domain.SaleItem;
 import com.kpos.domain.SaleItemOption;
@@ -33,6 +34,9 @@ public class ContentManagementServiceImpl implements IContentManagementService {
 
     @Autowired
     private ISaleItemDao saleItemDao;
+
+    @Autowired
+    private ISaleItemOptionDao saleItemOptionDao;
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public CreateResult<Category> createMenuCategory(Category aCategory) {
@@ -194,9 +198,26 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public CreateResult<SaleItemOption> addSaleItemOption(SaleItemOptionType soapType) {
-
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        CreateResult<SaleItemOption> result = new CreateResult<SaleItemOption>();
+        long itemId = soapType.getSaleItemId();
+        SaleItem item = saleItemDao.findSaleItem(itemId);
+        if(item != null) {
+            SaleItemOption option = new SaleItemOption();
+            option.setSaleItem(item);
+            option.setName(soapType.getName());
+            option.setOutPrice(soapType.getTakeoutPrice());
+            option.setPrice(soapType.getPrice());
+            option.setRequired(soapType.getIsRequired());
+            saleItemOptionDao.insertSaleItemOption(option);
+            result.setCreated(option);
+            result.setSuccessful(true);
+        } else {
+            result.setSuccessful(false);
+            result.setException(new Exception("Can't find item [" + itemId + "]"));
+        }
+        return result;
     }
 
     @Override
@@ -206,6 +227,10 @@ public class ContentManagementServiceImpl implements IContentManagementService {
 
     @Override
     public DeleteResult deleteSaleItemOption(long aId) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        DeleteResult result = new DeleteResult();
+        boolean isSuccessful = saleItemOptionDao.deleteSaleItemOption(aId);
+        result.setId(aId);
+        result.setSuccessful(isSuccessful);
+        return result;
     }
 }
