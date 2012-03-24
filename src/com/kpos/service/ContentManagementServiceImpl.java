@@ -221,8 +221,30 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public UpdateResult<SaleItemOption> updateSaleItemOption(SaleItemOptionType soapType) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        UpdateResult<SaleItemOption> result = new UpdateResult<SaleItemOption>();
+        long saleItemId = soapType.getSaleItemId();
+        SaleItem saleItem = saleItemDao.findSaleItem(saleItemId);
+        if(saleItem != null) {
+            SaleItemOption option = saleItemOptionDao.findSaleItemOption(soapType.getId());
+            if(option != null) {
+                option.setRequired(soapType.getIsRequired());
+                option.setName(soapType.getName());
+                option.setOutPrice(soapType.getTakeoutPrice());
+                option.setPrice(soapType.getPrice());
+                saleItemOptionDao.updateSaleItemOption(option);
+                result.setSuccessful(true);
+                result.setManagedObject(option);
+            } else {
+                result.setSuccessful(false);
+                result.setException(new Exception("can't find sale item option [" + soapType.getId() + "]"));
+            }
+        } else {
+            result.setSuccessful(false);
+            result.setException(new Exception("can't find sale item [" + soapType.getSaleItemId() + "]"));
+        }
+        return result;
     }
 
     @Override
