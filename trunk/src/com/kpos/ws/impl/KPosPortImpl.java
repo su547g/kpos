@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import javax.jws.WebParam;
+import javax.xml.ws.Holder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -86,12 +87,11 @@ public class KPosPortImpl implements KPosPortType {
         return resultType;
     }
 
-    /*protected void setSoapFaultHolder (Holder<ResultType> holder, Throwable t) {
+    protected void setSoapFaultHolder (Holder<ResultType> holder, Throwable t) {
       holder.value = getSoapFaultResult(t);
-    }*/
+    }
 
     protected ResultType getSoapFaultResult (Throwable t) {
-      BbDataActLog.error(t.getMessage(), t, log);
       ResultType result = new ResultType();
       result.setFailureReason(t.getMessage());
       result.setSuccessful(false);
@@ -130,75 +130,95 @@ public class KPosPortImpl implements KPosPortType {
     @Override
     public DeleteCategoryResponseType deleteCategory(
             @WebParam(partName = "parameters", name = "DeleteCategoryType", targetNamespace = NS) DeleteCategoryType parameters) {
-        long categoryId = parameters.getCategoryId();
-        DeleteResult result = contentManagementService.deleteCategory(categoryId);
         DeleteCategoryResponseType responseType = new DeleteCategoryResponseType();
-        responseType.setResult(getSoapResult(result));
+        try {
+            long categoryId = parameters.getCategoryId();
+            DeleteResult result = contentManagementService.deleteCategory(categoryId);
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
         return responseType;
     }
 
     @Override
     public DeleteSaleItemResponseType deleteSaleItem(
             @WebParam(partName = "parameters", name = "DeleteSaleItemType", targetNamespace = NS) DeleteSaleItemType parameters) {
-        DeleteResult result = contentManagementService.deleteSaleItem(parameters.getItemId());
         DeleteSaleItemResponseType responseType = new DeleteSaleItemResponseType();
-        responseType.setResult(getSoapResult(result));
+        try {
+            DeleteResult result = contentManagementService.deleteSaleItem(parameters.getItemId());
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
         return responseType;
     }
 
     @Override
     public ListCategoryResponseType listCategory(
             @WebParam(partName = "parameters", name = "ListCategoryType", targetNamespace = NS) ListCategoryType parameters) {
-        FetchResult<List<Category>> fetchResult = contentManagementService.listAllCategories();
-        List<Category> categoryList = fetchResult.getTarget();
-        List<CategoryType> categoryTypes = new ArrayList<CategoryType>();
-        for(Category category : categoryList) {
-            CategoryType type = new CategoryType();
-            type.setHappyHourRate(category.getHhRate());
-            type.setId(category.getId());
-            type.setIsAllowedHappyHour(category.isAllowedHH());
-            type.setName(category.getName());
-            type.setNotes(category.getNotes());
-            type.setThumbPath(category.getThumbPath());
-            categoryTypes.add(type);
-        }
         ListCategoryResponseType responseType = new ListCategoryResponseType();
-        responseType.setTotal(categoryTypes.size());
-        responseType.setResult(getSoapResult(fetchResult));
+        try {
+            FetchResult<List<Category>> fetchResult = contentManagementService.listAllCategories();
+            List<Category> categoryList = fetchResult.getTarget();
+            List<CategoryType> categoryTypes = new ArrayList<CategoryType>();
+            for(Category category : categoryList) {
+                CategoryType type = new CategoryType();
+                type.setHappyHourRate(category.getHhRate());
+                type.setId(category.getId());
+                type.setIsAllowedHappyHour(category.isAllowedHH());
+                type.setName(category.getName());
+                type.setNotes(category.getNotes());
+                type.setThumbPath(category.getThumbPath());
+                categoryTypes.add(type);
+            }
+            responseType.setTotal(categoryTypes.size());
+            responseType.setResult(getSoapResult(fetchResult));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
         return responseType;
     }
 
     @Override
     public CreateCategoryResponseType createCategory(
             @WebParam(partName = "parameters", name = "CreateCategoryType", targetNamespace = NS) CreateCategoryType soapCategory) {
-        Category category = new Category();
-        CategoryType soapType = soapCategory.getCategory();
-        category.setName(soapType.getName());
-        category.setNotes(soapType.getNotes());
-        category.setThumbPath(soapType.getThumbPath());
-        if(soapType.getIsAllowedHappyHour() != null) {
-            category.setAllowedHH(soapType.getIsAllowedHappyHour());
-        }
-        if(soapType.getHappyHourRate() != null) {
-            category.setHhRate(soapType.getHappyHourRate());
-        }
-        category.setCreatedOn(new Date());
-        category.setLastUpdated(new Date());
-        CreateResult<Category> result = contentManagementService.createMenuCategory(category);
         CreateCategoryResponseType responseType = new CreateCategoryResponseType();
-        if(result.isSuccessful() && result.getCreated() != null) {
-            responseType.setCategoryId(result.getCreated().getId());
+        try {
+            Category category = new Category();
+            CategoryType soapType = soapCategory.getCategory();
+            category.setName(soapType.getName());
+            category.setNotes(soapType.getNotes());
+            category.setThumbPath(soapType.getThumbPath());
+            if(soapType.getIsAllowedHappyHour() != null) {
+                category.setAllowedHH(soapType.getIsAllowedHappyHour());
+            }
+            if(soapType.getHappyHourRate() != null) {
+                category.setHhRate(soapType.getHappyHourRate());
+            }
+            category.setCreatedOn(new Date());
+            category.setLastUpdated(new Date());
+            CreateResult<Category> result = contentManagementService.createMenuCategory(category);
+            if(result.isSuccessful() && result.getCreated() != null) {
+                responseType.setCategoryId(result.getCreated().getId());
+            }
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
         }
-        responseType.setResult(getSoapResult(result));
         return responseType;
     }
 
     @Override
     public UpdateCategoryResponseType updateCategory(
             @WebParam(partName = "parameters", name = "UpdateCategoryType", targetNamespace = NS) UpdateCategoryType parameters) {
-        UpdateResult<Category> result = contentManagementService.updateCategory(parameters.getCategory());
         UpdateCategoryResponseType responseType = new UpdateCategoryResponseType();
-        responseType.setResult(getSoapResult(result));
+        try {
+            UpdateResult<Category> result = contentManagementService.updateCategory(parameters.getCategory());
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
         return responseType;
     }
 
@@ -206,22 +226,25 @@ public class KPosPortImpl implements KPosPortType {
     public ListSaleItemsForCategoryResponseType listSaleItemsForCategory(
             @WebParam(partName = "parameters", name = "ListSaleItemsForCategoryType", targetNamespace = NS) ListSaleItemsForCategoryType parameters) {
         ListSaleItemsForCategoryResponseType responseType = new ListSaleItemsForCategoryResponseType();
-        long categoryId = parameters.getCategoryId();
-        FetchResult<List<SaleItem>> fetchResult = contentManagementService.listSaleItemsForCategory(categoryId);
-        if(fetchResult.isSuccessful()) {
-            List<SaleItem> saleItems = fetchResult.getTarget();
-            responseType.setTotal(saleItems.size());
-            List<SaleItemType> saleItemTypes = responseType.getSaleItems();
-            for(SaleItem item : saleItems) {
-                SaleItemType itemType = convertSaleItemToSoap(item);
-                itemType.setCatId(categoryId);
-                saleItemTypes.add(itemType);
+        try {
+            long categoryId = parameters.getCategoryId();
+            FetchResult<List<SaleItem>> fetchResult = contentManagementService.listSaleItemsForCategory(categoryId);
+            if(fetchResult.isSuccessful()) {
+                List<SaleItem> saleItems = fetchResult.getTarget();
+                responseType.setTotal(saleItems.size());
+                List<SaleItemType> saleItemTypes = responseType.getSaleItems();
+                for(SaleItem item : saleItems) {
+                    SaleItemType itemType = convertSaleItemToSoap(item);
+                    itemType.setCatId(categoryId);
+                    saleItemTypes.add(itemType);
+                }
+            } else {
+                responseType.setTotal(0);
             }
-        } else {
-            responseType.setTotal(0);
+            responseType.setResult(getSoapResult(fetchResult));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
         }
-        responseType.setResult(getSoapResult(fetchResult));
-
         return responseType;
     }
 
@@ -229,8 +252,12 @@ public class KPosPortImpl implements KPosPortType {
     public UpdateSaleItemResponseType updateSaleItem(
             @WebParam(partName = "parameters", name = "UpdateSaleItemType", targetNamespace = NS) UpdateSaleItemType parameters) {
         UpdateSaleItemResponseType responseType = new UpdateSaleItemResponseType();
-        UpdateResult<SaleItem> result = contentManagementService.updateSaleItem(parameters.getSaleItem());
-        responseType.setResult(getSoapResult(result));
+        try {
+            UpdateResult<SaleItem> result = contentManagementService.updateSaleItem(parameters.getSaleItem());
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
         return responseType;
     }
 
@@ -238,23 +265,27 @@ public class KPosPortImpl implements KPosPortType {
     public FetchSaleItemResponseType fetchSaleItem(
             @WebParam(partName = "parameters", name = "FetchSaleItemType", targetNamespace = NS) FetchSaleItemType parameters) {
         FetchSaleItemResponseType responseType = new FetchSaleItemResponseType();
-        FetchResult<SaleItem> fetchResult = contentManagementService.fetchSaleItem(parameters.getItemId());
-        SaleItem item = fetchResult.getTarget();
-        SaleItemType soapType = convertSaleItemToSoap(item);
-        soapType.setCatId(item.getCategory().getId());
-        
-        List<SaleItemOption> itemOptions = item.getOptionList();
-        for(SaleItemOption option : itemOptions) {
-            SaleItemOptionType optionType = new SaleItemOptionType();
-            optionType.setId(option.getId());
-            optionType.setName(option.getName());
-            optionType.setPrice(option.getPrice());
-            optionType.setSaleItemId(item.getId());
-            optionType.setTakeoutPrice(option.getOutPrice());
-            soapType.getOptions().add(optionType);
+        try {
+            FetchResult<SaleItem> fetchResult = contentManagementService.fetchSaleItem(parameters.getItemId());
+            SaleItem item = fetchResult.getTarget();
+            SaleItemType soapType = convertSaleItemToSoap(item);
+            soapType.setCatId(item.getCategory().getId());
+
+            List<SaleItemOption> itemOptions = item.getOptionList();
+            for(SaleItemOption option : itemOptions) {
+                SaleItemOptionType optionType = new SaleItemOptionType();
+                optionType.setId(option.getId());
+                optionType.setName(option.getName());
+                optionType.setPrice(option.getPrice());
+                optionType.setSaleItemId(item.getId());
+                optionType.setTakeoutPrice(option.getOutPrice());
+                soapType.getOptions().add(optionType);
+            }
+            responseType.setSaleItem(soapType);
+            responseType.setResult(getSoapResult(fetchResult));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
         }
-        responseType.setSaleItem(soapType);
-        responseType.setResult(getSoapResult(fetchResult));
         return responseType;
     }
 
@@ -262,12 +293,16 @@ public class KPosPortImpl implements KPosPortType {
     public CreateSaleItemResponseType createSaleItem(
             @WebParam(partName = "parameters", name = "CreateSaleItemType", targetNamespace = NS) CreateSaleItemType parameters) {
         CreateSaleItemResponseType responseType = new CreateSaleItemResponseType();
-        SaleItemType soapType = parameters.getSaleItem();
-        CreateResult<SaleItem> result = contentManagementService.createSaleItem(soapType);
-        if(result.isSuccessful() && result.getCreated() != null) {
-            responseType.setSaleItemId(result.getCreated().getId());
+        try {
+            SaleItemType soapType = parameters.getSaleItem();
+            CreateResult<SaleItem> result = contentManagementService.createSaleItem(soapType);
+            if(result.isSuccessful() && result.getCreated() != null) {
+                responseType.setSaleItemId(result.getCreated().getId());
+            }
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
         }
-        responseType.setResult(getSoapResult(result));
         return responseType;
     }
 
@@ -275,29 +310,44 @@ public class KPosPortImpl implements KPosPortType {
     public CreateSaleItemOptionResponseType createSaleItemOption(
             @WebParam(partName = "parameters", name = "CreateSaleItemOptionType", targetNamespace = NS) CreateSaleItemOptionType parameters) {
         CreateSaleItemOptionResponseType responseType = new CreateSaleItemOptionResponseType();
-        CreateResult<SaleItemOption> result = contentManagementService.addSaleItemOption(parameters.getItemOption());
-        if(result.isSuccessful() && result.getCreated() != null) {
-            responseType.setItemOptionId(result.getCreated().getId());
-        } else {
-            responseType.setItemOptionId(-1L);
+        try {
+            CreateResult<SaleItemOption> result = contentManagementService.addSaleItemOption(parameters.getItemOption());
+            if(result.isSuccessful() && result.getCreated() != null) {
+                responseType.setItemOptionId(result.getCreated().getId());
+            } else {
+                responseType.setItemOptionId(-1L);
+            }
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
         }
-        responseType.setResult(getSoapResult(result));
         return responseType;
     }
 
     @Override
     public UpdateSaleItemOptionResponseType updateSaleItemOption(
             @WebParam(partName = "parameters", name = "UpdateSaleItemOptionType", targetNamespace = NS) UpdateSaleItemOptionType parameters) {
-        //TODO
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        UpdateSaleItemOptionResponseType responseType = new UpdateSaleItemOptionResponseType();
+        try {
+            UpdateResult<SaleItemOption> result = contentManagementService.updateSaleItemOption(parameters.getItemOption());
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            ResultType result = this.getSoapFaultResult(e);
+            responseType.setResult(result);
+        }
+        return responseType;
     }
 
     @Override
     public DeleteSaleItemOptionResponseType deleteSaleItemOption(
             @WebParam(partName = "parameters", name = "DeleteSaleItemOptionType", targetNamespace = NS) DeleteSaleItemOptionType parameters) {
         DeleteSaleItemOptionResponseType responseType = new DeleteSaleItemOptionResponseType();
-        DeleteResult result = contentManagementService.deleteSaleItem(parameters.getId());
-        responseType.setResult(getSoapResult(result));
+        try {
+            DeleteResult result = contentManagementService.deleteSaleItem(parameters.getId());
+            responseType.setResult(getSoapResult(result));
+        } catch(Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
         return responseType;
     }
 }
