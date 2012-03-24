@@ -5,9 +5,9 @@
     <title></title>
     <style type="text/css">
         body{
-        font-size:14px;
-        background:#c4f0f1;
-        text-align:center;
+            font-size:14px;
+            background:#c4f0f1;
+            text-align:center;
         }
 
         .tableone {width:250px; border-collapse:collapse; margin:0 auto;}
@@ -27,7 +27,7 @@
 
         .tableone {background:#697210; border:1px solid #fff; color:#fff;}
         .tableone td {border:1px solid #fff; color:#fff;}
-        .tableone tbody {background:#f0c992; color:#000;}
+        .tableone tbody {background:#eee; color:#000;}
         .tableone caption {background:#fff; color:#697210; font-size:1.2em; margin:0 auto;}
         .tableone th, .tabletwo th {text-align:left;}
 
@@ -42,69 +42,81 @@
     var currentRow=-1;
 
     function highlightRow(row, highLight) {
-    row.style.cursor = 'pointer';
-    var cell = row.cells[0];
-    if(highLight) {
-    cell.style.cssText = 'border-width: 1px; border-color: blue';
-    } else {
-    cell.style.cssText = 'border-width: 1px; border-color: #B3B1B1';
-    }
+        row.style.cursor = 'pointer';
+        var cell = row.cells[0];
+        var bgColor = "background-color:" + cell.style.background;
+
+        if(highLight) {
+            //cell.style.cssText = 'border-width: 1px; border-color: blue; ' + bgColor;
+            cell.style.borderWidth = "1px";
+            cell.style.borderColor = "blue";
+        } else {
+            //cell.style.cssText = 'border-width: 1px; border-color: #B3B1B1 ' + bgColor;
+            cell.style.borderWidth = "1px";
+            cell.style.borderColor = "#B3B1B1";
+        }
     }
 
     function selectRow(tableID, selectedRowID) {
-    var table = document.getElementById(tableID);
-    var rowCount = table.rows.length;
-    for(var i = 0; i < rowCount; i++) {
-    var row = table.rows[i];
-    if(row.id == selectedRowID) {
-    row.style.background='#dcfac9';
-    currentRow = i;
-    } else {
-    row.style.background='#f0c992';
+        var table = document.getElementById(tableID);
+        var rowCount = table.rows.length;
+        for(var i = 0; i < rowCount; i++) {
+            var row = table.rows[i];
+            if(row.id == selectedRowID) {
+                row.style.background = '#dcfac9';
+                row.cells[0].style.background = '#dcfac9';
+                currentRow = i;
+            } else {
+                row.style.background = 'eee'; //'#f0c992';
+                row.cells[0].style.background = 'eee'; //'#f0c992';
     }
-    }
+        }
     }
 
     function addCategoryRow(tableID) {
-    var table = document.getElementById(tableID);
+        var table = document.getElementById(tableID);
 
-    var rowCount = table.rows.length;
-    var row = table.insertRow(rowCount);
-    var rowId = tableID + "_r" + rowCount;
-    //alert("rowId " + rowId);
-    row.id = rowId;
-    row.name = rowId;
-    row.setAttribute('onclick', 'selectRow("'+tableID+'", "'+rowId+'");');
-    //row.onclick = new funtion(){ selectRow("", ""); }
+        var rowCount = table.rows.length;
+        var row = table.insertRow(rowCount);
+        var rowId = tableID + "_r" + rowCount;
 
-    row.onmouseover = function(){ highlightRow(this, true); };
-    row.onmouseout = function(){ highlightRow(this, false); };
+        row.id = rowId;
+        row.name = rowId;
+        row.setAttribute('onclick', 'selectRow("'+tableID+'", "'+rowId+'");');
+        /*row.onclick = new function(){
+            alert(tableID);
+            //selectRow('"'+tableID+'"', '"'+rowId+'"');
+        };*/
+        row.onmouseover = function(){ highlightRow(this, true); };
+        row.onmouseout = function(){ highlightRow(this, false); };
 
-    var cell1 = row.insertCell(0);
-    var element1 = document.createTextNode("category");
-    cell1.appendChild(element1);
+        var cell1 = row.insertCell(0);
+        var element1 = document.createTextNode("category"); //document.createElement("th");
+        //element1.setAttribute("class", "td1");
+        //element1.innerText = "category";
+        cell1.appendChild(element1);//row.appendChild(element1);
 
-    var cell2 = row.insertCell(1);
-    var temp = "<a href='javascript:deleteRow(\"" + tableID + "\",\"" + rowId +"\");'>X</a>";
-    //alert(temp);
-    cell2.innerHTML = temp;
+        var cell2 = row.insertCell(1);
+        var temp = "<a href='javascript:deleteRow(\"" + tableID + "\",\"" + rowId +"\");'>X</a>";
+
+        cell2.innerHTML = temp;
     }
 
     function deleteRow(tableID, rowID) {
-    try {
-    var table = document.getElementById(tableID);
-    var rowCount = table.rows.length;
-    for(var i = 0; i < rowCount; i++) {
-    var row = table.rows[i];
-    if(row.id == rowID) {
-    table.deleteRow(i);
-    rowCount--;
-    i--;
-    }
-    }
-    } catch(e) {
-    //alert(e);
-    }
+        try {
+            var table = document.getElementById(tableID);
+            var rowCount = table.rows.length;
+            for(var i = 0; i < rowCount; i++) {
+                var row = table.rows[i];
+                if(row.id == rowID) {
+                    table.deleteRow(i);
+                    rowCount--;
+                    i--;
+                }
+            }
+        } catch(e) {
+            //alert(e);
+        }
     }
 </script>
 <body>
