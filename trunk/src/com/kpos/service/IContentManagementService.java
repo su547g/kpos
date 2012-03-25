@@ -1,9 +1,11 @@
 package com.kpos.service;
 
 import com.kpos.domain.Category;
+import com.kpos.domain.Printer;
 import com.kpos.domain.SaleItem;
 import com.kpos.domain.SaleItemOption;
 import com.kpos.ws.app.CategoryType;
+import com.kpos.ws.app.PrinterType;
 import com.kpos.ws.app.SaleItemOptionType;
 import com.kpos.ws.app.SaleItemType;
 
@@ -40,4 +42,6 @@ public interface IContentManagementService {
     UpdateResult<SaleItemOption> updateSaleItemOption(SaleItemOptionType soapType);
 
     DeleteResult deleteSaleItemOption(long aId);
+    
+    CreateResult<Printer> createPrinter(PrinterType soapType);
 }
