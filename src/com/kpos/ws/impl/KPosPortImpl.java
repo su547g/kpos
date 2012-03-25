@@ -1,6 +1,7 @@
 package com.kpos.ws.impl;
 
 import com.kpos.domain.Category;
+import com.kpos.domain.Printer;
 import com.kpos.domain.SaleItem;
 import com.kpos.domain.SaleItemOption;
 import com.kpos.service.*;
@@ -15,6 +16,7 @@ import javax.xml.ws.Holder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by kpos.
@@ -123,6 +125,15 @@ public class KPosPortImpl implements KPosPortType {
             optionType.setTakeoutPrice(option.getOutPrice());
             optionType.setIsRequired(option.isRequired());
             optionTypes.add(optionType);
+        }
+        //Load printers
+        List<PrinterType> printerTypes = itemType.getPrinters();
+        Set<Printer> printers = item.getPrinters();
+        for(Printer printer : printers) {
+            PrinterType printerType = new PrinterType();
+            printerType.setId(printer.getId());
+            printerType.setName(printer.getName());
+            printerType.setIpAddr(printer.getIpAddress());
         }
         return itemType;
     }
@@ -271,16 +282,6 @@ public class KPosPortImpl implements KPosPortType {
             SaleItemType soapType = convertSaleItemToSoap(item);
             soapType.setCatId(item.getCategory().getId());
 
-            List<SaleItemOption> itemOptions = item.getOptionList();
-            for(SaleItemOption option : itemOptions) {
-                SaleItemOptionType optionType = new SaleItemOptionType();
-                optionType.setId(option.getId());
-                optionType.setName(option.getName());
-                optionType.setPrice(option.getPrice());
-                optionType.setSaleItemId(item.getId());
-                optionType.setTakeoutPrice(option.getOutPrice());
-                soapType.getOptions().add(optionType);
-            }
             responseType.setSaleItem(soapType);
             responseType.setResult(getSoapResult(fetchResult));
         } catch (Exception e) {
@@ -346,6 +347,19 @@ public class KPosPortImpl implements KPosPortType {
             DeleteResult result = contentManagementService.deleteSaleItem(parameters.getId());
             responseType.setResult(getSoapResult(result));
         } catch(Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
+        return responseType;
+    }
+
+    @Override
+    public CreatePrinterResponseType createPrinter(
+            @WebParam(partName = "parameters", name = "CreatePrinterType", targetNamespace = NS) CreatePrinterType parameters) {
+        CreatePrinterResponseType responseType = new CreatePrinterResponseType();
+        try {
+            CreateResult<Printer> result = contentManagementService.createPrinter(parameters.getPrinter());
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
             responseType.setResult(getSoapFaultResult(e));
         }
         return responseType;

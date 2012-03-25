@@ -6,7 +6,9 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * This class represents a sale item that a customer can order.
@@ -61,15 +63,14 @@ public class SaleItem extends AbstractDomainObject {
     @Column(name = "description", nullable = true)
     private String description;
 
-    /*
     @ManyToMany
-   @JoinTable(
-           name = "REI_SHARED_WITH",
-           joinColumns = @JoinColumn(name = "REI_ROW_INST"),
-           inverseJoinColumns = @JoinColumn(name = "DART_USER_ROW_INST")
-   )
-   @ForeignKey(name = "REI_SHARED_WITH_2_REI_FK", inverseName = "REI_SHARED_WITH_2_USER_FK")
-     */
+    @JoinTable(
+           name = "ITEM_PRINTER_ASSOC",
+           joinColumns = @JoinColumn(name = "SALE_ITEM_ID"),
+           inverseJoinColumns = @JoinColumn(name = "PRINTER_ID")
+    )
+    @ForeignKey(name = "ITEM_2_PRINTER_FK", inverseName = "PRINTER_2_ITEM_FK")
+    private Set<Printer> printers = new HashSet<Printer>();
 
     public Long getId() {
         return id;
@@ -165,6 +166,14 @@ public class SaleItem extends AbstractDomainObject {
 
     public void setThumbPath(String thumbPath) {
         this.thumbPath = thumbPath;
+    }
+
+    public Set<Printer> getPrinters() {
+        return printers;
+    }
+
+    public void setPrinters(Set<Printer> printers) {
+        this.printers = printers;
     }
 
     @Override

@@ -49,6 +49,9 @@
             <xs:element name="DeleteSaleItemOptionType" type="tns:DeleteSaleItemOptionType"/>
             <xs:element name="DeleteSaleItemOptionResponseType" type="tns:DeleteSaleItemOptionResponseType"/>
 
+            <xs:element name="CreatePrinterType" type="tns:CreatePrinterType"/>
+            <xs:element name="CreatePrinterResponseType" type="tns:CreatePrinterResponseType"/>
+
             <!--Result object-->
             <xs:complexType name="ResultType">
                 <xs:sequence>
@@ -73,6 +76,14 @@
                 </xs:sequence>
             </xs:complexType>
 
+            <xs:complexType name="PrinterType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="name" type="xsd:string" minOccurs="1"/>
+                    <xs:element name="ipAddr" type="xsd:string" minOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+
             <xs:complexType name="SaleItemType">
                 <xs:sequence>
                     <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
@@ -87,6 +98,7 @@
                     <xs:element name="options" type="tns:SaleItemOptionType" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="isSingleOption" type="xsd:boolean" minOccurs="0" maxOccurs="1" default="false"/>
                     <xs:element name="thumbPath" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="printers" type="tns:PrinterType" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:complexType>
 
@@ -242,10 +254,23 @@
                     <xs:element name="Result" type="tns:ResultType"/>
                 </xs:sequence>
             </xs:complexType>
+
+            <xs:complexType name="CreatePrinterType">
+                <xs:sequence>
+                    <xs:element name="printer" type="tns:PrinterType" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="CreatePrinterResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="id" type="xs:long" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
             <!--End of operations-->
         </xs:schema>
     </wsdl:types>
 
+    <!--Begin of messages-->
     <wsdl:message name="CreateCategoryMessage">
         <wsdl:part name="parameters" element="tns:CreateCategoryType"/>
     </wsdl:message>
@@ -330,6 +355,14 @@
         <wsdl:part name="parameters" element="tns:DeleteSaleItemOptionResponseType"/>
     </wsdl:message>
 
+    <wsdl:message name="CreatePrinterMessage">
+        <wsdl:part name="parameters" element="tns:CreatePrinterType"/>
+    </wsdl:message>
+    <wsdl:message name="CreatePrinterResponseMessage">
+        <wsdl:part name="parameters" element="tns:CreatePrinterResponseType"/>
+    </wsdl:message>
+    <!--End of messages-->
+
     <wsdl:portType name="KPosPortType">
         <wsdl:operation name="CreateCategory">
             <wsdl:input message="tns:CreateCategoryMessage" name="CreateCategory"/>
@@ -389,6 +422,11 @@
         <wsdl:operation name="DeleteSaleItemOption">
             <wsdl:input message="tns:DeleteSaleItemOptionMessage" name="DeleteSaleItemOption"/>
             <wsdl:output message="tns:DeleteSaleItemOptionResponseMessage" name="DeleteSaleItemOptionResponse"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="CreatePrinter">
+            <wsdl:input message="tns:CreatePrinterMessage" name="CreatePrinter"/>
+            <wsdl:output message="tns:CreatePrinterResponseMessage" name="CreatePrinterResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -511,6 +549,16 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="DeleteSaleItemOptionResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="CreatePrinter">
+            <soap:operation soapAction="http://ws.kpos.com/CreatePrinter" style="document"/>
+            <wsdl:input name="CreatePrinter">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="CreatePrinterResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>

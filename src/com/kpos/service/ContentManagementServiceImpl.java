@@ -1,12 +1,15 @@
 package com.kpos.service;
 
 import com.kpos.dao.ICategoryDao;
+import com.kpos.dao.IPrinterDao;
 import com.kpos.dao.ISaleItemDao;
 import com.kpos.dao.ISaleItemOptionDao;
 import com.kpos.domain.Category;
+import com.kpos.domain.Printer;
 import com.kpos.domain.SaleItem;
 import com.kpos.domain.SaleItemOption;
 import com.kpos.ws.app.CategoryType;
+import com.kpos.ws.app.PrinterType;
 import com.kpos.ws.app.SaleItemOptionType;
 import com.kpos.ws.app.SaleItemType;
 import org.slf4j.Logger;
@@ -19,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by kpos.
@@ -37,6 +41,9 @@ public class ContentManagementServiceImpl implements IContentManagementService {
 
     @Autowired
     private ISaleItemOptionDao saleItemOptionDao;
+    
+    @Autowired
+    private IPrinterDao printerDao;
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public CreateResult<Category> createMenuCategory(Category aCategory) {
@@ -121,6 +128,29 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         saleItem.setDescription(aSaleItemType.getDescription());
         saleItem.setSingleOptionOnly(aSaleItemType.getIsSingleOption());
         saleItem.setThumbPath(aSaleItemType.getThumbPath());
+        
+        List<SaleItemOptionType> optionTypes = aSaleItemType.getOptions();
+        List<SaleItemOption> options = saleItem.getOptionList();
+        options.clear();
+        for(SaleItemOptionType optionType : optionTypes) {
+            SaleItemOption option = new SaleItemOption();
+            option.setName(optionType.getName());
+            option.setOutPrice(optionType.getTakeoutPrice());
+            option.setPrice(optionType.getPrice());
+            option.setRequired(optionType.getIsRequired());
+            option.setSaleItem(saleItem);
+            options.add(option);
+        }
+        
+        List<PrinterType> printerTypes = aSaleItemType.getPrinters();
+        Set<Printer> printers = saleItem.getPrinters();
+        printers.clear();
+        for(PrinterType printerType : printerTypes) {
+            Printer printer = new Printer();
+            printer.setIpAddress(printerType.getIpAddr());
+            printer.setName(printerType.getName());
+            printers.add(printer);
+        }
     }
 
     @Override
@@ -253,6 +283,23 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         boolean isSuccessful = saleItemOptionDao.deleteSaleItemOption(aId);
         result.setId(aId);
         result.setSuccessful(isSuccessful);
+        return result;
+    }
+    
+    @Override
+    public CreateResult<Printer> createPrinter(PrinterType soapType) {
+        CreateResult<Printer> result = new CreateResult<Printer>();
+        Printer printer = new Printer();
+        printer.setIpAddress(soapType.getIpAddr());
+        printer.setName(soapType.getName());
+        Printer newPrinter = printerDao.insert(printer);
+        if(newPrinter.getId() != null) {
+            result.setCreated(newPrinter);
+            result.setSuccessful(true);
+        } else {
+            result.setCreated(null);
+            result.setSuccessful(false);
+        }
         return result;
     }
 }
