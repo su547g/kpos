@@ -124,6 +124,8 @@ public class KPosPortImpl implements KPosPortType {
             optionType.setSaleItemId(item.getId());
             optionType.setTakeoutPrice(option.getOutPrice());
             optionType.setIsRequired(option.isRequired());
+            optionType.setDescription(option.getDescription());
+            optionType.setThumbPath(option.getThumPath());
             optionTypes.add(optionType);
         }
         //Load printers
@@ -360,6 +362,54 @@ public class KPosPortImpl implements KPosPortType {
             CreateResult<Printer> result = contentManagementService.createPrinter(parameters.getPrinter());
             responseType.setResult(getSoapResult(result));
         } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
+        return responseType;
+    }
+
+    @Override
+    public ListPrintersResponseType listPrinters(
+            @WebParam(partName = "parameters", name = "ListPrintersType", targetNamespace = NS) ListPrintersType parameters) {
+        ListPrintersResponseType responseType = new ListPrintersResponseType();
+        try {
+            List<PrinterType> soapTypes = responseType.getPrinters();
+            FetchResult<List<Printer>> result = contentManagementService.listPrinters();
+            List<Printer> printers = result.getTarget();
+            for(Printer printer : printers) {
+                PrinterType soapType = new PrinterType();
+                soapType.setId(printer.getId());
+                soapType.setIpAddr(printer.getIpAddress());
+                soapType.setName(printer.getName());
+                soapTypes.add(soapType);
+            }
+            responseType.setResult(getSoapResult(result));
+        }catch (Exception e){
+            responseType.setResult(getSoapFaultResult(e));
+        }
+        return responseType;
+    }
+
+    @Override
+    public DeletePrinterResponseType deletePrinter(
+            @WebParam(partName = "parameters", name = "DeletePrinterType", targetNamespace = NS) DeletePrinterType parameters) {
+        DeletePrinterResponseType responseType = new DeletePrinterResponseType();
+        try {
+            DeleteResult result = contentManagementService.deletePrinter(parameters.getId());
+            responseType.setResult(getSoapResult(result));
+        }catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
+        return responseType;
+    }
+
+    @Override
+    public UpdatePrinterResponseType updatePrinter(
+            @WebParam(partName = "parameters", name = "UpdatePrinterType", targetNamespace = NS) UpdatePrinterType parameters) {
+        UpdatePrinterResponseType responseType = new UpdatePrinterResponseType();
+        try{
+            UpdateResult<Printer> result = contentManagementService.updatePrinter(parameters.getPrinter());
+            responseType.setResult(getSoapResult(result));
+        }catch (Exception e) {
             responseType.setResult(getSoapFaultResult(e));
         }
         return responseType;
