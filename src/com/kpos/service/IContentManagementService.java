@@ -44,4 +44,10 @@ public interface IContentManagementService {
     DeleteResult deleteSaleItemOption(long aId);
     
     CreateResult<Printer> createPrinter(PrinterType soapType);
+    
+    DeleteResult deletePrinter(long aId);
+    
+    UpdateResult<Printer> updatePrinter(PrinterType soapType);
+        
+    FetchResult<List<Printer>> listPrinters();
 }

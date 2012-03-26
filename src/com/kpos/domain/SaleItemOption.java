@@ -36,6 +36,12 @@ public class SaleItemOption extends AbstractDomainObject {
     @Column(name = "is_required", nullable = true)
     private boolean isRequired = false;
 
+    @Column(name = "description")
+    private String description;
+    
+    @Column(name = "thum_path")
+    private String thumPath;
+
     public Long getId() {
         return id;
     }
@@ -83,6 +89,22 @@ public class SaleItemOption extends AbstractDomainObject {
 
     public void setRequired(boolean required) {
         isRequired = required;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getThumPath() {
+        return thumPath;
+    }
+
+    public void setThumPath(String thumPath) {
+        this.thumPath = thumPath;
     }
 
     @Override

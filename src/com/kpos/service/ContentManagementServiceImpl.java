@@ -227,6 +227,15 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         return fetchResult;
     }
 
+    private void convertSoapItemOptionToDomain(SaleItemOptionType soapType, SaleItemOption option) {
+        option.setName(soapType.getName());
+        option.setOutPrice(soapType.getTakeoutPrice());
+        option.setPrice(soapType.getPrice());
+        option.setRequired(soapType.getIsRequired());
+        option.setDescription(soapType.getDescription());
+        option.setThumPath(soapType.getThumbPath());
+    }
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public CreateResult<SaleItemOption> addSaleItemOption(SaleItemOptionType soapType) {
@@ -236,10 +245,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         if(item != null) {
             SaleItemOption option = new SaleItemOption();
             option.setSaleItem(item);
-            option.setName(soapType.getName());
-            option.setOutPrice(soapType.getTakeoutPrice());
-            option.setPrice(soapType.getPrice());
-            option.setRequired(soapType.getIsRequired());
+            convertSoapItemOptionToDomain(soapType, option);
             saleItemOptionDao.insertSaleItemOption(option);
             result.setCreated(option);
             result.setSuccessful(true);
@@ -259,10 +265,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         if(saleItem != null) {
             SaleItemOption option = saleItemOptionDao.findSaleItemOption(soapType.getId());
             if(option != null) {
-                option.setRequired(soapType.getIsRequired());
-                option.setName(soapType.getName());
-                option.setOutPrice(soapType.getTakeoutPrice());
-                option.setPrice(soapType.getPrice());
+                convertSoapItemOptionToDomain(soapType, option);
                 saleItemOptionDao.updateSaleItemOption(option);
                 result.setSuccessful(true);
                 result.setManagedObject(option);
@@ -278,6 +281,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public DeleteResult deleteSaleItemOption(long aId) {
         DeleteResult result = new DeleteResult();
         boolean isSuccessful = saleItemOptionDao.deleteSaleItemOption(aId);
@@ -287,6 +291,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     }
     
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public CreateResult<Printer> createPrinter(PrinterType soapType) {
         CreateResult<Printer> result = new CreateResult<Printer>();
         Printer printer = new Printer();
@@ -300,6 +305,41 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             result.setCreated(null);
             result.setSuccessful(false);
         }
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public DeleteResult deletePrinter(long aId) {
+        DeleteResult result = new DeleteResult();
+        boolean isSuccessful = printerDao.delete(aId);
+        result.setSuccessful(isSuccessful);
+        result.setId(aId);
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public UpdateResult<Printer> updatePrinter(PrinterType soapType) {
+        UpdateResult<Printer> result = new UpdateResult<Printer>();
+        Printer printer = printerDao.findById(soapType.getId());
+        if(printer != null) {
+            printer.setIpAddress(soapType.getIpAddr());
+            printer.setName(soapType.getName());
+        } else {
+            result.setSuccessful(false);
+            result.setManagedObject(null);
+            result.setException(new Exception("Can't find printer ["+soapType.getId()+"]"));
+        }
+        return result;
+    }
+
+    @Override
+    public FetchResult<List<Printer>> listPrinters() {
+        FetchResult<List<Printer>> result = new FetchResult<List<Printer>>();
+        List<Printer> printers = printerDao.findAll();
+        result.setSuccessful(true);
+        result.setTarget(printers);
         return result;
     }
 }
