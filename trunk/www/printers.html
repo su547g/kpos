@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta id="viewport" name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="apple-touch-fullscreen" content="yes" />
+
+    <script type="text/javascript" src="xml2json.js"></script>
+    <script type="text/javascript" src="kpos.js"></script>
+
+    <style type="text/css">
+        body{
+            font-size:14px;
+            background:#c4f0f1;
+            text-align:center;
+        }
+
+        .tableone {width:250px; border-collapse:collapse; margin:0 auto;}
+        .tabletwo {width:220px; margin:2px; border:1px solid #B3B1B1; border-spacing: 1px; border-style:outset}
+
+        .th1 {width:149px;}
+        .th2 {width:99px;}
+        .th3 {width:99px;}
+        .th4 {width:99px;}
+        .th5 {width:200px;}
+
+        .td1 {width:149px;border:1px solid #B3B1B1;}
+        .td2 {width:99px;}
+        .td3 {width:99px;}
+        .td4 {width:99px;}
+        .td5 {width:170px;}
+
+        .tableone {background:#697210; border:1px solid #fff; color:#fff;}
+        .tableone td {border:1px solid #fff; color:#fff;}
+        .tableone tbody {background:#eee; color:#000;}
+        .tableone caption {background:#fff; color:#697210; font-size:1.2em; margin:0 auto;}
+        .tableone th, .tabletwo th {text-align:left;}
+
+        .tabletwo td {background:#eee; color:#000;}
+        .tabletwo tr.dk th {background:#ddd; color:#000;}
+        .tabletwo tr.dk td {background:#ddd; color:#000;}
+
+        .innerb {height:30em; overflow:auto;}
+    </style>
+
+    <script language="javascript">
+        var currentRow=-1;
+    
+        function highlightRow(row, highLight) {
+            row.style.cursor = 'pointer';
+            var cell = row.cells[0];
+            var bgColor = "background-color:" + cell.style.background;
+    
+            if(highLight) {
+                //cell.style.cssText = 'border-width: 1px; border-color: blue; ' + bgColor;
+                cell.style.borderWidth = "1px";
+                cell.style.borderColor = "blue";
+            } else {
+                //cell.style.cssText = 'border-width: 1px; border-color: #B3B1B1 ' + bgColor;
+                cell.style.borderWidth = "1px";
+                cell.style.borderColor = "#B3B1B1";
+            }
+        }
+    
+        function selectRow(tableID, selectedRowID) {
+            var table = document.getElementById(tableID);
+            var rowCount = table.rows.length;
+            for(var i = 0; i < rowCount; i++) {
+                var row = table.rows[i];
+                if(row.id == selectedRowID) {
+                    row.style.background = '#dcfac9';
+                    row.cells[0].style.background = '#dcfac9';
+                    currentRow = i;
+                } else {
+                    row.style.background = 'eee'; //'#f0c992';
+                    row.cells[0].style.background = 'eee'; //'#f0c992';
+                }
+            }
+        }
+    
+        function addPrinterRow(tableID) {
+            var table = document.getElementById(tableID);
+        
+            var rowCount = table.rows.length;
+            var row = table.insertRow(rowCount);
+            var rowId = tableID + "_r" + rowCount;
+        
+            row.id = rowId;
+            row.name = rowId;
+            row.setAttribute('onclick', 'selectRow("'+tableID+'", "'+rowId+'");');
+            /*row.onclick = new function(){
+            alert(tableID);
+            //selectRow('"'+tableID+'"', '"'+rowId+'"');
+            };*/
+            row.onmouseover = function(){ highlightRow(this, true); };
+            row.onmouseout = function(){ highlightRow(this, false); };
+        
+            var cell1 = row.insertCell(0);
+            var element1 = document.createTextNode("category"); //document.createElement("th");
+            //element1.setAttribute("class", "td1");
+            //element1.innerText = "category";
+            cell1.appendChild(element1);//row.appendChild(element1);
+        
+            var cell2 = row.insertCell(1);
+            var temp = "<a href='javascript:deleteRow(\"" + tableID + "\",\"" + rowId +"\");'>X</a>";
+        
+            cell2.innerHTML = temp;
+        }
+    
+        function deleteRow(tableID, rowID) {
+            try {
+                var table = document.getElementById(tableID);
+                var rowCount = table.rows.length;
+                for(var i = 0; i < rowCount; i++) {
+                    var row = table.rows[i];
+                    if(row.id == rowID) {
+                        table.deleteRow(i);
+                        rowCount--;
+                        i--;
+                    }
+                }
+            } catch(e) {
+                //alert(e);
+            }
+        }
+    </script>
+</head>
+<body>
+    <table>
+        <tr>
+            <td>
+                <table class="tableone" align="left">
+                    <caption>Printers</caption>
+                    <thead>
+                    <tr>
+                        <th class="th1" scope="col">Name</th>
+                        <th class="th2" scope="col">IP Address</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <td colspan="3"><a href="javascript:addPrinterRow('printers');">Add</a> <a>Delete</a></td>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <tr>
+                        <td colspan="5">
+                            <div class="innerb">
+                                <table id ="printers" class="tabletwo">
+                                    <tr id="printer_r0" onclick="javascript:selectRow('printers', 'printer_r0')"
+                                        onmouseover="highlightRow(this, true);"
+                                        onmouseout="highlightRow(this, false);">
+                                        <th class="td1">T3 4264</th>
+                                        <td>localhost</td>
+                                        <td><a href="javascript:deleteRow('printers', 'printer_r0');">X</a></td>
+                                    </tr>
+                                    <tr id="printer_r1" onmouseover="highlightRow(this, true);"
+                                        onmouseout="highlightRow(this, false);">
+                                        <th class="td1">BA 4081</th>
+                                        <td></td>
+                                        <td><a href="javascript:deleteRow('printers', 'printer_r1');">X</a></td>
+                                    </tr>
+                                    <tr id="printer_r2">
+                                        <th class="td1">BE 843</th>
+                                        <td></td>
+                                        <td><a href="javascript:deleteRow('printers', 'printer_r2');">X</a></td>
+                                    </tr>
+                                    <tr id="printer_r3">
+                                        <th class="td1">FR 506</th>
+                                        <td></td>
+                                        <td><a href="javascript:deleteRow('printers', 'printer_r3');">X</a></td>
+                                    </tr>
+                                    <tr id="printer_r4">
+                                        <th class="td1">EZY 6046</th>
+                                        <td></td>
+                                        <td><a href="javascript:deleteRow('printers', 'printer_r4');">X</a></td>
+                                    </tr>
+                                    <tr id="printer_r5">
+                                        <th class="td1">EZY 6174</th>
+                                        <td></td>
+                                        <td><a href="javascript:deleteRow('printers', 'printer_r5');">X</a></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+            <td>
+                <table id="details" border="1">
+                    <caption>Printer Details</caption>
+                    <tbody>
+                        <tr>
+                            <td>Name:</td>
+                            <td><input type="text" name="printer_name" id="printer_name"/></td>
+                        </tr>
+                        <tr>
+                            <td>IP Address: </td>
+                            <td><input type="text" id="printer_ip" name="printer_ip"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><a href="">Save</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

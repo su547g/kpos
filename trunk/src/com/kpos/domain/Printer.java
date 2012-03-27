@@ -15,8 +15,8 @@ public class Printer extends AbstractDomainObject {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "server", nullable = false)
-    private String server;
+    //@Column(name = "server", nullable = true)
+    //private String server;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -32,13 +32,13 @@ public class Printer extends AbstractDomainObject {
         this.id = id;
     }
 
-    public String getServer() {
+    /*public String getServer() {
         return server;
     }
 
     public void setServer(String server) {
         this.server = server;
-    }
+    } */
 
     public String getName() {
         return name;
@@ -66,7 +66,7 @@ public class Printer extends AbstractDomainObject {
         if (id != null ? !id.equals(printer.id) : printer.id != null) return false;
         if (ipAddress != null ? !ipAddress.equals(printer.ipAddress) : printer.ipAddress != null) return false;
         if (name != null ? !name.equals(printer.name) : printer.name != null) return false;
-        if (server != null ? !server.equals(printer.server) : printer.server != null) return false;
+        //if (server != null ? !server.equals(printer.server) : printer.server != null) return false;
 
         return true;
     }
@@ -74,7 +74,7 @@ public class Printer extends AbstractDomainObject {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (server != null ? server.hashCode() : 0);
+        //result = 31 * result + (server != null ? server.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (ipAddress != null ? ipAddress.hashCode() : 0);
         return result;
