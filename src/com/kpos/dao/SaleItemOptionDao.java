@@ -1,12 +1,14 @@
 package com.kpos.dao;
 
 import com.kpos.domain.SaleItemOption;
+import org.springframework.stereotype.Repository;
 
 /**
  * Created by kpos.
  * Author: kkwang
  * Date: 3/21/12 11:40 PM
  */
+@Repository
 public class SaleItemOptionDao extends AbstractJpaDao<SaleItemOption> implements ISaleItemOptionDao {
     @Override
     protected Class getEntityClass() {

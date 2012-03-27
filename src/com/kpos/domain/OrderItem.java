@@ -46,9 +46,6 @@ public class OrderItem extends AbstractDomainObject {
     @Column(name = "sale_price")
     private double salePrice;
 
-    @Column(name = "override_price")
-    private double overridePrice;
-
     @Column(name = "override_name")
     private String overrideName;
 
@@ -98,14 +95,6 @@ public class OrderItem extends AbstractDomainObject {
 
     public void setSalePrice(double salePrice) {
         this.salePrice = salePrice;
-    }
-
-    public double getOverridePrice() {
-        return overridePrice;
-    }
-
-    public void setOverridePrice(double overridePrice) {
-        this.overridePrice = overridePrice;
     }
 
     public String getOverrideName() {

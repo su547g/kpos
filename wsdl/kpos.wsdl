@@ -83,7 +83,7 @@
 
             <xs:complexType name="PrinterType">
                 <xs:sequence>
-                    <xs:element name="id" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="name" type="xsd:string" minOccurs="1"/>
                     <xs:element name="ipAddr" type="xsd:string" minOccurs="1"/>
                 </xs:sequence>

@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -49,6 +50,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     public CreateResult<Category> createMenuCategory(Category aCategory) {
         try {
             CreateResult<Category> result = new CreateResult<Category>();
+            aCategory.setCreatedOn(new Date());
             categoryDao.insertCategory(aCategory);
             result.setCreated(aCategory);
             return result;
@@ -87,6 +89,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             aCategory.setName(aCategoryType.getName());
             aCategory.setNotes(aCategoryType.getNotes());
             aCategory.setThumbPath(aCategoryType.getThumbPath());
+            aCategory.setLastUpdated(new Date());
             Category category = categoryDao.updateCategory(aCategory);
             updateResult.setManagedObject(category);
             updateResult.setSuccessful(true);
@@ -128,6 +131,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         saleItem.setDescription(aSaleItemType.getDescription());
         saleItem.setSingleOptionOnly(aSaleItemType.getIsSingleOption());
         saleItem.setThumbPath(aSaleItemType.getThumbPath());
+        saleItem.setLastUpdated(new Date());
         
         List<SaleItemOptionType> optionTypes = aSaleItemType.getOptions();
         List<SaleItemOption> options = saleItem.getOptionList();
@@ -162,6 +166,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             SaleItem saleItem = new SaleItem();
             convertSoapItemToSaleItem(saleItem, aSaleItemType);
             saleItem.setCategory(category);
+            saleItem.setCreatedOn(new Date());
             saleItemDao.insertSaleItem(saleItem);
             result.setCreated(saleItem);
         } else {
@@ -234,6 +239,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         option.setRequired(soapType.getIsRequired());
         option.setDescription(soapType.getDescription());
         option.setThumPath(soapType.getThumbPath());
+        option.setLastUpdated(new Date());
     }
 
     @Override
@@ -245,6 +251,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         if(item != null) {
             SaleItemOption option = new SaleItemOption();
             option.setSaleItem(item);
+            option.setCreatedOn(new Date());
             convertSoapItemOptionToDomain(soapType, option);
             saleItemOptionDao.insertSaleItemOption(option);
             result.setCreated(option);
@@ -297,6 +304,8 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         Printer printer = new Printer();
         printer.setIpAddress(soapType.getIpAddr());
         printer.setName(soapType.getName());
+        printer.setCreatedOn(new Date());
+        printer.setLastUpdated(new Date());
         Printer newPrinter = printerDao.insert(printer);
         if(newPrinter.getId() != null) {
             result.setCreated(newPrinter);
@@ -326,6 +335,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         if(printer != null) {
             printer.setIpAddress(soapType.getIpAddr());
             printer.setName(soapType.getName());
+            printer.setLastUpdated(new Date());
         } else {
             result.setSuccessful(false);
             result.setManagedObject(null);
