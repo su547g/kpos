@@ -48,9 +48,10 @@
         .innerb {height:30em; overflow:auto;}
     </style>
 
-    <script language="javascript">
+    <script language="text/javascript">
         var currentRow=-1;
-    
+        var v_printers = localStorage.getItem('v_printers');
+
         function highlightRow(row, highLight) {
             row.style.cursor = 'pointer';
             var cell = row.cells[0];
@@ -93,17 +94,12 @@
             row.id = rowId;
             row.name = rowId;
             row.setAttribute('onclick', 'selectRow("'+tableID+'", "'+rowId+'");');
-            /*row.onclick = new function(){
-            alert(tableID);
-            //selectRow('"'+tableID+'"', '"'+rowId+'"');
-            };*/
+
             row.onmouseover = function(){ highlightRow(this, true); };
             row.onmouseout = function(){ highlightRow(this, false); };
         
             var cell1 = row.insertCell(0);
             var element1 = document.createTextNode("category"); //document.createElement("th");
-            //element1.setAttribute("class", "td1");
-            //element1.innerText = "category";
             cell1.appendChild(element1);//row.appendChild(element1);
         
             var cell2 = row.insertCell(1);
@@ -129,8 +125,45 @@
             }
         }
     </script>
+    <script type="text/javascript">
+        function loadPrinters() {
+            ws_list_printers(listPrintersHandler);
+        }
+        function listPrintersHandler(jsonObj) {
+            if(jsonObj != undefined && jsonObj != null &&
+                jsonObj.listprintersresponsetype != undefined && jsonObj.listprintersresponsetype != null &&
+                jsonObj.listprintersresponsetype.result.successful != false) {
+                alert("printers returned!");
+                var printers = jsonObj.listprintersresponsetype.printers;
+                localStorage.setItem('v_printers', printers);
+            } else {
+                alert("failed to add printer!");
+            }
+        }
+
+        function addPrinter() {
+            alert("adding printer");
+            var name = document.getElementById("printer_name").value;
+            var ip = document.getElementById("printer_ip").value;
+            var printerType = new AddPrinterType("", name, ip);
+            ws_add_printer(printerType, addPrinterHandler);
+        }
+        function addPrinterHandler(jsonObj) {
+            if(jsonObj != undefined && jsonObj != null &&
+                jsonObj.createprinterresponsetype != undefined && jsonObj.createprinterresponsetype != null &&
+                jsonObj.createprinterresponsetype.result.successful != false) {
+                alert("printer added!");
+                var newID = jsonObj.id;
+                var name = document.getElementById("printer_name").value;
+                var ip = document.getElementById("printer_ip").value;
+                //var printer =
+            } else {
+                alert("failed to add printer!");
+            }
+        }
+    </script>
 </head>
-<body>
+<body onload="javascript:loadPrinters();">
     <table>
         <tr>
             <td>
@@ -205,7 +238,7 @@
                             <td><input type="text" id="printer_ip" name="printer_ip"/></td>
                         </tr>
                         <tr>
-                            <td colspan="2"><a href="">Save</a></td>
+                            <td colspan="2"><a href="" onclick="javascript:addPrinter();">Save</a></td>
                         </tr>
                     </tbody>
                 </table>

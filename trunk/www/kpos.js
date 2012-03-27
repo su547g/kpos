@@ -93,6 +93,7 @@ function Printer(id, name, ip) {
         }
         xml += "<app:name>" + this.myName + "</app:name>";
         xml += "<app:ipAddr>" + this.myIP + "</app:ipAddr>";
+        xml += this.endTag;
         return xml;
     }
 }
@@ -100,7 +101,7 @@ function Printer(id, name, ip) {
 function AddPrinterType(id, name, ip) {
     this.myPrinter = new Printer(id, name, ip);
     this.tag = "<app:CreatePrinterType>";
-    this.engTag = "</app:CreatePrinterType>";
+    this.endTag = "</app:CreatePrinterType>";
     this.getXML = function() {
         var xml = soapXMLBegin;
         xml += this.tag + this.myPrinter.getXML() + this.endTag;
@@ -109,12 +110,26 @@ function AddPrinterType(id, name, ip) {
     }
 }
 
-function addPrinter(addPrinterType) {
+function ws_add_printer(addPrinterType, handler) {
     var soapXML = addPrinterType.getXML();
     alert(soapXML);
-    callWebService(soapXML, addPrinterHandler);
+    callWebService(soapXML, handler);
 }
 
+function ListPrintersType() {
+    this.tag = "<app:ListPrintersType/>";
+    this.getXML() = function() {
+        var xml = soapXMLBegin + this.tag + soapXMLEnd;
+        return xml;
+    }
+}
+
+function ws_list_printers(handler) {
+    var soapType = new ListPrintersType();
+    var soapXML = soapType.getXML();
+    alert(soapXML);
+    callWebService(soapXML, handler);
+}
 //////////////////////////////////////////////////////////////////////////////////////////
 
 //This is the AuthenticateUserType class.
