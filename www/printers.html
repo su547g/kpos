@@ -68,7 +68,13 @@
 			return curr_printer;
 		}
 		function getPrinters() {
-			return strToObj(localStorage.getItem('v_printers'));;
+			var printers = strToObj(localStorage.getItem('v_printers'));
+			if(printers.length == undefined) {
+				var printer_array = new Array();
+				printer_array.push(printers);
+				return printer_array;
+			}
+			return printers;
 		}
 		function setPrinters(printers) {
 			var jsonString = obj2str(printers);
