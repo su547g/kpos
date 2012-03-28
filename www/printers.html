@@ -48,43 +48,82 @@
         .innerb {height:30em; overflow:auto;}
     </style>
 
-    <script language="text/javascript">
-        var currentRow=-1;
-        var v_printers = localStorage.getItem('v_printers');
-
+    <script language="javascript">
+    	var ADD = "ADD";
+    	var UPDATE = "UPDATE";
+    	
+        var v_selected_rowid = "";
+        
+        var curr_printer = localStorage.getItem('curr_printer');
+        
+		var operation = "";
+		
+		function setCurrentPrinter(printer) {
+			curr_printer = printer;
+			var jsonString = obj2str(curr_printer);
+			localStorage.setItem('curr_printer', jsonString);
+		}
+		function getCurrentPrinter() {
+			curr_printer = strToObj(localStorage.getItem('curr_printer'));
+			return curr_printer;
+		}
+		function getPrinters() {
+			return strToObj(localStorage.getItem('v_printers'));;
+		}
+		function setPrinters(printers) {
+			var jsonString = obj2str(printers);
+			localStorage.setItem('v_printers', jsonString);
+		}
+		
         function highlightRow(row, highLight) {
             row.style.cursor = 'pointer';
-            var cell = row.cells[0];
-            var bgColor = "background-color:" + cell.style.background;
+            var cells = row.cells;
     
             if(highLight) {
-                //cell.style.cssText = 'border-width: 1px; border-color: blue; ' + bgColor;
-                cell.style.borderWidth = "1px";
-                cell.style.borderColor = "blue";
+                cells[0].style.borderWidth = "1px";
+                cells[0].style.borderColor = "blue";
+                cells[1].style.borderWidth = "1px";
+                cells[1].style.borderColor = "blue";
             } else {
-                //cell.style.cssText = 'border-width: 1px; border-color: #B3B1B1 ' + bgColor;
-                cell.style.borderWidth = "1px";
-                cell.style.borderColor = "#B3B1B1";
+                cells[0].style.borderWidth = "1px";
+                cells[0].style.borderColor = "#B3B1B1";
+                cells[1].style.borderWidth = "1px";
+                cells[1].style.borderColor = "#B3B1B1";
             }
         }
     
         function selectRow(tableID, selectedRowID) {
             var table = document.getElementById(tableID);
+            v_selected_rowid = selectedRowID;
             var rowCount = table.rows.length;
             for(var i = 0; i < rowCount; i++) {
                 var row = table.rows[i];
                 if(row.id == selectedRowID) {
                     row.style.background = '#dcfac9';
                     row.cells[0].style.background = '#dcfac9';
+                    row.cells[1].style.background = '#dcfac9';
                     currentRow = i;
+                    operation = UPDATE;
+                    var v_printers = getPrinters();
+                    if(v_printers.length != undefined) {
+                    	setCurrentPrinter(v_printers[i]);
+                    } else {
+                    	setCurrentPrinter(v_printers);
+                    }
+                    if(curr_printer != null) {
+                    	document.getElementById("printer_name").value = curr_printer.name;
+            			document.getElementById("printer_ip").value = curr_printer.ipaddr;
+            			opeartion = UPDATE;
+            		}
                 } else {
                     row.style.background = 'eee'; //'#f0c992';
                     row.cells[0].style.background = 'eee'; //'#f0c992';
+                    row.cells[1].style.background = 'eee'; //'#f0c992';
                 }
             }
         }
     
-        function addPrinterRow(tableID) {
+        function addPrinterRow(tableID, printerObj) {
             var table = document.getElementById(tableID);
         
             var rowCount = table.rows.length;
@@ -93,19 +132,24 @@
         
             row.id = rowId;
             row.name = rowId;
-            row.setAttribute('onclick', 'selectRow("'+tableID+'", "'+rowId+'");');
+            //row.setAttribute('onclick', 'selectRow("'+tableID+'", "'+rowId+'");');
 
             row.onmouseover = function(){ highlightRow(this, true); };
             row.onmouseout = function(){ highlightRow(this, false); };
         
             var cell1 = row.insertCell(0);
-            var element1 = document.createTextNode("category"); //document.createElement("th");
+            cell1.setAttribute('onclick', 'selectRow("'+tableID+'", "'+rowId+'");');
+            var element1 = document.createTextNode(printerObj.name); //document.createElement("th");
             cell1.appendChild(element1);//row.appendChild(element1);
-        
-            var cell2 = row.insertCell(1);
+        	
+        	cell2 = row.insertCell(1);
+        	cell2.setAttribute('onclick', 'selectRow("'+tableID+'", "'+rowId+'");');
+        	var element2 = document.createTextNode(printerObj.ipaddr);
+        	cell2.appendChild(element2);
+        	
+            var cell3 = row.insertCell(2);
             var temp = "<a href='javascript:deleteRow(\"" + tableID + "\",\"" + rowId +"\");'>X</a>";
-        
-            cell2.innerHTML = temp;
+            cell3.innerHTML = temp;
         }
     
         function deleteRow(tableID, rowID) {
@@ -116,16 +160,48 @@
                     var row = table.rows[i];
                     if(row.id == rowID) {
                         table.deleteRow(i);
+                        var printers = getPrinters();
+                        var printer = printers[i];
+                        if(current_printer.id == printer.id) { setCurrentPrinter(null); }
+                        printers.splice(i, 1);
+                        setPrinters(printers);
+                        if(printer.id != null) {
+                        	var deletePrinterType = new DeletePrinterType(printer.id);
+                        	ws_delete_printer(deletePrinterType, deletePrinterHandler);
+                        }
                         rowCount--;
                         i--;
+                        break;
                     }
                 }
             } catch(e) {
                 //alert(e);
             }
         }
-    </script>
-    <script type="text/javascript">
+        function deletePrinterHandler(jsonObj) {
+        	if(jsonObj != undefined && jsonObj != null &&
+                jsonObj.deleteprintersresponsetype != undefined && jsonObj.deleteprintersresponsetype != null &&
+                jsonObj.deleteprintersresponsetype.result.successful != false) {
+            } else {
+            	alert("failed to delete printer!");
+            }
+        }
+        
+        function newPrinter() {
+        	document.getElementById("printer_name").value = "";
+            document.getElementById("printer_ip").value = "";
+            operation = ADD;
+            setCurrentPrinter(null);
+        }
+        
+        function savePrinterInfo() {
+        	if(operation == ADD){
+        		addPrinter();
+        	} else if(operation == UPDATE) {
+        		updatePrinter();
+        	}
+        }
+    
         function loadPrinters() {
             ws_list_printers(listPrintersHandler);
         }
@@ -133,9 +209,18 @@
             if(jsonObj != undefined && jsonObj != null &&
                 jsonObj.listprintersresponsetype != undefined && jsonObj.listprintersresponsetype != null &&
                 jsonObj.listprintersresponsetype.result.successful != false) {
-                alert("printers returned!");
                 var printers = jsonObj.listprintersresponsetype.printers;
-                localStorage.setItem('v_printers', printers);
+                setPrinters(printers);
+                if(printers != undefined && printers != null) {
+	                if(printers.length != undefined) {
+	                	for(var i = 0; i < printers.length; i++) {
+	                		addPrinterRow("printers", printers[i]);
+	                	}
+	                } else {
+	                	//Only one printer
+	                	addPrinterRow("printers", printers);
+	                }
+	            }
             } else {
                 alert("failed to add printer!");
             }
@@ -156,11 +241,44 @@
                 var newID = jsonObj.id;
                 var name = document.getElementById("printer_name").value;
                 var ip = document.getElementById("printer_ip").value;
-                //var printer =
+                var printer = {};
+                printer["id"] = newID;
+                printer["name"] = name;
+                printer["ipaddr"] = ip;
+                setCurrentPrinter(printer);
+                var v_printers = getPrinters();
+                v_printers.push(printer);
+                setPrinters(v_printers);
+                addPrinterRow("printers");
             } else {
                 alert("failed to add printer!");
             }
         }
+        
+        function updatePrinter() {
+        	var name = document.getElementById("printer_name").value;
+            var ip = document.getElementById("printer_ip").value;
+            curr_printer.name = name;
+            curr_printer.ipaddr = ip;
+            setCurrentPrinter(curr_printer);
+            var updatePrinterType = new UpdatePrinterType(curr_printer.id, curr_printer.name, curr_printer.ipaddr);
+            ws_update_printer(updatePrinterType, updatePrinterHandler);
+        }
+        function updatePrinterHandler(jsonObj) {
+        	if(jsonObj != undefined && jsonObj != null &&
+                jsonObj.updateprinterresponsetype != undefined && jsonObj.updateprinterresponsetype != null &&
+                jsonObj.updateprinterresponsetype.result.successful != false) {
+                var selectedRow = document.getElementById(v_selected_rowid);
+                if(selectedRow != null && selectedRow.cells != null) {
+                	selectedRow.cells[0].text = document.getElementById("printer_name").value;
+                	selectedRow.cells[1].text = document.getElementById("printer_ip").value;
+                }
+            } else {
+            	alert("failed to update pritner!");
+            }
+        }
+        
+        
     </script>
 </head>
 <body onload="javascript:loadPrinters();">
@@ -173,18 +291,20 @@
                     <tr>
                         <th class="th1" scope="col">Name</th>
                         <th class="th2" scope="col">IP Address</th>
+                        <th class="th2" scope="col"></th>
                     </tr>
                     </thead>
                     <tfoot>
                     <tr>
-                        <td colspan="3"><a href="javascript:addPrinterRow('printers');">Add</a> <a>Delete</a></td>
+                        <td colspan="3"><a href="javascript:newPrinter();">New Printer</a> <a>Delete</a></td>
                     </tr>
                     </tfoot>
                     <tbody>
                     <tr>
-                        <td colspan="5">
+                        <td colspan="3" width="100%">
                             <div class="innerb">
-                                <table id ="printers" class="tabletwo">
+                                <table id ="printers" class="tabletwo" width="100%">
+                                	<!--
                                     <tr id="printer_r0" onclick="javascript:selectRow('printers', 'printer_r0')"
                                         onmouseover="highlightRow(this, true);"
                                         onmouseout="highlightRow(this, false);">
@@ -198,26 +318,7 @@
                                         <td></td>
                                         <td><a href="javascript:deleteRow('printers', 'printer_r1');">X</a></td>
                                     </tr>
-                                    <tr id="printer_r2">
-                                        <th class="td1">BE 843</th>
-                                        <td></td>
-                                        <td><a href="javascript:deleteRow('printers', 'printer_r2');">X</a></td>
-                                    </tr>
-                                    <tr id="printer_r3">
-                                        <th class="td1">FR 506</th>
-                                        <td></td>
-                                        <td><a href="javascript:deleteRow('printers', 'printer_r3');">X</a></td>
-                                    </tr>
-                                    <tr id="printer_r4">
-                                        <th class="td1">EZY 6046</th>
-                                        <td></td>
-                                        <td><a href="javascript:deleteRow('printers', 'printer_r4');">X</a></td>
-                                    </tr>
-                                    <tr id="printer_r5">
-                                        <th class="td1">EZY 6174</th>
-                                        <td></td>
-                                        <td><a href="javascript:deleteRow('printers', 'printer_r5');">X</a></td>
-                                    </tr>
+                                    -->
                                 </table>
                             </div>
                         </td>
@@ -238,7 +339,7 @@
                             <td><input type="text" id="printer_ip" name="printer_ip"/></td>
                         </tr>
                         <tr>
-                            <td colspan="2"><a href="" onclick="javascript:addPrinter();">Save</a></td>
+                            <td colspan="2"><a href="" onclick="javascript:savePrinterInfo();">Save</a></td>
                         </tr>
                     </tbody>
                 </table>
