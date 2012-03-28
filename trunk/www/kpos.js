@@ -95,7 +95,7 @@ function Printer(id, name, ip) {
         xml += "<app:ipAddr>" + this.myIP + "</app:ipAddr>";
         xml += this.endTag;
         return xml;
-    }
+    };
 }
 
 function AddPrinterType(id, name, ip) {
@@ -107,7 +107,7 @@ function AddPrinterType(id, name, ip) {
         xml += this.tag + this.myPrinter.getXML() + this.endTag;
         xml += soapXMLEnd;
         return xml;
-    }
+    };
 }
 
 function ws_add_printer(addPrinterType, handler) {
@@ -118,17 +118,49 @@ function ws_add_printer(addPrinterType, handler) {
 
 function ListPrintersType() {
     this.tag = "<app:ListPrintersType/>";
-    this.getXML() = function() {
+    this.getXML = function() {
         var xml = soapXMLBegin + this.tag + soapXMLEnd;
         return xml;
-    }
+    };
 }
 
 function ws_list_printers(handler) {
     var soapType = new ListPrintersType();
     var soapXML = soapType.getXML();
-    alert(soapXML);
     callWebService(soapXML, handler);
+}
+
+function UpdatePrinterType(id, name, ip) {
+	this.myPrinter = new Printer(id, name, ip);
+    this.tag = "<app:UpdatePrinterType>";
+    this.endTag = "</app:UpdatePrinterType>";
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += this.tag + this.myPrinter.getXML() + this.endTag;
+        xml += soapXMLEnd;
+        return xml;
+    };
+}
+function ws_update_printer(updatePrinterType, handler) {
+	var soapXML = updatePrinterType.getXML();
+	alert(soapXML);
+	callWebService(soapXML, handler);
+}
+
+function DeletePrinterType(id) {
+	this.tag = "<app:DeletePrinterType>";
+    this.endTag = "</app:DeletePrinterType>";
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += this.tag + "<app:id>"+id+"</app:id>" + this.endTag;
+        xml += soapXMLEnd;
+        return xml;
+    };
+}
+function ws_delete_printer(deletePrinterType, handler) {
+	var soapXML = deletePrinterType.getXML();
+	alert(soapXML);
+	callWebService(soapXML, handler);
 }
 //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -142,7 +174,7 @@ function AuthenticateUserType(email, password) {
 		xml += this.tag + this.myCredential.getXML() + this.endTag;
 		xml += soapXMLEnd;
 		return xml;
-	}
+	};
 }
 //This is the LoginCredential class.
 function LoginCredential(email, password) {
