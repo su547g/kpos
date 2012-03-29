@@ -10,6 +10,10 @@ import java.util.List;
  * Date: 3/18/12 12:27 AM
  */
 public interface ISaleItemDao {
+    SaleItem findByName(long aCategoryId, String aName);
+
+    List<SaleItem> listSaleItemsForCategory(long aCatId);
+
     void insertSaleItem(SaleItem aItem);
 
     SaleItem findSaleItem(long id);

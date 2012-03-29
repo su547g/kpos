@@ -154,23 +154,21 @@
         	cell2.appendChild(element2);
         	
             var cell3 = row.insertCell(2);
-            var temp = "<a href='javascript:deleteRow(\"" + tableID + "\",\"" + rowId +"\");'>X</a>";
+            var temp = "<a href='javascript:deleteRow(\"" + rowId +"\");'>X</a>";
             cell3.innerHTML = temp;
         }
     
-        function deleteRow(tableID, rowID) {
+    	var deletedRowId = "";
+        function deleteRow(rowID) {
             try {
-                var table = document.getElementById(tableID);
+                var table = document.getElementById("printers");
                 var rowCount = table.rows.length;
                 for(var i = 0; i < rowCount; i++) {
                     var row = table.rows[i];
                     if(row.id == rowID) {
-                        table.deleteRow(i);
+                    	deletedRowId = rowID;
                         var printers = getPrinters();
                         var printer = printers[i];
-                        if(current_printer.id == printer.id) { setCurrentPrinter(null); }
-                        printers.splice(i, 1);
-                        setPrinters(printers);
                         if(printer.id != null) {
                         	var deletePrinterType = new DeletePrinterType(printer.id);
                         	ws_delete_printer(deletePrinterType, deletePrinterHandler);
@@ -186,16 +184,37 @@
         }
         function deletePrinterHandler(jsonObj) {
         	if(jsonObj != undefined && jsonObj != null &&
-                jsonObj.deleteprintersresponsetype != undefined && jsonObj.deleteprintersresponsetype != null &&
-                jsonObj.deleteprintersresponsetype.result.successful != false) {
+                jsonObj.deleteprinterresponsetype != undefined && jsonObj.deleteprinterresponsetype != null &&
+                jsonObj.deleteprinterresponsetype.result.successful == "true") {
+            	try {
+	                var table = document.getElementById("printers");
+	                var rowCount = table.rows.length;
+	                for(var i = 0; i < rowCount; i++) {
+	                    var row = table.rows[i];
+	                    if(row.id == deletedRowId) {
+	                    	if(curr_printer != null && curr_printer.id == jsonObj.deleteprinterresponsetype.result.id) { 
+	                    		setCurrentPrinter(null);
+	                    	}
+	                        table.deleteRow(i);
+	                        printers.splice(i, 1);
+	                        setPrinters(printers);
+	                        break;
+	                    }
+	                }
+	            } catch(e) {
+         		   //alert(e);
+        		}
             } else {
             	alert("failed to delete printer!");
             }
+            deletedRowId = "";
         }
         
         function newPrinter() {
         	document.getElementById("printer_name").value = "";
             document.getElementById("printer_ip").value = "";
+            document.getElementById("printer_name").readonly = "false";
+            document.getElementById("printer_ip").readonly = "false";
             operation = ADD;
             setCurrentPrinter(null);
         }
@@ -214,7 +233,7 @@
         function listPrintersHandler(jsonObj) {
             if(jsonObj != undefined && jsonObj != null &&
                 jsonObj.listprintersresponsetype != undefined && jsonObj.listprintersresponsetype != null &&
-                jsonObj.listprintersresponsetype.result.successful != false) {
+                jsonObj.listprintersresponsetype.result.successful == "true") {
                 var printers = jsonObj.listprintersresponsetype.printers;
                 setPrinters(printers);
                 if(printers != undefined && printers != null) {
@@ -233,7 +252,6 @@
         }
 
         function addPrinter() {
-            alert("adding printer");
             var name = document.getElementById("printer_name").value;
             var ip = document.getElementById("printer_ip").value;
             var printerType = new AddPrinterType("", name, ip);
@@ -242,8 +260,7 @@
         function addPrinterHandler(jsonObj) {
             if(jsonObj != undefined && jsonObj != null &&
                 jsonObj.createprinterresponsetype != undefined && jsonObj.createprinterresponsetype != null &&
-                jsonObj.createprinterresponsetype.result.successful != false) {
-                alert("printer added!");
+                jsonObj.createprinterresponsetype.result.successful == "true") {
                 var newID = jsonObj.id;
                 var name = document.getElementById("printer_name").value;
                 var ip = document.getElementById("printer_ip").value;
@@ -273,7 +290,7 @@
         function updatePrinterHandler(jsonObj) {
         	if(jsonObj != undefined && jsonObj != null &&
                 jsonObj.updateprinterresponsetype != undefined && jsonObj.updateprinterresponsetype != null &&
-                jsonObj.updateprinterresponsetype.result.successful != false) {
+                jsonObj.updateprinterresponsetype.result.successful == "true") {
                 var selectedRow = document.getElementById(v_selected_rowid);
                 if(selectedRow != null && selectedRow.cells != null) {
                 	selectedRow.cells[0].text = document.getElementById("printer_name").value;
@@ -316,13 +333,13 @@
                                         onmouseout="highlightRow(this, false);">
                                         <th class="td1">T3 4264</th>
                                         <td>localhost</td>
-                                        <td><a href="javascript:deleteRow('printers', 'printer_r0');">X</a></td>
+                                        <td><a href="javascript:deleteRow('printer_r0');">X</a></td>
                                     </tr>
                                     <tr id="printer_r1" onmouseover="highlightRow(this, true);"
                                         onmouseout="highlightRow(this, false);">
                                         <th class="td1">BA 4081</th>
                                         <td></td>
-                                        <td><a href="javascript:deleteRow('printers', 'printer_r1');">X</a></td>
+                                        <td><a href="javascript:deleteRow('printer_r1');">X</a></td>
                                     </tr>
                                     -->
                                 </table>
@@ -338,11 +355,11 @@
                     <tbody>
                         <tr>
                             <td>Name:</td>
-                            <td><input type="text" name="printer_name" id="printer_name"/></td>
+                            <td><input type="text" name="printer_name" id="printer_name" readonly="true"/></td>
                         </tr>
                         <tr>
                             <td>IP Address: </td>
-                            <td><input type="text" id="printer_ip" name="printer_ip"/></td>
+                            <td><input type="text" id="printer_ip" name="printer_ip" readonly="true"/></td>
                         </tr>
                         <tr>
                             <td colspan="2"><a href="" onclick="javascript:savePrinterInfo();">Save</a></td>

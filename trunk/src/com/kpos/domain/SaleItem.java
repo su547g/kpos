@@ -17,6 +17,16 @@ import java.util.Set;
  * Author: kkwang
  * Date: 3/9/12 10:47 PM
  */
+@NamedQueries({
+        @NamedQuery(
+                name = "findBySaleItemName",
+                query = "from SaleItem s where s.category.id = :aCatId and s.name = :aName"
+        ),
+        @NamedQuery(
+                name = "listSaleItemsByCatNameAsc",
+                query = "from SaleItem s where s.category.id = :aCatId order by s.name asc"
+        )
+})
 @Entity
 @Table(name = "SALE_ITEM")
 public class SaleItem extends AbstractDomainObject {

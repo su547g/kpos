@@ -395,6 +395,7 @@ public class KPosPortImpl implements KPosPortType {
         DeletePrinterResponseType responseType = new DeletePrinterResponseType();
         try {
             DeleteResult result = contentManagementService.deletePrinter(parameters.getId());
+            responseType.setId(parameters.getId());
             responseType.setResult(getSoapResult(result));
         }catch (Exception e) {
             responseType.setResult(getSoapFaultResult(e));

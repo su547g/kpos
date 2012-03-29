@@ -3,6 +3,9 @@ package com.kpos.dao;
 import com.kpos.domain.SaleItem;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Query;
+import java.util.List;
+
 /**
  * Created by kpos.
  * Author: kkwang
@@ -13,6 +16,25 @@ public class SaleItemDao extends AbstractJpaDao<SaleItem> implements ISaleItemDa
     @Override
     protected Class getEntityClass() {
         return SaleItem.class;
+    }
+
+    @Override
+    public SaleItem findByName(long aCategoryId, String aName) {
+        Query namedQuery = this.entityManager.createNamedQuery("findBySaleItemName");
+        namedQuery.setParameter("aCatId", aCategoryId);
+        namedQuery.setParameter("aName", aName);
+        Object obj = namedQuery.getSingleResult();
+        if(obj != null) {
+            return (SaleItem)obj;
+        }
+        return null;
+    }
+
+    @Override
+    public List<SaleItem> listSaleItemsForCategory(long aCatId) {
+        Query namedQuery = this.entityManager.createNamedQuery("listSaleItemsByCatNameAsc");
+        namedQuery.setParameter("aCatId", aCatId);
+        return (List<SaleItem>)namedQuery.getResultList();
     }
 
     @Override

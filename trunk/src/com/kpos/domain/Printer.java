@@ -7,6 +7,16 @@ import javax.persistence.*;
  * Author: kkwang
  * Date: 3/9/12 10:45 PM
  */
+@NamedQueries({
+        @NamedQuery(
+                name = "findPrinterByName",
+                query = "from Printer p where p.name = :aName"
+        ),
+        @NamedQuery(
+                name = "listPrintersByNameAsc",
+                query = "from Printer p order by p.name asc"
+        )
+})
 @Entity
 @Table(name = "PRINTER")
 public class Printer extends AbstractDomainObject {

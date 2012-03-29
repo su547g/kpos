@@ -51,8 +51,15 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         try {
             CreateResult<Category> result = new CreateResult<Category>();
             aCategory.setCreatedOn(new Date());
-            categoryDao.insertCategory(aCategory);
-            result.setCreated(aCategory);
+            Category object = categoryDao.findByName(aCategory.getName());
+            if(object != null) {
+                result.setCreated(null);
+                result.setSuccessful(false);
+                result.setException(new Exception("Category name already exists!"));
+            } else {
+                categoryDao.insertCategory(aCategory);
+                result.setCreated(aCategory);
+            }
             return result;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -63,7 +70,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     @Override
     public FetchResult<List<Category>> listAllCategories() {
         FetchResult<List<Category>> fetchResult = new FetchResult<List<Category>>();
-        fetchResult.setTarget(categoryDao.listCategories());
+        fetchResult.setTarget(categoryDao.listCategoriesByNameAsc());
         return fetchResult;
     }
 
@@ -83,16 +90,22 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         if(aCategoryType.getId() == null) {
             updateResult.setSuccessful(false);
         } else {
-            Category aCategory = categoryDao.findCategory(aCategoryType.getId());
-            aCategory.setAllowedHH(aCategoryType.getIsAllowedHappyHour());
-            aCategory.setHhRate(aCategoryType.getHappyHourRate());
-            aCategory.setName(aCategoryType.getName());
-            aCategory.setNotes(aCategoryType.getNotes());
-            aCategory.setThumbPath(aCategoryType.getThumbPath());
-            aCategory.setLastUpdated(new Date());
-            Category category = categoryDao.updateCategory(aCategory);
-            updateResult.setManagedObject(category);
-            updateResult.setSuccessful(true);
+            Category object = categoryDao.findByName(aCategoryType.getName());
+            if(object != null) {
+                updateResult.setSuccessful(false);
+                updateResult.setException(new Exception("Category name already exists!"));
+            } else {
+                Category aCategory = categoryDao.findCategory(aCategoryType.getId());
+                aCategory.setAllowedHH(aCategoryType.getIsAllowedHappyHour());
+                aCategory.setHhRate(aCategoryType.getHappyHourRate());
+                aCategory.setName(aCategoryType.getName());
+                aCategory.setNotes(aCategoryType.getNotes());
+                aCategory.setThumbPath(aCategoryType.getThumbPath());
+                aCategory.setLastUpdated(new Date());
+                Category category = categoryDao.updateCategory(aCategory);
+                updateResult.setManagedObject(category);
+                updateResult.setSuccessful(true);
+            }
         }
         return updateResult;
     }
@@ -224,7 +237,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             fetchResult.setSuccessful(false);
             fetchResult.setFailure(1, "Category doesn't exist!");
         } else {
-            saleItems = category.getSaleItems();
+            saleItems = saleItemDao.listSaleItemsForCategory(aCategoryId);
             fetchResult.setTarget(saleItems);
             fetchResult.setSuccessful(true);
         }
@@ -301,18 +314,25 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public CreateResult<Printer> createPrinter(PrinterType soapType) {
         CreateResult<Printer> result = new CreateResult<Printer>();
-        Printer printer = new Printer();
-        printer.setIpAddress(soapType.getIpAddr());
-        printer.setName(soapType.getName());
-        printer.setCreatedOn(new Date());
-        printer.setLastUpdated(new Date());
-        Printer newPrinter = printerDao.insert(printer);
-        if(newPrinter.getId() != null) {
-            result.setCreated(newPrinter);
-            result.setSuccessful(true);
-        } else {
+        Printer obj = printerDao.findByName(soapType.getName());
+        if(obj != null) {
             result.setCreated(null);
             result.setSuccessful(false);
+            result.setException(new Exception("Printer name already exists!"));
+        } else {
+            Printer printer = new Printer();
+            printer.setIpAddress(soapType.getIpAddr());
+            printer.setName(soapType.getName());
+            printer.setCreatedOn(new Date());
+            printer.setLastUpdated(new Date());
+            Printer newPrinter = printerDao.insert(printer);
+            if(newPrinter.getId() != null) {
+                result.setCreated(newPrinter);
+                result.setSuccessful(true);
+            } else {
+                result.setCreated(null);
+                result.setSuccessful(false);
+            }
         }
         return result;
     }
@@ -333,6 +353,12 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         UpdateResult<Printer> result = new UpdateResult<Printer>();
         Printer printer = printerDao.findById(soapType.getId());
         if(printer != null) {
+            Printer obj = printerDao.findByName(soapType.getName());
+            if(obj != null) {
+                result.setSuccessful(false);
+                result.setException(new Exception("Printer name already exists!"));
+                return result;
+            }
             printer.setIpAddress(soapType.getIpAddr());
             printer.setName(soapType.getName());
             printer.setLastUpdated(new Date());
@@ -347,7 +373,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     @Override
     public FetchResult<List<Printer>> listPrinters() {
         FetchResult<List<Printer>> result = new FetchResult<List<Printer>>();
-        List<Printer> printers = printerDao.findAll();
+        List<Printer> printers = printerDao.listByNameAsc();
         result.setSuccessful(true);
         result.setTarget(printers);
         return result;
