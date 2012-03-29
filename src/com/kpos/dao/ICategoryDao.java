@@ -10,6 +10,10 @@ import java.util.List;
  * Date: 3/10/12 11:54 PM
  */
 public interface ICategoryDao {
+    Category findByName(String aName);
+
+    List<Category> listCategoriesByNameAsc();
+
     void insertCategory(Category aCategory);
 
     boolean deleteCategory(Category aCategory);

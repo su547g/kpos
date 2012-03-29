@@ -14,6 +14,16 @@ import java.util.List;
  * Author: kkwang
  * Date: 3/9/12 10:07 PM
  */
+@NamedQueries({
+        @NamedQuery(
+                name = "findCategoryByName",
+                query = "from Category c where c.name = :aName"
+        ),
+        @NamedQuery(
+                name = "listCategoriesByNameAsc",
+                query = "from Category c order by c.name asc"
+        )
+})
 @Entity
 @Table(name = "CATEGORY")
 public class Category extends AbstractDomainObject {
