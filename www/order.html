@@ -1,0 +1,271 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <title></title>
+   <style type="text/css">
+      body{
+         font-size:14px;
+         background:white; //#F2F2F2; //c4f0f1;
+         text-align:center;
+      }
+
+      .tableone {width:250px; border-collapse:collapse; margin:0 auto;}
+      .tabletwo {width:220px; margin:2px; border:1px solid #B3B1B1; border-spacing: 1px; border-style:outset}
+
+      .th1 {width:149px;}
+      .th2 {width:99px;}
+      .th3 {width:99px;}
+      .th4 {width:99px;}
+      .th5 {width:200px;}
+
+      .td1 {width:149px;border:1px solid #B3B1B1;}
+      .td2 {width:99px;}
+      .td3 {width:99px;}
+      .td4 {width:99px;}
+      .td5 {width:170px;}
+
+      .tableone {background:#697210; border:1px solid #fff; color:#fff;}
+      .tableone td {border:1px solid #fff; color:#fff;}
+      .tableone tbody {background:#f0c992; color:#000;}
+      .tableone caption {background:#fff; color:#697210; font-size:1.2em; margin:0 auto;}
+      .tableone th, .tabletwo th {text-align:left;}
+
+      .tabletwo td {background:#eee; color:#000;}
+      .tabletwo tr.dk th {background:#ddd; color:#000;}
+      .tabletwo tr.dk td {background:#ddd; color:#000;}
+
+      .innerb {height:30em; overflow:auto;}
+
+      .categoryTable {border:1px solid gray; border-spacing:8px}
+      .categoryTable td {
+         border:1px solid gray;
+         padding: 5px;
+         background-color:#F07800; //FF742E; //3399FF;
+         color: #FFF; //003366;
+         //border-radius:3px;
+         -moz-border-radius: 1px;
+      }
+
+      .menuItemTable {border:1px solid gray; border-spacing:8px}
+      .menuItemTable td {
+         border:1px solid gray;
+         padding:5px;
+         background-color:#FFFFCC;
+         //border-radius:1px;
+         -moz-border-radius: 1px;
+      }
+
+      .optionsTable {border:1px solid gray; border-spacing:8px}
+      .optionsTable td {
+         border:1px solid gray;
+         padding:5px;
+         background-color:#3399FF;
+         color:#FFF;
+         //border-radius:1px;
+         -moz-border-radius: 1px;
+      }
+   </style>
+</head>
+<script language="javascript">
+   var currentRow=-1;
+
+   function highlightRow(row, highLight) {
+      row.style.cursor = 'pointer';
+      var cell = row.cells[0];
+      if(highLight) {
+         cell.style.cssText = 'border-width: 1px; border-color: blue';
+      } else {
+         cell.style.cssText = 'border-width: 1px; border-color: #B3B1B1';
+      }
+   }
+
+   function selectRow(tableID, selectedRowID) {
+      var table = document.getElementById(tableID);
+      var rowCount = table.rows.length;
+      for(var i = 0; i < rowCount; i++) {
+          var row = table.rows[i];
+          if(row.id == selectedRowID) {
+              row.style.background='#dcfac9';
+              currentRow = i;
+          } else {
+              row.style.background='#f0c992';
+          }
+      }
+   }
+
+   function addCategoryRow(tableID) {
+      var table = document.getElementById(tableID);
+
+      var rowCount = table.rows.length;
+      var row = table.insertRow(rowCount);
+      var rowId = tableID + "_r" + rowCount;
+      //alert("rowId " + rowId);
+      row.id = rowId;
+      row.name = rowId;
+      row.setAttribute('onclick', 'selectRow("'+tableID+'", "'+rowId+'");');
+      //row.onclick = new funtion(){ selectRow("", ""); }
+
+      row.onmouseover = function(){ highlightRow(this, true); };
+      row.onmouseout = function(){ highlightRow(this, false); };
+
+      var cell1 = row.insertCell(0);
+      var element1 = document.createTextNode("category");
+      cell1.appendChild(element1);
+
+      var cell2 = row.insertCell(1);
+      var temp = "<a href='javascript:deleteRow(\"" + tableID + "\",\"" + rowId +"\");'>X</a>";
+      //alert(temp);
+      cell2.innerHTML = temp;
+   }
+
+   function deleteRow(tableID, rowID) {
+      try {
+         var table = document.getElementById(tableID);
+         var rowCount = table.rows.length;
+         for(var i = 0; i < rowCount; i++) {
+            var row = table.rows[i];
+            if(row.id == rowID) {
+               table.deleteRow(i);
+               rowCount--;
+               i--;
+            }
+         }
+      } catch(e) {
+         //alert(e);
+      }
+   }
+</script>
+<body>
+   <div style="position:absolute; left:10px; top:10px; width:95%">
+      <table width="100%" style="border:1px solid gray; border-spacing:2px">
+         <tr>
+            <td colspan="3" align="left"><= Back</td>
+         </tr>
+         <tr>
+            <td align="left" width="64.5%" style="border:1px solid black; padding:3px">
+               <div style="height: 600px">
+               Menu Categories
+               <table id="categories" class="categoryTable">
+                  <tr>
+                     <td>Noodles</td>
+                     <td>Beef</td>
+                     <td>Chicken</td>
+                     <td>Rice</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                  </tr>
+                  <tr>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                  </tr>
+               </table>
+               <br>
+               Menu Items
+               <table id="menuItems" class="menuItemTable">
+                  <tr>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                  </tr>
+                  <tr>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                  </tr>
+               </table>
+               <br>
+               Options
+               <table id="options" class="optionsTable">
+                  <tr>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                  </tr>
+                  <tr>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                  </tr>
+               </table>
+               </div>
+            </td>
+            <td width="0.5%"></td>
+            <td width="35%" valign="top" align="left" style="border:1px solid black">
+               <div>
+               <table width="100%" border="1">
+                  <tr>
+                     <th width="50%" valign="top" align="left">Item description</th>
+                     <th width="5%" valign="top" align="right">Quantity</th>
+                     <th width="10%" valign="top" align="right">Price</th>
+                     <td width="5%"></td>
+                     <td width="5%"></td>
+                     <td width="5%"></td>
+                  </tr>
+                  <tr>
+                     <td valign="top" align="left">Fried rice with beef</td>
+                     <td valign="top" align="right">1</td>
+                     <td valign="top" align="right">7.95</td>
+                     <td align="center">+</td>
+                     <td align="center">-</td>
+                     <td align="center">X</td>
+                  </tr>
+                  <tr>
+                     <td valign="top" align="left">Orange Juice</td>
+                     <td valign="top" align="right">1</td>
+                     <td valign="top" align="right">1.95</td>
+                     <td align="center">+</td>
+                     <td align="center">-</td>
+                     <td align="center">X</td>
+                  </tr>
+                  <tr><td colspan="6"><br></td></tr>
+                  <tr>
+                     <td colspan="2" valign="top" align="right">Tax: </td>
+                     <td valign="top" align="right">1.5</td>
+                     <td align="center"></td>
+                     <td align="center"></td>
+                     <td align="center"></td>
+                  </tr>
+                  <tr>
+                     <td colspan="2" valign="top" align="right">Total: </td>
+                     <td valign="top" align="right">11.4</td>
+                     <td align="center"></td>
+                     <td align="center"></td>
+                     <td align="center"></td>
+                  </tr>
+               </table>
+               </div>
+            </td>
+         </tr>
+      </table>
+   </div>
+</body>
+</html>
