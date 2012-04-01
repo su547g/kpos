@@ -1,0 +1,16 @@
+1. Change ListCategory to return just a list of categories without the sale items.
+    When the user clicks on a category, fetch details about that category and its belonging items.
+
+Need functions:
+1. CRUD for global menu options
+2. CRUD for combo menus
+3. CRUD for Order
+4. Define status states for a table, and function for updating the status
+5. CRUD for Staff
+6. Associate Customer info with each order. CRUD for Customer
+7. CRUD for PaymentRecord.
+8. Assign/re-assign table for an order
+9. Send order to printers
+
+
+1. Access control
