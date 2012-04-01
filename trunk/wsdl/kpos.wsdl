@@ -13,6 +13,15 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 elementFormDefault="qualified">
 
+            <xs:element name="SaveTableType" type="tns:SaveTableType"/>
+            <xs:element name="SaveTableResponseType" type="tns:SaveTableResponseType"/>
+            <xs:element name="FetchTableType" type="tns:FetchTableType"/>
+            <xs:element name="FetchTableResponseType" type="tns:FetchTableResponseType"/>
+            <xs:element name="DeleteTableType" type="tns:DeleteTableType"/>
+            <xs:element name="DeleteTableResponseType" type="tns:DeleteTableResponseType"/>
+            <xs:element name="ListTablesType" type="tns:ListTablesType"/>
+            <xs:element name="ListTablesResponseType" type="tns:ListTablesResponseType"/>
+
             <xs:element name="CreateCategoryType" type="tns:CreateCategoryType"/>
             <xs:element name="CreateCategoryResponseType" type="tns:CreateCategoryResponseType"/>
 
@@ -69,6 +78,14 @@
             </xs:complexType>
 
             <!--Define data structures below-->
+            <xs:complexType name="TableType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="x" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="y" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
 
             <xs:complexType name="CategoryType">
                 <xs:sequence>
@@ -122,6 +139,49 @@
             <!--End of data structures-->
 
             <!--Define operations below-->
+
+            <xs:complexType name="SaveTableType">
+                <xs:sequence>
+                    <xs:element name="table" type="tns:TableType" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="SaveTableResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="tableId" type="xs:long" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="FetchTableType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="FetchTableResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="table" type="tns:TableType" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeleteTableType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeleteTableResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListTablesType">
+                <xs:sequence>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListTablesResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="table" type="tns:TableType" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:complexType>
 
             <xs:complexType name="CreateCategoryType">
                 <xs:sequence>
@@ -423,6 +483,26 @@
     <!--End of messages-->
 
     <wsdl:portType name="KPosPortType">
+        <wsdl:operation name="SaveTable">
+            <wsdl:input message="tns:SaveTableMessage" name="SaveTable"/>
+            <wsdl:output message="tns:SaveTableResponseMessage" name="SaveTableResponse"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="FetchTable">
+            <wsdl:input message="tns:FetchTableMessage" name="FetchTable"/>
+            <wsdl:output message="tns:FetchTableResponseMessage" name="FetchTableResponse"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="DeleteTable">
+            <wsdl:input message="tns:DeleteTableMessage" name="DeleteTable"/>
+            <wsdl:output message="tns:DeleteTableResponseMessage" name="DeleteTableResponse"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="ListTables">
+            <wsdl:input message="tns:ListTablesMessage" name="ListTables"/>
+            <wsdl:output message="tns:ListTablesResponseMessage" name="ListTablesResponse"/>
+        </wsdl:operation>
+
         <wsdl:operation name="CreateCategory">
             <wsdl:input message="tns:CreateCategoryMessage" name="CreateCategory"/>
             <wsdl:output message="tns:CreateCategoryResponseMessage" name="CreateCategoryResponse"/>
@@ -503,6 +583,46 @@
 
     <wsdl:binding name="KPosBinding" type="tns:KPosPortType">
         <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+        <wsdl:operation name="SaveTable">
+            <soap:operation soapAction="http://ws.kpos.com/SaveTable" style="document"/>
+            <wsdl:input name="SaveTable">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="SaveTableResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="FetchTable">
+            <soap:operation soapAction="http://ws.kpos.com/FetchTable" style="document"/>
+            <wsdl:input name="FetchTable">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="FetchTableResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="DeleteTable">
+            <soap:operation soapAction="http://ws.kpos.com/DeleteTable" style="document"/>
+            <wsdl:input name="DeleteTable">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DeleteTableResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="ListTables">
+            <soap:operation soapAction="http://ws.kpos.com/ListTables" style="document"/>
+            <wsdl:input name="ListTables">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="ListTablesResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
 
         <wsdl:operation name="CreateCategory">
             <soap:operation soapAction="http://ws.kpos.com/CreateCategory" style="document"/>
