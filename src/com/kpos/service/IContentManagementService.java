@@ -1,13 +1,7 @@
 package com.kpos.service;
 
-import com.kpos.domain.Category;
-import com.kpos.domain.Printer;
-import com.kpos.domain.SaleItem;
-import com.kpos.domain.SaleItemOption;
-import com.kpos.ws.app.CategoryType;
-import com.kpos.ws.app.PrinterType;
-import com.kpos.ws.app.SaleItemOptionType;
-import com.kpos.ws.app.SaleItemType;
+import com.kpos.domain.*;
+import com.kpos.ws.app.*;
 
 import java.util.List;
 
@@ -50,4 +44,12 @@ public interface IContentManagementService {
     UpdateResult<Printer> updatePrinter(PrinterType soapType);
         
     FetchResult<List<Printer>> listPrinters();
+
+    FetchResult<List<RestaurantTable>> listTables();
+
+    CreateResult<RestaurantTable> createRestaurantTable(TableType soapType);
+
+    UpdateResult<RestaurantTable> updateRestaurantTable(TableType soapType);
+
+    DeleteResult deleteTable(long aId);
 }

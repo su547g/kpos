@@ -221,6 +221,12 @@
                 <xs:sequence>
                 </xs:sequence>
             </xs:complexType>
+            <xs:complexType name="CategoryInfoType">
+                <xs:sequence>
+                    <xs:element name="id" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="name" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
             <xs:complexType name="ListCategoryResponseType">
                 <xs:sequence>
                     <xs:element name="Result" type="tns:ResultType"/>
@@ -372,6 +378,31 @@
     </wsdl:types>
 
     <!--Begin of messages-->
+    <wsdl:message name="SaveTableMessage">
+        <wsdl:part name="parameters" element="tns:SaveTableType"/>
+    </wsdl:message>
+    <wsdl:message name="SaveTableResponseMessage">
+        <wsdl:part name="parameters" element="tns:SaveTableResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="FetchTableMessage">
+        <wsdl:part name="parameters" element="tns:FetchTableType"/>
+    </wsdl:message>
+    <wsdl:message name="FetchTableResponseMessage">
+        <wsdl:part name="parameters" element="tns:FetchTableResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="DeleteTableMessage">
+        <wsdl:part name="parameters" element="tns:DeleteTableType"/>
+    </wsdl:message>
+    <wsdl:message name="DeleteTableResponseMessage">
+        <wsdl:part name="parameters" element="tns:DeleteTableResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="ListTablesMessage">
+        <wsdl:part name="parameters" element="tns:ListTablesType"/>
+    </wsdl:message>
+    <wsdl:message name="ListTablesResponseMessage">
+        <wsdl:part name="parameters" element="tns:ListTablesResponseType"/>
+    </wsdl:message>
+
     <wsdl:message name="CreateCategoryMessage">
         <wsdl:part name="parameters" element="tns:CreateCategoryType"/>
     </wsdl:message>

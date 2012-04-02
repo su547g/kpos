@@ -1,9 +1,6 @@
 package com.kpos.ws.impl;
 
-import com.kpos.domain.Category;
-import com.kpos.domain.Printer;
-import com.kpos.domain.SaleItem;
-import com.kpos.domain.SaleItemOption;
+import com.kpos.domain.*;
 import com.kpos.service.*;
 import com.kpos.ws.app.*;
 import org.slf4j.Logger;
@@ -414,5 +411,59 @@ public class KPosPortImpl implements KPosPortType {
             responseType.setResult(getSoapFaultResult(e));
         }
         return responseType;
+    }
+
+    @Override
+    public ListTablesResponseType listTables(
+            @WebParam(partName = "parameters", name = "ListTablesType", targetNamespace = NS) ListTablesType parameters) {
+        ListTablesResponseType responseType = new ListTablesResponseType();
+        try {
+            FetchResult<List<RestaurantTable>> result = contentManagementService.listTables();
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
+        return responseType;
+    }
+
+    @Override
+    public SaveTableResponseType saveTable(
+            @WebParam(partName = "parameters", name = "SaveTableType", targetNamespace = NS) SaveTableType parameters) {
+        SaveTableResponseType responseType = new SaveTableResponseType();
+        TableType tableType = parameters.getTable();
+        try {
+            if(tableType.getId() == null || tableType.getId() == 0) {
+                CreateResult<RestaurantTable> result = contentManagementService.createRestaurantTable(tableType);
+                responseType.setTableId(result.getCreated().getId());
+                responseType.setResult(getSoapResult(result));
+            } else {
+                UpdateResult<RestaurantTable> result = contentManagementService.updateRestaurantTable(tableType);
+                responseType.setTableId(result.getManagedObject().getId());
+                responseType.setResult(getSoapResult(result));
+            }
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
+        return responseType;
+    }
+
+    @Override
+    public DeleteTableResponseType deleteTable(
+            @WebParam(partName = "parameters", name = "DeleteTableType", targetNamespace = NS) DeleteTableType parameters) {
+        DeleteTableResponseType responseType = new DeleteTableResponseType();
+        try {
+            DeleteResult result = contentManagementService.deleteTable(parameters.getId());
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
+
+        return responseType;
+    }
+
+    @Override
+    public FetchTableResponseType fetchTable(
+            @WebParam(partName = "parameters", name = "FetchTableType", targetNamespace = NS) FetchTableType parameters) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }
