@@ -1,6 +1,6 @@
 package com.kpos.dao;
 
-import com.kpos.domain.Category;
+import com.kpos.domain.MenuCategory;
 
 import java.util.List;
 
@@ -10,17 +10,17 @@ import java.util.List;
  * Date: 3/10/12 11:54 PM
  */
 public interface ICategoryDao {
-    Category findByName(String aName);
+    MenuCategory findByName(String aName);
 
-    List<Category> listCategoriesByNameAsc();
+    List<MenuCategory> listCategoriesByNameAsc();
 
-    void insertCategory(Category aCategory);
+    void insertCategory(MenuCategory aCategory);
 
-    boolean deleteCategory(Category aCategory);
+    boolean deleteCategory(MenuCategory aCategory);
 
-    Category updateCategory(Category aCategory);
+    MenuCategory updateCategory(MenuCategory aCategory);
 
-    List<Category> listCategories();
+    List<MenuCategory> listCategories();
 
-    Category findCategory(long aId);
+    MenuCategory findCategory(long aId);
 }

@@ -1,6 +1,7 @@
 package com.kpos.dao;
 
 import com.kpos.domain.RestaurantTable;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
  * User: kkwang
  * Date: 4/2/12
  */
+@Repository
 public class TableDao extends AbstractJpaDao<RestaurantTable> implements ITableDao {
     @Override
     protected Class getEntityClass() {
@@ -20,9 +22,9 @@ public class TableDao extends AbstractJpaDao<RestaurantTable> implements ITableD
     public RestaurantTable findTableByName(String aName) {
         Query namedQuery = this.entityManager.createNamedQuery("findTableByName");
         namedQuery.setParameter("aName", aName);
-        Object obj = namedQuery.getSingleResult();
-        if(obj != null) {
-            return (RestaurantTable)obj;
+        List resultList = namedQuery.getResultList();
+        if(resultList != null && resultList.size() > 0) {
+            return (RestaurantTable)resultList.get(0);
         }
         return null;
     }

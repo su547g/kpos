@@ -3,6 +3,7 @@ package com.kpos.dao;
 import com.kpos.domain.Printer;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -23,11 +24,16 @@ public class PrinterDao extends AbstractJpaDao<Printer> implements IPrinterDao {
     public Printer findByName(String aName) {
         Query namedQuery = this.entityManager.createNamedQuery("findPrinterByName");
         namedQuery.setParameter("aName", aName);
-        Object obj = namedQuery.getSingleResult();
-        if(obj != null) {
-            return (Printer)obj;
+        try {
+            Object obj = namedQuery.getSingleResult();
+
+            if(obj != null) {
+                return (Printer)obj;
+            }
+            return null;
+        }catch (NoResultException e) {
+            return null;
         }
-        return null;
     }
 
     @Override

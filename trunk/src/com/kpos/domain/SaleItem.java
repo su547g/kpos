@@ -54,7 +54,7 @@ public class SaleItem extends AbstractDomainObject {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Category category;
+    private MenuCategory category;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "saleItem", orphanRemoval = true, fetch = FetchType.LAZY)
     @ForeignKey(name = "OPTION_2_ITEM_FK")
@@ -81,6 +81,11 @@ public class SaleItem extends AbstractDomainObject {
     )
     @ForeignKey(name = "ITEM_2_PRINTER_FK", inverseName = "PRINTER_2_ITEM_FK")
     private Set<Printer> printers = new HashSet<Printer>();
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "combo_section_id")
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
+    private ComboMenuSection comboSection;
 
     public Long getId() {
         return id;
@@ -130,11 +135,11 @@ public class SaleItem extends AbstractDomainObject {
         this.hh_price = hh_price;
     }
 
-    public Category getCategory() {
+    public MenuCategory getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(MenuCategory category) {
         this.category = category;
     }
 

@@ -1,7 +1,6 @@
 package com.kpos.domain;
 
 import org.hibernate.annotations.ForeignKey;
-import org.hibernate.annotations.Index;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -17,16 +16,16 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(
                 name = "findCategoryByName",
-                query = "from Category c where c.name = :aName"
+                query = "from MenuCategory c where c.name = :aName"
         ),
         @NamedQuery(
                 name = "listCategoriesByNameAsc",
-                query = "from Category c order by c.name asc"
+                query = "from MenuCategory c order by c.name asc"
         )
 })
 @Entity
 @Table(name = "CATEGORY")
-public class Category extends AbstractDomainObject {
+public class MenuCategory extends AbstractDomainObject {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "id")
@@ -137,7 +136,7 @@ public class Category extends AbstractDomainObject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Category category = (Category) o;
+        MenuCategory category = (MenuCategory) o;
 
         if (Double.compare(category.hhRate, hhRate) != 0) return false;
         if (isAllowedHH != category.isAllowedHH) return false;
