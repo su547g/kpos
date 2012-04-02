@@ -28,6 +28,9 @@ public class CustomerInfo extends AbstractDomainObject {
     @Column(name = "buzz_number")
     private String buzz;
     
+    @Column(name = "email")
+    private String email;
+
     @Override
     public Long getId() {
         return id;
@@ -69,6 +72,14 @@ public class CustomerInfo extends AbstractDomainObject {
         this.buzz = buzz;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -81,6 +92,7 @@ public class CustomerInfo extends AbstractDomainObject {
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
+        if (email != null ? !email.equals(that.email) : that.email != null) return false;
 
         return true;
     }
@@ -92,6 +104,7 @@ public class CustomerInfo extends AbstractDomainObject {
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
         result = 31 * result + (address != null ? address.hashCode() : 0);
         result = 31 * result + (buzz != null ? buzz.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
         return result;
     }
 }

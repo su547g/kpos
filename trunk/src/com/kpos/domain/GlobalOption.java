@@ -33,10 +33,11 @@ public class GlobalOption extends AbstractDomainObject {
     protected boolean isTaxable;
 
     //owning entity
-    @ManyToOne(cascade = CascadeType.ALL)
+    /*@ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "option_cat_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private GlobalOptionCategory optionCategory;
+    */
 
     public Long getId() {
         return id;
@@ -78,6 +79,7 @@ public class GlobalOption extends AbstractDomainObject {
         isTaxable = taxable;
     }
 
+    /*
     public GlobalOptionCategory getOptionCategory() {
         return optionCategory;
     }
@@ -85,6 +87,7 @@ public class GlobalOption extends AbstractDomainObject {
     public void setOptionCategory(GlobalOptionCategory optionCategory) {
         this.optionCategory = optionCategory;
     }
+    */
 
     @Override
     public boolean equals(Object o) {
@@ -98,8 +101,8 @@ public class GlobalOption extends AbstractDomainObject {
         if (Double.compare(that.takeOutPrice, takeOutPrice) != 0) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (optionCategory != null ? !optionCategory.equals(that.optionCategory) : that.optionCategory != null)
-            return false;
+        //if (optionCategory != null ? !optionCategory.equals(that.optionCategory) : that.optionCategory != null)
+            //return false;
 
         return true;
     }
@@ -115,7 +118,7 @@ public class GlobalOption extends AbstractDomainObject {
         temp = takeOutPrice != +0.0d ? Double.doubleToLongBits(takeOutPrice) : 0L;
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (isTaxable ? 1 : 0);
-        result = 31 * result + (optionCategory != null ? optionCategory.hashCode() : 0);
+        //result = 31 * result + (optionCategory != null ? optionCategory.hashCode() : 0);
         return result;
     }
 }
