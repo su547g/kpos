@@ -41,15 +41,15 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     private ITableDao tableDao;
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
-    public CreateResult<Category> createMenuCategory(Category aCategory) {
+    public CreateResult<MenuCategory> createMenuCategory(MenuCategory aCategory) {
         try {
-            CreateResult<Category> result = new CreateResult<Category>();
+            CreateResult<MenuCategory> result = new CreateResult<MenuCategory>();
             aCategory.setCreatedOn(new Date());
-            Category object = categoryDao.findByName(aCategory.getName());
+            MenuCategory object = categoryDao.findByName(aCategory.getName());
             if(object != null) {
                 result.setCreated(null);
                 result.setSuccessful(false);
-                result.setException(new Exception("Category name already exists!"));
+                result.setException(new Exception("MenuCategory name already exists!"));
             } else {
                 categoryDao.insertCategory(aCategory);
                 result.setCreated(aCategory);
@@ -57,21 +57,21 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             return result;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return new CreateResult<Category>(e);
+            return new CreateResult<MenuCategory>(e);
         }
     }
 
     @Override
-    public FetchResult<List<Category>> listAllCategories() {
-        FetchResult<List<Category>> fetchResult = new FetchResult<List<Category>>();
+    public FetchResult<List<MenuCategory>> listAllCategories() {
+        FetchResult<List<MenuCategory>> fetchResult = new FetchResult<List<MenuCategory>>();
         fetchResult.setTarget(categoryDao.listCategoriesByNameAsc());
         return fetchResult;
     }
 
     @Override
-    public FetchResult<Category> fetchCategory(long aCategoryId) {
-        FetchResult<Category> fetchResult = new FetchResult<Category>();
-        Category category = categoryDao.findCategory(aCategoryId);
+    public FetchResult<MenuCategory> fetchCategory(long aCategoryId) {
+        FetchResult<MenuCategory> fetchResult = new FetchResult<MenuCategory>();
+        MenuCategory category = categoryDao.findCategory(aCategoryId);
         fetchResult.setTarget(category);
         fetchResult.setSuccessful(category != null);
         return fetchResult;
@@ -79,24 +79,24 @@ public class ContentManagementServiceImpl implements IContentManagementService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
-    public UpdateResult<Category> updateCategory(CategoryType aCategoryType) {
-        UpdateResult<Category> updateResult = new UpdateResult<Category>();
+    public UpdateResult<MenuCategory> updateCategory(CategoryType aCategoryType) {
+        UpdateResult<MenuCategory> updateResult = new UpdateResult<MenuCategory>();
         if(aCategoryType.getId() == null) {
             updateResult.setSuccessful(false);
         } else {
-            Category object = categoryDao.findByName(aCategoryType.getName());
+            MenuCategory object = categoryDao.findByName(aCategoryType.getName());
             if(object != null) {
                 updateResult.setSuccessful(false);
-                updateResult.setException(new Exception("Category name already exists!"));
+                updateResult.setException(new Exception("MenuCategory name already exists!"));
             } else {
-                Category aCategory = categoryDao.findCategory(aCategoryType.getId());
+                MenuCategory aCategory = categoryDao.findCategory(aCategoryType.getId());
                 aCategory.setAllowedHH(aCategoryType.getIsAllowedHappyHour());
                 aCategory.setHhRate(aCategoryType.getHappyHourRate());
                 aCategory.setName(aCategoryType.getName());
                 aCategory.setNotes(aCategoryType.getNotes());
                 aCategory.setThumbPath(aCategoryType.getThumbPath());
                 aCategory.setLastUpdated(new Date());
-                Category category = categoryDao.updateCategory(aCategory);
+                MenuCategory category = categoryDao.updateCategory(aCategory);
                 updateResult.setManagedObject(category);
                 updateResult.setSuccessful(true);
             }
@@ -108,7 +108,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public DeleteResult deleteCategory(long aCategoryId) {
         DeleteResult deleteResult = new DeleteResult();
-        Category category = categoryDao.findCategory(aCategoryId);
+        MenuCategory category = categoryDao.findCategory(aCategoryId);
         if(category != null) {
             categoryDao.deleteCategory(category);
             deleteResult.setSuccessful(true);
@@ -168,7 +168,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public CreateResult<SaleItem> createSaleItem(SaleItemType aSaleItemType) {
         CreateResult<SaleItem> result = new CreateResult<SaleItem>();
-        Category category = categoryDao.findCategory(aSaleItemType.getCatId());
+        MenuCategory category = categoryDao.findCategory(aSaleItemType.getCatId());
         if(category != null) {
             SaleItem saleItem = new SaleItem();
             convertSoapItemToSaleItem(saleItem, aSaleItemType);
@@ -178,7 +178,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             result.setCreated(saleItem);
         } else {
             result.setSuccessful(false);
-            result.setException(new Exception("Category ["+aSaleItemType.getCatId()+"] can't be found!"));
+            result.setException(new Exception("MenuCategory ["+aSaleItemType.getCatId()+"] can't be found!"));
         }
         return result;
     }
@@ -190,7 +190,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         SaleItem saleItem = saleItemDao.findSaleItem(aSaleItemType.getId());
         if(saleItem != null) {
             convertSoapItemToSaleItem(saleItem, aSaleItemType);
-            Category newCategory = categoryDao.findCategory(aSaleItemType.getCatId());
+            MenuCategory newCategory = categoryDao.findCategory(aSaleItemType.getCatId());
             if(newCategory != null) {
                 saleItem.setCategory(newCategory);
             } else {
@@ -223,13 +223,13 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     @Override
     public FetchResult<List<SaleItem>> listSaleItemsForCategory(long aCategoryId) {
         FetchResult<List<SaleItem>> fetchResult = new FetchResult<List<SaleItem>>();
-        Category category = categoryDao.findCategory(aCategoryId);
+        MenuCategory category = categoryDao.findCategory(aCategoryId);
         List<SaleItem> saleItems;
         if(category == null) {
             log.warn("Can't find category id [" + aCategoryId + "]");
             saleItems = new ArrayList<SaleItem>();
             fetchResult.setSuccessful(false);
-            fetchResult.setFailure(1, "Category doesn't exist!");
+            fetchResult.setFailure(1, "MenuCategory doesn't exist!");
         } else {
             saleItems = saleItemDao.listSaleItemsForCategory(aCategoryId);
             fetchResult.setTarget(saleItems);
@@ -392,6 +392,8 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             table.setCoordinate_x(soapType.getX());
             table.setCoordinate_y(soapType.getY());
             table.setName(soapType.getName());
+            table.setCreatedOn(new Date());
+            table.setLastUpdated(new Date());
             tableDao.insert(table);
             result.setCreated(table);
             result.setSuccessful(true);
@@ -407,12 +409,12 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public UpdateResult<RestaurantTable> updateRestaurantTable(TableType soapType) {
         UpdateResult<RestaurantTable> result = new UpdateResult<RestaurantTable>();
-        RestaurantTable object = tableDao.findById(soapType.getId());
-        if(object != null) {
-            RestaurantTable table = new RestaurantTable();
+        RestaurantTable table = tableDao.findById(soapType.getId());
+        if(table != null) {
             table.setCoordinate_x(soapType.getX());
             table.setCoordinate_y(soapType.getY());
             table.setName(soapType.getName());
+            table.setLastUpdated(new Date());
             result.setManagedObject(table);
             result.setSuccessful(true);
         } else {

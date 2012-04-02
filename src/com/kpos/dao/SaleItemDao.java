@@ -3,6 +3,7 @@ package com.kpos.dao;
 import com.kpos.domain.SaleItem;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -23,11 +24,16 @@ public class SaleItemDao extends AbstractJpaDao<SaleItem> implements ISaleItemDa
         Query namedQuery = this.entityManager.createNamedQuery("findBySaleItemName");
         namedQuery.setParameter("aCatId", aCategoryId);
         namedQuery.setParameter("aName", aName);
-        Object obj = namedQuery.getSingleResult();
-        if(obj != null) {
-            return (SaleItem)obj;
+        try {
+            Object obj = namedQuery.getSingleResult();
+
+            if(obj != null) {
+                return (SaleItem)obj;
+            }
+            return null;
+        }catch(NoResultException e) {
+            return null;
         }
-        return null;
     }
 
     @Override

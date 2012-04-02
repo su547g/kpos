@@ -11,13 +11,13 @@ import java.util.List;
  * Date: 3/14/12 11:08 PM
  */
 public interface IContentManagementService {
-    CreateResult<Category> createMenuCategory(Category aCategory);
+    CreateResult<MenuCategory> createMenuCategory(MenuCategory aCategory);
 
-    FetchResult<List<Category>> listAllCategories();
+    FetchResult<List<MenuCategory>> listAllCategories();
 
-    FetchResult<Category> fetchCategory(long aCategoryId);
+    FetchResult<MenuCategory> fetchCategory(long aCategoryId);
 
-    UpdateResult<Category> updateCategory(CategoryType aCategoryType);
+    UpdateResult<MenuCategory> updateCategory(CategoryType aCategoryType);
 
     DeleteResult deleteCategory(long aCategoryId);
 

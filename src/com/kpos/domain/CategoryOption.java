@@ -1,7 +1,5 @@
 package com.kpos.domain;
 
-import org.hibernate.annotations.ForeignKey;
-import org.hibernate.annotations.Index;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -32,7 +30,7 @@ public class CategoryOption extends AbstractDomainObject {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Category category;
+    private MenuCategory category;
 
     public Long getId() {
 
@@ -67,11 +65,11 @@ public class CategoryOption extends AbstractDomainObject {
         this.price = price;
     }
 
-    public Category getCategory() {
+    public MenuCategory getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(MenuCategory category) {
         this.category = category;
     }
 

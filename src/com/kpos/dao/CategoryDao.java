@@ -1,9 +1,9 @@
 package com.kpos.dao;
 
-import com.kpos.domain.Category;
-import com.kpos.service.CreateResult;
+import com.kpos.domain.MenuCategory;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -13,34 +13,39 @@ import java.util.List;
  * Date: 3/10/12 11:21 PM
  */
 @Repository
-public class CategoryDao extends AbstractJpaDao<Category> implements ICategoryDao {
+public class CategoryDao extends AbstractJpaDao<MenuCategory> implements ICategoryDao {
     @Override
     protected Class getEntityClass() {
-        return Category.class;
+        return MenuCategory.class;
     }
 
     @Override
-    public Category findByName(String aName) {
+    public MenuCategory findByName(String aName) {
         Query namedQuery = this.entityManager.createNamedQuery("findCategoryByName");
         namedQuery.setParameter("aName", aName);
-        Object obj = namedQuery.getSingleResult();
-        if(obj != null) {
-            return (Category)obj;
+        try {
+            Object obj = namedQuery.getSingleResult();
+
+            if(obj != null) {
+                return (MenuCategory)obj;
+            }
+            return null;
+        }catch (NoResultException exception) {
+            return null;
         }
-        return null;
     }
     
     @Override
-    public List<Category> listCategoriesByNameAsc() {
+    public List<MenuCategory> listCategoriesByNameAsc() {
         Query namedQuery = this.entityManager.createNamedQuery("listCategoriesByNameAsc");
-        return (List<Category>)namedQuery.getResultList();
+        return (List<MenuCategory>)namedQuery.getResultList();
     }
     
-    public void insertCategory(Category aCategory) {
+    public void insertCategory(MenuCategory aCategory) {
         if(aCategory.getId() == null) {
             this.insert(aCategory);
         } else {
-            Category temp = this.findById(aCategory.getId());
+            MenuCategory temp = this.findById(aCategory.getId());
             if(temp == null) {
                 aCategory.setId(null);
                 this.insert(aCategory);
@@ -49,7 +54,7 @@ public class CategoryDao extends AbstractJpaDao<Category> implements ICategoryDa
     }
 
     @Override
-    public boolean deleteCategory(Category aCategory) {
+    public boolean deleteCategory(MenuCategory aCategory) {
         if(aCategory.getId() != null) {
             return this.delete(aCategory);
         }
@@ -57,17 +62,17 @@ public class CategoryDao extends AbstractJpaDao<Category> implements ICategoryDa
     }
 
     @Override
-    public Category updateCategory(Category aCategory) {
+    public MenuCategory updateCategory(MenuCategory aCategory) {
         return this.update(aCategory);
     }
 
     @Override
-    public List<Category> listCategories() {
+    public List<MenuCategory> listCategories() {
         return this.findAll();
     }
 
     @Override
-    public Category findCategory(long aId) {
+    public MenuCategory findCategory(long aId) {
         return this.findById(aId);
     }
 }

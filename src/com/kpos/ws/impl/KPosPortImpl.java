@@ -169,10 +169,10 @@ public class KPosPortImpl implements KPosPortType {
             @WebParam(partName = "parameters", name = "ListCategoryType", targetNamespace = NS) ListCategoryType parameters) {
         ListCategoryResponseType responseType = new ListCategoryResponseType();
         try {
-            FetchResult<List<Category>> fetchResult = contentManagementService.listAllCategories();
-            List<Category> categoryList = fetchResult.getTarget();
+            FetchResult<List<MenuCategory>> fetchResult = contentManagementService.listAllCategories();
+            List<MenuCategory> categoryList = fetchResult.getTarget();
             List<CategoryType> categoryTypes = new ArrayList<CategoryType>();
-            for(Category category : categoryList) {
+            for(MenuCategory category : categoryList) {
                 CategoryType type = new CategoryType();
                 type.setHappyHourRate(category.getHhRate());
                 type.setId(category.getId());
@@ -195,7 +195,7 @@ public class KPosPortImpl implements KPosPortType {
             @WebParam(partName = "parameters", name = "CreateCategoryType", targetNamespace = NS) CreateCategoryType soapCategory) {
         CreateCategoryResponseType responseType = new CreateCategoryResponseType();
         try {
-            Category category = new Category();
+            MenuCategory category = new MenuCategory();
             CategoryType soapType = soapCategory.getCategory();
             category.setName(soapType.getName());
             category.setNotes(soapType.getNotes());
@@ -208,7 +208,7 @@ public class KPosPortImpl implements KPosPortType {
             }
             category.setCreatedOn(new Date());
             category.setLastUpdated(new Date());
-            CreateResult<Category> result = contentManagementService.createMenuCategory(category);
+            CreateResult<MenuCategory> result = contentManagementService.createMenuCategory(category);
             if(result.isSuccessful() && result.getCreated() != null) {
                 responseType.setCategoryId(result.getCreated().getId());
             }
@@ -224,7 +224,7 @@ public class KPosPortImpl implements KPosPortType {
             @WebParam(partName = "parameters", name = "UpdateCategoryType", targetNamespace = NS) UpdateCategoryType parameters) {
         UpdateCategoryResponseType responseType = new UpdateCategoryResponseType();
         try {
-            UpdateResult<Category> result = contentManagementService.updateCategory(parameters.getCategory());
+            UpdateResult<MenuCategory> result = contentManagementService.updateCategory(parameters.getCategory());
             responseType.setResult(getSoapResult(result));
         } catch (Exception e) {
             responseType.setResult(getSoapFaultResult(e));
@@ -419,6 +419,15 @@ public class KPosPortImpl implements KPosPortType {
         ListTablesResponseType responseType = new ListTablesResponseType();
         try {
             FetchResult<List<RestaurantTable>> result = contentManagementService.listTables();
+            List<RestaurantTable> tables = result.getTarget();
+            for(RestaurantTable table : tables) {
+                TableType soapTable = new TableType();
+                soapTable.setId(table.getId());
+                soapTable.setName(table.getName());
+                soapTable.setX(table.getCoordinate_x());
+                soapTable.setY(table.getCoordinate_y());
+                responseType.getTable().add(soapTable);
+            }
             responseType.setResult(getSoapResult(result));
         } catch (Exception e) {
             responseType.setResult(getSoapFaultResult(e));
@@ -434,11 +443,15 @@ public class KPosPortImpl implements KPosPortType {
         try {
             if(tableType.getId() == null || tableType.getId() == 0) {
                 CreateResult<RestaurantTable> result = contentManagementService.createRestaurantTable(tableType);
-                responseType.setTableId(result.getCreated().getId());
+                if(result.isSuccessful()) {
+                    responseType.setTableId(result.getCreated().getId());
+                }
                 responseType.setResult(getSoapResult(result));
             } else {
                 UpdateResult<RestaurantTable> result = contentManagementService.updateRestaurantTable(tableType);
-                responseType.setTableId(result.getManagedObject().getId());
+                if(result.isSuccessful()) {
+                    responseType.setTableId(result.getManagedObject().getId());
+                }
                 responseType.setResult(getSoapResult(result));
             }
         } catch (Exception e) {

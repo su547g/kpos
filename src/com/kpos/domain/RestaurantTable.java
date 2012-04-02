@@ -10,11 +10,11 @@ import javax.persistence.*;
 @NamedQueries({
     @NamedQuery(
             name = "findTableByName",
-            query = "from Table p where p.name = :aName"
+            query = "from RestaurantTable p where p.name = :aName"
     ),
     @NamedQuery(
             name = "listTablesByNameAsc",
-            query = "from Table p order by p.name asc"
+            query = "from RestaurantTable p order by p.name asc"
     )
 })
 @Entity
