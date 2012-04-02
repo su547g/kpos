@@ -19,8 +19,11 @@ public class CategoryOption extends AbstractDomainObject {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+    
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
     private String description;
 
     @Column(name = "price", nullable = true)
@@ -38,6 +41,14 @@ public class CategoryOption extends AbstractDomainObject {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -73,6 +84,7 @@ public class CategoryOption extends AbstractDomainObject {
 
         if (Double.compare(that.price, price) != 0) return false;
         if (category != null ? !category.equals(that.category) : that.category != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
 
@@ -84,6 +96,7 @@ public class CategoryOption extends AbstractDomainObject {
         int result;
         long temp;
         result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         temp = price != +0.0d ? Double.doubleToLongBits(price) : 0L;
         result = 31 * result + (int) (temp ^ (temp >>> 32));
