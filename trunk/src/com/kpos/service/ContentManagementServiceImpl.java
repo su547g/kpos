@@ -1,17 +1,8 @@
 package com.kpos.service;
 
-import com.kpos.dao.ICategoryDao;
-import com.kpos.dao.IPrinterDao;
-import com.kpos.dao.ISaleItemDao;
-import com.kpos.dao.ISaleItemOptionDao;
-import com.kpos.domain.Category;
-import com.kpos.domain.Printer;
-import com.kpos.domain.SaleItem;
-import com.kpos.domain.SaleItemOption;
-import com.kpos.ws.app.CategoryType;
-import com.kpos.ws.app.PrinterType;
-import com.kpos.ws.app.SaleItemOptionType;
-import com.kpos.ws.app.SaleItemType;
+import com.kpos.dao.*;
+import com.kpos.domain.*;
+import com.kpos.ws.app.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +36,9 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     
     @Autowired
     private IPrinterDao printerDao;
+    
+    @Autowired
+    private ITableDao tableDao;
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public CreateResult<Category> createMenuCategory(Category aCategory) {
@@ -378,4 +372,69 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         result.setTarget(printers);
         return result;
     }
+    
+    @Override
+    public FetchResult<List<RestaurantTable>> listTables() {
+        FetchResult<List<RestaurantTable>> result = new FetchResult<List<RestaurantTable>>();
+        List<RestaurantTable> tables = tableDao.listTablesByNameAsc();
+        result.setSuccessful(true);
+        result.setTarget(tables);
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public CreateResult<RestaurantTable> createRestaurantTable(TableType soapType) {
+        CreateResult<RestaurantTable> result = new CreateResult<RestaurantTable>();
+        RestaurantTable object = tableDao.findTableByName(soapType.getName());
+        if(object == null) {
+            RestaurantTable table = new RestaurantTable();
+            table.setCoordinate_x(soapType.getX());
+            table.setCoordinate_y(soapType.getY());
+            table.setName(soapType.getName());
+            tableDao.insert(table);
+            result.setCreated(table);
+            result.setSuccessful(true);
+        } else {
+            result.setException(new Exception("Table with name [" + soapType.getName()+"] already exits!"));
+            result.setSuccessful(false);
+        }
+
+        return  result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public UpdateResult<RestaurantTable> updateRestaurantTable(TableType soapType) {
+        UpdateResult<RestaurantTable> result = new UpdateResult<RestaurantTable>();
+        RestaurantTable object = tableDao.findById(soapType.getId());
+        if(object != null) {
+            RestaurantTable table = new RestaurantTable();
+            table.setCoordinate_x(soapType.getX());
+            table.setCoordinate_y(soapType.getY());
+            table.setName(soapType.getName());
+            result.setManagedObject(table);
+            result.setSuccessful(true);
+        } else {
+            result.setException(new Exception("Table with id [" + soapType.getId()+"] doesn't exit!"));
+            result.setSuccessful(false);
+        }
+
+        return  result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public DeleteResult deleteTable(long aId) {
+        DeleteResult result = new DeleteResult();
+        if(null == tableDao.findById(aId)) {
+            result.setSuccessful(false);
+            result.setException(new Exception("Table ["+aId+"] doesn't exist!"));
+        } else {
+            tableDao.delete(aId);
+            result.setSuccessful(true);
+        }
+        return result;
+    }
+
 }

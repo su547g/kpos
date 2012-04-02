@@ -20,7 +20,7 @@ import java.util.List;
 @Table(name = "ORDER")
 public class Order extends AbstractDomainObject {
     public static enum OrderType {
-        IN, OUT;
+        IN, OUT, DELIVERY, PICKUP;
         @Override public String toString() {
             return super.toString().toUpperCase();
         }
@@ -59,6 +59,10 @@ public class Order extends AbstractDomainObject {
     @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "table_id")
     private RestaurantTable table;
+
+    @OneToOne(cascade = CascadeType.REFRESH)
+    @ForeignKey(name = "ORDER_2_CUSTOMER_FK")
+    private CustomerInfo customerInfo;
 
     public Long getId() {
         return id;
@@ -106,5 +110,58 @@ public class Order extends AbstractDomainObject {
 
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public List<Bill> getBillList() {
+        return billList;
+    }
+
+    public void setBillList(List<Bill> billList) {
+        this.billList = billList;
+    }
+
+    public RestaurantTable getTable() {
+        return table;
+    }
+
+    public void setTable(RestaurantTable table) {
+        this.table = table;
+    }
+
+    public CustomerInfo getCustomerInfo() {
+        return customerInfo;
+    }
+
+    public void setCustomerInfo(CustomerInfo customerInfo) {
+        this.customerInfo = customerInfo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Order order = (Order) o;
+
+        if (Double.compare(order.totalPrice, totalPrice) != 0) return false;
+        if (id != null ? !id.equals(order.id) : order.id != null) return false;
+        if (notes != null ? !notes.equals(order.notes) : order.notes != null) return false;
+        if (orderType != null ? !orderType.equals(order.orderType) : order.orderType != null) return false;
+        if (status != order.status) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (orderType != null ? orderType.hashCode() : 0);
+        result = 31 * result + (notes != null ? notes.hashCode() : 0);
+        temp = totalPrice != +0.0d ? Double.doubleToLongBits(totalPrice) : 0L;
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
     }
 }

@@ -7,6 +7,16 @@ import javax.persistence.*;
  * Author: kkwang
  * Date: 3/10/12 11:18 PM
  */
+@NamedQueries({
+    @NamedQuery(
+            name = "findTableByName",
+            query = "from Table p where p.name = :aName"
+    ),
+    @NamedQuery(
+            name = "listTablesByNameAsc",
+            query = "from Table p order by p.name asc"
+    )
+})
 @Entity
 @Table(name = "RESTAURANT_TABLE")
 public class RestaurantTable extends AbstractDomainObject {
