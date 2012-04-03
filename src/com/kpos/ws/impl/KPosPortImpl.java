@@ -484,7 +484,12 @@ public class KPosPortImpl implements KPosPortType {
     public DeleteCategoryOptionResponseType deleteCategoryOption(
             @WebParam(partName = "parameters", name = "DeleteCategoryOptionType", targetNamespace = NS) DeleteCategoryOptionType parameters) {
         DeleteCategoryOptionResponseType responseType = new DeleteCategoryOptionResponseType();
-
+        try {
+            DeleteResult result = contentManagementService.deleteCategoryOption(parameters.getId());
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
         return responseType;
     }
 
@@ -492,7 +497,12 @@ public class KPosPortImpl implements KPosPortType {
     public CreateCategoryOptionResponseType createCategoryOption(
             @WebParam(partName = "parameters", name = "CreateCategoryOptionType", targetNamespace = NS) CreateCategoryOptionType parameters) {
         CreateCategoryOptionResponseType responseType = new CreateCategoryOptionResponseType();
-
+        try {
+            CreateResult<CategoryOption> result = contentManagementService.createCategoryOption(parameters.getCategoryOption());
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
         return responseType;
     }
 
@@ -500,7 +510,12 @@ public class KPosPortImpl implements KPosPortType {
     public UpdateCategoryOptionResponseType updateCategoryOption(
             @WebParam(partName = "parameters", name = "UpdateCategoryOptionType", targetNamespace = NS) UpdateCategoryOptionType parameters) {
         UpdateCategoryOptionResponseType responseType = new UpdateCategoryOptionResponseType();
-
+        try {
+            UpdateResult<CategoryOption> result = contentManagementService.updateCategoryOption(parameters.getCategoryOption());
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
         return responseType;
     }
 

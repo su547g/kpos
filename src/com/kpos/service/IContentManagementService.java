@@ -52,4 +52,10 @@ public interface IContentManagementService {
     UpdateResult<RestaurantTable> updateRestaurantTable(TableType soapType);
 
     DeleteResult deleteTable(long aId);
+
+    DeleteResult deleteCategoryOption(long aId);
+
+    CreateResult<CategoryOption> createCategoryOption(CategoryOptionType soapType);
+
+    UpdateResult<CategoryOption> updateCategoryOption(CategoryOptionType soapType);
 }
