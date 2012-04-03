@@ -479,4 +479,36 @@ public class KPosPortImpl implements KPosPortType {
             @WebParam(partName = "parameters", name = "FetchTableType", targetNamespace = NS) FetchTableType parameters) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
+
+    @Override
+    public DeleteCategoryOptionResponseType deleteCategoryOption(
+            @WebParam(partName = "parameters", name = "DeleteCategoryOptionType", targetNamespace = NS) DeleteCategoryOptionType parameters) {
+        DeleteCategoryOptionResponseType responseType = new DeleteCategoryOptionResponseType();
+
+        return responseType;
+    }
+
+    @Override
+    public CreateCategoryOptionResponseType createCategoryOption(
+            @WebParam(partName = "parameters", name = "CreateCategoryOptionType", targetNamespace = NS) CreateCategoryOptionType parameters) {
+        CreateCategoryOptionResponseType responseType = new CreateCategoryOptionResponseType();
+
+        return responseType;
+    }
+
+    @Override
+    public UpdateCategoryOptionResponseType updateCategoryOption(
+            @WebParam(partName = "parameters", name = "UpdateCategoryOptionType", targetNamespace = NS) UpdateCategoryOptionType parameters) {
+        UpdateCategoryOptionResponseType responseType = new UpdateCategoryOptionResponseType();
+
+        return responseType;
+    }
+
+    @Override
+    public ListCategoryOptionResponseType listCategoryOption(
+            @WebParam(partName = "parameters", name = "ListCategoryOptionType", targetNamespace = NS) ListCategoryOptionType parameters) {
+        ListCategoryOptionResponseType responseType = new ListCategoryOptionResponseType();
+
+        return responseType;
+    }
 }

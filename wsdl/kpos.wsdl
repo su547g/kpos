@@ -34,6 +34,15 @@
             <xs:element name="ListCategoryType" type="tns:ListCategoryType"/>
             <xs:element name="ListCategoryResponseType" type="tns:ListCategoryResponseType"/>
 
+            <xs:element name="CreateCategoryOptionType" type="tns:CreateCategoryOptionType"/>
+            <xs:element name="CreateCategoryOptionResponseType" type="tns:CreateCategoryOptionResponseType"/>
+            <xs:element name="UpdateCategoryOptionType" type="tns:UpdateCategoryOptionType"/>
+            <xs:element name="UpdateCategoryOptionResponseType" type="tns:UpdateCategoryOptionResponseType"/>
+            <xs:element name="DeleteCategoryOptionType" type="tns:DeleteCategoryOptionType"/>
+            <xs:element name="DeleteCategoryOptionResponseType" type="tns:DeleteCategoryOptionResponseType"/>
+            <xs:element name="ListCategoryOptionType" type="tns:ListCategoryOptionType"/>
+            <xs:element name="ListCategoryOptionResponseType" type="tns:ListCategoryOptionResponseType"/>
+
             <xs:element name="CreateSaleItemType" type="tns:CreateSaleItemType"/>
             <xs:element name="CreateSaleItemResponseType" type="tns:CreateSaleItemResponseType"/>
 
@@ -95,6 +104,15 @@
                     <xs:element name="isAllowedHappyHour" type="xsd:boolean" minOccurs="0" maxOccurs="1" default="false"/>
                     <xs:element name="happyHourRate" type="xsd:double" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="thumbPath" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="CategoryOptionType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="description" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="price" type="xsd:double" maxOccurs="1"/>
+                    <xs:element name="categoryId" type="xsd:long" minOccurs="1" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
 
@@ -232,6 +250,48 @@
                     <xs:element name="Result" type="tns:ResultType"/>
                     <xs:element name="total" type="xs:int" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="categories" type="tns:CategoryType" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="CreateCategoryOptionType">
+                <xs:sequence>
+                    <xs:element name="categoryOption" type="tns:CategoryOptionType" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="CreateCategoryOptionResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="UpdateCategoryOptionType">
+                <xs:sequence>
+                    <xs:element name="categoryOption" type="tns:CategoryOptionType" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="UpdateCategoryOptionResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeleteCategoryOptionType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeleteCategoryOptionResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListCategoryOptionType">
+                <xs:sequence>
+                    <xs:element name="categoryId" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListCategoryOptionResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="options" type="tns:CategoryOptionType" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:complexType>
 
@@ -431,6 +491,31 @@
         <wsdl:part name="parameters" element="tns:ListCategoryResponseType"/>
     </wsdl:message>
 
+    <wsdl:message name="CreateCategoryOptionMessage">
+        <wsdl:part name="parameters" element="tns:CreateCategoryOptionType"/>
+    </wsdl:message>
+    <wsdl:message name="CreateCategoryOptionResponseMessage">
+        <wsdl:part name="parameters" element="tns:CreateCategoryOptionResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="UpdateCategoryOptionMessage">
+        <wsdl:part name="parameters" element="tns:UpdateCategoryOptionType"/>
+    </wsdl:message>
+    <wsdl:message name="UpdateCategoryOptionResponseMessage">
+        <wsdl:part name="parameters" element="tns:UpdateCategoryOptionResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="DeleteCategoryOptionMessage">
+        <wsdl:part name="parameters" element="tns:DeleteCategoryOptionType"/>
+    </wsdl:message>
+    <wsdl:message name="DeleteCategoryOptionResponseMessage">
+        <wsdl:part name="parameters" element="tns:DeleteCategoryOptionResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="ListCategoryOptionMessage">
+        <wsdl:part name="parameters" element="tns:ListCategoryOptionType"/>
+    </wsdl:message>
+    <wsdl:message name="ListCategoryOptionResponseMessage">
+        <wsdl:part name="parameters" element="tns:ListCategoryOptionResponseType"/>
+    </wsdl:message>
+
     <wsdl:message name="ListSaleItemsForCategoryMessage">
         <wsdl:part name="parameters" element="tns:ListSaleItemsForCategoryType"/>
     </wsdl:message>
@@ -552,6 +637,23 @@
         <wsdl:operation name="ListCategory">
             <wsdl:input message="tns:ListCategoryMessage" name="ListCategory"/>
             <wsdl:output message="tns:ListCategoryResponseMessage" name="ListCategoryResponse"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="CreateCategoryOption">
+            <wsdl:input message="tns:CreateCategoryOptionMessage" name="CreateCategoryOption"/>
+            <wsdl:output message="tns:CreateCategoryOptionResponseMessage" name="CreateCategoryOptionResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="UpdateCategoryOption">
+            <wsdl:input message="tns:UpdateCategoryOptionMessage" name="UpdateCategoryOption"/>
+            <wsdl:output message="tns:UpdateCategoryOptionResponseMessage" name="UpdateCategoryOptionResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="DeleteCategoryOption">
+            <wsdl:input message="tns:DeleteCategoryOptionMessage" name="DeleteCategoryOption"/>
+            <wsdl:output message="tns:DeleteCategoryOptionResponseMessage" name="DeleteCategoryOptionResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="ListCategoryOption">
+            <wsdl:input message="tns:ListCategoryOptionMessage" name="ListCategoryOption"/>
+            <wsdl:output message="tns:ListCategoryOptionResponseMessage" name="ListCategoryOptionResponse"/>
         </wsdl:operation>
 
         <wsdl:operation name="ListSaleItemsForCategory">
@@ -691,6 +793,16 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="ListCategoryResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="CreateCategoryOption">
+            <soap:operation soapAction="http://ws.kpos.com/CreateCategoryOption" style="document"/>
+            <wsdl:input name="CreateCategoryOption">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="CreateCategoryOptionResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
