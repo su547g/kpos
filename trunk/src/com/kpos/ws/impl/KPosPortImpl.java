@@ -523,7 +523,63 @@ public class KPosPortImpl implements KPosPortType {
     public ListCategoryOptionResponseType listCategoryOption(
             @WebParam(partName = "parameters", name = "ListCategoryOptionType", targetNamespace = NS) ListCategoryOptionType parameters) {
         ListCategoryOptionResponseType responseType = new ListCategoryOptionResponseType();
+        try {
+            FetchResult<MenuCategory> fetchResult = contentManagementService.fetchCategory(parameters.getCategoryId());
 
+            MenuCategory category = fetchResult.getTarget();
+            if(category != null) {
+                List<CategoryOption> options = category.getOptions();
+                for(CategoryOption option : options) {
+                    CategoryOptionType soapType = new CategoryOptionType();
+                    soapType.setCategoryId(parameters.getCategoryId());
+                    soapType.setDescription(option.getDescription());
+                    soapType.setId(option.getId());
+                    soapType.setName(option.getName());
+                    soapType.setPrice(option.getPrice());
+                    responseType.getOptions().add(soapType);
+                }
+                FetchResult<List<CategoryOption>> result = new FetchResult<List<CategoryOption>>();
+                result.setTarget(options);
+                result.setSuccessful(true);
+                responseType.setResult(getSoapResult(result));
+            } else {
+                responseType.setResult(getSoapFaultResult(new Exception("Category ["+parameters.getCategoryId()+"] doesn't exist")));
+            }
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
         return responseType;
+    }
+
+    @Override
+    public UpdateGlobalOptionResponseType updateGlobalOption(
+            @WebParam(partName = "parameters", name = "UpdateGlobalOptionType", targetNamespace = NS) UpdateGlobalOptionType parameters) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public DeleteGlobalOptionResponseType deleteGlobalOption(
+            @WebParam(partName = "parameters", name = "DeleteGlobalOptionType", targetNamespace = NS) DeleteGlobalOptionType parameters) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public CreateGlobalOptionResponseType createGlobalOption(
+            @WebParam(partName = "parameters", name = "CreateGlobalOptionType", targetNamespace = NS) CreateGlobalOptionType parameters) {
+        CreateGlobalOptionResponseType responseType = new CreateGlobalOptionResponseType();
+        try {
+            CreateResult<GlobalOption> result = contentManagementService.createGlobalOption(parameters.getGlobalOption());
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
+        
+        return responseType;
+    }
+
+    @Override
+    public ListGlobalOptionResponseType listGlobalOption(
+            @WebParam(partName = "parameters", name = "ListGlobalOptionType", targetNamespace = NS) ListGlobalOptionType parameters) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

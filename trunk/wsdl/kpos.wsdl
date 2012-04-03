@@ -75,6 +75,16 @@
             <xs:element name="DeletePrinterResponseType" type="tns:DeletePrinterResponseType"/>
             <xs:element name="ListPrintersType" type="tns:ListPrintersType"/>
             <xs:element name="ListPrintersResponseType" type="tns:ListPrintersResponseType"/>
+
+            <xs:element name="CreateGlobalOptionType" type="tns:CreateGlobalOptionType"/>
+            <xs:element name="CreateGlobalOptionResponseType" type="tns:CreateGlobalOptionResponseType"/>
+            <xs:element name="UpdateGlobalOptionType" type="tns:UpdateGlobalOptionType"/>
+            <xs:element name="UpdateGlobalOptionResponseType" type="tns:UpdateGlobalOptionResponseType"/>
+            <xs:element name="DeleteGlobalOptionType" type="tns:DeleteGlobalOptionType"/>
+            <xs:element name="DeleteGlobalOptionResponseType" type="tns:DeleteGlobalOptionResponseType"/>
+            <xs:element name="ListGlobalOptionType" type="tns:ListGlobalOptionType"/>
+            <xs:element name="ListGlobalOptionResponseType" type="tns:ListGlobalOptionResponseType"/>
+
             <!--Result object-->
             <xs:complexType name="ResultType">
                 <xs:sequence>
@@ -152,6 +162,15 @@
                     <xs:element name="isRequired" type="xsd:boolean" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="description" type="xsd:string" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="thumbPath" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="GlobalOptionType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="price" type="xsd:double" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="outPrice" type="xsd:double" minOccurs="0" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
             <!--End of data structures-->
@@ -433,6 +452,47 @@
                     <xs:element name="printers" type="tns:PrinterType" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:complexType>
+
+            <xs:complexType name="CreateGlobalOptionType">
+                <xs:sequence>
+                    <xs:element name="globalOption" type="tns:GlobalOptionType" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="CreateGlobalOptionResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="UpdateGlobalOptionType">
+                <xs:sequence>
+                    <xs:element name="globalOption" type="tns:GlobalOptionType" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="UpdateGlobalOptionResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeleteGlobalOptionType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeleteGlobalOptionResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListGlobalOptionType">
+                <xs:sequence>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListGlobalOptionResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="options" type="tns:GlobalOptionType" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:complexType>
             <!--End of operations-->
         </xs:schema>
     </wsdl:types>
@@ -596,6 +656,31 @@
     <wsdl:message name="ListPrintersResponseMessage">
         <wsdl:part name="parameters" element="tns:ListPrintersResponseType"/>
     </wsdl:message>
+
+    <wsdl:message name="CreateGlobalOptionMessage">
+        <wsdl:part name="parameters" element="tns:CreateGlobalOptionType"/>
+    </wsdl:message>
+    <wsdl:message name="CreateGlobalOptionResponseMessage">
+        <wsdl:part name="parameters" element="tns:CreateGlobalOptionResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="UpdateGlobalOptionMessage">
+        <wsdl:part name="parameters" element="tns:UpdateGlobalOptionType"/>
+    </wsdl:message>
+    <wsdl:message name="UpdateGlobalOptionResponseMessage">
+        <wsdl:part name="parameters" element="tns:UpdateGlobalOptionResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="DeleteGlobalOptionMessage">
+        <wsdl:part name="parameters" element="tns:DeleteGlobalOptionType"/>
+    </wsdl:message>
+    <wsdl:message name="DeleteGlobalOptionResponseMessage">
+        <wsdl:part name="parameters" element="tns:DeleteGlobalOptionResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="ListGlobalOptionMessage">
+        <wsdl:part name="parameters" element="tns:ListGlobalOptionType"/>
+    </wsdl:message>
+    <wsdl:message name="ListGlobalOptionResponseMessage">
+        <wsdl:part name="parameters" element="tns:ListGlobalOptionResponseType"/>
+    </wsdl:message>
     <!--End of messages-->
 
     <wsdl:portType name="KPosPortType">
@@ -711,6 +796,23 @@
         <wsdl:operation name="ListPrinters">
             <wsdl:input message="tns:ListPrintersMessage" name="ListPrinters"/>
             <wsdl:output message="tns:ListPrintersResponseMessage" name="ListPrintersResponse"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="CreateGlobalOption">
+            <wsdl:input message="tns:CreateGlobalOptionMessage" name="CreateGlobalOption"/>
+            <wsdl:output message="tns:CreateGlobalOptionResponseMessage" name="CreateGlobalOptionResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="UpdateGlobalOption">
+            <wsdl:input message="tns:UpdateGlobalOptionMessage" name="UpdateGlobalOption"/>
+            <wsdl:output message="tns:UpdateGlobalOptionResponseMessage" name="UpdateGlobalOptionResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="DeleteGlobalOption">
+            <wsdl:input message="tns:DeleteGlobalOptionMessage" name="DeleteGlobalOption"/>
+            <wsdl:output message="tns:DeleteGlobalOptionResponseMessage" name="DeleteGlobalOptionResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="ListGlobalOption">
+            <wsdl:input message="tns:ListGlobalOptionMessage" name="ListGlobalOption"/>
+            <wsdl:output message="tns:ListGlobalOptionResponseMessage" name="ListGlobalOptionResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -950,6 +1052,43 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="ListPrintersResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="CreateGlobalOption">
+            <soap:operation soapAction="http://ws.kpos.com/CreateGlobalOption" style="document"/>
+            <wsdl:input name="CreateGlobalOption">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="CreateGlobalOptionResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="UpdateGlobalOption">
+            <soap:operation soapAction="http://ws.kpos.com/UpdateGlobalOption" style="document"/>
+            <wsdl:input name="UpdateGlobalOption">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="UpdateGlobalOptionResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="DeleteGlobalOption">
+            <soap:operation soapAction="http://ws.kpos.com/DeleteGlobalOption" style="document"/>
+            <wsdl:input name="DeleteGlobalOption">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DeleteGlobalOptionResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="ListGlobalOption">
+            <soap:operation soapAction="http://ws.kpos.com/ListGlobalOption" style="document"/>
+            <wsdl:input name="ListGlobalOption">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="ListGlobalOptionResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
