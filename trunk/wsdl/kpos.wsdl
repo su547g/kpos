@@ -806,6 +806,33 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="UpdateCategoryOption">
+            <soap:operation soapAction="http://ws.kpos.com/UpdateCategoryOption" style="document"/>
+            <wsdl:input name="UpdateCategoryOption">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="UpdateCategoryOptionResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="DeleteCategoryOption">
+            <soap:operation soapAction="http://ws.kpos.com/DeleteCategoryOption" style="document"/>
+            <wsdl:input name="DeleteCategoryOption">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DeleteCategoryOptionResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="ListCategoryOption">
+            <soap:operation soapAction="http://ws.kpos.com/ListCategoryOption" style="document"/>
+            <wsdl:input name="ListCategoryOption">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="ListCategoryOptionResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
 
         <wsdl:operation name="CreateSaleItem">
             <soap:operation soapAction="http://ws.kpos.com/CreateSaleItem" style="document"/>

@@ -27,6 +27,9 @@ public class ContentManagementServiceImpl implements IContentManagementService {
 
     @Autowired
     private ICategoryDao categoryDao;
+    
+    @Autowired
+    private ICategoryOptionDao categoryOptionDao;
 
     @Autowired
     private ISaleItemDao saleItemDao;
@@ -439,4 +442,56 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         return result;
     }
 
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public DeleteResult deleteCategoryOption(long aId) {
+        DeleteResult result = new DeleteResult();
+        if(null == categoryOptionDao.findById(aId)) {
+            result.setSuccessful(false);
+            result.setException(new Exception("Category Option [" + aId + "] doesn't exist!"));
+        } else {
+            categoryOptionDao.delete(aId);
+            result.setSuccessful(true);
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public CreateResult<CategoryOption> createCategoryOption(CategoryOptionType soapType) {
+        CreateResult<CategoryOption> result = new CreateResult<CategoryOption>();
+        MenuCategory category = categoryDao.findCategory(soapType.getCategoryId());
+        if(null != category) {
+            CategoryOption option = new CategoryOption();
+            option.setCategory(category);
+            option.setDescription(soapType.getDescription());
+            option.setName(soapType.getName());
+            option.setPrice(soapType.getPrice());
+            option.setCreatedOn(new Date());
+            option.setLastUpdated(new Date());
+        } else {
+            result.setSuccessful(false);
+            result.setException(new Exception("Category [" + soapType.getCategoryId()+"] doesn't exist!"));
+        }
+        return result;
+    }
+
+    public UpdateResult<CategoryOption> updateCategoryOption(CategoryOptionType soapType) {
+        UpdateResult<CategoryOption> result = new UpdateResult<CategoryOption>();
+        MenuCategory category = categoryDao.findCategory(soapType.getCategoryId());
+        if(null != category) {
+            CategoryOption option = categoryOptionDao.findById(soapType.getId());
+            if(option != null) {
+                option.setCategory(category);
+                option.setDescription(soapType.getDescription());
+                option.setName(soapType.getName());
+                option.setPrice(soapType.getPrice());
+                option.setLastUpdated(new Date());
+            }
+        } else {
+            result.setSuccessful(false);
+            result.setException(new Exception("Category [" + soapType.getCategoryId()+"] doesn't exist!"));
+        }
+        return result;
+    }
 }
