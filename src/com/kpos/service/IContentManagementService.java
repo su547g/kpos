@@ -58,4 +58,6 @@ public interface IContentManagementService {
     CreateResult<CategoryOption> createCategoryOption(CategoryOptionType soapType);
 
     UpdateResult<CategoryOption> updateCategoryOption(CategoryOptionType soapType);
+
+    CreateResult<GlobalOption> createGlobalOption(GlobalOptionType soapType);
 }

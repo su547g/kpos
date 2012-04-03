@@ -12,6 +12,12 @@ import javax.persistence.*;
  * Author: kkwang
  * Date: 3/10/12 9:49 PM
  */
+@NamedQueries({
+    @NamedQuery(
+        name = "findGlobalOptionByName",
+        query = "from GlobalOption c where c.name = :aName"
+    )
+})
 @Entity
 @Table(name = "GLOBAL_OPTION")
 public class GlobalOption extends AbstractDomainObject {

@@ -43,6 +43,9 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     @Autowired
     private ITableDao tableDao;
 
+    @Autowired
+    private IGlobalOptionDao globalOptionDao;
+    
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public CreateResult<MenuCategory> createMenuCategory(MenuCategory aCategory) {
         try {
@@ -476,6 +479,8 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         return result;
     }
 
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public UpdateResult<CategoryOption> updateCategoryOption(CategoryOptionType soapType) {
         UpdateResult<CategoryOption> result = new UpdateResult<CategoryOption>();
         MenuCategory category = categoryDao.findCategory(soapType.getCategoryId());
@@ -491,6 +496,32 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         } else {
             result.setSuccessful(false);
             result.setException(new Exception("Category [" + soapType.getCategoryId()+"] doesn't exist!"));
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public CreateResult<GlobalOption> createGlobalOption(GlobalOptionType soapType) {
+        CreateResult<GlobalOption> result = new CreateResult<GlobalOption>();
+        if(soapType.getName() == null || soapType.getName().isEmpty()) {
+            result.setSuccessful(false);
+            result.setException(new Exception("Option name can't be empty!"));
+        } else {
+            GlobalOption option = globalOptionDao.findByName(soapType.getName());
+            if(option != null) {
+                result.setSuccessful(false);
+                result.setException(new Exception("Option with name [" + soapType.getName()+"] already exists!"));
+            } else {
+                option = new GlobalOption();
+                option.setDineInPrice(soapType.getPrice());
+                option.setName(soapType.getName());
+                option.setTakeOutPrice(soapType.getOutPrice());
+                option.setTaxable(false);
+                globalOptionDao.insert(option);
+                result.setSuccessful(true);
+                result.setCreated(option);
+            }
         }
         return result;
     }
