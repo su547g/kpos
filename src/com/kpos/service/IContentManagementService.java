@@ -60,4 +60,10 @@ public interface IContentManagementService {
     UpdateResult<CategoryOption> updateCategoryOption(CategoryOptionType soapType);
 
     CreateResult<GlobalOption> createGlobalOption(GlobalOptionType soapType);
+
+    UpdateResult<GlobalOption> updateGlobalOption(GlobalOptionType soapType);
+
+    DeleteResult deleteGlobalOption(long aId);
+
+    FetchResult<List<GlobalOption>> listGlobalOptions();
 }

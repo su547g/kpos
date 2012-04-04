@@ -518,11 +518,63 @@ public class ContentManagementServiceImpl implements IContentManagementService {
                 option.setName(soapType.getName());
                 option.setTakeOutPrice(soapType.getOutPrice());
                 option.setTaxable(false);
+                option.setCreatedOn(new Date());
+                option.setLastUpdated(new Date());
                 globalOptionDao.insert(option);
                 result.setSuccessful(true);
                 result.setCreated(option);
             }
         }
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public UpdateResult<GlobalOption> updateGlobalOption(GlobalOptionType soapType) {
+        UpdateResult<GlobalOption> result = new UpdateResult<GlobalOption>();
+        if(soapType.getId() != null) {
+            GlobalOption option = globalOptionDao.findById(soapType.getId());
+            if(option != null) {
+                option.setDineInPrice(soapType.getPrice());
+                option.setName(soapType.getName());
+                option.setTakeOutPrice(soapType.getOutPrice());
+                option.setTaxable(false);
+                option.setLastUpdated(new Date());
+                result.setSuccessful(true);
+                result.setManagedObject(option);
+            } else {
+                result.setSuccessful(false);
+                result.setException(new Exception("Global Option [" + soapType.getId() + "] doesn't exist!"));
+            }
+        } else {
+            result.setSuccessful(false);
+            result.setException(new Exception("ID can't be null!"));
+        }
+
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public DeleteResult deleteGlobalOption(long aId) {
+        DeleteResult result = new DeleteResult();
+        if(null != globalOptionDao.findById(aId)) {
+            globalOptionDao.delete(aId);
+            result.setSuccessful(true);
+            result.setId(aId);
+        } else {
+            result.setSuccessful(false);
+            result.setException(new Exception("Global option [" + aId + "] doesn't exist!"));
+        }
+        return result;
+    }
+
+    @Override
+    public FetchResult<List<GlobalOption>> listGlobalOptions() {
+        FetchResult<List<GlobalOption>> result = new FetchResult<List<GlobalOption>>();
+        List<GlobalOption> options = globalOptionDao.findAll();
+        result.setTarget(options);
+        result.setSuccessful(true);
         return result;
     }
 }

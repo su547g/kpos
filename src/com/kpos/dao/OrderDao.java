@@ -1,17 +1,18 @@
 package com.kpos.dao;
 
-import com.kpos.domain.CategoryOption;
+import com.kpos.domain.Order;
 import org.springframework.stereotype.Repository;
 
 /**
  * Created by IntelliJ IDEA.
  * User: kkwang
- * Date: 4/2/12
+ * Date: 4/3/12
+ * Time: 8:20 PM
  */
 @Repository
-public class CategoryOptionDao extends AbstractJpaDao<CategoryOption> implements ICategoryOptionDao {
+public class OrderDao extends AbstractJpaDao<Order> implements IOrderDao {
     @Override
     protected Class getEntityClass() {
-        return CategoryOption.class;
+        return Order.class;
     }
 }
