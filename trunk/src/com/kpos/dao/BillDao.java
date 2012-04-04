@@ -1,17 +1,18 @@
 package com.kpos.dao;
 
-import com.kpos.domain.CategoryOption;
+import com.kpos.domain.Bill;
 import org.springframework.stereotype.Repository;
 
 /**
  * Created by IntelliJ IDEA.
  * User: kkwang
- * Date: 4/2/12
+ * Date: 4/3/12
+ * Time: 8:22 PM
  */
 @Repository
-public class CategoryOptionDao extends AbstractJpaDao<CategoryOption> implements ICategoryOptionDao {
+public class BillDao extends AbstractJpaDao<Bill> implements IBillDao {
     @Override
     protected Class getEntityClass() {
-        return CategoryOption.class;
+        return Bill.class;
     }
 }

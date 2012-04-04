@@ -554,13 +554,28 @@ public class KPosPortImpl implements KPosPortType {
     @Override
     public UpdateGlobalOptionResponseType updateGlobalOption(
             @WebParam(partName = "parameters", name = "UpdateGlobalOptionType", targetNamespace = NS) UpdateGlobalOptionType parameters) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        UpdateGlobalOptionResponseType responseType = new UpdateGlobalOptionResponseType();
+        try {
+            UpdateResult<GlobalOption> result = contentManagementService.updateGlobalOption(parameters.getGlobalOption());
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
+        return responseType;
     }
 
     @Override
     public DeleteGlobalOptionResponseType deleteGlobalOption(
             @WebParam(partName = "parameters", name = "DeleteGlobalOptionType", targetNamespace = NS) DeleteGlobalOptionType parameters) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        DeleteGlobalOptionResponseType responseType = new DeleteGlobalOptionResponseType();
+        try {
+          DeleteResult result = contentManagementService.deleteGlobalOption(parameters.getId());
+          responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
+
+        return responseType;
     }
 
     @Override
@@ -580,6 +595,13 @@ public class KPosPortImpl implements KPosPortType {
     @Override
     public ListGlobalOptionResponseType listGlobalOption(
             @WebParam(partName = "parameters", name = "ListGlobalOptionType", targetNamespace = NS) ListGlobalOptionType parameters) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        ListGlobalOptionResponseType responseType = new ListGlobalOptionResponseType();
+        try {
+            FetchResult<List<GlobalOption>> result = contentManagementService.listGlobalOptions();
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
+        return responseType;
     }
 }
