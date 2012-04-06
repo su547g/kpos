@@ -178,7 +178,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         if(category != null) {
             SaleItem saleItem = new SaleItem();
             convertSoapItemToSaleItem(saleItem, aSaleItemType);
-            saleItem.setCategory(category);
+            saleItem.setMenuCategory(category);
             saleItem.setCreatedOn(new Date());
             saleItemDao.insertSaleItem(saleItem);
             result.setCreated(saleItem);
@@ -198,7 +198,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             convertSoapItemToSaleItem(saleItem, aSaleItemType);
             MenuCategory newCategory = categoryDao.findCategory(aSaleItemType.getCatId());
             if(newCategory != null) {
-                saleItem.setCategory(newCategory);
+                saleItem.setMenuCategory(newCategory);
             } else {
                 log.debug("Failed to find category with id [" + aSaleItemType.getCatId() + "]");
             }
@@ -466,7 +466,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         MenuCategory category = categoryDao.findCategory(soapType.getCategoryId());
         if(null != category) {
             CategoryOption option = new CategoryOption();
-            option.setCategory(category);
+            option.setMenuCategory(category);
             option.setDescription(soapType.getDescription());
             option.setName(soapType.getName());
             option.setPrice(soapType.getPrice());
@@ -487,7 +487,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         if(null != category) {
             CategoryOption option = categoryOptionDao.findById(soapType.getId());
             if(option != null) {
-                option.setCategory(category);
+                option.setMenuCategory(category);
                 option.setDescription(soapType.getDescription());
                 option.setName(soapType.getName());
                 option.setPrice(soapType.getPrice());

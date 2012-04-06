@@ -20,11 +20,11 @@ import java.util.Set;
 @NamedQueries({
         @NamedQuery(
                 name = "findBySaleItemName",
-                query = "from SaleItem s where s.category.id = :aCatId and s.name = :aName"
+                query = "from SaleItem s where s.menuCategory.id = :aCatId and s.name = :aName"
         ),
         @NamedQuery(
                 name = "listSaleItemsByCatNameAsc",
-                query = "from SaleItem s where s.category.id = :aCatId order by s.name asc"
+                query = "from SaleItem s where s.menuCategory.id = :aCatId order by s.name asc"
         )
 })
 @Entity
@@ -38,7 +38,7 @@ public class SaleItem extends AbstractDomainObject {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "normal_price", nullable = false)
+    @Column(name = "price", nullable = false)
     private double price;
 
     @Column(name = "is_allowed_hh", nullable = false)
@@ -54,7 +54,7 @@ public class SaleItem extends AbstractDomainObject {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private MenuCategory category;
+    private MenuCategory menuCategory;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "saleItem", orphanRemoval = true, fetch = FetchType.LAZY)
     @ForeignKey(name = "OPTION_2_ITEM_FK")
@@ -81,11 +81,6 @@ public class SaleItem extends AbstractDomainObject {
     )
     @ForeignKey(name = "ITEM_2_PRINTER_FK", inverseName = "PRINTER_2_ITEM_FK")
     private Set<Printer> printers = new HashSet<Printer>();
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "combo_section_id")
-    @OnDelete(action = OnDeleteAction.NO_ACTION)
-    private ComboMenuSection comboSection;
 
     public Long getId() {
         return id;
@@ -135,12 +130,12 @@ public class SaleItem extends AbstractDomainObject {
         this.hh_price = hh_price;
     }
 
-    public MenuCategory getCategory() {
-        return category;
+    public MenuCategory getMenuCategory() {
+        return menuCategory;
     }
 
-    public void setCategory(MenuCategory category) {
-        this.category = category;
+    public void setMenuCategory(MenuCategory category) {
+        this.menuCategory = category;
     }
 
     public List<SaleItemOption> getOptionList() {
@@ -202,7 +197,7 @@ public class SaleItem extends AbstractDomainObject {
         if (Double.compare(saleItem.hh_price, hh_price) != 0) return false;
         if (isAllowedHH != saleItem.isAllowedHH) return false;
         if (Double.compare(saleItem.price, price) != 0) return false;
-        if (category != null ? !category.equals(saleItem.category) : saleItem.category != null) return false;
+        if (menuCategory != null ? !menuCategory.equals(saleItem.menuCategory) : saleItem.menuCategory != null) return false;
         if (id != null ? !id.equals(saleItem.id) : saleItem.id != null) return false;
         if (name != null ? !name.equals(saleItem.name) : saleItem.name != null) return false;
         if (description != null ? !description.equals(saleItem.description) : saleItem.description != null) return false;
@@ -225,7 +220,7 @@ public class SaleItem extends AbstractDomainObject {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = hh_price != +0.0d ? Double.doubleToLongBits(hh_price) : 0L;
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (category != null ? category.hashCode() : 0);
+        result = 31 * result + (menuCategory != null ? menuCategory.hashCode() : 0);
         return result;
     }
 }
