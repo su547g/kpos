@@ -1,5 +1,6 @@
 package com.kpos.domain;
 
+import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -21,24 +22,26 @@ public class OrderItem extends AbstractDomainObject {
     private Long id;
 
     //owning entity
+    /*
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "sale_item_id")
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private SaleItem saleItem;
-
+    */
     @Column(name = "quantity")
     private float quantity;
 
     //owning entity
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
+    @ForeignKey(name = "ITEM_2_ORDER_FK")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Order order;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    /*@ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "bill_id")
     @OnDelete(action = OnDeleteAction.NO_ACTION)
-    private Bill bill;
+    private Bill bill;   */
     
     @Column(name = "notes")
     private String notes;
@@ -57,6 +60,7 @@ public class OrderItem extends AbstractDomainObject {
         this.id = id;
     }
 
+    /*
     public SaleItem getSaleItem() {
         return saleItem;
     }
@@ -64,7 +68,7 @@ public class OrderItem extends AbstractDomainObject {
     public void setSaleItem(SaleItem saleItem) {
         this.saleItem = saleItem;
     }
-
+    */
     public float getQuantity() {
         return quantity;
     }
@@ -104,14 +108,14 @@ public class OrderItem extends AbstractDomainObject {
     public void setOverrideName(String overrideName) {
         this.overrideName = overrideName;
     }
-
+    /*
     public Bill getBill() {
         return bill;
     }
 
     public void setBill(Bill bill) {
         this.bill = bill;
-    }
+    }*/
 
     @Override
     public boolean equals(Object o) {
@@ -122,7 +126,7 @@ public class OrderItem extends AbstractDomainObject {
 
         if (Float.compare(orderItem.quantity, quantity) != 0) return false;
         if (id != null ? !id.equals(orderItem.id) : orderItem.id != null) return false;
-        if (saleItem != null ? !saleItem.equals(orderItem.saleItem) : orderItem.saleItem != null) return false;
+        //if (saleItem != null ? !saleItem.equals(orderItem.saleItem) : orderItem.saleItem != null) return false;
         if (notes != null ? !notes.equals(orderItem.notes) : orderItem.notes != null) return false;
         if (overrideName != null ? !overrideName.equals(orderItem.overrideName) : orderItem.overrideName != null) return false;
         return true;
@@ -131,7 +135,7 @@ public class OrderItem extends AbstractDomainObject {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (saleItem != null ? saleItem.hashCode() : 0);
+        //result = 31 * result + (saleItem != null ? saleItem.hashCode() : 0);
         result = 31 * result + (quantity != +0.0f ? Float.floatToIntBits(quantity) : 0);
         result = 31 * result + (notes != null ? notes.hashCode() : 0);
         result = 31 * result + (overrideName != null ? overrideName.hashCode() : 0);

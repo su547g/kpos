@@ -17,7 +17,7 @@ import java.util.List;
  * Date: 3/9/12 11:53 PM
  */
 @Entity
-@Table(name = "ORDER")
+@Table(name = "ORDER_BILL")
 public class Order extends AbstractDomainObject {
     public static enum OrderType {
         IN, OUT, DELIVERY, PICKUP;
@@ -36,10 +36,10 @@ public class Order extends AbstractDomainObject {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<OrderItem> orderItems = new ArrayList<OrderItem>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order", orphanRemoval = true, fetch = FetchType.LAZY)
+    /*@OneToOne(cascade = CascadeType.ALL, mappedBy = "order", orphanRemoval = true, fetch = FetchType.LAZY)
     @ForeignKey(name = "BILL_2_ORDER_FK")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Bill> billList = new ArrayList<Bill>();
+    private Bill bill;*/
 
     @Column(name = "status")
     @org.hibernate.annotations.Type(type = "com.kpos.domain.OrderStatusEnumAdaptor")
@@ -63,6 +63,11 @@ public class Order extends AbstractDomainObject {
     @OneToOne(cascade = CascadeType.REFRESH)
     @ForeignKey(name = "ORDER_2_CUSTOMER_FK")
     private CustomerInfo customerInfo;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bill", orphanRemoval = true, fetch = FetchType.LAZY)
+    @ForeignKey(name = "PAYMENT_2_BILL_FK")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<PaymentRecord> paymentRecords = new ArrayList<PaymentRecord>();
 
     public Long getId() {
         return id;
@@ -112,13 +117,13 @@ public class Order extends AbstractDomainObject {
         this.totalPrice = totalPrice;
     }
 
-    public List<Bill> getBillList() {
-        return billList;
+    /*public Bill getBill() {
+        return bill;
     }
 
-    public void setBillList(List<Bill> billList) {
-        this.billList = billList;
-    }
+    public void setBill(Bill bill) {
+        this.bill = bill;
+    }*/
 
     public RestaurantTable getTable() {
         return table;
@@ -134,6 +139,14 @@ public class Order extends AbstractDomainObject {
 
     public void setCustomerInfo(CustomerInfo customerInfo) {
         this.customerInfo = customerInfo;
+    }
+
+    public List<PaymentRecord> getPaymentRecords() {
+        return paymentRecords;
+    }
+
+    public void setPaymentRecords(List<PaymentRecord> paymentRecords) {
+        this.paymentRecords = paymentRecords;
     }
 
     @Override

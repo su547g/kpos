@@ -1,5 +1,6 @@
 package com.kpos.domain;
 
+import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -30,9 +31,10 @@ public class PaymentRecord extends AbstractDomainObject {
 
     //owning entity
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "bill_id")
+    @JoinColumn(name = "order_id")
+    @ForeignKey(name = "PAYMENT_2_ORDER_FK")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Bill bill;
+    private Order order;
 
     @Column(name = "payment_type")
     private String paymentType;
@@ -59,12 +61,12 @@ public class PaymentRecord extends AbstractDomainObject {
         this.amount = amount;
     }
 
-    public Bill getBill() {
-        return bill;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setBill(Bill bill) {
-        this.bill = bill;
+    public void setOrder(Order anOrder) {
+        this.order = anOrder;
     }
 
     public String getPaymentType() {
@@ -99,7 +101,7 @@ public class PaymentRecord extends AbstractDomainObject {
         PaymentRecord that = (PaymentRecord) o;
 
         if (Double.compare(that.amount, amount) != 0) return false;
-        if (bill != null ? !bill.equals(that.bill) : that.bill != null) return false;
+        if (order != null ? !order.equals(that.order) : that.order != null) return false;
         if (cardNumber != null ? !cardNumber.equals(that.cardNumber) : that.cardNumber != null) return false;
         if (cardType != null ? !cardType.equals(that.cardType) : that.cardType != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
@@ -115,7 +117,7 @@ public class PaymentRecord extends AbstractDomainObject {
         result = id != null ? id.hashCode() : 0;
         temp = amount != +0.0d ? Double.doubleToLongBits(amount) : 0L;
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (bill != null ? bill.hashCode() : 0);
+        result = 31 * result + (order != null ? order.hashCode() : 0);
         result = 31 * result + (paymentType != null ? paymentType.hashCode() : 0);
         result = 31 * result + (cardType != null ? cardType.hashCode() : 0);
         result = 31 * result + (cardNumber != null ? cardNumber.hashCode() : 0);
