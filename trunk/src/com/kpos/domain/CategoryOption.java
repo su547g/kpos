@@ -30,7 +30,7 @@ public class CategoryOption extends AbstractDomainObject {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private MenuCategory category;
+    private MenuCategory menuCategory;
 
     public Long getId() {
 
@@ -65,12 +65,12 @@ public class CategoryOption extends AbstractDomainObject {
         this.price = price;
     }
 
-    public MenuCategory getCategory() {
-        return category;
+    public MenuCategory getMenuCategory() {
+        return menuCategory;
     }
 
-    public void setCategory(MenuCategory category) {
-        this.category = category;
+    public void setMenuCategory(MenuCategory category) {
+        this.menuCategory = category;
     }
 
     @Override
@@ -81,7 +81,7 @@ public class CategoryOption extends AbstractDomainObject {
         CategoryOption that = (CategoryOption) o;
 
         if (Double.compare(that.price, price) != 0) return false;
-        if (category != null ? !category.equals(that.category) : that.category != null) return false;
+        if (menuCategory != null ? !menuCategory.equals(that.menuCategory) : that.menuCategory != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
@@ -98,7 +98,7 @@ public class CategoryOption extends AbstractDomainObject {
         result = 31 * result + (description != null ? description.hashCode() : 0);
         temp = price != +0.0d ? Double.doubleToLongBits(price) : 0L;
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (category != null ? category.hashCode() : 0);
+        result = 31 * result + (menuCategory != null ? menuCategory.hashCode() : 0);
         return result;
     }
 }

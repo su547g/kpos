@@ -146,6 +146,7 @@ public class KPosPortImpl implements KPosPortType {
             DeleteResult result = contentManagementService.deleteCategory(categoryId);
             responseType.setResult(getSoapResult(result));
         } catch (Exception e) {
+            log.error("Error in DeleteCategory: ", e);
             responseType.setResult(getSoapFaultResult(e));
         }
         return responseType;
@@ -171,7 +172,7 @@ public class KPosPortImpl implements KPosPortType {
         try {
             FetchResult<List<MenuCategory>> fetchResult = contentManagementService.listAllCategories();
             List<MenuCategory> categoryList = fetchResult.getTarget();
-            List<CategoryType> categoryTypes = new ArrayList<CategoryType>();
+            List<CategoryType> categoryTypes = responseType.getCategories();
             for(MenuCategory category : categoryList) {
                 CategoryType type = new CategoryType();
                 type.setHappyHourRate(category.getHhRate());
@@ -279,7 +280,7 @@ public class KPosPortImpl implements KPosPortType {
             FetchResult<SaleItem> fetchResult = contentManagementService.fetchSaleItem(parameters.getItemId());
             SaleItem item = fetchResult.getTarget();
             SaleItemType soapType = convertSaleItemToSoap(item);
-            soapType.setCatId(item.getCategory().getId());
+            soapType.setCatId(item.getMenuCategory().getId());
 
             responseType.setSaleItem(soapType);
             responseType.setResult(getSoapResult(fetchResult));

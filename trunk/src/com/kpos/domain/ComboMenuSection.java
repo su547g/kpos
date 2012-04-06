@@ -25,9 +25,9 @@ public class ComboMenuSection extends AbstractDomainObject {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private ComboMenu combo;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "comboSection", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.REFRESH, orphanRemoval = true, fetch = FetchType.LAZY)
     @ForeignKey(name = "ITEM_2_SECTION_FK")
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private List<SaleItem> saleItems;
 
     public Long getId() {
