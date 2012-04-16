@@ -138,11 +138,19 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         saleItem.setAllowedHH(aSaleItemType.getIsAllowedHH());
         saleItem.setHh_price(aSaleItemType.getHhPrice());
         saleItem.setHhRate(aSaleItemType.getHhRate());
+        saleItem.setSeasonPrice(aSaleItemType.getSeasonPrice());
         saleItem.setOutPrice(aSaleItemType.getTakeoutPrice());
+        saleItem.setOutPriceLarge(aSaleItemType.getOutPriceLarge());
+        saleItem.setOutPriceMed(aSaleItemType.getOutPriceMedium());
+        saleItem.setOutPriceSmall(aSaleItemType.getOutPriceSmall());
         saleItem.setPrice(aSaleItemType.getNormalPrice());
+        saleItem.setPriceLarge(aSaleItemType.getPriceLarge());
+        saleItem.setPriceMedium(aSaleItemType.getPriceLarge());
+        saleItem.setPriceSmall(aSaleItemType.getPriceSmall());
         saleItem.setName(aSaleItemType.getName());
         saleItem.setDescription(aSaleItemType.getDescription());
         saleItem.setSingleOptionOnly(aSaleItemType.getIsSingleOption());
+        saleItem.setTaxable(aSaleItemType.isIsTaxable());
         saleItem.setThumbPath(aSaleItemType.getThumbPath());
         saleItem.setLastUpdated(new Date());
         

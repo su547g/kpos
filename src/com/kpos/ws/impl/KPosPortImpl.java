@@ -105,9 +105,17 @@ public class KPosPortImpl implements KPosPortType {
         itemType.setId(item.getId());
         itemType.setIsAllowedHH(item.isAllowedHH());
         itemType.setIsSingleOption(item.isSingleOptionOnly());
+        itemType.setIsTaxable(item.isTaxable());
         itemType.setName(item.getName());
         itemType.setNormalPrice(item.getPrice());
+        itemType.setPriceLarge(item.getPriceLarge());
+        itemType.setPriceMed(item.getPriceMedium());
+        itemType.setPriceSmall(item.getPriceSmall());
         itemType.setTakeoutPrice(item.getOutPrice());
+        itemType.setOutPriceLarge(item.getOutPriceLarge());
+        itemType.setOutPriceMedium(item.getOutPriceMed());
+        itemType.setOutPriceSmall(item.getOutPriceSmall());
+        itemType.setSeasonPrice(item.getSeasonPrice());
         itemType.setThumbPath(item.getThumbPath());
         itemType.setDescription(item.getDescription());
         //Load item options

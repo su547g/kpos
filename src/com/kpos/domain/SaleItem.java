@@ -41,6 +41,15 @@ public class SaleItem extends AbstractDomainObject {
     @Column(name = "price", nullable = false)
     private double price;
 
+    @Column(name = "price_small", nullable = true)
+    private double priceSmall;
+
+    @Column(name = "price_med", nullable = true)
+    private double priceMedium;
+
+    @Column(name = "price_large", nullable = true)
+    private double priceLarge;
+
     @Column(name = "is_allowed_hh", nullable = false)
     private boolean isAllowedHH = false; //is item allowed for happy hour?
 
@@ -64,8 +73,23 @@ public class SaleItem extends AbstractDomainObject {
     @Column(name = "out_price")
     private double outPrice; //take-out price
 
+    @Column(name = "out_small", nullable = true)
+    private double outPriceSmall;
+
+    @Column(name = "out_medium", nullable = true)
+    private double outPriceMed;
+
+    @Column(name = "out_large", nullable = true)
+    private double outPriceLarge;
+
+    @Column(name = "season_price", nullable = true)
+    private double seasonPrice;
+
     @Column(name = "single_option_only")
     private boolean singleOptionOnly = false; //whether user can select only a single option or multiple
+
+    @Column(name = "is_taxable")
+    private boolean isTaxable = true;
 
     @Column(name = "thumb_path", nullable = true)
     private String thumbPath;
@@ -162,6 +186,14 @@ public class SaleItem extends AbstractDomainObject {
         this.singleOptionOnly = singleOptionOnly;
     }
 
+    public boolean isTaxable() {
+        return isTaxable;
+    }
+
+    public void setTaxable(boolean taxable) {
+        isTaxable = taxable;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -184,6 +216,62 @@ public class SaleItem extends AbstractDomainObject {
 
     public void setPrinters(Set<Printer> printers) {
         this.printers = printers;
+    }
+
+    public double getPriceSmall() {
+        return priceSmall;
+    }
+
+    public void setPriceSmall(double priceSmall) {
+        this.priceSmall = priceSmall;
+    }
+
+    public double getPriceMedium() {
+        return priceMedium;
+    }
+
+    public void setPriceMedium(double priceMedium) {
+        this.priceMedium = priceMedium;
+    }
+
+    public double getPriceLarge() {
+        return priceLarge;
+    }
+
+    public void setPriceLarge(double priceLarge) {
+        this.priceLarge = priceLarge;
+    }
+
+    public double getOutPriceSmall() {
+        return outPriceSmall;
+    }
+
+    public void setOutPriceSmall(double outPriceSmall) {
+        this.outPriceSmall = outPriceSmall;
+    }
+
+    public double getOutPriceMed() {
+        return outPriceMed;
+    }
+
+    public void setOutPriceMed(double outPriceMed) {
+        this.outPriceMed = outPriceMed;
+    }
+
+    public double getOutPriceLarge() {
+        return outPriceLarge;
+    }
+
+    public void setOutPriceLarge(double outPriceLarge) {
+        this.outPriceLarge = outPriceLarge;
+    }
+
+    public double getSeasonPrice() {
+        return seasonPrice;
+    }
+
+    public void setSeasonPrice(double seasonPrice) {
+        this.seasonPrice = seasonPrice;
     }
 
     @Override
