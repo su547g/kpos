@@ -68,6 +68,9 @@ public class Order extends AbstractDomainObject {
     @ForeignKey(name = "PAYMENT_2_BILL_FK")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<PaymentRecord> paymentRecords = new ArrayList<PaymentRecord>();
+    
+    @Column(name = "pickup_phone_num")
+    private Long pickupPhone;
 
     public Long getId() {
         return id;
@@ -147,6 +150,14 @@ public class Order extends AbstractDomainObject {
 
     public void setPaymentRecords(List<PaymentRecord> paymentRecords) {
         this.paymentRecords = paymentRecords;
+    }
+
+    public Long getPickupPhone() {
+        return pickupPhone;
+    }
+
+    public void setPickupPhone(Long pickupPhone) {
+        this.pickupPhone = pickupPhone;
     }
 
     @Override
