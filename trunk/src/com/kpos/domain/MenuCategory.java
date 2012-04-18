@@ -43,12 +43,12 @@ public class MenuCategory extends AbstractDomainObject {
     @Column(name = "hh_rate", nullable = true)
     private double hhRate = 1; //happy hour rate
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "menuCategory", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "menuCategory", orphanRemoval = false, fetch = FetchType.LAZY)
     @ForeignKey(name = "OPTION_2_CAT_FK")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<CategoryOption> options = new ArrayList<CategoryOption>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "menuCategory", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "menuCategory", orphanRemoval = false, fetch = FetchType.LAZY)
     @ForeignKey(name = "SALEITEM_2_CAT_FK")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<SaleItem> saleItems = new ArrayList<SaleItem>();

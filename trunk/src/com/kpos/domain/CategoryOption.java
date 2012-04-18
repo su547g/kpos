@@ -27,9 +27,8 @@ public class CategoryOption extends AbstractDomainObject {
     @Column(name = "price", nullable = true)
     private double price;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "category_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private MenuCategory menuCategory;
 
     public Long getId() {

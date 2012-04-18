@@ -480,6 +480,9 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             option.setPrice(soapType.getPrice());
             option.setCreatedOn(new Date());
             option.setLastUpdated(new Date());
+            categoryOptionDao.insert(option);
+            result.setSuccessful(true);
+            result.setCreated(option);
         } else {
             result.setSuccessful(false);
             result.setException(new Exception("Category [" + soapType.getCategoryId()+"] doesn't exist!"));

@@ -508,6 +508,9 @@ public class KPosPortImpl implements KPosPortType {
         CreateCategoryOptionResponseType responseType = new CreateCategoryOptionResponseType();
         try {
             CreateResult<CategoryOption> result = contentManagementService.createCategoryOption(parameters.getCategoryOption());
+            if(result.isSuccessful() && result.getCreated() != null) {
+                responseType.setOptionId(result.getCreated().getId());
+            }
             responseType.setResult(getSoapResult(result));
         } catch (Exception e) {
             responseType.setResult(getSoapFaultResult(e));

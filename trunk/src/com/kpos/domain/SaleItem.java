@@ -44,7 +44,7 @@ public class SaleItem extends AbstractDomainObject {
     @Column(name = "price_small", nullable = true)
     private double priceSmall;
 
-    @Column(name = "price_med", nullable = true)
+    @Column(name = "price_medium", nullable = true)
     private double priceMedium;
 
     @Column(name = "price_large", nullable = true)

@@ -323,6 +323,7 @@
             <xs:complexType name="CreateCategoryOptionResponseType">
                 <xs:sequence>
                     <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="optionId" type="xsd:long" minOccurs="1" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="UpdateCategoryOptionType">
