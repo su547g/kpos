@@ -64,7 +64,7 @@ public class Order extends AbstractDomainObject {
     @ForeignKey(name = "ORDER_2_CUSTOMER_FK")
     private CustomerInfo customerInfo;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order", orphanRemoval = false, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order", orphanRemoval = true, fetch = FetchType.LAZY)
     @ForeignKey(name = "PAYMENT_2_BILL_FK")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<PaymentRecord> paymentRecords = new ArrayList<PaymentRecord>();
