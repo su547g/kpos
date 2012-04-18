@@ -65,7 +65,7 @@ public class SaleItem extends AbstractDomainObject {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private MenuCategory menuCategory;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "saleItem", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "saleItem", orphanRemoval = false, fetch = FetchType.LAZY)
     @ForeignKey(name = "OPTION_2_ITEM_FK")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<SaleItemOption> optionList = new ArrayList<SaleItemOption>();
