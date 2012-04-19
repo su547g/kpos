@@ -47,7 +47,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     private IGlobalOptionDao globalOptionDao;
     
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
-    public CreateResult<MenuCategory> createMenuCategory(MenuCategory aCategory) {
+    public CreateResult<MenuCategory> createMenuCategory(MenuCategory aCategory, List<Long> printerIds) {
         try {
             CreateResult<MenuCategory> result = new CreateResult<MenuCategory>();
             aCategory.setCreatedOn(new Date());
@@ -58,6 +58,12 @@ public class ContentManagementServiceImpl implements IContentManagementService {
                 result.setException(new Exception("MenuCategory name already exists!"));
             } else {
                 categoryDao.insertCategory(aCategory);
+                for(Long id : printerIds) {
+                    Printer printer = printerDao.findById(id);
+                    if(printer != null) {
+                        aCategory.getPrinters().add(printer);
+                    }
+                }
                 result.setCreated(aCategory);
             }
             return result;
@@ -66,7 +72,19 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             return new CreateResult<MenuCategory>(e);
         }
     }
-
+    /*
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public boolean addPrintersToCategory(MenuCategory category,) {
+        for(Long id : printerIds) {
+            Printer printer = printerDao.findById(id);
+            if(printer != null) {
+                category.getPrinters().add(printer);
+            }
+        }
+        return true;
+    }  */
+    
     @Override
     public FetchResult<List<MenuCategory>> listAllCategories() {
         FetchResult<List<MenuCategory>> fetchResult = new FetchResult<List<MenuCategory>>();

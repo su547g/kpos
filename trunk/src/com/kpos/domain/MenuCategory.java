@@ -6,7 +6,9 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by kpos.
@@ -58,6 +60,15 @@ public class MenuCategory extends AbstractDomainObject {
     
     @Column(name = "thumb_path", nullable = true)
     private String thumbPath;
+
+    @ManyToMany
+    @JoinTable(
+            name = "CAT_PRINTER_ASSOC",
+            joinColumns = @JoinColumn(name = "MENU_CAT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "PRINTER_ID")
+    )
+    @ForeignKey(name = "CAT_2_PRINTER_FK", inverseName = "PRINTER_2_CAT_FK")
+    private Set<Printer> printers = new HashSet<Printer>();
 
     public Long getId() {
         return id;
@@ -129,6 +140,14 @@ public class MenuCategory extends AbstractDomainObject {
 
     public void setThumbPath(String thumbPath) {
         this.thumbPath = thumbPath;
+    }
+
+    public Set<Printer> getPrinters() {
+        return printers;
+    }
+
+    public void setPrinters(Set<Printer> printers) {
+        this.printers = printers;
     }
 
     @Override

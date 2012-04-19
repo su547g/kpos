@@ -217,7 +217,7 @@ public class KPosPortImpl implements KPosPortType {
             }
             category.setCreatedOn(new Date());
             category.setLastUpdated(new Date());
-            CreateResult<MenuCategory> result = contentManagementService.createMenuCategory(category);
+            CreateResult<MenuCategory> result = contentManagementService.createMenuCategory(category, soapType.getPrinterIds());
             if(result.isSuccessful() && result.getCreated() != null) {
                 responseType.setCategoryId(result.getCreated().getId());
             }

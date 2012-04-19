@@ -11,8 +11,9 @@ import java.util.List;
  * Date: 3/14/12 11:08 PM
  */
 public interface IContentManagementService {
-    CreateResult<MenuCategory> createMenuCategory(MenuCategory aCategory);
-
+    CreateResult<MenuCategory> createMenuCategory(MenuCategory aCategory, List<Long> printerIds);
+    //boolean addPrintersToCategory(MenuCategory category, List<Long> printerIds);
+    
     FetchResult<List<MenuCategory>> listAllCategories();
 
     FetchResult<MenuCategory> fetchCategory(long aCategoryId);
