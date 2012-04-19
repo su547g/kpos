@@ -34,6 +34,10 @@ public class RestaurantTable extends AbstractDomainObject {
     @Column(name = "y")
     private int coordinate_y;
 
+    @ManyToOne(cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "area_id")
+    private SeatingArea area;
+
     public Long getId() {
         return id;
     }
@@ -64,6 +68,14 @@ public class RestaurantTable extends AbstractDomainObject {
 
     public void setCoordinate_y(int coordinate_y) {
         this.coordinate_y = coordinate_y;
+    }
+
+    public SeatingArea getArea() {
+        return area;
+    }
+
+    public void setArea(SeatingArea area) {
+        this.area = area;
     }
 
     @Override
