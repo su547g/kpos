@@ -134,13 +134,10 @@ public class KPosPortImpl implements KPosPortType {
             optionTypes.add(optionType);
         }
         //Load printers
-        List<PrinterType> printerTypes = itemType.getPrinters();
+        List<Long> printerIds = itemType.getPrinterIds();
         Set<Printer> printers = item.getPrinters();
         for(Printer printer : printers) {
-            PrinterType printerType = new PrinterType();
-            printerType.setId(printer.getId());
-            printerType.setName(printer.getName());
-            printerType.setIpAddr(printer.getIpAddress());
+            printerIds.add(printer.getId());
         }
         return itemType;
     }
@@ -190,6 +187,9 @@ public class KPosPortImpl implements KPosPortType {
                 type.setNotes(category.getNotes());
                 type.setThumbPath(category.getThumbPath());
                 categoryTypes.add(type);
+                for(Printer printer : category.getPrinters()) {
+                    type.getPrinterIds().add(printer.getId());
+                }
             }
             responseType.setTotal(categoryTypes.size());
             responseType.setResult(getSoapResult(fetchResult));
@@ -287,10 +287,12 @@ public class KPosPortImpl implements KPosPortType {
         try {
             FetchResult<SaleItem> fetchResult = contentManagementService.fetchSaleItem(parameters.getItemId());
             SaleItem item = fetchResult.getTarget();
-            SaleItemType soapType = convertSaleItemToSoap(item);
-            soapType.setCatId(item.getMenuCategory().getId());
+            if(item != null) {
+                SaleItemType soapType = convertSaleItemToSoap(item);
+                soapType.setCatId(item.getMenuCategory().getId());
 
-            responseType.setSaleItem(soapType);
+                responseType.setSaleItem(soapType);
+            }
             responseType.setResult(getSoapResult(fetchResult));
         } catch (Exception e) {
             responseType.setResult(getSoapFaultResult(e));
@@ -352,7 +354,7 @@ public class KPosPortImpl implements KPosPortType {
             @WebParam(partName = "parameters", name = "DeleteSaleItemOptionType", targetNamespace = NS) DeleteSaleItemOptionType parameters) {
         DeleteSaleItemOptionResponseType responseType = new DeleteSaleItemOptionResponseType();
         try {
-            DeleteResult result = contentManagementService.deleteSaleItem(parameters.getId());
+            DeleteResult result = contentManagementService.deleteSaleItemOption(parameters.getId());
             responseType.setResult(getSoapResult(result));
         } catch(Exception e) {
             responseType.setResult(getSoapFaultResult(e));
@@ -610,6 +612,15 @@ public class KPosPortImpl implements KPosPortType {
         ListGlobalOptionResponseType responseType = new ListGlobalOptionResponseType();
         try {
             FetchResult<List<GlobalOption>> result = contentManagementService.listGlobalOptions();
+            List<GlobalOption> globalOptions = result.getTarget();
+            for(GlobalOption option : globalOptions) {
+                GlobalOptionType soapType = new GlobalOptionType();
+                soapType.setId(option.getId());
+                soapType.setName(option.getName());
+                soapType.setOutPrice(option.getTakeOutPrice());
+                soapType.setPrice(option.getDineInPrice());
+                responseType.getOptions().add(soapType);
+            }
             responseType.setResult(getSoapResult(result));
         } catch (Exception e) {
             responseType.setResult(getSoapFaultResult(e));

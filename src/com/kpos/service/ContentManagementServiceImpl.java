@@ -109,17 +109,21 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             updateResult.setSuccessful(false);
         } else {
             MenuCategory object = categoryDao.findByName(aCategoryType.getName());
-            if(object != null) {
+            if(object != null && object.getId().longValue() != aCategoryType.getId().longValue()) {
                 updateResult.setSuccessful(false);
-                updateResult.setException(new Exception("MenuCategory name already exists!"));
+                updateResult.setException(new Exception("Different category with the same name already exists!"));
             } else {
                 MenuCategory aCategory = categoryDao.findCategory(aCategoryType.getId());
-                aCategory.setAllowedHH(aCategoryType.getIsAllowedHappyHour());
-                aCategory.setHhRate(aCategoryType.getHappyHourRate());
+                if(aCategoryType.getIsAllowedHappyHour() != null) aCategory.setAllowedHH(aCategoryType.getIsAllowedHappyHour());
+                if(aCategoryType.getHappyHourRate() != null) aCategory.setHhRate(aCategoryType.getHappyHourRate());
                 aCategory.setName(aCategoryType.getName());
                 aCategory.setNotes(aCategoryType.getNotes());
                 aCategory.setThumbPath(aCategoryType.getThumbPath());
                 aCategory.setLastUpdated(new Date());
+                aCategory.getPrinters().clear();
+                for(Long id : aCategoryType.getPrinterIds()) {
+                    aCategory.getPrinters().add(printerDao.findById(id));
+                }
                 MenuCategory category = categoryDao.updateCategory(aCategory);
                 updateResult.setManagedObject(category);
                 updateResult.setSuccessful(true);
@@ -153,23 +157,23 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     }
 
     private void convertSoapItemToSaleItem(SaleItem saleItem, SaleItemType aSaleItemType) {
-        saleItem.setAllowedHH(aSaleItemType.getIsAllowedHH());
-        saleItem.setHh_price(aSaleItemType.getHhPrice());
-        saleItem.setHhRate(aSaleItemType.getHhRate());
-        saleItem.setSeasonPrice(aSaleItemType.getSeasonPrice());
-        saleItem.setOutPrice(aSaleItemType.getTakeoutPrice());
-        saleItem.setOutPriceLarge(aSaleItemType.getOutPriceLarge());
-        saleItem.setOutPriceMed(aSaleItemType.getOutPriceMedium());
-        saleItem.setOutPriceSmall(aSaleItemType.getOutPriceSmall());
+        if(aSaleItemType.getIsAllowedHH() != null) saleItem.setAllowedHH(aSaleItemType.getIsAllowedHH());
+        if(aSaleItemType.getHhPrice() != null) saleItem.setHh_price(aSaleItemType.getHhPrice());
+        if(aSaleItemType.getHhRate() != null) saleItem.setHhRate(aSaleItemType.getHhRate());
+        if(aSaleItemType.getSeasonPrice() != null) saleItem.setSeasonPrice(aSaleItemType.getSeasonPrice());
+        if(aSaleItemType.getTakeoutPrice() != null) saleItem.setOutPrice(aSaleItemType.getTakeoutPrice());
+        if(aSaleItemType.getOutPriceLarge() != null) saleItem.setOutPriceLarge(aSaleItemType.getOutPriceLarge());
+        if(aSaleItemType.getOutPriceMedium() != null) saleItem.setOutPriceMed(aSaleItemType.getOutPriceMedium());
+        if(aSaleItemType.getOutPriceSmall() != null) saleItem.setOutPriceSmall(aSaleItemType.getOutPriceSmall());
         saleItem.setPrice(aSaleItemType.getNormalPrice());
-        saleItem.setPriceLarge(aSaleItemType.getPriceLarge());
-        saleItem.setPriceMedium(aSaleItemType.getPriceLarge());
-        saleItem.setPriceSmall(aSaleItemType.getPriceSmall());
-        saleItem.setName(aSaleItemType.getName());
-        saleItem.setDescription(aSaleItemType.getDescription());
-        saleItem.setSingleOptionOnly(aSaleItemType.getIsSingleOption());
+        if(aSaleItemType.getPriceLarge() != null) saleItem.setPriceLarge(aSaleItemType.getPriceLarge());
+        if(aSaleItemType.getPriceLarge() != null) saleItem.setPriceMedium(aSaleItemType.getPriceMed());
+        if(aSaleItemType.getPriceSmall() != null) saleItem.setPriceSmall(aSaleItemType.getPriceSmall());
+        if(aSaleItemType.getName() != null) saleItem.setName(aSaleItemType.getName());
+        if(aSaleItemType.getDescription() != null) saleItem.setDescription(aSaleItemType.getDescription());
+        if(aSaleItemType.getIsSingleOption() != null) saleItem.setSingleOptionOnly(aSaleItemType.getIsSingleOption());
         saleItem.setTaxable(aSaleItemType.isIsTaxable());
-        saleItem.setThumbPath(aSaleItemType.getThumbPath());
+        if(aSaleItemType.getThumbPath() != null) saleItem.setThumbPath(aSaleItemType.getThumbPath());
         saleItem.setLastUpdated(new Date());
         
         List<SaleItemOptionType> optionTypes = aSaleItemType.getOptions();
@@ -178,21 +182,21 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         for(SaleItemOptionType optionType : optionTypes) {
             SaleItemOption option = new SaleItemOption();
             option.setName(optionType.getName());
-            option.setOutPrice(optionType.getTakeoutPrice());
+            if(optionType.getTakeoutPrice() != null) option.setOutPrice(optionType.getTakeoutPrice());
             option.setPrice(optionType.getPrice());
-            option.setRequired(optionType.getIsRequired());
+            if(optionType.getIsRequired() != null) option.setRequired(optionType.getIsRequired());
             option.setSaleItem(saleItem);
             options.add(option);
         }
         
-        List<PrinterType> printerTypes = aSaleItemType.getPrinters();
+        List<Long> printerIds = aSaleItemType.getPrinterIds();
         Set<Printer> printers = saleItem.getPrinters();
         printers.clear();
-        for(PrinterType printerType : printerTypes) {
-            Printer printer = new Printer();
-            printer.setIpAddress(printerType.getIpAddr());
-            printer.setName(printerType.getName());
-            printers.add(printer);
+        for(Long id : printerIds) {
+            Printer printer = printerDao.findById(id);
+            if(printer != null) {
+                printers.add(printer);
+            }
         }
     }
 

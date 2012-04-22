@@ -60,9 +60,9 @@ public class SaleItem extends AbstractDomainObject {
     private double hh_price;
 
     //owning entity
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "category_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private MenuCategory menuCategory;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "saleItem", orphanRemoval = true, fetch = FetchType.LAZY)
