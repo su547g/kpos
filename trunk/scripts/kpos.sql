@@ -46,6 +46,7 @@ CREATE TABLE `cat_printer_assoc` (
 
 LOCK TABLES `cat_printer_assoc` WRITE;
 /*!40000 ALTER TABLE `cat_printer_assoc` DISABLE KEYS */;
+INSERT INTO `cat_printer_assoc` VALUES (3,1);
 /*!40000 ALTER TABLE `cat_printer_assoc` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -80,7 +81,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (2,'Beef',0,0,1,'beef dishes','C:\\kpos\\pictures\\beef.jpg','2012-04-18 21:03:36','2012-04-18 21:03:36',NULL,NULL,0);
+INSERT INTO `category` VALUES (3,'Rice',0,0,1,'all rice dishes','C:\\kpos\\img\\rice.jpg','2012-04-20 21:54:16','2012-04-20 21:54:16',NULL,NULL,1);
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -105,7 +106,7 @@ CREATE TABLE `category_option` (
   PRIMARY KEY (`id`),
   KEY `OPTION_2_CAT_FK` (`category_id`),
   CONSTRAINT `OPTION_2_CAT_FK` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -114,6 +115,7 @@ CREATE TABLE `category_option` (
 
 LOCK TABLES `category_option` WRITE;
 /*!40000 ALTER TABLE `category_option` DISABLE KEYS */;
+INSERT INTO `category_option` VALUES (1,'hello!',0,3,'2012-04-20 21:54:49','2012-04-20 21:54:49',NULL,NULL,0,'fdfsad');
 /*!40000 ALTER TABLE `category_option` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -225,7 +227,7 @@ CREATE TABLE `global_option` (
   `last_updated_by` int(11) DEFAULT NULL,
   `version` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -260,6 +262,7 @@ CREATE TABLE `item_printer_assoc` (
 
 LOCK TABLES `item_printer_assoc` WRITE;
 /*!40000 ALTER TABLE `item_printer_assoc` DISABLE KEYS */;
+INSERT INTO `item_printer_assoc` VALUES (4,1),(5,1);
 /*!40000 ALTER TABLE `item_printer_assoc` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -467,7 +470,7 @@ CREATE TABLE `sale_item` (
   PRIMARY KEY (`id`),
   KEY `SALEITEM_2_CAT_FK` (`category_id`),
   CONSTRAINT `SALEITEM_2_CAT_FK` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -476,6 +479,7 @@ CREATE TABLE `sale_item` (
 
 LOCK TABLES `sale_item` WRITE;
 /*!40000 ALTER TABLE `sale_item` DISABLE KEYS */;
+INSERT INTO `sale_item` VALUES (4,'fhalsdfjhals','fhalsfjha',8,0,1,5,3,8,0,'C:\\hflasjkfha','2012-04-21 20:54:11','2012-04-21 20:54:11',NULL,NULL,NULL,0,10,0,7,8,9,7,8,9),(5,'fhalsdfjhals','fhalsfjha',8,0,1,5,3,8,0,'C:\\hflasjkfha','2012-04-21 21:02:09','2012-04-21 21:02:09',NULL,NULL,NULL,0,10,0,7,8,9,7,8,9);
 /*!40000 ALTER TABLE `sale_item` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -503,7 +507,7 @@ CREATE TABLE `sale_item_option` (
   PRIMARY KEY (`id`),
   KEY `OPTION_2_ITEM_FK` (`sale_item_id`),
   CONSTRAINT `OPTION_2_ITEM_FK` FOREIGN KEY (`sale_item_id`) REFERENCES `sale_item` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -512,6 +516,7 @@ CREATE TABLE `sale_item_option` (
 
 LOCK TABLES `sale_item_option` WRITE;
 /*!40000 ALTER TABLE `sale_item_option` DISABLE KEYS */;
+INSERT INTO `sale_item_option` VALUES (4,'option 1','hfladfh',0.5,0.5,4,0,'fhalfdsjhll','2012-04-21 20:54:29','2012-04-21 20:54:29',NULL,NULL,0);
 /*!40000 ALTER TABLE `sale_item_option` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -553,4 +558,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-04-19  0:24:18
+-- Dump completed on 2012-04-21 22:01:34
