@@ -20,6 +20,7 @@ public class GlobalOptionDao extends AbstractJpaDao<GlobalOption> implements IGl
     
     public GlobalOption findByName(String aName) {
         Query query = entityManager.createNamedQuery("findGlobalOptionByName");
+        query.setParameter("aName", aName);
         List options = query.getResultList();
         if(options == null || options.isEmpty()) {
             return null;

@@ -28,9 +28,8 @@ public class SaleItemOption extends AbstractDomainObject {
     private double outPrice;
 
     //owning entity
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "sale_item_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private SaleItem saleItem;
 
     @Column(name = "is_required", nullable = true)
@@ -39,8 +38,8 @@ public class SaleItemOption extends AbstractDomainObject {
     @Column(name = "description")
     private String description;
     
-    @Column(name = "thum_path")
-    private String thumPath;
+    @Column(name = "thumb_path")
+    private String thumbPath;
 
     public Long getId() {
         return id;
@@ -100,11 +99,11 @@ public class SaleItemOption extends AbstractDomainObject {
     }
 
     public String getThumPath() {
-        return thumPath;
+        return thumbPath;
     }
 
     public void setThumPath(String thumPath) {
-        this.thumPath = thumPath;
+        this.thumbPath = thumPath;
     }
 
     @Override
