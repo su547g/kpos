@@ -12,6 +12,12 @@
                 xmlns:tns="http://ws.kpos.com/app"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 elementFormDefault="qualified">
+            <xs:element name="SaveSeatingAreaType" type="tns:SaveSeatingAreaType"/>
+            <xs:element name="SaveSeatingAreaResponseType" type="tns:SaveSeatingAreaResponseType"/>
+            <xs:element name="FetchSeatingAreaType" type="tns:FetchSeatingAreaType"/>
+            <xs:element name="FetchSeatingAreaResponseType" type="tns:FetchSeatingAreaResponseType"/>
+            <xs:element name="DeleteSeatingAreaType" type="tns:DeleteSeatingAreaType"/>
+            <xs:element name="DeleteSeatingAreaResponseType" type="tns:DeleteSeatingAreaResponseType"/>
 
             <xs:element name="SaveTableType" type="tns:SaveTableType"/>
             <xs:element name="SaveTableResponseType" type="tns:SaveTableResponseType"/>
@@ -103,6 +109,14 @@
                     <xs:element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="x" type="xsd:int" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="y" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="areaId" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="SeatingAreaType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="tables" type="tns:TableType" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:complexType>
 
@@ -220,6 +234,37 @@
             <!--End of data structures-->
 
             <!--Define operations below-->
+            <xs:complexType name="SaveSeatingAreaType">
+                <xs:sequence>
+                    <xs:element name="areaType" type="tns:SeatingAreaType" minOccurs="1" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="SaveSeatingAreaResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="areaId" type="xs:long" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="FetchSeatingAreaType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="FetchSeatingAreaResponseType">
+                <xs:sequence>
+                    <xs:element name="areaType" type="tns:SeatingAreaType" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeleteSeatingAreaType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeleteSeatingAreaResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
 
             <xs:complexType name="SaveTableType">
                 <xs:sequence>
@@ -543,6 +588,25 @@
     </wsdl:types>
 
     <!--Begin of messages-->
+    <wsdl:message name="SaveSeatingAreaMessage">
+        <wsdl:part name="parameters" element="tns:SaveSeatingAreaType"/>
+    </wsdl:message>
+    <wsdl:message name="SaveSeatingAreaResponseMessage">
+        <wsdl:part name="parameters" element="tns:SaveSeatingAreaResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="FetchSeatingAreaMessage">
+        <wsdl:part name="parameters" element="tns:FetchSeatingAreaType"/>
+    </wsdl:message>
+    <wsdl:message name="FetchSeatingAreaResponseMessage">
+        <wsdl:part name="parameters" element="tns:FetchSeatingAreaResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="DeleteSeatingAreaMessage">
+        <wsdl:part name="parameters" element="tns:DeleteSeatingAreaType"/>
+    </wsdl:message>
+    <wsdl:message name="DeleteSeatingAreaResponseMessage">
+        <wsdl:part name="parameters" element="tns:DeleteSeatingAreaResponseType"/>
+    </wsdl:message>
+
     <wsdl:message name="SaveTableMessage">
         <wsdl:part name="parameters" element="tns:SaveTableType"/>
     </wsdl:message>
@@ -729,6 +793,19 @@
     <!--End of messages-->
 
     <wsdl:portType name="KPosPortType">
+        <wsdl:operation name="SaveSeatingArea">
+            <wsdl:input message="tns:SaveSeatingAreaMessage" name="SaveSeatingArea"/>
+            <wsdl:output message="tns:SaveSeatingAreaResponseMessage" name="SaveSeatingAreaResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="FetchSeatingArea">
+            <wsdl:input message="tns:FetchSeatingAreaMessage" name="FetchSeatingArea"/>
+            <wsdl:output message="tns:FetchSeatingAreaResponseMessage" name="FetchSeatingAreaResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="DeleteSeatingArea">
+            <wsdl:input message="tns:DeleteSeatingAreaMessage" name="DeleteSeatingArea"/>
+            <wsdl:output message="tns:DeleteSeatingAreaResponseMessage" name="DeleteSeatingAreaResponse"/>
+        </wsdl:operation>
+
         <wsdl:operation name="SaveTable">
             <wsdl:input message="tns:SaveTableMessage" name="SaveTable"/>
             <wsdl:output message="tns:SaveTableResponseMessage" name="SaveTableResponse"/>
@@ -863,6 +940,34 @@
 
     <wsdl:binding name="KPosBinding" type="tns:KPosPortType">
         <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+        <wsdl:operation name="SaveSeatingArea">
+            <soap:operation soapAction="http://ws.kpos.com/SaveSeatingArea" style="document"/>
+            <wsdl:input name="SaveSeatingArea">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="SaveSeatingAreaResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="FetchSeatingArea">
+            <soap:operation soapAction="http://ws.kpos.com/FetchSeatingArea" style="document"/>
+            <wsdl:input name="FetchSeatingArea">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="FetchSeatingAreaResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="DeleteSeatingArea">
+            <soap:operation soapAction="http://ws.kpos.com/DeleteSeatingArea" style="document"/>
+            <wsdl:input name="DeleteSeatingArea">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DeleteSeatingAreaResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
 
         <wsdl:operation name="SaveTable">
             <soap:operation soapAction="http://ws.kpos.com/SaveTable" style="document"/>

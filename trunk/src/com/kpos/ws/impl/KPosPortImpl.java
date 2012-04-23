@@ -627,4 +627,44 @@ public class KPosPortImpl implements KPosPortType {
         }
         return responseType;
     }
+
+    @Override
+    public SaveSeatingAreaResponseType saveSeatingArea(
+            @WebParam(partName = "parameters", name = "SaveSeatingAreaType", targetNamespace = NS) SaveSeatingAreaType parameters) {
+        SaveSeatingAreaResponseType responseType = new SaveSeatingAreaResponseType();
+        try {
+            if(!parameters.getAreaType().isEmpty()) {
+                for(SeatingAreaType soapType : parameters.getAreaType()) {
+                    if(soapType.getId() != null && soapType.getId() > 0) {
+                        UpdateResult<SeatingArea> result = contentManagementService.updateSeatingArea(soapType);
+                        if(result.isSuccessful()) {
+                            responseType.setAreaId(result.getManagedObject().getId());
+                        }
+                        responseType.setResult(getSoapResult(result));
+                    } else {
+                        CreateResult<SeatingArea> result = contentManagementService.createSeatingArea(soapType);
+                        if(result.isSuccessful()) {
+                            responseType.setAreaId(result.getCreated().getId());
+                        }
+                        responseType.setResult(getSoapResult(result));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
+        return responseType;
+    }
+
+    @Override
+    public FetchSeatingAreaResponseType fetchSeatingArea(
+            @WebParam(partName = "parameters", name = "FetchSeatingAreaType", targetNamespace = NS) FetchSeatingAreaType parameters) {
+        return null;
+    }
+
+    @Override
+    public DeleteSeatingAreaResponseType deleteSeatingArea(
+            @WebParam(partName = "parameters", name = "DeleteSeatingAreaType", targetNamespace = NS) DeleteSeatingAreaType parameters) {
+        return null;
+    }
 }
