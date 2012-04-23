@@ -45,6 +45,9 @@ public class ContentManagementServiceImpl implements IContentManagementService {
 
     @Autowired
     private IGlobalOptionDao globalOptionDao;
+
+    @Autowired
+    private ISeatingAreaDao seatingAreaDao;
     
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public CreateResult<MenuCategory> createMenuCategory(MenuCategory aCategory, List<Long> printerIds) {
@@ -609,5 +612,73 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         result.setTarget(options);
         result.setSuccessful(true);
         return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public CreateResult<SeatingArea> createSeatingArea(SeatingAreaType soapType) {
+        CreateResult<SeatingArea> result = new CreateResult<SeatingArea>();
+        if(soapType.getName() == null || soapType.getName().trim().isEmpty()) {
+            result.setSuccessful(false);
+            result.setFailure(1, "Name can't be null");
+        } else {
+            SeatingArea area = seatingAreaDao.findByName(soapType.getName());
+            if(area != null) {
+                result.setSuccessful(false);
+                result.setException(new Exception("Seating area with the same name already exists!"));
+            } else {
+                SeatingArea seatingArea = new SeatingArea();
+                seatingArea.setName(soapType.getName());
+                seatingArea.setCreatedOn(new Date());
+                seatingArea.setLastUpdated(new Date());
+                for(TableType tableType : soapType.getTables()) {
+                    RestaurantTable table = new RestaurantTable();
+                    table.setArea(seatingArea);
+                    table.setCoordinate_x(tableType.getX());
+                    table.setCoordinate_y(tableType.getY());
+                    table.setName(tableType.getName());
+                    table.setCreatedOn(new Date());
+                    table.setLastUpdated(new Date());
+                }
+                seatingAreaDao.insert(seatingArea);
+                result.setSuccessful(true);
+                result.setCreated(seatingArea);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public UpdateResult<SeatingArea> updateSeatingArea(SeatingAreaType soapType) {
+        UpdateResult<SeatingArea> updateResult = new UpdateResult<SeatingArea>();
+        if(soapType.getId() == null) {
+            updateResult.setSuccessful(false);
+            updateResult.setException(new Exception("id can't be null"));
+        } else {
+            SeatingArea seatingArea = seatingAreaDao.findById(soapType.getId());
+            if(seatingArea == null) {
+                updateResult.setSuccessful(false);
+                updateResult.setException(new Exception("Can't find seating area with id [" + soapType.getId() + "]"));
+            } else {
+                seatingArea.setName(soapType.getName());
+                seatingArea.setCreatedOn(new Date());
+                seatingArea.setLastUpdated(new Date());
+                seatingArea.getTables().clear();
+                for(TableType tableType : soapType.getTables()) {
+                    RestaurantTable table = new RestaurantTable();
+                    table.setArea(seatingArea);
+                    table.setCoordinate_x(tableType.getX());
+                    table.setCoordinate_y(tableType.getY());
+                    table.setName(tableType.getName());
+                    table.setCreatedOn(new Date());
+                    table.setLastUpdated(new Date());
+                }
+                seatingAreaDao.merge(seatingArea);
+                updateResult.setSuccessful(true);
+                updateResult.setManagedObject(seatingArea);
+            }
+        }
+        return updateResult;
     }
 }

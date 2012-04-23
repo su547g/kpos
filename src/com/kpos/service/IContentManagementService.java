@@ -67,4 +67,8 @@ public interface IContentManagementService {
     DeleteResult deleteGlobalOption(long aId);
 
     FetchResult<List<GlobalOption>> listGlobalOptions();
+
+    CreateResult<SeatingArea> createSeatingArea(SeatingAreaType soapType);
+
+    UpdateResult<SeatingArea> updateSeatingArea(SeatingAreaType soapType);
 }

@@ -12,6 +12,20 @@ import java.util.List;
  * Author: kkwang
  * Date: 4/18/12 9:58 PM
  */
+@NamedQueries({
+        @NamedQuery(
+                name = "findSeatingAreaByName",
+                query = "from SeatingArea c where c.name = :aName"
+        ),
+        @NamedQuery(
+                name = "listSeatingAreasByNameAsc",
+                query = "from SeatingArea c order by c.name asc"
+        ),
+        @NamedQuery(
+               name = "listSeatingAreasByNameDesc",
+               query = "from SeatingArea c order by c.name desc"
+        )
+})
 @Entity
 @Table(name = "SEATING_AREA")
 public class SeatingArea extends AbstractDomainObject {
