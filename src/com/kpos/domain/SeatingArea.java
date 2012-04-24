@@ -5,6 +5,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,7 +41,7 @@ public class SeatingArea extends AbstractDomainObject {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "area", orphanRemoval = true, fetch = FetchType.LAZY)
     @ForeignKey(name = "TABLE_2_AREA_FK")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<RestaurantTable> tables;
+    private List<RestaurantTable> tables = new ArrayList<RestaurantTable>();
 
     public Long getId() {
         return id;
