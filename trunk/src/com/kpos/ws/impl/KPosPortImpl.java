@@ -659,12 +659,43 @@ public class KPosPortImpl implements KPosPortType {
     @Override
     public FetchSeatingAreaResponseType fetchSeatingArea(
             @WebParam(partName = "parameters", name = "FetchSeatingAreaType", targetNamespace = NS) FetchSeatingAreaType parameters) {
-        return null;
+        FetchSeatingAreaResponseType responseType = new FetchSeatingAreaResponseType();
+        try {
+            FetchResult<SeatingArea> fetchResult = contentManagementService.fetchSeatingArea(parameters.getId());
+            if(fetchResult.isSuccessful()) {
+                SeatingArea area = fetchResult.getTarget();
+                SeatingAreaType soapType = new SeatingAreaType();
+                soapType.setId(area.getId());
+                soapType.setName(area.getName());
+                for(RestaurantTable table : area.getTables()) {
+                    TableType tableType = new TableType();
+                    tableType.setAreaId(area.getId());
+                    tableType.setId(table.getId());
+                    tableType.setName(table.getName());
+                    tableType.setX(table.getCoordinate_x());
+                    tableType.setY(table.getCoordinate_y());
+                    soapType.getTables().add(tableType);
+                }
+                responseType.setAreaType(soapType);
+            }
+            responseType.setResult(getSoapResult(fetchResult));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
+        return responseType;
     }
 
     @Override
     public DeleteSeatingAreaResponseType deleteSeatingArea(
             @WebParam(partName = "parameters", name = "DeleteSeatingAreaType", targetNamespace = NS) DeleteSeatingAreaType parameters) {
-        return null;
+        DeleteSeatingAreaResponseType responseType = new DeleteSeatingAreaResponseType();
+        try {
+            DeleteResult result = contentManagementService.deleteSeatingArea(parameters.getId());
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e){
+            responseType.setResult(getSoapFaultResult(e));
+        }
+
+        return responseType;
     }
 }

@@ -71,4 +71,8 @@ public interface IContentManagementService {
     CreateResult<SeatingArea> createSeatingArea(SeatingAreaType soapType);
 
     UpdateResult<SeatingArea> updateSeatingArea(SeatingAreaType soapType);
+    
+    DeleteResult deleteSeatingArea(long aId);
+
+    FetchResult<SeatingArea> fetchSeatingArea(long aId);
 }

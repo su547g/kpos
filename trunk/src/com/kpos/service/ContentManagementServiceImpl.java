@@ -639,6 +639,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
                     table.setName(tableType.getName());
                     table.setCreatedOn(new Date());
                     table.setLastUpdated(new Date());
+                    seatingArea.getTables().add(table);
                 }
                 seatingAreaDao.insert(seatingArea);
                 result.setSuccessful(true);
@@ -673,6 +674,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
                     table.setName(tableType.getName());
                     table.setCreatedOn(new Date());
                     table.setLastUpdated(new Date());
+                    seatingArea.getTables().add(table);
                 }
                 seatingAreaDao.merge(seatingArea);
                 updateResult.setSuccessful(true);
@@ -680,5 +682,33 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             }
         }
         return updateResult;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public DeleteResult deleteSeatingArea(long aId) {
+        DeleteResult result = new DeleteResult();
+        result.setId(aId);
+        SeatingArea area = seatingAreaDao.findById(aId);
+        if(area != null) {
+            seatingAreaDao.delete(aId);
+            result.setSuccessful(true);
+        } else {
+            result.setException(new Exception("Can't find seating area id [" + aId + "]"));
+        }
+        return result;
+    }
+
+    @Override
+    public FetchResult<SeatingArea> fetchSeatingArea(long aId) {
+        FetchResult<SeatingArea> result = new FetchResult<SeatingArea>();
+        SeatingArea area = seatingAreaDao.findById(aId);
+        if(area != null) {
+            result.setTarget(area);
+            result.setSuccessful(true);
+        } else {
+            result.setSuccessful(false);
+        }
+        return result;
     }
 }

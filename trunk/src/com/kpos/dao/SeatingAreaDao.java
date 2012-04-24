@@ -1,6 +1,7 @@
 package com.kpos.dao;
 
 import com.kpos.domain.SeatingArea;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -11,6 +12,7 @@ import java.util.List;
  * Author: kkwang
  * Date: 4/22/12 11:52 PM
  */
+@Repository
 public class SeatingAreaDao extends AbstractJpaDao<SeatingArea> implements ISeatingAreaDao {
     @Override
     protected Class getEntityClass() {

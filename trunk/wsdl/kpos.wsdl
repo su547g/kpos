@@ -252,6 +252,7 @@
             </xs:complexType>
             <xs:complexType name="FetchSeatingAreaResponseType">
                 <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
                     <xs:element name="areaType" type="tns:SeatingAreaType" minOccurs="1" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
