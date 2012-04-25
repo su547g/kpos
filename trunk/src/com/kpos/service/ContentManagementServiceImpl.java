@@ -425,22 +425,33 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public CreateResult<RestaurantTable> createRestaurantTable(TableType soapType) {
         CreateResult<RestaurantTable> result = new CreateResult<RestaurantTable>();
-        RestaurantTable object = tableDao.findTableByName(soapType.getName());
-        if(object == null) {
-            RestaurantTable table = new RestaurantTable();
-            table.setCoordinate_x(soapType.getX());
-            table.setCoordinate_y(soapType.getY());
-            table.setName(soapType.getName());
-            table.setCreatedOn(new Date());
-            table.setLastUpdated(new Date());
-            tableDao.insert(table);
-            result.setCreated(table);
-            result.setSuccessful(true);
-        } else {
-            result.setException(new Exception("Table with name [" + soapType.getName()+"] already exits!"));
+        if(soapType.getAreaId() == null) {
             result.setSuccessful(false);
+            result.setException(new Exception("Area ID can't be null"));
+        } else {
+            SeatingArea area = seatingAreaDao.findById(soapType.getAreaId());
+            if(area != null) {
+                RestaurantTable object = tableDao.findTableByName(soapType.getName());
+                if(object == null) {
+                    RestaurantTable table = new RestaurantTable();
+                    table.setCoordinate_x(soapType.getX());
+                    table.setCoordinate_y(soapType.getY());
+                    table.setName(soapType.getName());
+                    table.setCreatedOn(new Date());
+                    table.setLastUpdated(new Date());
+                    table.setArea(area);
+                    area.getTables().add(table);
+                    result.setCreated(table);
+                    result.setSuccessful(true);
+                } else {
+                    result.setException(new Exception("Table with name [" + soapType.getName()+"] already exits!"));
+                    result.setSuccessful(false);
+                }
+            } else {
+                result.setSuccessful(false);
+                result.setException(new Exception("Can't find area for id [" + soapType.getAreaId() + "]"));
+            }
         }
-
         return  result;
     }
 

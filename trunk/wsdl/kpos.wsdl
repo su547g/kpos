@@ -210,11 +210,21 @@
             <xs:complexType name="OrderItem">
                 <xs:sequence>
                     <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
-                    <xs:element name="orderId" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="orderId" type="xsd:long" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="quantity" type="xsd:int" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="price" type="xsd:double" minOccurs="0" maxOccurs="1"/>
-                    <xs:element name="overrideName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="notes" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="options" type="tns:OrderItemOption" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="OrderItemOption">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="orderItemId" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="quantity" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="price" type="xsd:double" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="Order">
@@ -228,6 +238,7 @@
                     <xs:element name="notes" type="xsd:string" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="status" type="xsd:string" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="createTime" type="xsd:dateTime" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="orderItems" type="tns:OrderItem" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="payments" type="tns:PaymentRecord" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:complexType>
