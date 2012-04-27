@@ -69,8 +69,8 @@ public class Order extends AbstractDomainObject {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<PaymentRecord> paymentRecords = new ArrayList<PaymentRecord>();
     
-    @Column(name = "pickup_phone_num")
-    private Long pickupPhone;
+    @Column(name = "num_guests")
+    private Integer numOfGuests;
 
     public Long getId() {
         return id;
@@ -152,12 +152,12 @@ public class Order extends AbstractDomainObject {
         this.paymentRecords = paymentRecords;
     }
 
-    public Long getPickupPhone() {
-        return pickupPhone;
+    public Integer getNumOfGuests() {
+        return numOfGuests;
     }
 
-    public void setPickupPhone(Long pickupPhone) {
-        this.pickupPhone = pickupPhone;
+    public void setNumOfGuests(Integer numOfGuests) {
+        this.numOfGuests = numOfGuests;
     }
 
     @Override
