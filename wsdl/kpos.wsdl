@@ -91,6 +91,9 @@
             <xs:element name="ListGlobalOptionType" type="tns:ListGlobalOptionType"/>
             <xs:element name="ListGlobalOptionResponseType" type="tns:ListGlobalOptionResponseType"/>
 
+            <xs:element name="SaveOrderType" type="tns:SaveOrderType"/>
+            <xs:element name="SaveOrderResponseType" type="tns:SaveOrderResponseType"/>
+
             <!--Result object-->
             <xs:complexType name="ResultType">
                 <xs:sequence>
@@ -609,6 +612,18 @@
                     <xs:element name="options" type="tns:GlobalOptionType" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:complexType>
+
+            <xs:complexType name="SaveOrderType">
+                <xs:sequence>
+                    <xs:element name="order" type="tns:Order" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="SaveOrderResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="id" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
             <!--End of operations-->
         </xs:schema>
     </wsdl:types>
@@ -816,6 +831,13 @@
     <wsdl:message name="ListGlobalOptionResponseMessage">
         <wsdl:part name="parameters" element="tns:ListGlobalOptionResponseType"/>
     </wsdl:message>
+
+    <wsdl:message name="SaveOrderMessage">
+        <wsdl:part name="parameters" element="tns:SaveOrderType"/>
+    </wsdl:message>
+    <wsdl:message name="SaveOrderResponseMessage">
+        <wsdl:part name="parameters" element="tns:SaveOrderResponseType"/>
+    </wsdl:message>
     <!--End of messages-->
 
     <wsdl:portType name="KPosPortType">
@@ -961,6 +983,11 @@
         <wsdl:operation name="ListGlobalOption">
             <wsdl:input message="tns:ListGlobalOptionMessage" name="ListGlobalOption"/>
             <wsdl:output message="tns:ListGlobalOptionResponseMessage" name="ListGlobalOptionResponse"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="SaveOrder">
+            <wsdl:input message="tns:SaveOrderMessage" name="SaveOrder"/>
+            <wsdl:output message="tns:SaveOrderResponseMessage" name="SaveOrderResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -1265,6 +1292,16 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="ListGlobalOptionResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="SaveOrder">
+            <soap:operation soapAction="http://ws.kpos.com/SaveOrder" style="document"/>
+            <wsdl:input name="SaveOrder">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="SaveOrderResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>

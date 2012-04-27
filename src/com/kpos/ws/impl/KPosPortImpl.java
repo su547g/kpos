@@ -698,4 +698,10 @@ public class KPosPortImpl implements KPosPortType {
 
         return responseType;
     }
+
+    @Override
+    public SaveOrderResponseType saveOrder(
+            @WebParam(partName = "parameters", name = "SaveOrderType", targetNamespace = NS) SaveOrderType parameters) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

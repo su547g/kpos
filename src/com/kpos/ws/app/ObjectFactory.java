@@ -57,6 +57,7 @@ public class ObjectFactory {
     private final static QName _FetchTableType_QNAME = new QName("http://ws.kpos.com/app", "FetchTableType");
     private final static QName _ListPrintersType_QNAME = new QName("http://ws.kpos.com/app", "ListPrintersType");
     private final static QName _DeleteSaleItemResponseType_QNAME = new QName("http://ws.kpos.com/app", "DeleteSaleItemResponseType");
+    private final static QName _SaveOrderResponseType_QNAME = new QName("http://ws.kpos.com/app", "SaveOrderResponseType");
     private final static QName _CreateCategoryType_QNAME = new QName("http://ws.kpos.com/app", "CreateCategoryType");
     private final static QName _UpdateGlobalOptionResponseType_QNAME = new QName("http://ws.kpos.com/app", "UpdateGlobalOptionResponseType");
     private final static QName _CreateSaleItemType_QNAME = new QName("http://ws.kpos.com/app", "CreateSaleItemType");
@@ -71,6 +72,7 @@ public class ObjectFactory {
     private final static QName _FetchSaleItemResponseType_QNAME = new QName("http://ws.kpos.com/app", "FetchSaleItemResponseType");
     private final static QName _ListSaleItemsForCategoryType_QNAME = new QName("http://ws.kpos.com/app", "ListSaleItemsForCategoryType");
     private final static QName _DeleteGlobalOptionResponseType_QNAME = new QName("http://ws.kpos.com/app", "DeleteGlobalOptionResponseType");
+    private final static QName _SaveOrderType_QNAME = new QName("http://ws.kpos.com/app", "SaveOrderType");
     private final static QName _FetchSaleItemType_QNAME = new QName("http://ws.kpos.com/app", "FetchSaleItemType");
     private final static QName _CreateCategoryOptionResponseType_QNAME = new QName("http://ws.kpos.com/app", "CreateCategoryOptionResponseType");
     private final static QName _SaveTableType_QNAME = new QName("http://ws.kpos.com/app", "SaveTableType");
@@ -95,38 +97,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SaveSeatingAreaResponseType }
-     * 
-     */
-    public SaveSeatingAreaResponseType createSaveSeatingAreaResponseType() {
-        return new SaveSeatingAreaResponseType();
-    }
-
-    /**
-     * Create an instance of {@link DeleteTableResponseType }
-     * 
-     */
-    public DeleteTableResponseType createDeleteTableResponseType() {
-        return new DeleteTableResponseType();
-    }
-
-    /**
-     * Create an instance of {@link UpdateSaleItemType }
-     * 
-     */
-    public UpdateSaleItemType createUpdateSaleItemType() {
-        return new UpdateSaleItemType();
-    }
-
-    /**
-     * Create an instance of {@link SaveTableType }
-     * 
-     */
-    public SaveTableType createSaveTableType() {
-        return new SaveTableType();
-    }
-
-    /**
      * Create an instance of {@link DeleteCategoryOptionResponseType }
      * 
      */
@@ -135,99 +105,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CreateSaleItemOptionType }
+     * Create an instance of {@link DeletePrinterType }
      * 
      */
-    public CreateSaleItemOptionType createCreateSaleItemOptionType() {
-        return new CreateSaleItemOptionType();
-    }
-
-    /**
-     * Create an instance of {@link ListPrintersType }
-     * 
-     */
-    public ListPrintersType createListPrintersType() {
-        return new ListPrintersType();
-    }
-
-    /**
-     * Create an instance of {@link ListGlobalOptionResponseType }
-     * 
-     */
-    public ListGlobalOptionResponseType createListGlobalOptionResponseType() {
-        return new ListGlobalOptionResponseType();
-    }
-
-    /**
-     * Create an instance of {@link ListCategoryOptionType }
-     * 
-     */
-    public ListCategoryOptionType createListCategoryOptionType() {
-        return new ListCategoryOptionType();
-    }
-
-    /**
-     * Create an instance of {@link CategoryOptionType }
-     * 
-     */
-    public CategoryOptionType createCategoryOptionType() {
-        return new CategoryOptionType();
-    }
-
-    /**
-     * Create an instance of {@link CategoryInfoType }
-     * 
-     */
-    public CategoryInfoType createCategoryInfoType() {
-        return new CategoryInfoType();
-    }
-
-    /**
-     * Create an instance of {@link CreateSaleItemOptionResponseType }
-     * 
-     */
-    public CreateSaleItemOptionResponseType createCreateSaleItemOptionResponseType() {
-        return new CreateSaleItemOptionResponseType();
-    }
-
-    /**
-     * Create an instance of {@link SaleItemType }
-     * 
-     */
-    public SaleItemType createSaleItemType() {
-        return new SaleItemType();
-    }
-
-    /**
-     * Create an instance of {@link ListTablesResponseType }
-     * 
-     */
-    public ListTablesResponseType createListTablesResponseType() {
-        return new ListTablesResponseType();
-    }
-
-    /**
-     * Create an instance of {@link UpdateCategoryOptionResponseType }
-     * 
-     */
-    public UpdateCategoryOptionResponseType createUpdateCategoryOptionResponseType() {
-        return new UpdateCategoryOptionResponseType();
-    }
-
-    /**
-     * Create an instance of {@link UpdatePrinterResponseType }
-     * 
-     */
-    public UpdatePrinterResponseType createUpdatePrinterResponseType() {
-        return new UpdatePrinterResponseType();
-    }
-
-    /**
-     * Create an instance of {@link ListSaleItemsForCategoryType }
-     * 
-     */
-    public ListSaleItemsForCategoryType createListSaleItemsForCategoryType() {
-        return new ListSaleItemsForCategoryType();
+    public DeletePrinterType createDeletePrinterType() {
+        return new DeletePrinterType();
     }
 
     /**
@@ -239,67 +121,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PaymentRecord }
+     * Create an instance of {@link CustomerInfo }
      * 
      */
-    public PaymentRecord createPaymentRecord() {
-        return new PaymentRecord();
+    public CustomerInfo createCustomerInfo() {
+        return new CustomerInfo();
     }
 
     /**
-     * Create an instance of {@link OrderItem }
+     * Create an instance of {@link ListPrintersType }
      * 
      */
-    public OrderItem createOrderItem() {
-        return new OrderItem();
-    }
-
-    /**
-     * Create an instance of {@link DeleteCategoryOptionType }
-     * 
-     */
-    public DeleteCategoryOptionType createDeleteCategoryOptionType() {
-        return new DeleteCategoryOptionType();
-    }
-
-    /**
-     * Create an instance of {@link UpdateGlobalOptionResponseType }
-     * 
-     */
-    public UpdateGlobalOptionResponseType createUpdateGlobalOptionResponseType() {
-        return new UpdateGlobalOptionResponseType();
-    }
-
-    /**
-     * Create an instance of {@link FetchSeatingAreaResponseType }
-     * 
-     */
-    public FetchSeatingAreaResponseType createFetchSeatingAreaResponseType() {
-        return new FetchSeatingAreaResponseType();
-    }
-
-    /**
-     * Create an instance of {@link ListTablesType }
-     * 
-     */
-    public ListTablesType createListTablesType() {
-        return new ListTablesType();
-    }
-
-    /**
-     * Create an instance of {@link UpdateSaleItemOptionType }
-     * 
-     */
-    public UpdateSaleItemOptionType createUpdateSaleItemOptionType() {
-        return new UpdateSaleItemOptionType();
-    }
-
-    /**
-     * Create an instance of {@link UpdateGlobalOptionType }
-     * 
-     */
-    public UpdateGlobalOptionType createUpdateGlobalOptionType() {
-        return new UpdateGlobalOptionType();
+    public ListPrintersType createListPrintersType() {
+        return new ListPrintersType();
     }
 
     /**
@@ -311,275 +145,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CreateSaleItemType }
+     * Create an instance of {@link DeleteCategoryOptionType }
      * 
      */
-    public CreateSaleItemType createCreateSaleItemType() {
-        return new CreateSaleItemType();
+    public DeleteCategoryOptionType createDeleteCategoryOptionType() {
+        return new DeleteCategoryOptionType();
     }
 
     /**
-     * Create an instance of {@link UpdateCategoryResponseType }
+     * Create an instance of {@link SaveTableType }
      * 
      */
-    public UpdateCategoryResponseType createUpdateCategoryResponseType() {
-        return new UpdateCategoryResponseType();
-    }
-
-    /**
-     * Create an instance of {@link CategoryType }
-     * 
-     */
-    public CategoryType createCategoryType() {
-        return new CategoryType();
-    }
-
-    /**
-     * Create an instance of {@link ResultType }
-     * 
-     */
-    public ResultType createResultType() {
-        return new ResultType();
-    }
-
-    /**
-     * Create an instance of {@link GlobalOptionType }
-     * 
-     */
-    public GlobalOptionType createGlobalOptionType() {
-        return new GlobalOptionType();
-    }
-
-    /**
-     * Create an instance of {@link CreateCategoryOptionResponseType }
-     * 
-     */
-    public CreateCategoryOptionResponseType createCreateCategoryOptionResponseType() {
-        return new CreateCategoryOptionResponseType();
-    }
-
-    /**
-     * Create an instance of {@link Order }
-     * 
-     */
-    public Order createOrder() {
-        return new Order();
-    }
-
-    /**
-     * Create an instance of {@link ListGlobalOptionType }
-     * 
-     */
-    public ListGlobalOptionType createListGlobalOptionType() {
-        return new ListGlobalOptionType();
-    }
-
-    /**
-     * Create an instance of {@link ListCategoryType }
-     * 
-     */
-    public ListCategoryType createListCategoryType() {
-        return new ListCategoryType();
-    }
-
-    /**
-     * Create an instance of {@link SaveTableResponseType }
-     * 
-     */
-    public SaveTableResponseType createSaveTableResponseType() {
-        return new SaveTableResponseType();
-    }
-
-    /**
-     * Create an instance of {@link SeatingAreaType }
-     * 
-     */
-    public SeatingAreaType createSeatingAreaType() {
-        return new SeatingAreaType();
-    }
-
-    /**
-     * Create an instance of {@link UpdatePrinterType }
-     * 
-     */
-    public UpdatePrinterType createUpdatePrinterType() {
-        return new UpdatePrinterType();
-    }
-
-    /**
-     * Create an instance of {@link ListPrintersResponseType }
-     * 
-     */
-    public ListPrintersResponseType createListPrintersResponseType() {
-        return new ListPrintersResponseType();
-    }
-
-    /**
-     * Create an instance of {@link ListCategoryResponseType }
-     * 
-     */
-    public ListCategoryResponseType createListCategoryResponseType() {
-        return new ListCategoryResponseType();
-    }
-
-    /**
-     * Create an instance of {@link ListSaleItemsForCategoryResponseType }
-     * 
-     */
-    public ListSaleItemsForCategoryResponseType createListSaleItemsForCategoryResponseType() {
-        return new ListSaleItemsForCategoryResponseType();
-    }
-
-    /**
-     * Create an instance of {@link CreateCategoryOptionType }
-     * 
-     */
-    public CreateCategoryOptionType createCreateCategoryOptionType() {
-        return new CreateCategoryOptionType();
-    }
-
-    /**
-     * Create an instance of {@link CreateSaleItemResponseType }
-     * 
-     */
-    public CreateSaleItemResponseType createCreateSaleItemResponseType() {
-        return new CreateSaleItemResponseType();
-    }
-
-    /**
-     * Create an instance of {@link DeleteSaleItemOptionResponseType }
-     * 
-     */
-    public DeleteSaleItemOptionResponseType createDeleteSaleItemOptionResponseType() {
-        return new DeleteSaleItemOptionResponseType();
-    }
-
-    /**
-     * Create an instance of {@link CreateGlobalOptionType }
-     * 
-     */
-    public CreateGlobalOptionType createCreateGlobalOptionType() {
-        return new CreateGlobalOptionType();
-    }
-
-    /**
-     * Create an instance of {@link DeleteSaleItemOptionType }
-     * 
-     */
-    public DeleteSaleItemOptionType createDeleteSaleItemOptionType() {
-        return new DeleteSaleItemOptionType();
-    }
-
-    /**
-     * Create an instance of {@link CreatePrinterResponseType }
-     * 
-     */
-    public CreatePrinterResponseType createCreatePrinterResponseType() {
-        return new CreatePrinterResponseType();
-    }
-
-    /**
-     * Create an instance of {@link DeleteCategoryResponseType }
-     * 
-     */
-    public DeleteCategoryResponseType createDeleteCategoryResponseType() {
-        return new DeleteCategoryResponseType();
-    }
-
-    /**
-     * Create an instance of {@link FetchSaleItemResponseType }
-     * 
-     */
-    public FetchSaleItemResponseType createFetchSaleItemResponseType() {
-        return new FetchSaleItemResponseType();
-    }
-
-    /**
-     * Create an instance of {@link DeleteSeatingAreaResponseType }
-     * 
-     */
-    public DeleteSeatingAreaResponseType createDeleteSeatingAreaResponseType() {
-        return new DeleteSeatingAreaResponseType();
-    }
-
-    /**
-     * Create an instance of {@link SaleItemOptionType }
-     * 
-     */
-    public SaleItemOptionType createSaleItemOptionType() {
-        return new SaleItemOptionType();
-    }
-
-    /**
-     * Create an instance of {@link FetchTableResponseType }
-     * 
-     */
-    public FetchTableResponseType createFetchTableResponseType() {
-        return new FetchTableResponseType();
-    }
-
-    /**
-     * Create an instance of {@link DeletePrinterResponseType }
-     * 
-     */
-    public DeletePrinterResponseType createDeletePrinterResponseType() {
-        return new DeletePrinterResponseType();
-    }
-
-    /**
-     * Create an instance of {@link CreateCategoryResponseType }
-     * 
-     */
-    public CreateCategoryResponseType createCreateCategoryResponseType() {
-        return new CreateCategoryResponseType();
-    }
-
-    /**
-     * Create an instance of {@link FetchTableType }
-     * 
-     */
-    public FetchTableType createFetchTableType() {
-        return new FetchTableType();
-    }
-
-    /**
-     * Create an instance of {@link UpdateSaleItemResponseType }
-     * 
-     */
-    public UpdateSaleItemResponseType createUpdateSaleItemResponseType() {
-        return new UpdateSaleItemResponseType();
-    }
-
-    /**
-     * Create an instance of {@link ListCategoryOptionResponseType }
-     * 
-     */
-    public ListCategoryOptionResponseType createListCategoryOptionResponseType() {
-        return new ListCategoryOptionResponseType();
-    }
-
-    /**
-     * Create an instance of {@link UpdateCategoryOptionType }
-     * 
-     */
-    public UpdateCategoryOptionType createUpdateCategoryOptionType() {
-        return new UpdateCategoryOptionType();
-    }
-
-    /**
-     * Create an instance of {@link DeleteSaleItemType }
-     * 
-     */
-    public DeleteSaleItemType createDeleteSaleItemType() {
-        return new DeleteSaleItemType();
-    }
-
-    /**
-     * Create an instance of {@link UpdateSaleItemOptionResponseType }
-     * 
-     */
-    public UpdateSaleItemOptionResponseType createUpdateSaleItemOptionResponseType() {
-        return new UpdateSaleItemOptionResponseType();
+    public SaveTableType createSaveTableType() {
+        return new SaveTableType();
     }
 
     /**
@@ -591,67 +169,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DeleteGlobalOptionResponseType }
+     * Create an instance of {@link SaveTableResponseType }
      * 
      */
-    public DeleteGlobalOptionResponseType createDeleteGlobalOptionResponseType() {
-        return new DeleteGlobalOptionResponseType();
+    public SaveTableResponseType createSaveTableResponseType() {
+        return new SaveTableResponseType();
     }
 
     /**
-     * Create an instance of {@link PrinterType }
+     * Create an instance of {@link ListCategoryResponseType }
      * 
      */
-    public PrinterType createPrinterType() {
-        return new PrinterType();
-    }
-
-    /**
-     * Create an instance of {@link FetchSaleItemType }
-     * 
-     */
-    public FetchSaleItemType createFetchSaleItemType() {
-        return new FetchSaleItemType();
-    }
-
-    /**
-     * Create an instance of {@link CreateGlobalOptionResponseType }
-     * 
-     */
-    public CreateGlobalOptionResponseType createCreateGlobalOptionResponseType() {
-        return new CreateGlobalOptionResponseType();
-    }
-
-    /**
-     * Create an instance of {@link DeleteSeatingAreaType }
-     * 
-     */
-    public DeleteSeatingAreaType createDeleteSeatingAreaType() {
-        return new DeleteSeatingAreaType();
-    }
-
-    /**
-     * Create an instance of {@link CreatePrinterType }
-     * 
-     */
-    public CreatePrinterType createCreatePrinterType() {
-        return new CreatePrinterType();
-    }
-
-    /**
-     * Create an instance of {@link TableType }
-     * 
-     */
-    public TableType createTableType() {
-        return new TableType();
-    }
-
-    /**
-     * Create an instance of {@link CreateCategoryType }
-     * 
-     */
-    public CreateCategoryType createCreateCategoryType() {
-        return new CreateCategoryType();
+    public ListCategoryResponseType createListCategoryResponseType() {
+        return new ListCategoryResponseType();
     }
 
     /**
@@ -671,6 +201,182 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link UpdateSaleItemType }
+     * 
+     */
+    public UpdateSaleItemType createUpdateSaleItemType() {
+        return new UpdateSaleItemType();
+    }
+
+    /**
+     * Create an instance of {@link UpdateCategoryOptionResponseType }
+     * 
+     */
+    public UpdateCategoryOptionResponseType createUpdateCategoryOptionResponseType() {
+        return new UpdateCategoryOptionResponseType();
+    }
+
+    /**
+     * Create an instance of {@link ListCategoryOptionType }
+     * 
+     */
+    public ListCategoryOptionType createListCategoryOptionType() {
+        return new ListCategoryOptionType();
+    }
+
+    /**
+     * Create an instance of {@link DeleteSaleItemOptionType }
+     * 
+     */
+    public DeleteSaleItemOptionType createDeleteSaleItemOptionType() {
+        return new DeleteSaleItemOptionType();
+    }
+
+    /**
+     * Create an instance of {@link OrderItem }
+     * 
+     */
+    public OrderItem createOrderItem() {
+        return new OrderItem();
+    }
+
+    /**
+     * Create an instance of {@link CategoryOptionType }
+     * 
+     */
+    public CategoryOptionType createCategoryOptionType() {
+        return new CategoryOptionType();
+    }
+
+    /**
+     * Create an instance of {@link UpdateSaleItemResponseType }
+     * 
+     */
+    public UpdateSaleItemResponseType createUpdateSaleItemResponseType() {
+        return new UpdateSaleItemResponseType();
+    }
+
+    /**
+     * Create an instance of {@link CreateGlobalOptionType }
+     * 
+     */
+    public CreateGlobalOptionType createCreateGlobalOptionType() {
+        return new CreateGlobalOptionType();
+    }
+
+    /**
+     * Create an instance of {@link CreateSaleItemResponseType }
+     * 
+     */
+    public CreateSaleItemResponseType createCreateSaleItemResponseType() {
+        return new CreateSaleItemResponseType();
+    }
+
+    /**
+     * Create an instance of {@link UpdateCategoryResponseType }
+     * 
+     */
+    public UpdateCategoryResponseType createUpdateCategoryResponseType() {
+        return new UpdateCategoryResponseType();
+    }
+
+    /**
+     * Create an instance of {@link SaveSeatingAreaResponseType }
+     * 
+     */
+    public SaveSeatingAreaResponseType createSaveSeatingAreaResponseType() {
+        return new SaveSeatingAreaResponseType();
+    }
+
+    /**
+     * Create an instance of {@link PrinterType }
+     * 
+     */
+    public PrinterType createPrinterType() {
+        return new PrinterType();
+    }
+
+    /**
+     * Create an instance of {@link ListSaleItemsForCategoryType }
+     * 
+     */
+    public ListSaleItemsForCategoryType createListSaleItemsForCategoryType() {
+        return new ListSaleItemsForCategoryType();
+    }
+
+    /**
+     * Create an instance of {@link DeleteSeatingAreaResponseType }
+     * 
+     */
+    public DeleteSeatingAreaResponseType createDeleteSeatingAreaResponseType() {
+        return new DeleteSeatingAreaResponseType();
+    }
+
+    /**
+     * Create an instance of {@link DeleteSaleItemOptionResponseType }
+     * 
+     */
+    public DeleteSaleItemOptionResponseType createDeleteSaleItemOptionResponseType() {
+        return new DeleteSaleItemOptionResponseType();
+    }
+
+    /**
+     * Create an instance of {@link CreateSaleItemType }
+     * 
+     */
+    public CreateSaleItemType createCreateSaleItemType() {
+        return new CreateSaleItemType();
+    }
+
+    /**
+     * Create an instance of {@link UpdateGlobalOptionType }
+     * 
+     */
+    public UpdateGlobalOptionType createUpdateGlobalOptionType() {
+        return new UpdateGlobalOptionType();
+    }
+
+    /**
+     * Create an instance of {@link ListTablesResponseType }
+     * 
+     */
+    public ListTablesResponseType createListTablesResponseType() {
+        return new ListTablesResponseType();
+    }
+
+    /**
+     * Create an instance of {@link SaleItemType }
+     * 
+     */
+    public SaleItemType createSaleItemType() {
+        return new SaleItemType();
+    }
+
+    /**
+     * Create an instance of {@link FetchSaleItemType }
+     * 
+     */
+    public FetchSaleItemType createFetchSaleItemType() {
+        return new FetchSaleItemType();
+    }
+
+    /**
+     * Create an instance of {@link UpdateSaleItemOptionResponseType }
+     * 
+     */
+    public UpdateSaleItemOptionResponseType createUpdateSaleItemOptionResponseType() {
+        return new UpdateSaleItemOptionResponseType();
+    }
+
+    /**
+     * Create an instance of {@link SaleItemOptionType }
+     * 
+     */
+    public SaleItemOptionType createSaleItemOptionType() {
+        return new SaleItemOptionType();
+    }
+
+    /**
      * Create an instance of {@link DeleteCategoryType }
      * 
      */
@@ -679,11 +385,43 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DeletePrinterType }
+     * Create an instance of {@link CreatePrinterType }
      * 
      */
-    public DeletePrinterType createDeletePrinterType() {
-        return new DeletePrinterType();
+    public CreatePrinterType createCreatePrinterType() {
+        return new CreatePrinterType();
+    }
+
+    /**
+     * Create an instance of {@link PaymentRecord }
+     * 
+     */
+    public PaymentRecord createPaymentRecord() {
+        return new PaymentRecord();
+    }
+
+    /**
+     * Create an instance of {@link ListGlobalOptionType }
+     * 
+     */
+    public ListGlobalOptionType createListGlobalOptionType() {
+        return new ListGlobalOptionType();
+    }
+
+    /**
+     * Create an instance of {@link CreatePrinterResponseType }
+     * 
+     */
+    public CreatePrinterResponseType createCreatePrinterResponseType() {
+        return new CreatePrinterResponseType();
+    }
+
+    /**
+     * Create an instance of {@link ListPrintersResponseType }
+     * 
+     */
+    public ListPrintersResponseType createListPrintersResponseType() {
+        return new ListPrintersResponseType();
     }
 
     /**
@@ -692,6 +430,302 @@ public class ObjectFactory {
      */
     public DeleteTableType createDeleteTableType() {
         return new DeleteTableType();
+    }
+
+    /**
+     * Create an instance of {@link UpdatePrinterResponseType }
+     * 
+     */
+    public UpdatePrinterResponseType createUpdatePrinterResponseType() {
+        return new UpdatePrinterResponseType();
+    }
+
+    /**
+     * Create an instance of {@link UpdatePrinterType }
+     * 
+     */
+    public UpdatePrinterType createUpdatePrinterType() {
+        return new UpdatePrinterType();
+    }
+
+    /**
+     * Create an instance of {@link SaveOrderType }
+     * 
+     */
+    public SaveOrderType createSaveOrderType() {
+        return new SaveOrderType();
+    }
+
+    /**
+     * Create an instance of {@link ListCategoryType }
+     * 
+     */
+    public ListCategoryType createListCategoryType() {
+        return new ListCategoryType();
+    }
+
+    /**
+     * Create an instance of {@link UpdateSaleItemOptionType }
+     * 
+     */
+    public UpdateSaleItemOptionType createUpdateSaleItemOptionType() {
+        return new UpdateSaleItemOptionType();
+    }
+
+    /**
+     * Create an instance of {@link UpdateGlobalOptionResponseType }
+     * 
+     */
+    public UpdateGlobalOptionResponseType createUpdateGlobalOptionResponseType() {
+        return new UpdateGlobalOptionResponseType();
+    }
+
+    /**
+     * Create an instance of {@link CreateCategoryResponseType }
+     * 
+     */
+    public CreateCategoryResponseType createCreateCategoryResponseType() {
+        return new CreateCategoryResponseType();
+    }
+
+    /**
+     * Create an instance of {@link Order }
+     * 
+     */
+    public Order createOrder() {
+        return new Order();
+    }
+
+    /**
+     * Create an instance of {@link DeletePrinterResponseType }
+     * 
+     */
+    public DeletePrinterResponseType createDeletePrinterResponseType() {
+        return new DeletePrinterResponseType();
+    }
+
+    /**
+     * Create an instance of {@link GlobalOptionType }
+     * 
+     */
+    public GlobalOptionType createGlobalOptionType() {
+        return new GlobalOptionType();
+    }
+
+    /**
+     * Create an instance of {@link SeatingAreaType }
+     * 
+     */
+    public SeatingAreaType createSeatingAreaType() {
+        return new SeatingAreaType();
+    }
+
+    /**
+     * Create an instance of {@link DeleteTableResponseType }
+     * 
+     */
+    public DeleteTableResponseType createDeleteTableResponseType() {
+        return new DeleteTableResponseType();
+    }
+
+    /**
+     * Create an instance of {@link ListSaleItemsForCategoryResponseType }
+     * 
+     */
+    public ListSaleItemsForCategoryResponseType createListSaleItemsForCategoryResponseType() {
+        return new ListSaleItemsForCategoryResponseType();
+    }
+
+    /**
+     * Create an instance of {@link CategoryType }
+     * 
+     */
+    public CategoryType createCategoryType() {
+        return new CategoryType();
+    }
+
+    /**
+     * Create an instance of {@link DeleteGlobalOptionResponseType }
+     * 
+     */
+    public DeleteGlobalOptionResponseType createDeleteGlobalOptionResponseType() {
+        return new DeleteGlobalOptionResponseType();
+    }
+
+    /**
+     * Create an instance of {@link CategoryInfoType }
+     * 
+     */
+    public CategoryInfoType createCategoryInfoType() {
+        return new CategoryInfoType();
+    }
+
+    /**
+     * Create an instance of {@link FetchSeatingAreaResponseType }
+     * 
+     */
+    public FetchSeatingAreaResponseType createFetchSeatingAreaResponseType() {
+        return new FetchSeatingAreaResponseType();
+    }
+
+    /**
+     * Create an instance of {@link ListTablesType }
+     * 
+     */
+    public ListTablesType createListTablesType() {
+        return new ListTablesType();
+    }
+
+    /**
+     * Create an instance of {@link ListGlobalOptionResponseType }
+     * 
+     */
+    public ListGlobalOptionResponseType createListGlobalOptionResponseType() {
+        return new ListGlobalOptionResponseType();
+    }
+
+    /**
+     * Create an instance of {@link FetchSaleItemResponseType }
+     * 
+     */
+    public FetchSaleItemResponseType createFetchSaleItemResponseType() {
+        return new FetchSaleItemResponseType();
+    }
+
+    /**
+     * Create an instance of {@link DeleteSaleItemType }
+     * 
+     */
+    public DeleteSaleItemType createDeleteSaleItemType() {
+        return new DeleteSaleItemType();
+    }
+
+    /**
+     * Create an instance of {@link SaveOrderResponseType }
+     * 
+     */
+    public SaveOrderResponseType createSaveOrderResponseType() {
+        return new SaveOrderResponseType();
+    }
+
+    /**
+     * Create an instance of {@link DeleteSeatingAreaType }
+     * 
+     */
+    public DeleteSeatingAreaType createDeleteSeatingAreaType() {
+        return new DeleteSeatingAreaType();
+    }
+
+    /**
+     * Create an instance of {@link CreateGlobalOptionResponseType }
+     * 
+     */
+    public CreateGlobalOptionResponseType createCreateGlobalOptionResponseType() {
+        return new CreateGlobalOptionResponseType();
+    }
+
+    /**
+     * Create an instance of {@link CreateCategoryType }
+     * 
+     */
+    public CreateCategoryType createCreateCategoryType() {
+        return new CreateCategoryType();
+    }
+
+    /**
+     * Create an instance of {@link ListCategoryOptionResponseType }
+     * 
+     */
+    public ListCategoryOptionResponseType createListCategoryOptionResponseType() {
+        return new ListCategoryOptionResponseType();
+    }
+
+    /**
+     * Create an instance of {@link CreateCategoryOptionType }
+     * 
+     */
+    public CreateCategoryOptionType createCreateCategoryOptionType() {
+        return new CreateCategoryOptionType();
+    }
+
+    /**
+     * Create an instance of {@link CreateCategoryOptionResponseType }
+     * 
+     */
+    public CreateCategoryOptionResponseType createCreateCategoryOptionResponseType() {
+        return new CreateCategoryOptionResponseType();
+    }
+
+    /**
+     * Create an instance of {@link FetchTableResponseType }
+     * 
+     */
+    public FetchTableResponseType createFetchTableResponseType() {
+        return new FetchTableResponseType();
+    }
+
+    /**
+     * Create an instance of {@link UpdateCategoryOptionType }
+     * 
+     */
+    public UpdateCategoryOptionType createUpdateCategoryOptionType() {
+        return new UpdateCategoryOptionType();
+    }
+
+    /**
+     * Create an instance of {@link DeleteCategoryResponseType }
+     * 
+     */
+    public DeleteCategoryResponseType createDeleteCategoryResponseType() {
+        return new DeleteCategoryResponseType();
+    }
+
+    /**
+     * Create an instance of {@link CreateSaleItemOptionResponseType }
+     * 
+     */
+    public CreateSaleItemOptionResponseType createCreateSaleItemOptionResponseType() {
+        return new CreateSaleItemOptionResponseType();
+    }
+
+    /**
+     * Create an instance of {@link TableType }
+     * 
+     */
+    public TableType createTableType() {
+        return new TableType();
+    }
+
+    /**
+     * Create an instance of {@link CreateSaleItemOptionType }
+     * 
+     */
+    public CreateSaleItemOptionType createCreateSaleItemOptionType() {
+        return new CreateSaleItemOptionType();
+    }
+
+    /**
+     * Create an instance of {@link ResultType }
+     * 
+     */
+    public ResultType createResultType() {
+        return new ResultType();
+    }
+
+    /**
+     * Create an instance of {@link FetchTableType }
+     * 
+     */
+    public FetchTableType createFetchTableType() {
+        return new FetchTableType();
+    }
+
+    /**
+     * Create an instance of {@link OrderItemOption }
+     * 
+     */
+    public OrderItemOption createOrderItemOption() {
+        return new OrderItemOption();
     }
 
     /**
@@ -992,6 +1026,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SaveOrderResponseType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.kpos.com/app", name = "SaveOrderResponseType")
+    public JAXBElement<SaveOrderResponseType> createSaveOrderResponseType(SaveOrderResponseType value) {
+        return new JAXBElement<SaveOrderResponseType>(_SaveOrderResponseType_QNAME, SaveOrderResponseType.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link CreateCategoryType }{@code >}}
      * 
      */
@@ -1115,6 +1158,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://ws.kpos.com/app", name = "DeleteGlobalOptionResponseType")
     public JAXBElement<DeleteGlobalOptionResponseType> createDeleteGlobalOptionResponseType(DeleteGlobalOptionResponseType value) {
         return new JAXBElement<DeleteGlobalOptionResponseType>(_DeleteGlobalOptionResponseType_QNAME, DeleteGlobalOptionResponseType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SaveOrderType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.kpos.com/app", name = "SaveOrderType")
+    public JAXBElement<SaveOrderType> createSaveOrderType(SaveOrderType value) {
+        return new JAXBElement<SaveOrderType>(_SaveOrderType_QNAME, SaveOrderType.class, null, value);
     }
 
     /**
