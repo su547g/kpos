@@ -5,6 +5,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is an actual item on a customer order.
@@ -20,14 +22,13 @@ public class OrderItem extends AbstractDomainObject {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
-    //owning entity
-    /*
-    @ManyToOne(cascade = CascadeType.ALL)
+    
+    @OneToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "sale_item_id")
+    @ForeignKey(name = "ORDER_ITEM_2_SALEITEM_FK")
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private SaleItem saleItem;
-    */
+    
     @Column(name = "quantity")
     private float quantity;
 
@@ -38,10 +39,10 @@ public class OrderItem extends AbstractDomainObject {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Order order;
 
-    /*@ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "bill_id")
-    @OnDelete(action = OnDeleteAction.NO_ACTION)
-    private Bill bill;   */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderItem", orphanRemoval = true, fetch = FetchType.LAZY)
+    @ForeignKey(name = "ORDER_OPTION_2_ITEM_FK")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<OrderItemOption> options = new ArrayList<OrderItemOption>();
     
     @Column(name = "notes")
     private String notes;
@@ -60,7 +61,6 @@ public class OrderItem extends AbstractDomainObject {
         this.id = id;
     }
 
-    /*
     public SaleItem getSaleItem() {
         return saleItem;
     }
@@ -68,7 +68,7 @@ public class OrderItem extends AbstractDomainObject {
     public void setSaleItem(SaleItem saleItem) {
         this.saleItem = saleItem;
     }
-    */
+    
     public float getQuantity() {
         return quantity;
     }
@@ -108,14 +108,14 @@ public class OrderItem extends AbstractDomainObject {
     public void setOverrideName(String overrideName) {
         this.overrideName = overrideName;
     }
-    /*
-    public Bill getBill() {
-        return bill;
+
+    public List<OrderItemOption> getOptions() {
+        return options;
     }
 
-    public void setBill(Bill bill) {
-        this.bill = bill;
-    }*/
+    public void setOptions(List<OrderItemOption> options) {
+        this.options = options;
+    }
 
     @Override
     public boolean equals(Object o) {

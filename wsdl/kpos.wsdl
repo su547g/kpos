@@ -250,6 +250,7 @@
                     <xs:element name="name" type="xsd:string" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="phoneNumber" type="xsd:int" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="street1" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="apartment" type="xsd:string" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="buzz" type="xsd:string" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="city" type="xsd:string" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="zipcode" type="xsd:string" maxOccurs="1" minOccurs="0"/>

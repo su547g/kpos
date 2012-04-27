@@ -227,7 +227,7 @@ CREATE TABLE `global_option` (
   `last_updated_by` int(11) DEFAULT NULL,
   `version` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -286,6 +286,7 @@ CREATE TABLE `order_bill` (
   `created_by` int(11) DEFAULT NULL,
   `last_updated_by` int(11) DEFAULT NULL,
   `version` int(11) DEFAULT NULL,
+  `num_guests` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `table_id` (`table_id`),
   KEY `ORDER_2_CUSTOMER_FK` (`customer_id`),
@@ -322,8 +323,11 @@ CREATE TABLE `order_item` (
   `last_updated` datetime DEFAULT NULL,
   `last_updated_by` int(11) DEFAULT NULL,
   `version` int(11) DEFAULT NULL,
+  `sale_item_id` int(10) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `ITEM_2_ORDER_FK` (`order_id`),
+  KEY `ORDER_ITEM_2_SALEITEM_FK` (`sale_item_id`),
+  CONSTRAINT `ORDER_ITEM_2_SALEITEM_FK` FOREIGN KEY (`sale_item_id`) REFERENCES `sale_item` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `ITEM_2_ORDER_FK` FOREIGN KEY (`order_id`) REFERENCES `order_bill` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -335,6 +339,41 @@ CREATE TABLE `order_item` (
 LOCK TABLES `order_item` WRITE;
 /*!40000 ALTER TABLE `order_item` DISABLE KEYS */;
 /*!40000 ALTER TABLE `order_item` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `order_item_option`
+--
+
+DROP TABLE IF EXISTS `order_item_option`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `order_item_option` (
+  `id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `price` double DEFAULT NULL,
+  `order_item_id` int(11) NOT NULL,
+  `sale_item_option_id` int(11) NOT NULL,
+  `version` int(11) DEFAULT NULL,
+  `created_on` datetime DEFAULT NULL,
+  `last_updated` datetime DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `last_updated_by` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ORDER_OPTION_2_ITEM_FK` (`order_item_id`),
+  KEY `ORD_OPT_2_SALEI_OPT_FK` (`sale_item_option_id`),
+  CONSTRAINT `ORDER_OPTION_2_ITEM_FK` FOREIGN KEY (`order_item_id`) REFERENCES `order_item` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `ORD_OPT_2_SALEI_OPT_FK` FOREIGN KEY (`sale_item_option_id`) REFERENCES `sale_item_option` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order_item_option`
+--
+
+LOCK TABLES `order_item_option` WRITE;
+/*!40000 ALTER TABLE `order_item_option` DISABLE KEYS */;
+/*!40000 ALTER TABLE `order_item_option` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -422,7 +461,7 @@ CREATE TABLE `restaurant_table` (
   PRIMARY KEY (`id`),
   KEY `TABLE_2_AREA_FK` (`area_id`),
   CONSTRAINT `TABLE_2_AREA_FK` FOREIGN KEY (`area_id`) REFERENCES `seating_area` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -431,6 +470,7 @@ CREATE TABLE `restaurant_table` (
 
 LOCK TABLES `restaurant_table` WRITE;
 /*!40000 ALTER TABLE `restaurant_table` DISABLE KEYS */;
+INSERT INTO `restaurant_table` VALUES (2,'Table 1',0,9,NULL,'2012-04-24 00:16:47',NULL,'2012-04-24 00:16:47',0,3),(7,'Table 2',10,12,NULL,'2012-04-24 23:25:50',NULL,'2012-04-24 23:25:50',0,3);
 /*!40000 ALTER TABLE `restaurant_table` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -507,7 +547,7 @@ CREATE TABLE `sale_item_option` (
   PRIMARY KEY (`id`),
   KEY `OPTION_2_ITEM_FK` (`sale_item_id`),
   CONSTRAINT `OPTION_2_ITEM_FK` FOREIGN KEY (`sale_item_id`) REFERENCES `sale_item` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -537,7 +577,7 @@ CREATE TABLE `seating_area` (
   `version` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -546,6 +586,7 @@ CREATE TABLE `seating_area` (
 
 LOCK TABLES `seating_area` WRITE;
 /*!40000 ALTER TABLE `seating_area` DISABLE KEYS */;
+INSERT INTO `seating_area` VALUES (2,'A 1','2012-04-24 00:03:09','2012-04-24 00:03:09',NULL,NULL,0),(3,'Area 1','2012-04-24 00:16:46','2012-04-24 00:16:46',NULL,NULL,4);
 /*!40000 ALTER TABLE `seating_area` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -558,4 +599,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-04-21 22:01:34
+-- Dump completed on 2012-04-27  0:08:11
