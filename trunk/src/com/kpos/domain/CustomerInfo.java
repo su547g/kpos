@@ -8,6 +8,12 @@ import javax.persistence.*;
  * Date: 4/1/12
  * Time: 1:24 AM
  */
+@NamedQueries(
+        @NamedQuery(
+                name = "CustomerInfo.findByPhone",
+                query = "from CustomerInfo c where c.phone = :aPhone"
+        )
+)
 @Entity
 @Table(name = "CUSTOMER_INFO")
 public class CustomerInfo extends AbstractDomainObject {
@@ -20,7 +26,7 @@ public class CustomerInfo extends AbstractDomainObject {
     private String name;
     
     @Column(name = "phone")
-    private String phone;
+    private Long phone;
     
     @Column(name = "address")
     private String address;
@@ -48,11 +54,11 @@ public class CustomerInfo extends AbstractDomainObject {
         this.name = name;
     }
 
-    public String getPhone() {
+    public Long getPhone() {
         return phone;
     }
 
-    public void setPhone(String phone) {
+    public void setPhone(Long phone) {
         this.phone = phone;
     }
 

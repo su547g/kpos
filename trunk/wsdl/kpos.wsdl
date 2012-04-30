@@ -210,7 +210,7 @@
                     <xs:element name="transactionTS" type="xsd:dateTime" minOccurs="0" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
-            <xs:complexType name="OrderItem">
+            <xs:complexType name="OrderItemType">
                 <xs:sequence>
                     <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="orderId" type="xsd:long" minOccurs="0" maxOccurs="1"/>
@@ -219,10 +219,10 @@
                     <xs:element name="quantity" type="xsd:int" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="price" type="xsd:double" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="notes" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-                    <xs:element name="options" type="tns:OrderItemOption" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="options" type="tns:OrderItemOptionType" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:complexType>
-            <xs:complexType name="OrderItemOption">
+            <xs:complexType name="OrderItemOptionType">
                 <xs:sequence>
                     <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="orderItemId" type="xsd:long" minOccurs="0" maxOccurs="1"/>
@@ -232,7 +232,7 @@
                     <xs:element name="price" type="xsd:double" minOccurs="0" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
-            <xs:complexType name="Order">
+            <xs:complexType name="OrderType">
                 <xs:sequence>
                     <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="type" type="xsd:string" minOccurs="1" maxOccurs="1"/>
@@ -242,16 +242,16 @@
                     <xs:element name="notes" type="xsd:string" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="status" type="xsd:string" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="createTime" type="xsd:dateTime" minOccurs="0" maxOccurs="1"/>
-                    <xs:element name="orderItems" type="tns:OrderItem" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="orderItems" type="tns:OrderItemType" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="payments" type="tns:PaymentRecord" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="numOfGuests" type="xsd:int" minOccurs="0" maxOccurs="1"/>
-                    <xs:element name="customer" type="tns:CustomerInfo" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="customer" type="tns:CustomerInfoType" minOccurs="0" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
-            <xs:complexType name="CustomerInfo">
+            <xs:complexType name="CustomerInfoType">
                 <xs:sequence>
                     <xs:element name="name" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-                    <xs:element name="phoneNumber" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="phoneNumber" type="xsd:long" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="street1" type="xsd:string" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="apartment" type="xsd:string" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="buzz" type="xsd:string" minOccurs="0" maxOccurs="1"/>
@@ -615,7 +615,7 @@
 
             <xs:complexType name="SaveOrderType">
                 <xs:sequence>
-                    <xs:element name="order" type="tns:Order" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="order" type="tns:OrderType" minOccurs="1" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="SaveOrderResponseType">

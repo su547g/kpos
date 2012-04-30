@@ -2,6 +2,10 @@ package com.kpos.service;
 
 import com.kpos.dao.*;
 import com.kpos.domain.*;
+import com.kpos.domain.CustomerInfo;
+import com.kpos.domain.Order;
+import com.kpos.domain.OrderItem;
+import com.kpos.domain.OrderItemOption;
 import com.kpos.ws.app.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +52,15 @@ public class ContentManagementServiceImpl implements IContentManagementService {
 
     @Autowired
     private ISeatingAreaDao seatingAreaDao;
+    
+    @Autowired
+    private ICustomerInfoDao customerInfoDao;
+
+    @Autowired
+    private IOrderDao orderDao;
+    
+    @Autowired
+    private IOrderItemOptionDao orderItemOptionDao;
     
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public CreateResult<MenuCategory> createMenuCategory(MenuCategory aCategory, List<Long> printerIds) {
@@ -721,5 +734,99 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             result.setSuccessful(false);
         }
         return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public CreateResult<Order> createNewOrder(OrderType orderType) {
+        CreateResult<Order> result = new CreateResult<Order>();
+        Order order = new Order();
+        order.setNotes(orderType.getNotes());
+        order.setOrderType(orderType.getType());
+        order.setNumOfGuests(orderType.getNumOfGuests());
+        order.setCreatedOn(new Date());
+        order.setLastUpdated(new Date());
+        order.setTotalPrice(orderType.getTotalPrice());
+
+        if(orderType.getTableId() != null) {
+            RestaurantTable table = tableDao.findById(orderType.getTableId());
+            order.setTable(table);
+        }
+        if(orderType.getCustomer() != null){
+            CustomerInfo customer = customerInfoDao.findByPhoneNumber(String.valueOf(orderType.getCustomer().getPhoneNumber()));
+            if(null == customer) {
+                customer = new CustomerInfo();
+                customer.setAddress(orderType.getCustomer().getStreet1() + " " + orderType.getCustomer().getApartment());
+                customer.setBuzz(orderType.getCustomer().getBuzz());
+                customer.setName(orderType.getCustomer().getName());
+                customer.setPhone(orderType.getCustomer().getPhoneNumber());
+                customer.setCreatedOn(new Date());
+                customer.setLastUpdated(new Date());
+            }
+            order.setCustomerInfo(customer);
+        }
+        
+        for(OrderItemType itemType : orderType.getOrderItems()) {
+            OrderItem orderItem = new OrderItem();
+            orderItem.setNotes(itemType.getNotes());
+            orderItem.setQuantity(itemType.getQuantity());
+            orderItem.setCreatedOn(new Date());
+            orderItem.setLastUpdated(new Date());
+            SaleItem saleItem = saleItemDao.findSaleItem(itemType.getSaleItemId());
+            orderItem.setSaleItem(saleItem);
+            if(itemType.getPrice() != null && itemType.getPrice() > 0) {
+                orderItem.setSalePrice(itemType.getPrice());
+            } else {
+                orderItem.setSalePrice(0);
+            }
+            for(OrderItemOptionType optionType : itemType.getOptions()) {
+                SaleItemOption saleItemOption = saleItemOptionDao.findSaleItemOption(optionType.getItemOptionId());
+                if(saleItemOption != null) {
+                    OrderItemOption orderItemOption = new OrderItemOption();
+                    orderItemOption.setOrderItem(orderItem);
+                    orderItemOption.setPrice(order.getOrderType().equalsIgnoreCase(Order.OrderType.IN.name()) ? saleItemOption.getPrice() : saleItemOption.getOutPrice());
+                    orderItemOption.setQuantity(optionType.getQuantity());
+                    
+                    orderItem.getOptions().add(orderItemOption);
+                }
+            }
+            order.getOrderItems().add(orderItem);
+        }
+        
+        orderDao.insert(order);
+        result.setSuccessful(true);
+        result.setCreated(order);
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public UpdateResult<Order> updateOrder(OrderType orderType) {
+        UpdateResult<Order> result = new UpdateResult<Order>();
+
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public DeleteResult deleteOrder(long orderId) {
+        DeleteResult result = new DeleteResult();
+        boolean isDeleted = orderDao.delete(orderId);
+        result.setSuccessful(isDeleted);
+        result.setId(orderId);
+        return result;
+    }
+
+    @Override
+    public FetchResult<Order> fetchOrderById(long aId) {
+        FetchResult<Order> fetchResult = new FetchResult<Order>();
+        Order order = orderDao.findById(aId);
+        if(order != null) {
+            fetchResult.setTarget(order);
+            fetchResult.setSuccessful(true);
+        } else {
+            fetchResult.setSuccessful(false);
+        }
+        return fetchResult;
     }
 }
