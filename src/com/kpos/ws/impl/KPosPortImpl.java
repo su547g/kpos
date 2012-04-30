@@ -1,6 +1,7 @@
 package com.kpos.ws.impl;
 
 import com.kpos.domain.*;
+import com.kpos.domain.Order;
 import com.kpos.service.*;
 import com.kpos.ws.app.*;
 import org.slf4j.Logger;
@@ -680,6 +681,7 @@ public class KPosPortImpl implements KPosPortType {
             }
             responseType.setResult(getSoapResult(fetchResult));
         } catch (Exception e) {
+            log.error("Error in fetchSeatingArea", e);
             responseType.setResult(getSoapFaultResult(e));
         }
         return responseType;
@@ -693,6 +695,7 @@ public class KPosPortImpl implements KPosPortType {
             DeleteResult result = contentManagementService.deleteSeatingArea(parameters.getId());
             responseType.setResult(getSoapResult(result));
         } catch (Exception e){
+            log.error("Error in deleteSeatingArea", e);
             responseType.setResult(getSoapFaultResult(e));
         }
 
@@ -702,6 +705,22 @@ public class KPosPortImpl implements KPosPortType {
     @Override
     public SaveOrderResponseType saveOrder(
             @WebParam(partName = "parameters", name = "SaveOrderType", targetNamespace = NS) SaveOrderType parameters) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        SaveOrderResponseType responseType = new SaveOrderResponseType();
+        OrderType orderType = parameters.getOrder();
+        try {
+            if(orderType.getId() == null || orderType.getId() == 0) {
+                CreateResult<Order> result = contentManagementService.createNewOrder(orderType);
+                responseType.setResult(getSoapResult(result));
+                if(result.isSuccessful()) {
+                    responseType.setId(result.getCreated().getId());
+                }
+            } else {
+
+            }
+        } catch(Exception e) {
+            log.error("Error in saveOrder", e);
+            responseType.setResult(getSoapFaultResult(e));
+        }
+        return responseType;
     }
 }

@@ -1,6 +1,7 @@
 package com.kpos.service;
 
 import com.kpos.domain.*;
+import com.kpos.domain.Order;
 import com.kpos.ws.app.*;
 
 import java.util.List;
@@ -75,4 +76,12 @@ public interface IContentManagementService {
     DeleteResult deleteSeatingArea(long aId);
 
     FetchResult<SeatingArea> fetchSeatingArea(long aId);
+
+    CreateResult<Order> createNewOrder(OrderType orderType);
+
+    UpdateResult<Order> updateOrder(OrderType orderType);
+
+    FetchResult<Order> fetchOrderById(long aId);
+
+    DeleteResult deleteOrder(long orderId);
 }
