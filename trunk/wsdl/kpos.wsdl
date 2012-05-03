@@ -94,6 +94,9 @@
             <xs:element name="SaveOrderType" type="tns:SaveOrderType"/>
             <xs:element name="SaveOrderResponseType" type="tns:SaveOrderResponseType"/>
 
+            <xs:element name="ListPrintersHTMLType" type="tns:ListPrintersHTMLType"/>
+            <xs:element name="ListPrintersHTMLResponseType" type="tns:ListPrintersHTMLResponseType"/>
+
             <!--Result object-->
             <xs:complexType name="ResultType">
                 <xs:sequence>
@@ -624,6 +627,18 @@
                     <xs:element name="id" type="xsd:long" minOccurs="1" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
+
+            <xs:complexType name="ListPrintersHTMLType">
+                <xs:sequence>
+                    <xs:element name="prefix" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListPrintersHTMLResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="html" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
             <!--End of operations-->
         </xs:schema>
     </wsdl:types>
@@ -838,6 +853,13 @@
     <wsdl:message name="SaveOrderResponseMessage">
         <wsdl:part name="parameters" element="tns:SaveOrderResponseType"/>
     </wsdl:message>
+
+    <wsdl:message name="ListPrintersHTMLMessage">
+        <wsdl:part name="parameters" element="tns:ListPrintersHTMLType"/>
+    </wsdl:message>
+    <wsdl:message name="ListPrintersHTMLResponseMessage">
+        <wsdl:part name="parameters" element="tns:ListPrintersHTMLResponseType"/>
+    </wsdl:message>
     <!--End of messages-->
 
     <wsdl:portType name="KPosPortType">
@@ -988,6 +1010,11 @@
         <wsdl:operation name="SaveOrder">
             <wsdl:input message="tns:SaveOrderMessage" name="SaveOrder"/>
             <wsdl:output message="tns:SaveOrderResponseMessage" name="SaveOrderResponse"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="ListPrintersHTML">
+            <wsdl:input message="tns:ListPrintersHTMLMessage" name="ListPrintersHTML"/>
+            <wsdl:output message="tns:ListPrintersHTMLResponseMessage" name="ListPrintersHTMLResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -1302,6 +1329,16 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="SaveOrderResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="ListPrintersHTML">
+            <soap:operation soapAction="http://ws.kpos.com/ListPrinters" style="document"/>
+            <wsdl:input name="ListPrintersHTML">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="ListPrintersHTMLResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>

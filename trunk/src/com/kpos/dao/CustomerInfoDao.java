@@ -1,6 +1,7 @@
 package com.kpos.dao;
 
 import com.kpos.domain.CustomerInfo;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
  * Author: kkwang
  * Date: 4/27/12 11:00 PM
  */
+@Repository
 public class CustomerInfoDao extends AbstractJpaDao<CustomerInfo> implements ICustomerInfoDao{
     @Override
     protected Class getEntityClass() {
