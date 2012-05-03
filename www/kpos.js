@@ -162,6 +162,53 @@ function ws_delete_printer(deletePrinterType, handler) {
 	alert(soapXML);
 	callWebService(soapXML, handler);
 }
+
+function Category(id, name, notes, thumb, printerIds) {
+	this.myId = id;
+	this.myName = name;
+	this.myNotes = notes;
+	this.myThumb = thumb;
+	this.myPrinterIds = printerIds;
+	this.tag = "<app:category>";
+	this.endTag = "</app:category>";
+	this.getXML = function() {
+		var xml = this.tag;
+		if(this.myId != null && this.myId != "") {
+            xml += "<app:id>" + this.myId + "</app:id>";
+        }
+        xml += "<app:name>" + this.myName + "</app:name>";
+        if(this.myNotes != null && this.myNotes != "") {
+        	xml += "<app:notes>" + this.myNotes + "</app:notes>";
+        }
+        if(this.myThumb != null && this.myThumb != "") {
+        	xml += "<app:thumbPath>" + this.myNotes + "</app:thumbPath>";
+        }
+        if(this.printerIds != null) {
+        	for(var i = 0; i < this.printerIds.length; i++){
+        		xml += "<app:printerIds>" + this.printerIds[i] + "</app:printerIds>";
+        	}
+        }
+		xml += this.endTag;
+		return xml;
+	};
+}
+function CreateCategoryType(name, notes, thumb, printerIds) {
+	this.myCategory = new Category(null, name, notes, thumb, printerIds);
+	this.tag = "<app:CreateCategoryType>";
+    this.endTag = "</app:CreateCategoryType>";
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += this.tag + this.myCategory.getXML() + this.endTag;
+        xml += soapXMLEnd;
+        return xml;
+    };
+}
+function ws_create_category(createCategoryType, handler) {
+	var soapXML = createCategoryType.getXML();
+	alert(soapXML);
+	callWebService(soapXML, handler);
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////
 
 //This is the AuthenticateUserType class.

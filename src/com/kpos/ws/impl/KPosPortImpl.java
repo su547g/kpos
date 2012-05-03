@@ -723,4 +723,23 @@ public class KPosPortImpl implements KPosPortType {
         }
         return responseType;
     }
+
+    @Override
+    public ListPrintersHTMLResponseType listPrintersHTML(
+            @WebParam(partName = "parameters", name = "ListPrintersHTMLType", targetNamespace = NS) ListPrintersHTMLType parameters) {
+        ListPrintersHTMLResponseType responseType = new ListPrintersHTMLResponseType();
+        String prefix = parameters.getPrefix();
+        StringBuilder html = new StringBuilder("");
+        FetchResult<List<Printer>> result = this.contentManagementService.listPrinters();
+        if(result.isSuccessful()) {
+            for(Printer p : result.getTarget()) {
+                html.append("<input type='checkbox' id='").append(prefix).append("'").append(" name='").append(prefix).append("'");
+                html.append(" value='").append(p.getId()).append("'>");
+                html.append(p.getName()).append("</input>");
+            }
+        }
+        responseType.setHtml(html.toString());
+        responseType.setResult(getSoapResult(result));
+        return responseType;
+    }
 }
