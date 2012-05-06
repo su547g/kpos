@@ -181,11 +181,11 @@ function Category(id, name, notes, thumb, printerIds) {
         	xml += "<app:notes>" + this.myNotes + "</app:notes>";
         }
         if(this.myThumb != null && this.myThumb != "") {
-        	xml += "<app:thumbPath>" + this.myNotes + "</app:thumbPath>";
+        	xml += "<app:thumbPath>" + this.myThumb + "</app:thumbPath>";
         }
-        if(this.printerIds != null) {
-        	for(var i = 0; i < this.printerIds.length; i++){
-        		xml += "<app:printerIds>" + this.printerIds[i] + "</app:printerIds>";
+        if(this.myPrinterIds != null) {
+        	for(var i = 0; i < this.myPrinterIds.length; i++){
+        		xml += "<app:printerIds>" + this.myPrinterIds[i] + "</app:printerIds>";
         	}
         }
 		xml += this.endTag;
@@ -205,10 +205,57 @@ function CreateCategoryType(name, notes, thumb, printerIds) {
 }
 function ws_create_category(createCategoryType, handler) {
 	var soapXML = createCategoryType.getXML();
-	alert(soapXML);
+	//alert(soapXML);
 	callWebService(soapXML, handler);
 }
 
+function UpdateCategoryType(id, name, notes, thumb, printerIds) {
+    this.myCategory = new Category(id, name, notes, thumb, printerIds);
+    this.tag = "<app:UpdateCategoryType>";
+    this.endTag = "</app:UpdateCategoryType>";
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += this.tag + this.myCategory.getXML() + this.endTag;
+        xml += soapXMLEnd;
+        return xml;
+    };
+}
+function ws_update_category(updateCategoryType, handler) {
+    var soapXML = updateCategoryType.getXML();
+    alert(soapXML);
+    callWebService(soapXML, handler);
+}
+
+function ListPrintersHTMLType(id) {
+	this.myId = id;
+	this.tag = "<app:ListPrintersHTMLType>";
+	this.endTag = "</app:ListPrintersHTMLType>";
+	this.getXML = function() {
+		var xml = soapXMLBegin;
+		xml += this.tag + "<app:prefix>" + this.myId + "</app:prefix>" + this.endTag;
+		xml += soapXMLEnd;
+		return xml;
+	};
+}
+function ws_list_printer_html(listPrintersHTMLType, handler) {
+	var soapXML = listPrintersHTMLType.getXML();
+	//alert(soapXML);
+	callWebService(soapXML, handler);
+}
+
+function ListCategoriesType() {
+    this.tag = "<app:ListCategoryType/>";
+    this.getXML = function() {
+        var xml = soapXMLBegin + this.tag + soapXMLEnd;
+        return xml;
+    };
+}
+
+function ws_list_categories(handler) {
+    var soapType = new ListCategoriesType();
+    var soapXML = soapType.getXML();
+    callWebService(soapXML, handler);
+}
 //////////////////////////////////////////////////////////////////////////////////////////
 
 //This is the AuthenticateUserType class.
