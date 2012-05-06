@@ -400,7 +400,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         Printer printer = printerDao.findById(soapType.getId());
         if(printer != null) {
             Printer obj = printerDao.findByName(soapType.getName());
-            if(obj != null) {
+            if(obj != null && obj.getId().longValue() != soapType.getId().longValue()) {
                 result.setSuccessful(false);
                 result.setException(new Exception("Printer name already exists!"));
                 return result;

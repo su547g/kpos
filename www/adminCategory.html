@@ -3,6 +3,17 @@
 <html>
 <head>
     <title></title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta id="viewport" name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="apple-touch-fullscreen" content="yes" />
+
+    <script type="text/javascript" src="xml2json.js"></script>
+    <script type="text/javascript" src="kpos.js"></script>
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.min.js"></script>
+    
     <link rel="stylesheet" href="example.css" TYPE="text/css" MEDIA="screen">
     
     <style type="text/css">
@@ -91,91 +102,294 @@
 
 	<!-- Load the tabber code -->
 	<script type="text/javascript" src="tabber.js"></script>
+	<script language="javascript">
+	    var currentRow=-1;
+	
+		var ADD = "ADD";
+		var UPDATE = "UPDATE";
+		
+	    var v_selected_cat_rowid = "";
+	    
+	    var curr_category = localStorage.getItem('curr_category');
+	    
+		var operation = "";
+		
+		function setCurrentCategory(category) {
+			curr_category = category;
+			var jsonString = obj2str(curr_category);
+			localStorage.setItem('curr_category', jsonString);
+		}
+		function getCurrentCategory() {
+			curr_category = strToObj(localStorage.getItem('curr_category'));
+			return curr_category;
+		}
+		function getCategories() {
+			var categories = strToObj(localStorage.getItem('v_categories'));
+			if(categories == null || categories.length == undefined) {
+				var category_array = new Array();
+				category_array.push(categories);
+				return category_array;
+			}
+			return categories;
+		}
+		function setCategories(categories) {
+			var jsonString = obj2str(categories);
+			localStorage.setItem('v_categories', jsonString);
+		}
+			
+	    function highlightRow(row, highLight) {
+	        row.style.cursor = 'pointer';
+	        var cell = row.cells[0];
+	        var bgColor = "background-color:" + cell.style.background;
+	
+	        if(highLight) {
+	            //cell.style.cssText = 'border-width: 1px; border-color: blue; ' + bgColor;
+	            cell.style.borderWidth = "1px";
+	            cell.style.borderColor = "blue";
+	        } else {
+	            //cell.style.cssText = 'border-width: 1px; border-color: #B3B1B1 ' + bgColor;
+	            cell.style.borderWidth = "1px";
+	            cell.style.borderColor = "#B3B1B1";
+	        }
+	    }
+	
+	    function selectRow(tableID, selectedRowID) {
+	        var table = document.getElementById(tableID);
+	        v_selected_cat_rowid = selectedRowID;
+	        var rowCount = table.rows.length;
+	        operation = UPDATE;
+	        for(var i = 0; i < rowCount; i++) {
+	            var row = table.rows[i];
+	            if(row.id == selectedRowID) {
+	                row.style.background = '#dcfac9';
+	                row.cells[0].style.background = '#dcfac9';
+	                row.cells[1].style.background = '#dcfac9';
+	                currentRow = i;
+	                
+	                var v_categories = getCategories();
+	                if(v_categories.length != undefined) {
+	                	setCurrentCategory(v_categories[i]);
+	                } else {
+	                	setCurrentCategory(v_categories);
+	                }
+	                if(curr_category != null) {
+	                	document.getElementById("categoryName").value = curr_category.name;
+	        			document.getElementById("categoryNotes").value = curr_category.notes;
+	        			document.getElementById("catThumb").value = curr_category.thumb;
+	        			document.getElementById("categoryImg").src = curr_category.thumb;
+	        			document.getElementById("categoryName").readOnly = false;
+	        			document.getElementById("categoryNotes").readOnly = false;
+	        			document.getElementById("catThumb2").disabled = false;
+	        			//Set selected pritners
+	        			var printerIds = curr_category.printerids;
+	        			if(printerIds != null && printerIds.length != undefined) {
+	        				var printers = document.getElementsByName("catPrinters");
+	        				for(var m = 0; m < printerIds.length; m++) {
+	        					var pId = printerIds[m];
+	        					for(var n = 0; n < printers.length; n++) {
+	        						if(printers[n].value == pId) {
+	        							printers[n].checked = true;
+	        						}
+	        					}
+	        				}
+	        			}
+	        		}
+	            } else {
+	                row.style.background = 'eee'; //'#f0c992';
+	                row.cells[0].style.background = 'eee'; //'#f0c992';
+	                row.cells[1].style.background = 'eee'; //'#f0c992';
+	            }
+	        }
+	    }
+	
+	    function addCategoryRow(tableID, categoryObj) {
+	        var table = document.getElementById(tableID);
+	
+	        var rowCount = table.rows.length;
+	        var row = table.insertRow(rowCount);
+	        var rowId = tableID + "_r" + rowCount;
+	
+	        row.id = rowId;
+	        row.name = rowId;
+	        //row.setAttribute('onclick', 'selectRow("'+tableID+'", "'+rowId+'");');
+	        
+	        row.onmouseover = function(){ highlightRow(this, true); };
+	        row.onmouseout = function(){ highlightRow(this, false); };
+	
+	        var cell1 = row.insertCell(0);
+	        cell1.setAttribute('onclick', 'selectRow("'+tableID+'", "'+rowId+'");');
+	        var element1 = document.createTextNode(categoryObj.name==null?"":categoryObj.name);
+	        cell1.appendChild(element1);
+	
+	        var cell2 = row.insertCell(1);
+	        var temp = "<a href='javascript:deleteRow(\"" + tableID + "\",\"" + rowId +"\");'>X</a>";
+	
+	        cell2.innerHTML = temp;
+	    }
+	
+	    function deleteRow(tableID, rowID) {
+	        try {
+	            var table = document.getElementById(tableID);
+	            var rowCount = table.rows.length;
+	            for(var i = 0; i < rowCount; i++) {
+	                var row = table.rows[i];
+	                if(row.id == rowID) {
+	                    table.deleteRow(i);
+	                    rowCount--;
+	                    i--;
+	                }
+	            }
+	        } catch(e) {
+	            //alert(e);
+	        }
+	    }
+	    
+	    function saveCategoryInfo() {
+	    	if(operation == ADD){
+	    		createCategory();
+	    	} else if(operation == UPDATE) {
+	    		updateCategory();
+	    	}
+	    }
+	    
+	    function newCategory() {
+	    	document.getElementById("categoryName").value = "";
+	      	document.getElementById("categoryName").readOnly = false;
+	        document.getElementById("categoryNotes").value = "";
+	        document.getElementById("categoryNotes").readOnly = false;
+	        document.getElementById("catThumb2").disabled = false;
+	        operation = ADD;
+	        setCurrentCategory(null);
+	    }
+	    
+	    function getPrinterIds(name) {
+	    	var printers = document.getElementsByName(name);
+			var printerIds = new Array();
+			if(printers != null) {
+				for(var i = 0; i < printers.length; i++) {
+					if(printers[i].checked) {
+						printerIds.push(printers[i].value);
+					}
+				}
+			}
+			return printerIds;
+	    }
+	    function createCategory() {
+	        var name = document.getElementById("categoryName").value;
+	        var thumb = document.getElementById("categoryImg").src;
+	        var notes = document.getElementById("categoryNotes").value;
+	        var catPrinterIds = getPrinterIds("catPrinters");
+			
+	        var categoryType = new CreateCategoryType(name, notes, thumb, catPrinterIds);
+	        ws_create_category(categoryType, addCategoryHandler);
+	    }
+	    function addCategoryHandler(jsonObj) {
+	        if(jsonObj != undefined && jsonObj != null &&
+	            jsonObj.createcategoryresponsetype != undefined && jsonObj.createcategoryresponsetype != null &&
+	            jsonObj.createcategoryresponsetype.result.successful == "true") {
+	            var newID = jsonObj.createcategoryresponsetype.result.id;
+	            var name = document.getElementById("categoryName").value;
+	            var notes = document.getElementById("categoryNotes").value;
+	            var thumb = document.getElementById("catThumb").value;
+	            var category = {};
+	            category["id"] = newID;
+	            category["name"] = name;
+	            category["notes"] = notes;
+	            category["thumb"] = thumb;
+	            category["printerIds"] = getPrinterIds("catPrinters");
+	            
+	            setCurrentCategory(category);
+	            var v_categories = getCategories();
+	            v_categories.push(category);
+	            setCategories(v_categories);
+	            addCategoryRow("category", category);
+	        } else {
+	            alert("failed to add category!");
+	        }
+	    }
+		function updateCategory() {
+			var name = document.getElementById("categoryName").value;
+	        var thumb = document.getElementById("categoryImg").src;
+	        var notes = document.getElementById("categoryNotes").value;
+	        var catPrinterIds = getPrinterIds("catPrinters");
+	        curr_category.name = name;
+	        curr_category.thumb = thumb;
+	        curr_category.notes = notes;
+	        curr_category.printerids = catPrinterIds;
+	        setCurrentCategory(curr_category);
+	        
+	        var categoryType = new UpdateCategoryType(curr_category.id, name, notes, thumb, catPrinterIds);
+	        ws_update_category(categoryType, updateCategoryHandler);
+		}
+		function updateCategoryHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+	            jsonObj.updatecategoryresponsetype != undefined && jsonObj.updatecategoryresponsetype != null &&
+	            jsonObj.updatecategoryresponsetype.result.successful == "true") {
+	            var selectedRow = document.getElementById(v_selected_cat_rowid);
+                if(selectedRow != null && selectedRow.cells != null) {
+                	selectedRow.cells[0].innerText = document.getElementById("categoryName").value;
+                	var categories = getCategories();
+            		for(var i = 0; i < categories.length; i++) {
+            			if(categories[i].id == curr_category.id) {
+            				categories[i] = curr_category;
+            				setCategories(categories);
+            				break;
+            			}
+            		}
+                }
+	        } else {
+	            alert("failed to update category!");
+	        }
+		}
+		
+		function setPrintersHTML(id, handler) {
+			var listPrintersHTMLType = new ListPrintersHTMLType(id);
+			ws_list_printer_html(listPrintersHTMLType, handler);
+		}
+		function setPrintersHTMLHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.listprintershtmlresponsetype != undefined && jsonObj.listprintershtmlresponsetype != null && 
+				jsonObj.listprintershtmlresponsetype.result.successful == "true") {
+				html = jsonObj.listprintershtmlresponsetype.html;
+				var temp = unescape(html); 				
+				//alert(temp);
+				temp = html.replace(/&lt;/g, "<");
+				temp = temp.replace(/&gt;/g, ">");
+				//alert(temp);
+				document.getElementById("catPrinterCell").innerHTML = temp;
+			}
+		}
+		
+		function listAllCategories(){
+			ws_list_categories(listAllCategoriesHandler);
+		}
+		function listAllCategoriesHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.listcategoryresponsetype != undefined && jsonObj.listcategoryresponsetype != null &&
+				jsonObj.listcategoryresponsetype.result.successful == 'true') {
+				var categories = jsonObj.listcategoryresponsetype.categories;
+				var count = jsonObj.listcategoryresponsetype.total;
+                setCategories(categories);
+                if(categories != undefined && categories != null) {
+	                if(count > 1) {
+	                	for(var i = 0; i < categories.length; i++) {
+	                		addCategoryRow("category", categories[i]);
+	                	}
+	                } else {
+	                	//Only one category
+	                	addCategoryRow("category", categories);
+	                }
+	            }
+			}
+		}
+		
+		function updatePicture(id, src) {
+			document.getElementById(id).src = src;
+		}
+	</script>
 </head>
 
-<script language="javascript">
-    var currentRow=-1;
-
-    function highlightRow(row, highLight) {
-        row.style.cursor = 'pointer';
-        var cell = row.cells[0];
-        var bgColor = "background-color:" + cell.style.background;
-
-        if(highLight) {
-            //cell.style.cssText = 'border-width: 1px; border-color: blue; ' + bgColor;
-            cell.style.borderWidth = "1px";
-            cell.style.borderColor = "blue";
-        } else {
-            //cell.style.cssText = 'border-width: 1px; border-color: #B3B1B1 ' + bgColor;
-            cell.style.borderWidth = "1px";
-            cell.style.borderColor = "#B3B1B1";
-        }
-    }
-
-    function selectRow(tableID, selectedRowID) {
-        var table = document.getElementById(tableID);
-        var rowCount = table.rows.length;
-        for(var i = 0; i < rowCount; i++) {
-            var row = table.rows[i];
-            if(row.id == selectedRowID) {
-                row.style.background = '#dcfac9';
-                row.cells[0].style.background = '#dcfac9';
-                currentRow = i;
-            } else {
-                row.style.background = 'eee'; //'#f0c992';
-                row.cells[0].style.background = 'eee'; //'#f0c992';
-    }
-        }
-    }
-
-    function addCategoryRow(tableID) {
-        var table = document.getElementById(tableID);
-
-        var rowCount = table.rows.length;
-        var row = table.insertRow(rowCount);
-        var rowId = tableID + "_r" + rowCount;
-
-        row.id = rowId;
-        row.name = rowId;
-        row.setAttribute('onclick', 'selectRow("'+tableID+'", "'+rowId+'");');
-        /*row.onclick = new function(){
-            alert(tableID);
-            //selectRow('"'+tableID+'"', '"'+rowId+'"');
-        };*/
-        row.onmouseover = function(){ highlightRow(this, true); };
-        row.onmouseout = function(){ highlightRow(this, false); };
-
-        var cell1 = row.insertCell(0);
-        var element1 = document.createTextNode("category"); //document.createElement("th");
-        //element1.setAttribute("class", "td1");
-        //element1.innerText = "category";
-        cell1.appendChild(element1);//row.appendChild(element1);
-
-        var cell2 = row.insertCell(1);
-        var temp = "<a href='javascript:deleteRow(\"" + tableID + "\",\"" + rowId +"\");'>X</a>";
-
-        cell2.innerHTML = temp;
-    }
-
-    function deleteRow(tableID, rowID) {
-        try {
-            var table = document.getElementById(tableID);
-            var rowCount = table.rows.length;
-            for(var i = 0; i < rowCount; i++) {
-                var row = table.rows[i];
-                if(row.id == rowID) {
-                    table.deleteRow(i);
-                    rowCount--;
-                    i--;
-                }
-            }
-        } catch(e) {
-            //alert(e);
-        }
-    }
-</script>
-
-<body>
+<body onload="javascript:listAllCategories();">
 <table width="100%">
     <tr>
         <td width="18%" valign="top" align="left">
@@ -184,12 +398,12 @@
                 <thead>
                 <tr>
                     <th class="th1" scope="col">Name</th>
-                    <th class="th2" scope="col">Notes</th>
+                    <th class="th2" scope="col"></th>
                 </tr>
                 </thead>
                 <tfoot>
                 <tr>
-                    <td colspan="2"><a href="javascript:addCategoryRow('category');">Add</a> <a>Delete</a></td>
+                    <td colspan="2"><a href="javascript:newCategory();">Add</a> <a>Delete</a></td>
                 </tr>
                 </tfoot>
                 <tbody>
@@ -197,33 +411,6 @@
 	                    <td colspan="5" valign="top" align="left">
 	                        <div class="innerb">
 	                            <table id ="category" class="tabletwo" width="100%">
-	                                <tr id="category_r0" onclick="javascript:selectRow('category', 'category_r0')"
-	                                    onmouseover="highlightRow(this, true);"
-	                                    onmouseout="highlightRow(this, false);">
-	                                    <th class="td1">T3 4264</th>
-	                                    <td><a href="javascript:deleteRow('category', 'category_r0');">X</a></td>
-	                                </tr>
-	                                <tr id="category_r1" onmouseover="highlightRow(this, true);"
-	                                    onmouseout="highlightRow(this, false);">
-	                                    <th class="td1">BA 4081</th>
-	                                    <td><a href="javascript:deleteRow('category', 'category_r1');">X</a></td>
-	                                </tr>
-	                                <tr id="category_r2">
-	                                    <th class="td1">BE 843</th>
-	                                    <td><a href="javascript:deleteRow('category', 'category_r2');">X</a></td>
-	                                </tr>
-	                                <tr id="category_r3">
-	                                    <th class="td1">FR 506</th>
-	                                    <td><a href="javascript:deleteRow('category', 'category_r3');">X</a></td>
-	                                </tr>
-	                                <tr id="category_r4">
-	                                    <th class="td1">EZY 6046</th>
-	                                    <td><a href="javascript:deleteRow('category', 'category_r4');">X</a></td>
-	                                </tr>
-	                                <tr id="category_r5">
-	                                    <th class="td1">EZY 6174</th>
-	                                    <td><a href="javascript:deleteRow('category', 'category_r5');">X</a></td>
-	                                </tr>
 	                            </table>
 	                        </div>
 	                    </td>
@@ -232,17 +419,38 @@
             </table>
         </td>
         <td valign="top" align="left">
-        	<table width="70%">
+        	<table id="categoryInfo" width="70%">
         		<tr>
         			<td align="left" valign="top">
-        				Name: <input type="text" id="categoryName" value=""/>
+        				Name: <input type="text" id="categoryName" readonly="readonly" value=""/>
+        			</td>
+        		</tr>
+        		<tr>
+        			<td align="left" valign="top">
+        				Notes: <textarea id="categoryNotes" rows="3" cols="45" readonly="readonly" value=""></textarea>
         			</td>
         		</tr>
         		<tr>
         			<td>
-        				Thumbnail: <input type="file" id="catThumb" value=""/>
+        				Thumbnail: <input type="file" id="catThumb2" accept="image/*" disabled="disabled" onchange="updatePicture('categoryImg', this.value);"/>
+        				<img id="categoryImg" src=""/>
+        				<input type="hidden" id="catThumb" readonly="readonly">
         			</td>
         		</tr>
+				<tr>
+					<td>
+						<table>
+							<tr>
+								<td>Printers</td>
+								<td id="catPrinterCell"></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+        		<tr><td><button type="button" onclick="javascript:saveCategoryInfo();">Save</button></td></tr>
+				
+				<script language="javascript">setPrintersHTML("catPrinters", setPrintersHTMLHandler)</script>
+				
         		<tr>
         			<td width="100%">
         				<div class="tabber" id="tab1">
