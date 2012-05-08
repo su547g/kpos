@@ -114,6 +114,8 @@
 	    
 		var operation = "";
 		
+		var deletedRowId = "";
+		
 		function setCurrentCategory(category) {
 			curr_category = category;
 			var jsonString = obj2str(curr_category);
@@ -136,7 +138,6 @@
 			var jsonString = obj2str(categories);
 			localStorage.setItem('v_categories', jsonString);
 		}
-			
 	    function highlightRow(row, highLight) {
 	        row.style.cursor = 'pointer';
 	        var cell = row.cells[0];
@@ -152,7 +153,11 @@
 	            cell.style.borderColor = "#B3B1B1";
 	        }
 	    }
-	
+		function uncheckPrinters(printers) {
+			for(var n = 0; n < printers.length; n++) {
+				printers[n].checked = false;
+			}
+		}
 	    function selectRow(tableID, selectedRowID) {
 	        var table = document.getElementById(tableID);
 	        v_selected_cat_rowid = selectedRowID;
@@ -181,9 +186,10 @@
 	        			document.getElementById("categoryNotes").readOnly = false;
 	        			document.getElementById("catThumb2").disabled = false;
 	        			//Set selected pritners
+	        			var printers = document.getElementsByName("catPrinters");
+	        			uncheckPrinters(printers);
 	        			var printerIds = curr_category.printerids;
 	        			if(printerIds != null && printerIds.length != undefined) {
-	        				var printers = document.getElementsByName("catPrinters");
 	        				for(var m = 0; m < printerIds.length; m++) {
 	        					var pId = printerIds[m];
 	        					for(var n = 0; n < printers.length; n++) {
@@ -193,15 +199,17 @@
 	        					}
 	        				}
 	        			}
+	        			
+	        			listSaleItemsForCat(curr_category.id);
 	        		}
+	        		document.getElementById("btnNewItem").disabled = false;
 	            } else {
-	                row.style.background = 'eee'; //'#f0c992';
-	                row.cells[0].style.background = 'eee'; //'#f0c992';
-	                row.cells[1].style.background = 'eee'; //'#f0c992';
+	                row.style.background = ''; //'#f0c992';
+	                row.cells[0].style.background = ''; //'#f0c992';
+	                row.cells[1].style.background = ''; //'#f0c992';
 	            }
 	        }
 	    }
-	
 	    function addCategoryRow(tableID, categoryObj) {
 	        var table = document.getElementById(tableID);
 	
@@ -222,28 +230,43 @@
 	        cell1.appendChild(element1);
 	
 	        var cell2 = row.insertCell(1);
-	        var temp = "<a href='javascript:deleteRow(\"" + tableID + "\",\"" + rowId +"\");'>X</a>";
+	        var temp = "<a href='javascript:deleteCategoryRow(\"" + tableID + "\",\"" + rowId +"\");'>X</a>";
 	
 	        cell2.innerHTML = temp;
 	    }
-	
-	    function deleteRow(tableID, rowID) {
+	    function deleteCategoryRow(tableId, rowID) {
 	        try {
-	            var table = document.getElementById(tableID);
-	            var rowCount = table.rows.length;
-	            for(var i = 0; i < rowCount; i++) {
-	                var row = table.rows[i];
-	                if(row.id == rowID) {
-	                    table.deleteRow(i);
-	                    rowCount--;
-	                    i--;
-	                }
-	            }
+	            var table = document.getElementById(tableId);
+                var rowCount = table.rows.length;
+                for(var i = 0; i < rowCount; i++) {
+                    var row = table.rows[i];
+                    if(row.id == rowID) {
+                    	deletedRowId = rowID;
+                        var categories = getCategories();
+                        var category = categories[i];
+                        if(category.id != null) {
+                        	var deleteCategoryType = new DeleteCategoryType(category.id);
+                        	ws_delete_category(deleteCategoryType, deleteCategoryHandler);
+                        }
+                        rowCount--;
+                        i--;
+                        break;
+                    }
+                }
 	        } catch(e) {
 	            //alert(e);
 	        }
 	    }
-	    
+	    function deleteCategoryHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+                jsonObj.deletecategoryresponsetype != undefined && jsonObj.deletecategoryresponsetype != null &&
+                jsonObj.deletecategoryresponsetype.result.successful == "true") {
+                listAllCategories();
+            } else {
+            	alert("failed to delete category!");
+            }
+            deletedRowId = "";
+		}
 	    function saveCategoryInfo() {
 	    	if(operation == ADD){
 	    		createCategory();
@@ -251,13 +274,15 @@
 	    		updateCategory();
 	    	}
 	    }
-	    
 	    function newCategory() {
 	    	document.getElementById("categoryName").value = "";
 	      	document.getElementById("categoryName").readOnly = false;
 	        document.getElementById("categoryNotes").value = "";
 	        document.getElementById("categoryNotes").readOnly = false;
 	        document.getElementById("catThumb2").disabled = false;
+	        document.getElementById("categoryImg").src = "";
+	        var printers = document.getElementsByName("catPrinters");
+	        uncheckPrinters(printers);
 	        operation = ADD;
 	        setCurrentCategory(null);
 	    }
@@ -287,25 +312,11 @@
 	        if(jsonObj != undefined && jsonObj != null &&
 	            jsonObj.createcategoryresponsetype != undefined && jsonObj.createcategoryresponsetype != null &&
 	            jsonObj.createcategoryresponsetype.result.successful == "true") {
-	            var newID = jsonObj.createcategoryresponsetype.result.id;
-	            var name = document.getElementById("categoryName").value;
-	            var notes = document.getElementById("categoryNotes").value;
-	            var thumb = document.getElementById("catThumb").value;
-	            var category = {};
-	            category["id"] = newID;
-	            category["name"] = name;
-	            category["notes"] = notes;
-	            category["thumb"] = thumb;
-	            category["printerIds"] = getPrinterIds("catPrinters");
-	            
-	            setCurrentCategory(category);
-	            var v_categories = getCategories();
-	            v_categories.push(category);
-	            setCategories(v_categories);
-	            addCategoryRow("category", category);
+	           	listAllCategories();
 	        } else {
 	            alert("failed to add category!");
 	        }
+	        operation = "";
 	    }
 		function updateCategory() {
 			var name = document.getElementById("categoryName").value;
@@ -340,8 +351,8 @@
 	        } else {
 	            alert("failed to update category!");
 	        }
+	        operation = "";
 		}
-		
 		function setPrintersHTML(id, handler) {
 			var listPrintersHTMLType = new ListPrintersHTMLType(id);
 			ws_list_printer_html(listPrintersHTMLType, handler);
@@ -367,6 +378,8 @@
 			if(jsonObj != undefined && jsonObj != null &&
 				jsonObj.listcategoryresponsetype != undefined && jsonObj.listcategoryresponsetype != null &&
 				jsonObj.listcategoryresponsetype.result.successful == 'true') {
+				//Clear the table
+				document.getElementById("category").innerHTML = "";
 				var categories = jsonObj.listcategoryresponsetype.categories;
 				var count = jsonObj.listcategoryresponsetype.total;
                 setCategories(categories);
@@ -387,6 +400,248 @@
 			document.getElementById(id).src = src;
 		}
 	</script>
+	<script language="javascript">
+		var currentItemRow = -1;
+	
+	    var v_selected_item_rowid = "";
+	    
+	    var curr_item = localStorage.getItem('curr_item');
+	    
+		var itemOperation = "";
+		
+		var deletedItemRowId = "";
+		
+		function setCurrentItem(item) {
+			curr_item = item;
+			var jsonString = "null";
+			if(curr_item != null) {
+				jsonString = obj2str(curr_item);
+			}
+			localStorage.setItem('curr_item', jsonString);
+		}
+		function getCurrentItem() {
+			curr_item = strToObj(localStorage.getItem('curr_item'));
+			return curr_item;
+		}
+		function getItems() {
+			var items = strToObj(localStorage.getItem('v_items'));
+			if(items == null || items.length == undefined) {
+				var item_array = new Array();
+				item_array.push(items);
+				return item_array;
+			}
+			return items;
+		}
+		function setItems(items) {
+			var jsonString = obj2str(items);
+			localStorage.setItem('v_items', jsonString);
+		}
+		function enableDineInSizes(isEnabled) {
+			document.getElementById("smallPrice").disabled = !isEnabled;
+			document.getElementById("mediumPrice").disabled = !isEnabled;
+			document.getElementById("largePrice").disabled = !isEnabled;
+		}
+		function enableTakeoutSizes(isEnabled) {
+			document.getElementById("smallOutPrice").disabled = !isEnabled;
+			document.getElementById("mediumOutPrice").disabled = !isEnabled;
+			document.getElementById("largeOutPrice").disabled = !isEnabled;
+		}
+		function enableSeasonalPrice() {
+			var isChecked = document.getElementById("seasonPrice").checked;
+			document.getElementById("hasDineInSizes").disabled = isChecked;
+	        document.getElementById("hasTakeOutSizes").disabled = isChecked;
+	        enableDineInSizes(!isChecked);
+	        enableTakeoutSizes(!isChecked);
+	        document.getElementById("defaultItemPrice").disabled = isChecked;
+	        document.getElementById("defaultItemOutPrice").disabled = isChecked;
+		}
+		function addItemRow(tableID, itemObj, selectRowFunc, deleteRowFunc) {
+	        var table = document.getElementById(tableID);
+	
+	        var rowCount = table.rows.length;
+	        var rowId = tableID + "_r" + rowCount;
+			
+			var row = table.insertRow(rowCount);	
+	       	var innerHTML = "<tr id='"+rowId+"' onmouseover='javascript:highlightRow(this, true);' onmouseout=''javascript:highlightRow(this, false);>";
+	       	innerHTML += "<td onclick='"+selectRowFunc+"(\""+tableID+"\", \""+rowId+"\");'>"+itemObj.name+"</td><td><a href='javascript:"+deleteRowFunc+"(\""+tableID+"\",\""+rowId+"\");'>X</a></td></tr></tbody>";
+	       	row.innerHTML = innerHTML;
+	       	row.onmouseover = function(){ highlightRow(this, true); };
+	        row.onmouseout = function(){ highlightRow(this, false); };
+	    }
+		function selectItemRow(tableId, rowId) {
+			alert(rowId);
+		}
+	    function deleteItemRow(tableId, rowID) {
+	        try {
+	            var table = document.getElementById(tableId);
+                var rowCount = table.rows.length;
+                for(var i = 0; i < rowCount; i++) {
+                    var row = table.rows[i];
+                    if(row.id == rowID) {
+                    	deletedRowId = rowID;
+                        var items = getItems();
+                        var item = items[i];
+                        if(item.id != null) {
+                        	var deleteItemType = new DeleteItemType(item.id);
+                        	call_web_service(deleteItemType, deleteItemHandler);
+                        }
+                        rowCount--;
+                        i--;
+                        break;
+                    }
+                }
+	        } catch(e) {
+	            //alert(e);
+	        }
+	    }
+	    function deleteItemHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+                jsonObj.deletesaleitemresponsetype != undefined && jsonObj.deletesaleitemresponsetype != null &&
+                jsonObj.deletesaleitemresponsetype.result.successful == "true") {
+                var category = getCurrentCategory();
+                if(category != null) {
+                	listSaleItemsForCat(category.id);
+                }
+            } else {
+            	alert("failed to delete category!");
+            }
+            deletedItemRowId = "";
+		}
+		function resetItem() {
+			document.forms[0].itemName.value = "";
+	      	document.forms[0].itemName.disabled = false;
+	      	document.forms[0].itemName.readOnly = false;
+	      	document.forms[0].itemDescription.value = "";
+	      	document.forms[0].itemDescription.disabled = false;
+	      	document.forms[0].itemDescription.readOnly = false;
+	        document.forms[0].defaultItemPrice.value = "";
+	        document.forms[0].defaultItemPrice.disabled = false;
+	        document.forms[0].defaultItemOutPrice.value = "";
+	        document.forms[0].defaultItemOutPrice.disabled = false;
+	        document.forms[0].itemThumb2.disabled = false;
+	        document.forms[0].itemImg.src = "";
+	        document.forms[0].hasDineInSizes.disabled = false;
+	        document.forms[0].hasTakeOutSizes.disabled = false;
+	        document.forms[0].itemTaxable.disabled = false;
+	        document.forms[0].singleOption.disabled = false;
+	        document.forms[0].hasSeasonPrice.disabled = false;
+	        document.forms[0].seasonPrice.vaue = "";
+			document.forms[0].seasonPrice.disabled = false;
+			document.forms[0].btnSaveItem.disabled = false;
+			
+	        var printers = document.getElementsByName("itemPrinters");
+	        uncheckPrinters(printers);
+	        itemOperation = "";
+	        setCurrentItem(null);
+		}
+		function newItem() {
+	    	resetItem();
+	        itemOperation = ADD;
+	    }
+	    function setItemPrintersHTMLHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.listprintershtmlresponsetype != undefined && jsonObj.listprintershtmlresponsetype != null && 
+				jsonObj.listprintershtmlresponsetype.result.successful == "true") {
+				html = jsonObj.listprintershtmlresponsetype.html;
+				var temp = unescape(html); 				
+				//alert(temp);
+				temp = html.replace(/&lt;/g, "<");
+				temp = temp.replace(/&gt;/g, ">");
+				document.getElementById("itemPrinterCell").innerHTML = temp;
+			}
+		}
+		function saveItemInfo() {
+			if(itemOperation == ADD){
+	    		createSaleItem();
+	    	} else if(itemOperation == UPDATE) {
+	    		updateSaleItem();
+	    	}
+		}
+		function createSaleItem() {
+			if(curr_category != null) {
+				var catId = curr_category.id;
+				
+				var name = document.getElementById("itemName").value;
+				var taxable = document.getElementById("itemTaxable").checked;
+				var isSingleOption = document.getElementById("singleOption").checked;
+				var description = document.getElementById("itemDescription").value;
+				
+				var defaultPrice = document.getElementById("defaultItemPrice").value;
+				
+				var hasSeasonPrice = document.getElementById("hasSeasonPrice").checked;
+				var seasonPrice = hasSeasonPrice == true ? document.getElementById("seasonPrice").value : null;
+				
+				var defaultOutPrice = hasSeasonPrice == true ? null:document.getElementById("defaultItemOutPrice").value;
+				var smallPrice = null, mediumPrice = null, largePrice = null;
+				var smallOut = null, mediumOut = null, largeOut = null;
+				
+				var hasDineInSizes = document.getElementById("hasDineInSizes").checked;
+				var hasTakeoutSizes = document.getElementById("hasTakeOutSizes").checked;
+				if(!hasSeasonPrice) {
+					if(hasDineInSizes) {
+						smallPrice = document.getElementById("smallPrice").value;
+						mediumPrice = document.getElementById("mediumPrice").value;
+						largePrice = document.getElementById("largePrice").value;
+					}
+					if(hasTakeoutSizes) {
+						smallOut = document.getElementById("smallOutPrice").value;
+						mediumOut = document.getElementById("mediumOutPrice").value;
+						largeOut = document.getElementById("largeOutPrice").value;
+					}
+				}
+				
+				var thumb = document.getElementById("itemImg").src;
+				var printerIds = getPrinterIds("itemPrinterCell");
+				
+				var createItemType = new CreateItemType(catId,name,description,thumb,printerIds,isSingleOption,defaultPrice,defaultOutPrice,taxable,smallPrice,mediumPrice,largePrice,smallOut,mediumOut,largeOut,seasonPrice);
+				ws_create_item(createItemType, createSaleItemHandler);
+			}
+		}
+		function createSaleItemHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.createsaleitemresponsetype != undefined && jsonObj.createsaleitemresponsetype != null && 
+				jsonObj.createsaleitemresponsetype.result.successful == "true") {
+				var itemId = jsonObj.createsaleitemresponsetype.result.id;
+			} else {
+	            alert("failed to add sale item!");
+	        }
+	        itemOperation = "";
+		}
+		function updateSaleItem() {
+			
+		}
+		function updateSaleItemHandler(jsonObj) {
+			
+		}
+		function listSaleItemsForCat(catId) {
+			if(catId != null) {
+				var listType = new ListSaleItemsForCategoryType(catId);
+				call_web_service(listType, listSaleItemsForCatHandler);
+			} else {
+				alert("Please select a category.");
+			}
+		}
+		function listSaleItemsForCatHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.listsaleitemsforcategoryresponsetype != undefined && jsonObj.listsaleitemsforcategoryresponsetype != null && 
+				jsonObj.listsaleitemsforcategoryresponsetype.result.successful == "true") {
+				document.getElementById("menuItem").innerHTML = ""; //clear the table
+				var items = jsonObj.listsaleitemsforcategoryresponsetype.saleitems;
+				var count = jsonObj.listsaleitemsforcategoryresponsetype.total;
+				setItems(items);
+				if(items != undefined && items != null) {
+	                if(count > 1) {
+						for(var i = 0; i < count; i++) {
+							addItemRow("menuItem", items[i], "selectItemRow", "deleteItemRow");
+						}
+					} else {
+						addItemRow("menuItem", items, "selectItemRow", "deleteItemRow");
+					}						
+				}
+				resetItem();
+			}
+		}
+	</script>
 </head>
 
 <body onload="javascript:listAllCategories();">
@@ -403,7 +658,7 @@
                 </thead>
                 <tfoot>
                 <tr>
-                    <td colspan="2"><a href="javascript:newCategory();">Add</a> <a>Delete</a></td>
+                    <td colspan="2" align="center"><button onclick="javascript:newCategory();">New Category</button></td>
                 </tr>
                 </tfoot>
                 <tbody>
@@ -441,7 +696,7 @@
 					<td>
 						<table>
 							<tr>
-								<td>Printers</td>
+								<td>Printers:</td>
 								<td id="catPrinterCell"></td>
 							</tr>
 						</table>
@@ -461,56 +716,21 @@
 							    		<td width="20%">
 							    			<table class="tableone" align="left">
 								                <thead>
-								                <tr>
-								                    <th class="th1" scope="col">Name</th>
-								                    <th class="th2" scope="col">Notes</th>
-								                </tr>
+									                <tr>
+									                    <th class="th1" scope="col">Name</th>
+									                    <th class="th2" scope="col"></th>
+									                </tr>
 								                </thead>
 								                <tfoot>
-								                <tr>
-								                    <td colspan="2"><a>Add</a> <a>Delete</a></td>
-								                </tr>
+									                <tr>
+									                    <td align="center" colspan="2"><button id="btnNewItem"  onclick="javascript:newItem();">New Item</button></td>
+									                </tr>
 								                </tfoot>
 								                <tbody>
 									                <tr>
 									                    <td colspan="5">
 									                        <div class="innerb">
 									                            <table id ="menuItem" class="tabletwo">
-									                                <tr id="menuItem_r0"
-									                                    onclick="javascript:selectRow('menuItem', 'menuItem_r0')"
-									                                    onmouseover="highlightRow(this, true);"
-									                                    onmouseout="highlightRow(this, false);">
-									                                    <th class="td1" scope="row">T3 4264</th>
-									                                    <td><a href="javascript:deleteRow('menuItem', 'menuItem_r0');">X</a></td>
-									                                </tr>
-									                                <tr id="menuItem_r1"
-									                                    onmouseover="highlightRow(this, true);"
-									                                    onmouseout="highlightRow(this, false);">
-									                                    <th class="td1">BA 4081</th>
-									                                    <td><a href="javascript:deleteRow('menuItem', 'menuItem_r1');">X</a></td>
-									                                </tr>
-									                                <tr id="menuItem_r2"
-									                                    onmouseover="highlightRow(this, true);"
-									                                    onmouseout="highlightRow(this, false);">
-									                                    <th class="td1">BE 843</th>
-									                                    <td><a href="javascript:deleteRow('menuItem', 'menuItem_r2');">X</a></td>
-									                                </tr>
-									                                <tr id="menuItem_r3">
-									                                    <th class="td1">BA 4023</th>
-									                                    <td><a href="javascript:deleteRow('menuItem', 'menuItem_r3');">X</a></td>
-									                                </tr>
-									                                <tr id="menuItem_r4">
-									                                    <th class="td1">FR 506</th>
-									                                    <td><a href="javascript:deleteRow('menuItem', 'menuItem_r4');">X</a></td>
-									                                </tr>
-									                                <tr id="menuItem_r5">
-									                                    <th class="td1">EZY 6046</th>
-									                                    <td><a href="javascript:deleteRow('menuItem', 'menuItem_r5');">X</a></td>
-									                                </tr>
-									                                <tr id="menuItem_r6">
-									                                    <th class="td1">EZY 6174</th>
-									                                    <td><a href="javascript:deleteRow('menuItem', 'menuItem_r6');">X</a></td>
-									                                </tr>
 									                            </table>
 									                        </div>
 									                    </td>
@@ -520,23 +740,36 @@
 							    		</td>
 							    		<td valign="top">
 							    			Item Details:
-							            	<table style="border:1px solid gray" width="100%">
+							    			<form name="itemDetails">
+							            	<table name="itemTable" style="border:1px solid gray" width="100%">
 					                    		<tr>
-					                    			<td>Name: <input type="text" id="itemName"></td>
+					                    			<td>
+					                    				Name: <input type="text" id="itemName" name="itemName" value="" disabled="true"> <input type="checkbox" id="itemTaxable" name="itemTaxable" value="1" disabled="true"/>Taxable
+					                    				<input type="checkbox" id="singleOption" name="singleOption" value="1" disabled="true"/>Allow only 1 option
+					                    			</td>
 					                    		</tr>
 					                    		<tr>
-					                    			<td>Default Price: <input type="text" id="defaultItemPrice"></td>
+					                    			<td valign="top">Description: <textarea name="itemDescription" id="itemDescription" rows="3" cols="45" disabled="true" value=""></textarea></td>
 					                    		</tr>
 					                    		<tr>
-					                    			<td>Default Takeout Price: <input type="text" id="defaultItemOutPrice"></td>
+					                    			<td>
+					                    				<input type="checkbox" id="hasSeasonPrice" name="hasSeasonPrice" value="1" disabled="true" onclick="javascript:enableSeasonalPrice();"/>Seasonal price
+					                    				<input type="text" id="seasonPrice" name="seasonPrice" value="" disabled="true"/>
+					                    			</td>
+					                    		</tr>
+					                    		<tr>
+					                    			<td>Default Price: <input type="text" id="defaultItemPrice" name="defaultItemPrice" disabled="true"></td>
+					                    		</tr>
+					                    		<tr>
+					                    			<td>Default Takeout Price: <input type="text" id="defaultItemOutPrice" name="defaultItemOutPrice" disabled="true"></td>
 					                    		</tr>
 												<tr>
 													<td>
 														<table border="0" cellspacing="0" cellpadding="0">
 															<tr>
 																<td>Size</td>
-																<td><input type="checkbox" id="hasDineInSizes" name="hasDineInSizes" />Dine-in</td>
-																<td><input type="checkbox" id="hasTakeOutSizes" name="hasTakeOutSizes"/>Take-out</td>
+																<td><input type="checkbox" id="hasDineInSizes" name="hasDineInSizes" disabled="true" onclick="javascript:enableDineInSizes(this.checked);"/>Dine-in</td>
+																<td><input type="checkbox" id="hasTakeOutSizes" name="hasTakeOutSizes" disabled="true" onclick="javascript:enableTakeoutSizes(this.checked);"/>Take-out</td>
 															</tr>
 															<tr>
 																<td>Small</td>
@@ -558,15 +791,24 @@
 												</tr>
 					                    		<tr>
 								        			<td>
-								        				Thumbnail: <input type="file" id="itemThumb" value=""/>
+								        				Thumbnail: <input type="file" id="itemThumb2" disabled="true" onchange="updatePicture('itemImg', this.value);"/><img id="itemImg" src=""/>
+								        				<input type="hidden" id="itemThumb" value=""/>
 								        			</td>
 								        		</tr>
 								        		<tr>
-								        			<td>
-								        				Printers:
-								        			</td>
-								        		</tr>
-					                    	</table>
+													<td>
+														<table>
+															<tr>
+																<td>Printers:</td>
+																<td id="itemPrinterCell"></td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+								        		<tr><td><button type="button" id="btnSaveItem" name="btnSaveItem" disabled=true onclick="javascript:saveItemInfo();">Save</button></td></tr>
+												<script language="javascript">setPrintersHTML("itemPrinters", setItemPrintersHTMLHandler)</script>
+								            </table>
+								            </form>
 							    		</td>
 							    	</tr>
 							    </table>
