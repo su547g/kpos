@@ -272,7 +272,8 @@ function ws_delete_category(deleteCategoryType, handler) {
     callWebService(soapXML, handler);
 }
 
-function SaleItem(catId, name, description, thumb, printerIds, isSingleOption, price, outPrice, isTaxable, priceSmall, priceMedium, priceLarge, outSmall, outMedium, outLarge, seasonPrice) {
+function SaleItem(id, catId, name, description, thumb, printerIds, isSingleOption, price, outPrice, isTaxable, priceSmall, priceMedium, priceLarge, outSmall, outMedium, outLarge, seasonPrice) {
+    this.myId = id;
     this.myCatId = catId;
     this.myName = name;
     this.myDescription = description;
@@ -294,6 +295,9 @@ function SaleItem(catId, name, description, thumb, printerIds, isSingleOption, p
     this.endTag = "</app:saleItem>";
     this.getXML = function() {
         var xml = this.tag;
+        if(this.myId != null && this.myId != "") {
+            xml += "<app:id>" + this.myId + "</app:id>";
+        }
         if(this.myCatId != null && this.myCatId != "") {
             xml += "<app:catId>" + this.myCatId + "</app:catId>";
         }
@@ -345,7 +349,7 @@ function SaleItem(catId, name, description, thumb, printerIds, isSingleOption, p
     };
 }
 function CreateItemType(catId, name, description, thumb, printerIds, isSingleOption, price, outPrice, isTaxable, priceSmall, priceMedium, priceLarge, outSmall, outMedium, outLarge, seasonPrice) {
-    this.myItem = new SaleItem(catId, name, description, thumb, printerIds, isSingleOption,price, outPrice, isTaxable, priceSmall, priceMedium, priceLarge, outSmall, outMedium, outLarge, seasonPrice);
+    this.myItem = new SaleItem(null, catId, name, description, thumb, printerIds, isSingleOption,price, outPrice, isTaxable, priceSmall, priceMedium, priceLarge, outSmall, outMedium, outLarge, seasonPrice);
     this.tag = "<app:CreateSaleItemType>";
     this.endTag = "</app:CreateSaleItemType>";
     this.getXML = function() {
@@ -360,6 +364,17 @@ function ws_create_item(createItemType, handler) {
     alert(soapXML);
     callWebService(soapXML, handler);
 }
+function UpdateItemType(id, catId, name, description, thumb, printerIds, isSingleOption, price, outPrice, isTaxable, priceSmall, priceMedium, priceLarge, outSmall, outMedium, outLarge, seasonPrice) {
+    this.myItem = new SaleItem(id, catId, name, description, thumb, printerIds, isSingleOption,price, outPrice, isTaxable, priceSmall, priceMedium, priceLarge, outSmall, outMedium, outLarge, seasonPrice);
+    this.tag = "<app:UpdateSaleItemType>";
+    this.endTag = "</app:UpdateSaleItemType>";
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += this.tag + this.myItem.getXML() + this.endTag;
+        xml += soapXMLEnd;
+        return xml;
+    };
+}
 function ListSaleItemsForCategoryType(catId) {
     this.myCatId = catId;
     this.tag = "<app:ListSaleItemsForCategoryType>";
@@ -371,7 +386,28 @@ function ListSaleItemsForCategoryType(catId) {
         return xml;
     };
 }
-
+function FetchSaleItemType(itemId) {
+    this.myId = itemId;
+    this.tag = "<app:FetchSaleItemType>";
+    this.endTag = "</app:FetchSaleItemType>";
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += this.tag + "<app:itemId>"+this.myId+"</app:itemId>" + this.endTag;
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function DeleteSaleItemType(itemId) {
+    this.myId = itemId;
+    this.tag = "<app:DeleteSaleItemType>";
+    this.endTag = "</app:DeleteSaleItemType>";
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += this.tag + "<app:itemId>"+this.myId+"</app:itemId>" + this.endTag;
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
 function call_web_service(soapType, handler) {
     var soapXML = soapType.getXML();
     //alert(soapXML);

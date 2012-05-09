@@ -192,7 +192,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         if(aSaleItemType.getThumbPath() != null) saleItem.setThumbPath(aSaleItemType.getThumbPath());
         saleItem.setLastUpdated(new Date());
         
-        List<SaleItemOptionType> optionTypes = aSaleItemType.getOptions();
+        /*List<SaleItemOptionType> optionTypes = aSaleItemType.getOptions();
         List<SaleItemOption> options = saleItem.getOptionList();
         options.clear();
         for(SaleItemOptionType optionType : optionTypes) {
@@ -203,7 +203,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             if(optionType.getIsRequired() != null) option.setRequired(optionType.getIsRequired());
             option.setSaleItem(saleItem);
             options.add(option);
-        }
+        }*/
         
         List<Long> printerIds = aSaleItemType.getPrinterIds();
         Set<Printer> printers = saleItem.getPrinters();
