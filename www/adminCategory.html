@@ -158,6 +158,13 @@
 				printers[n].checked = false;
 			}
 		}
+		function checkPrinters(printers, pId) {
+			for(var n = 0; n < printers.length; n++) {
+				if(printers[n].value == pId) {
+					printers[n].checked = true;
+				}
+			}
+		}
 	    function selectRow(tableID, selectedRowID) {
 	        var table = document.getElementById(tableID);
 	        v_selected_cat_rowid = selectedRowID;
@@ -189,15 +196,15 @@
 	        			var printers = document.getElementsByName("catPrinters");
 	        			uncheckPrinters(printers);
 	        			var printerIds = curr_category.printerids;
-	        			if(printerIds != null && printerIds.length != undefined) {
-	        				for(var m = 0; m < printerIds.length; m++) {
-	        					var pId = printerIds[m];
-	        					for(var n = 0; n < printers.length; n++) {
-	        						if(printers[n].value == pId) {
-	        							printers[n].checked = true;
-	        						}
-	        					}
-	        				}
+	        			if(printerIds != null) {
+	        				if(printerIds.length != undefined) {
+		        				for(var m = 0; m < printerIds.length; m++) {
+		        					var pId = printerIds[m];
+		        					checkPrinters(printers, pId);
+		        				}
+		        			} else {
+		        				checkPrinters(printers, printerIds);
+		        			}
 	        			}
 	        			
 	        			listSaleItemsForCat(curr_category.id);
@@ -210,32 +217,25 @@
 	            }
 	        }
 	    }
-	    function addCategoryRow(tableID, categoryObj) {
+	    function addCategoryRow(tableID, categoryObj, selectRowFunc, deleteRowFunc) {
 	        var table = document.getElementById(tableID);
 	
 	        var rowCount = table.rows.length;
-	        var row = table.insertRow(rowCount);
 	        var rowId = tableID + "_r" + rowCount;
-	
-	        row.id = rowId;
-	        row.name = rowId;
-	        //row.setAttribute('onclick', 'selectRow("'+tableID+'", "'+rowId+'");');
 	        
-	        row.onmouseover = function(){ highlightRow(this, true); };
+	        var row = table.insertRow(rowCount);	
+	       	row.id = rowId;
+	        row.name = rowId;
+	       	
+	       	var innerHTML = "<td onclick='"+selectRowFunc+"(\""+tableID+"\", \""+rowId+"\");'>"+categoryObj.name+"</td><td><a href='javascript:"+deleteRowFunc+"(\""+tableID+"\",\""+rowId+"\","+categoryObj.id+");'>X</a></td>";
+	       	row.innerHTML = innerHTML;
+	       	row.onmouseover = function(){ highlightRow(this, true); };
 	        row.onmouseout = function(){ highlightRow(this, false); };
-	
-	        var cell1 = row.insertCell(0);
-	        cell1.setAttribute('onclick', 'selectRow("'+tableID+'", "'+rowId+'");');
-	        var element1 = document.createTextNode(categoryObj.name==null?"":categoryObj.name);
-	        cell1.appendChild(element1);
-	
-	        var cell2 = row.insertCell(1);
-	        var temp = "<a href='javascript:deleteCategoryRow(\"" + tableID + "\",\"" + rowId +"\");'>X</a>";
-	
-	        cell2.innerHTML = temp;
 	    }
-	    function deleteCategoryRow(tableId, rowID) {
-	        try {
+	    function deleteCategoryRow(tableId, rowID, catId) {
+	    	var deleteCategoryType = new DeleteCategoryType(catId);
+            call_web_service(deleteCategoryType, deleteCategoryHandler);
+	        /*try {
 	            var table = document.getElementById(tableId);
                 var rowCount = table.rows.length;
                 for(var i = 0; i < rowCount; i++) {
@@ -255,7 +255,7 @@
                 }
 	        } catch(e) {
 	            //alert(e);
-	        }
+	        }*/
 	    }
 	    function deleteCategoryHandler(jsonObj) {
 			if(jsonObj != undefined && jsonObj != null &&
@@ -386,11 +386,11 @@
                 if(categories != undefined && categories != null) {
 	                if(count > 1) {
 	                	for(var i = 0; i < categories.length; i++) {
-	                		addCategoryRow("category", categories[i]);
+	                		addCategoryRow("category", categories[i], "selectRow", "deleteCategoryRow");
 	                	}
 	                } else {
 	                	//Only one category
-	                	addCategoryRow("category", categories);
+	                	addCategoryRow("category", categories, "selectRow", "deleteCategoryRow");
 	                }
 	            }
 			}
@@ -461,38 +461,64 @@
 	        var rowCount = table.rows.length;
 	        var rowId = tableID + "_r" + rowCount;
 			
-			var row = table.insertRow(rowCount);	
-	       	var innerHTML = "<tr id='"+rowId+"' onmouseover='javascript:highlightRow(this, true);' onmouseout=''javascript:highlightRow(this, false);>";
-	       	innerHTML += "<td onclick='"+selectRowFunc+"(\""+tableID+"\", \""+rowId+"\");'>"+itemObj.name+"</td><td><a href='javascript:"+deleteRowFunc+"(\""+tableID+"\",\""+rowId+"\");'>X</a></td></tr></tbody>";
+			var row = table.insertRow(rowCount);
+			row.id = rowId;
+	       	//var innerHTML = "<tr id='"+rowId+"' onmouseover='javascript:highlightRow(this, true);' onmouseout=''javascript:highlightRow(this, false);>";
+	       	var innerHTML = "<td onclick='"+selectRowFunc+"(\""+tableID+"\", \""+rowId+"\","+itemObj.id+");'>"+itemObj.name+"</td><td><a href='javascript:"+deleteRowFunc+"(\""+tableID+"\",\""+rowId+"\","+itemObj.id+");'>X</a></td>";//</tr></tbody>
 	       	row.innerHTML = innerHTML;
 	       	row.onmouseover = function(){ highlightRow(this, true); };
 	        row.onmouseout = function(){ highlightRow(this, false); };
 	    }
-		function selectItemRow(tableId, rowId) {
-			alert(rowId);
+		function selectItemRow(tableId, rowId, itemId) {
+			alert(itemId);
+			var soapType = new FetchSaleItemType(itemId);
+			call_web_service(soapType, fetchSaleItemHandler);
 		}
-	    function deleteItemRow(tableId, rowID) {
-	        try {
-	            var table = document.getElementById(tableId);
-                var rowCount = table.rows.length;
-                for(var i = 0; i < rowCount; i++) {
-                    var row = table.rows[i];
-                    if(row.id == rowID) {
-                    	deletedRowId = rowID;
-                        var items = getItems();
-                        var item = items[i];
-                        if(item.id != null) {
-                        	var deleteItemType = new DeleteItemType(item.id);
-                        	call_web_service(deleteItemType, deleteItemHandler);
-                        }
-                        rowCount--;
-                        i--;
-                        break;
-                    }
-                }
-	        } catch(e) {
-	            //alert(e);
-	        }
+		function fetchSaleItemHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+                jsonObj.fetchsaleitemresponsetype != undefined && jsonObj.fetchsaleitemresponsetype != null &&
+                jsonObj.fetchsaleitemresponsetype.result.successful == "true") {
+                var item = jsonObj.fetchsaleitemresponsetype.saleitem;
+               	document.forms[0].itemName.value = item.name;
+               	document.forms[0].itemDescription.value = item.description==null?"":item.description;
+               	document.forms[0].defaultItemPrice.value = item.normalprice==null?"":item.normalprice;
+               	document.forms[0].defaultItemOutPrice.value = item.takeoutprice==null?"":item.takeoutprice;
+               	document.forms[0].itemImg.src = item.thumpath==null?"":item.thumbpath;
+               	document.forms[0].itemTaxable.checked = item.istaxable=="true";
+               	document.forms[0].singleOption.checked = item.issingleoption=="true";
+               	document.forms[0].hasSeasonPrice.checked = item.seasonprice!=null && item.seasonprice>0;
+               	document.forms[0].seasonPrice.vaue = item.seasonprice;
+               	document.forms[0].smallPrice.value = item.pricesmall;
+				document.forms[0].mediumPrice.value = item.pricemed;
+				document.forms[0].largePrice.value = item.pricelarge;
+				document.forms[0].smallOutPrice.value = item.outpricesmall;
+				document.forms[0].mediumOutPrice.value = item.outpricemedium;
+				document.forms[0].largeOutPrice.value = item.outpricelarge;
+				document.forms[0].hasDineInSizes.checked = item.pricesmall!=null||item.pricemed!=null||item.pricelarge!=null;
+	        	document.forms[0].hasTakeOutSizes.checked = item.outpricesmall!=null||item.outpricemedium!=null||item.outpricelarge!=null;
+	        	
+				var printerIds = item.printerids;
+				var printers = document.getElementsByName("itemPrinters");
+	        	uncheckPrinters(printers);
+				if(printerIds != null) {
+					if(printerIds.length != undefined) {
+						for(var m = 0; m < printerIds.length; m++) {
+							var pId = printerIds[m];
+							checkPrinters(printers, pId);
+						}
+					} else {
+						checkPrinters(printers, printerIds);
+					}
+				}
+				document.forms[0].itemId.value = item.id;
+				itemOperation = UPDATE;
+            }
+		}
+	    function deleteItemRow(tableId, rowID, itemId) {
+	    	if(itemId != null && itemId != "") {
+	    		var deleteItemType = new DeleteSaleItemType(itemId);
+				call_web_service(deleteItemType, deleteItemHandler);
+			}
 	    }
 	    function deleteItemHandler(jsonObj) {
 			if(jsonObj != undefined && jsonObj != null &&
@@ -501,6 +527,7 @@
                 var category = getCurrentCategory();
                 if(category != null) {
                 	listSaleItemsForCat(category.id);
+                	resetItem();
                 }
             } else {
             	alert("failed to delete category!");
@@ -509,30 +536,37 @@
 		}
 		function resetItem() {
 			document.forms[0].itemName.value = "";
-	      	document.forms[0].itemName.disabled = false;
-	      	document.forms[0].itemName.readOnly = false;
+	      	//document.forms[0].itemName.disabled = false;
+	      	//document.forms[0].itemName.readOnly = false;
 	      	document.forms[0].itemDescription.value = "";
-	      	document.forms[0].itemDescription.disabled = false;
-	      	document.forms[0].itemDescription.readOnly = false;
+	      	//document.forms[0].itemDescription.disabled = false;
+	      	//document.forms[0].itemDescription.readOnly = false;
 	        document.forms[0].defaultItemPrice.value = "";
-	        document.forms[0].defaultItemPrice.disabled = false;
+	        //document.forms[0].defaultItemPrice.disabled = false;
 	        document.forms[0].defaultItemOutPrice.value = "";
-	        document.forms[0].defaultItemOutPrice.disabled = false;
-	        document.forms[0].itemThumb2.disabled = false;
+	        //document.forms[0].defaultItemOutPrice.disabled = false;
+	        //document.forms[0].itemThumb2.disabled = false;
 	        document.forms[0].itemImg.src = "";
-	        document.forms[0].hasDineInSizes.disabled = false;
-	        document.forms[0].hasTakeOutSizes.disabled = false;
-	        document.forms[0].itemTaxable.disabled = false;
-	        document.forms[0].singleOption.disabled = false;
-	        document.forms[0].hasSeasonPrice.disabled = false;
+	        //document.forms[0].hasDineInSizes.disabled = false;
+	        //document.forms[0].hasTakeOutSizes.disabled = false;
+	        //document.forms[0].itemTaxable.disabled = false;
+	        //document.forms[0].singleOption.disabled = false;
+	        //document.forms[0].hasSeasonPrice.disabled = false;
 	        document.forms[0].seasonPrice.vaue = "";
-			document.forms[0].seasonPrice.disabled = false;
-			document.forms[0].btnSaveItem.disabled = false;
+			//document.forms[0].seasonPrice.disabled = false;
+			//document.forms[0].btnSaveItem.disabled = false;
+			document.forms[0].smallPrice.value = "";
+			document.forms[0].mediumPrice.value = "";
+			document.forms[0].largePrice.value = "";
+			document.forms[0].smallOutPrice.value = "";
+			document.forms[0].mediumOutPrice.value = "";
+			document.forms[0].largeOutPrice.value = "";
 			
 	        var printers = document.getElementsByName("itemPrinters");
 	        uncheckPrinters(printers);
 	        itemOperation = "";
 	        setCurrentItem(null);
+	        document.forms[0].itemId.value = "";
 		}
 		function newItem() {
 	    	resetItem();
@@ -558,7 +592,7 @@
 	    	}
 		}
 		function createSaleItem() {
-			if(curr_category != null) {
+			if(curr_category != null && document.forms[0].itemId.value=="") {
 				var catId = curr_category.id;
 				
 				var name = document.getElementById("itemName").value;
@@ -602,13 +636,56 @@
 				jsonObj.createsaleitemresponsetype != undefined && jsonObj.createsaleitemresponsetype != null && 
 				jsonObj.createsaleitemresponsetype.result.successful == "true") {
 				var itemId = jsonObj.createsaleitemresponsetype.result.id;
+				//document.forms[0].itemId.value = itemId;
+				var category = getCurrentCategory();
+                if(category != null) {
+                	listSaleItemsForCat(category.id);
+                	resetItem();
+                }
 			} else {
 	            alert("failed to add sale item!");
 	        }
 	        itemOperation = "";
 		}
 		function updateSaleItem() {
-			
+			if(curr_category != null && document.forms[0].itemId.value != "" && document.forms[0].itemId.value != null) {
+				var catId = curr_category.id;
+				var itemId = document.forms[0].itemId.value;
+				var name = document.getElementById("itemName").value;
+				var taxable = document.getElementById("itemTaxable").checked;
+				var isSingleOption = document.getElementById("singleOption").checked;
+				var description = document.getElementById("itemDescription").value;
+				
+				var defaultPrice = document.getElementById("defaultItemPrice").value;
+				
+				var hasSeasonPrice = document.getElementById("hasSeasonPrice").checked;
+				var seasonPrice = hasSeasonPrice == true ? document.getElementById("seasonPrice").value : null;
+				
+				var defaultOutPrice = hasSeasonPrice == true ? null:document.getElementById("defaultItemOutPrice").value;
+				var smallPrice = null, mediumPrice = null, largePrice = null;
+				var smallOut = null, mediumOut = null, largeOut = null;
+				
+				var hasDineInSizes = document.getElementById("hasDineInSizes").checked;
+				var hasTakeoutSizes = document.getElementById("hasTakeOutSizes").checked;
+				if(!hasSeasonPrice) {
+					if(hasDineInSizes) {
+						smallPrice = document.getElementById("smallPrice").value;
+						mediumPrice = document.getElementById("mediumPrice").value;
+						largePrice = document.getElementById("largePrice").value;
+					}
+					if(hasTakeoutSizes) {
+						smallOut = document.getElementById("smallOutPrice").value;
+						mediumOut = document.getElementById("mediumOutPrice").value;
+						largeOut = document.getElementById("largeOutPrice").value;
+					}
+				}
+				
+				var thumb = document.getElementById("itemImg").src;
+				var printerIds = getPrinterIds("itemPrinterCell");
+				
+				var updateItemType = new UpdateItemType(itemId, catId,name,description,thumb,printerIds,isSingleOption,defaultPrice,defaultOutPrice,taxable,smallPrice,mediumPrice,largePrice,smallOut,mediumOut,largeOut,seasonPrice);
+				call_web_service(updateItemType, updateSaleItemHandler);
+			}
 		}
 		function updateSaleItemHandler(jsonObj) {
 			
@@ -741,57 +818,58 @@
 							    		<td valign="top">
 							    			Item Details:
 							    			<form name="itemDetails">
+							    				<input type="hidden" name="itemId"/>
 							            	<table name="itemTable" style="border:1px solid gray" width="100%">
 					                    		<tr>
 					                    			<td>
-					                    				Name: <input type="text" id="itemName" name="itemName" value="" disabled="true"> <input type="checkbox" id="itemTaxable" name="itemTaxable" value="1" disabled="true"/>Taxable
-					                    				<input type="checkbox" id="singleOption" name="singleOption" value="1" disabled="true"/>Allow only 1 option
+					                    				Name: <input type="text" id="itemName" name="itemName" value=""> <input type="checkbox" id="itemTaxable" name="itemTaxable" value="1"/>Taxable
+					                    				<input type="checkbox" id="singleOption" name="singleOption" value="1"/>Allow only 1 option
 					                    			</td>
 					                    		</tr>
 					                    		<tr>
-					                    			<td valign="top">Description: <textarea name="itemDescription" id="itemDescription" rows="3" cols="45" disabled="true" value=""></textarea></td>
+					                    			<td valign="top">Description: <textarea name="itemDescription" id="itemDescription" rows="3" cols="45" value=""></textarea></td>
 					                    		</tr>
 					                    		<tr>
 					                    			<td>
-					                    				<input type="checkbox" id="hasSeasonPrice" name="hasSeasonPrice" value="1" disabled="true" onclick="javascript:enableSeasonalPrice();"/>Seasonal price
-					                    				<input type="text" id="seasonPrice" name="seasonPrice" value="" disabled="true"/>
+					                    				<input type="checkbox" id="hasSeasonPrice" name="hasSeasonPrice" value="1" onclick="javascript:enableSeasonalPrice();"/>Seasonal price
+					                    				<input type="text" id="seasonPrice" name="seasonPrice" value="" />
 					                    			</td>
 					                    		</tr>
 					                    		<tr>
-					                    			<td>Default Price: <input type="text" id="defaultItemPrice" name="defaultItemPrice" disabled="true"></td>
+					                    			<td>Default Price: <input type="text" id="defaultItemPrice" name="defaultItemPrice"></td>
 					                    		</tr>
 					                    		<tr>
-					                    			<td>Default Takeout Price: <input type="text" id="defaultItemOutPrice" name="defaultItemOutPrice" disabled="true"></td>
+					                    			<td>Default Takeout Price: <input type="text" id="defaultItemOutPrice" name="defaultItemOutPrice"></td>
 					                    		</tr>
 												<tr>
 													<td>
 														<table border="0" cellspacing="0" cellpadding="0">
 															<tr>
 																<td>Size</td>
-																<td><input type="checkbox" id="hasDineInSizes" name="hasDineInSizes" disabled="true" onclick="javascript:enableDineInSizes(this.checked);"/>Dine-in</td>
-																<td><input type="checkbox" id="hasTakeOutSizes" name="hasTakeOutSizes" disabled="true" onclick="javascript:enableTakeoutSizes(this.checked);"/>Take-out</td>
+																<td><input type="checkbox" id="hasDineInSizes" name="hasDineInSizes" onclick="javascript:enableDineInSizes(this.checked);"/>Dine-in</td>
+																<td><input type="checkbox" id="hasTakeOutSizes" name="hasTakeOutSizes" onclick="javascript:enableTakeoutSizes(this.checked);"/>Take-out</td>
 															</tr>
 															<tr>
 																<td>Small</td>
-																<td><input id="smallPrice" name="smallPrice" type="text" disabled="true"/></td>
-																<td><input id="smallOutPrice" name="smallOutPrice" type="text" disabled="true"/></td>
+																<td><input id="smallPrice" name="smallPrice" type="text"/></td>
+																<td><input id="smallOutPrice" name="smallOutPrice" type="text"/></td>
 															</tr>
 															<tr>
 																<td>Medium</td>
-																<td><input id="mediumPrice" name="mediumPrice" type="text" disabled="true"/></td>
-																<td><input id="mediumOutPrice" name="mediumOutPrice" type="text" disabled="true"/></td>
+																<td><input id="mediumPrice" name="mediumPrice" type="text"/></td>
+																<td><input id="mediumOutPrice" name="mediumOutPrice" type="text"/></td>
 															</tr>
 															<tr>
 																<td>Large</td>
-																<td><input id="largePrice" name="largePrice" type="text" disabled="true"/></td>
-																<td><input id="largeOutPrice" name="largeOutPrice" type="text" disabled="true"/></td>
+																<td><input id="largePrice" name="largePrice" type="text"/></td>
+																<td><input id="largeOutPrice" name="largeOutPrice" type="text"/></td>
 															</tr>
 														</table>
 													</td>
 												</tr>
 					                    		<tr>
 								        			<td>
-								        				Thumbnail: <input type="file" id="itemThumb2" disabled="true" onchange="updatePicture('itemImg', this.value);"/><img id="itemImg" src=""/>
+								        				Thumbnail: <input type="file" id="itemThumb2" onchange="updatePicture('itemImg', this.value);"/><img id="itemImg" src=""/>
 								        				<input type="hidden" id="itemThumb" value=""/>
 								        			</td>
 								        		</tr>
@@ -805,7 +883,7 @@
 														</table>
 													</td>
 												</tr>
-								        		<tr><td><button type="button" id="btnSaveItem" name="btnSaveItem" disabled=true onclick="javascript:saveItemInfo();">Save</button></td></tr>
+								        		<tr><td><button type="button" id="btnSaveItem" name="btnSaveItem" onclick="javascript:saveItemInfo();">Save</button></td></tr>
 												<script language="javascript">setPrintersHTML("itemPrinters", setItemPrintersHTMLHandler)</script>
 								            </table>
 								            </form>

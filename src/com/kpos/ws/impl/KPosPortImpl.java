@@ -742,4 +742,21 @@ public class KPosPortImpl implements KPosPortType {
         responseType.setResult(getSoapResult(result));
         return responseType;
     }
+    
+    private String listItemTableHTML(List<SaleItem> items, String tableId, String onclick) {
+        StringBuilder htmlBuilder = new StringBuilder("<table><tbody>");
+        int index = 0;
+        for(SaleItem item : items) {
+            //<tbody><tr id="menuItem_r0"><td onclick='selectItemRow("menuItem", "menuItem_r0");'>fasdfaf</td><td><a href='javascript:deleteItemRow("menuItem","menuItem_r0");'>X</a></td></tr></tbody>
+            String id = "menuItem_r" + index;
+            htmlBuilder.append("<tr id=\"").append(id).append(index).append("\">");
+            htmlBuilder.append("<td ").append("onclick='javascript:").append(onclick).append("(\"").append(tableId).append("\", \"").append(id).append("\");'");
+            htmlBuilder.append(item.getName()).append("</td><td><a href='javascript:deleteItemRow(\"").append(tableId).append("\", \"").append(id).append("\";'>X</a>");
+            htmlBuilder.append("</td>");
+            htmlBuilder.append("</tr>");
+            index++;
+        }
+        htmlBuilder.append("</tbody></table>");
+        return htmlBuilder.toString();
+    }
 }
