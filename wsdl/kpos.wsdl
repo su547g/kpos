@@ -46,6 +46,8 @@
             <xs:element name="UpdateCategoryOptionResponseType" type="tns:UpdateCategoryOptionResponseType"/>
             <xs:element name="DeleteCategoryOptionType" type="tns:DeleteCategoryOptionType"/>
             <xs:element name="DeleteCategoryOptionResponseType" type="tns:DeleteCategoryOptionResponseType"/>
+            <xs:element name="FetchCategoryOptionType" type="tns:FetchCategoryOptionType"/>
+            <xs:element name="FetchCategoryOptionResponseType" type="tns:FetchCategoryOptionResponseType"/>
             <xs:element name="ListCategoryOptionType" type="tns:ListCategoryOptionType"/>
             <xs:element name="ListCategoryOptionResponseType" type="tns:ListCategoryOptionResponseType"/>
 
@@ -66,10 +68,10 @@
 
             <xs:element name="CreateSaleItemOptionType" type="tns:CreateSaleItemOptionType"/>
             <xs:element name="CreateSaleItemOptionResponseType" type="tns:CreateSaleItemOptionResponseType"/>
-
             <xs:element name="UpdateSaleItemOptionType" type="tns:UpdateSaleItemOptionType"/>
             <xs:element name="UpdateSaleItemOptionResponseType" type="tns:UpdateSaleItemOptionResponseType"/>
-
+            <xs:element name="FetchSaleItemOptionType" type="tns:FetchSaleItemOptionType"/>
+            <xs:element name="FetchSaleItemOptionResponseType" type="tns:FetchSaleItemOptionResponseType"/>
             <xs:element name="DeleteSaleItemOptionType" type="tns:DeleteSaleItemOptionType"/>
             <xs:element name="DeleteSaleItemOptionResponseType" type="tns:DeleteSaleItemOptionResponseType"/>
 
@@ -86,6 +88,8 @@
             <xs:element name="CreateGlobalOptionResponseType" type="tns:CreateGlobalOptionResponseType"/>
             <xs:element name="UpdateGlobalOptionType" type="tns:UpdateGlobalOptionType"/>
             <xs:element name="UpdateGlobalOptionResponseType" type="tns:UpdateGlobalOptionResponseType"/>
+            <xs:element name="FetchGlobalOptionType" type="tns:FetchGlobalOptionType"/>
+            <xs:element name="FetchGlobalOptionResponseType" type="tns:FetchGlobalOptionResponseType"/>
             <xs:element name="DeleteGlobalOptionType" type="tns:DeleteGlobalOptionType"/>
             <xs:element name="DeleteGlobalOptionResponseType" type="tns:DeleteGlobalOptionResponseType"/>
             <xs:element name="ListGlobalOptionType" type="tns:ListGlobalOptionType"/>
@@ -424,6 +428,17 @@
                     <xs:element name="Result" type="tns:ResultType"/>
                 </xs:sequence>
             </xs:complexType>
+            <xs:complexType name="FetchCategoryOptionType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="FetchCategoryOptionResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="option" type="tns:CategoryOptionType" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
             <xs:complexType name="ListCategoryOptionType">
                 <xs:sequence>
                     <xs:element name="categoryId" type="xsd:long" minOccurs="1" maxOccurs="1"/>
@@ -433,6 +448,7 @@
                 <xs:sequence>
                     <xs:element name="Result" type="tns:ResultType"/>
                     <xs:element name="options" type="tns:CategoryOptionType" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="total" type="xsd:int"/>
                 </xs:sequence>
             </xs:complexType>
 
@@ -506,7 +522,6 @@
                     <xs:element name="itemOptionId" type="xs:long" minOccurs="0" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
-
             <xs:complexType name="UpdateSaleItemOptionType">
                 <xs:sequence>
                     <xs:element name="itemOption" type="tns:SaleItemOptionType" minOccurs="1" maxOccurs="1"/>
@@ -517,7 +532,17 @@
                     <xs:element name="Result" type="tns:ResultType"/>
                 </xs:sequence>
             </xs:complexType>
-
+            <xs:complexType name="FetchSaleItemOptionType">
+                <xs:sequence>
+                    <xs:element name="id" type="xs:long" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="FetchSaleItemOptionResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="itemOption" type="tns:SaleItemOptionType" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
             <xs:complexType name="DeleteSaleItemOptionType">
                 <xs:sequence>
                     <xs:element name="id" type="xs:long" minOccurs="1" maxOccurs="1"/>
@@ -593,6 +618,17 @@
             <xs:complexType name="UpdateGlobalOptionResponseType">
                 <xs:sequence>
                     <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="FetchGlobalOptionType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="FetchGlobalOptionResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="globalOption" type="tns:GlobalOptionType" minOccurs="0" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="DeleteGlobalOptionType">
@@ -734,6 +770,12 @@
     <wsdl:message name="DeleteCategoryOptionResponseMessage">
         <wsdl:part name="parameters" element="tns:DeleteCategoryOptionResponseType"/>
     </wsdl:message>
+    <wsdl:message name="FetchCategoryOptionMessage">
+        <wsdl:part name="parameters" element="tns:FetchCategoryOptionType"/>
+    </wsdl:message>
+    <wsdl:message name="FetchCategoryOptionResponseMessage">
+        <wsdl:part name="parameters" element="tns:FetchCategoryOptionResponseType"/>
+    </wsdl:message>
     <wsdl:message name="ListCategoryOptionMessage">
         <wsdl:part name="parameters" element="tns:ListCategoryOptionType"/>
     </wsdl:message>
@@ -789,7 +831,12 @@
     <wsdl:message name="UpdateSaleItemOptionResponseMessage">
         <wsdl:part name="parameters" element="tns:UpdateSaleItemOptionResponseType"/>
     </wsdl:message>
-
+    <wsdl:message name="FetchSaleItemOptionMessage">
+        <wsdl:part name="parameters" element="tns:FetchSaleItemOptionType"/>
+    </wsdl:message>
+    <wsdl:message name="FetchSaleItemOptionResponseMessage">
+        <wsdl:part name="parameters" element="tns:FetchSaleItemOptionResponseType"/>
+    </wsdl:message>
     <wsdl:message name="DeleteSaleItemOptionMessage">
         <wsdl:part name="parameters" element="tns:DeleteSaleItemOptionType"/>
     </wsdl:message>
@@ -833,6 +880,12 @@
     </wsdl:message>
     <wsdl:message name="UpdateGlobalOptionResponseMessage">
         <wsdl:part name="parameters" element="tns:UpdateGlobalOptionResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="FetchGlobalOptionMessage">
+        <wsdl:part name="parameters" element="tns:FetchGlobalOptionType"/>
+    </wsdl:message>
+    <wsdl:message name="FetchGlobalOptionResponseMessage">
+        <wsdl:part name="parameters" element="tns:FetchGlobalOptionResponseType"/>
     </wsdl:message>
     <wsdl:message name="DeleteGlobalOptionMessage">
         <wsdl:part name="parameters" element="tns:DeleteGlobalOptionType"/>
@@ -928,6 +981,10 @@
             <wsdl:input message="tns:DeleteCategoryOptionMessage" name="DeleteCategoryOption"/>
             <wsdl:output message="tns:DeleteCategoryOptionResponseMessage" name="DeleteCategoryOptionResponse"/>
         </wsdl:operation>
+        <wsdl:operation name="FetchCategoryOption">
+            <wsdl:input message="tns:FetchCategoryOptionMessage" name="FetchCategoryOption"/>
+            <wsdl:output message="tns:FetchCategoryOptionResponseMessage" name="FetchCategoryOptionResponse"/>
+        </wsdl:operation>
         <wsdl:operation name="ListCategoryOption">
             <wsdl:input message="tns:ListCategoryOptionMessage" name="ListCategoryOption"/>
             <wsdl:output message="tns:ListCategoryOptionResponseMessage" name="ListCategoryOptionResponse"/>
@@ -962,12 +1019,14 @@
             <wsdl:input message="tns:CreateSaleItemOptionMessage" name="CreateSaleItemOption"/>
             <wsdl:output message="tns:CreateSaleItemOptionResponseMessage" name="CreateSaleItemOptionResponse"/>
         </wsdl:operation>
-
         <wsdl:operation name="UpdateSaleItemOption">
             <wsdl:input message="tns:UpdateSaleItemOptionMessage" name="UpdateSaleItemOption"/>
             <wsdl:output message="tns:UpdateSaleItemOptionResponseMessage" name="UpdateSaleItemOptionResponse"/>
         </wsdl:operation>
-
+        <wsdl:operation name="FetchSaleItemOption">
+            <wsdl:input message="tns:FetchSaleItemOptionMessage" name="FetchSaleItemOption"/>
+            <wsdl:output message="tns:FetchSaleItemOptionResponseMessage" name="FetchSaleItemOptionResponse"/>
+        </wsdl:operation>
         <wsdl:operation name="DeleteSaleItemOption">
             <wsdl:input message="tns:DeleteSaleItemOptionMessage" name="DeleteSaleItemOption"/>
             <wsdl:output message="tns:DeleteSaleItemOptionResponseMessage" name="DeleteSaleItemOptionResponse"/>
@@ -997,6 +1056,10 @@
         <wsdl:operation name="UpdateGlobalOption">
             <wsdl:input message="tns:UpdateGlobalOptionMessage" name="UpdateGlobalOption"/>
             <wsdl:output message="tns:UpdateGlobalOptionResponseMessage" name="UpdateGlobalOptionResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="FetchGlobalOption">
+            <wsdl:input message="tns:FetchGlobalOptionMessage" name="FetchGlobalOption"/>
+            <wsdl:output message="tns:FetchGlobalOptionResponseMessage" name="FetchGlobalOptionResponse"/>
         </wsdl:operation>
         <wsdl:operation name="DeleteGlobalOption">
             <wsdl:input message="tns:DeleteGlobalOptionMessage" name="DeleteGlobalOption"/>
@@ -1156,6 +1219,15 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="FetchCategoryOption">
+            <soap:operation soapAction="http://ws.kpos.com/FetchCategoryOption" style="document"/>
+            <wsdl:input name="FetchCategoryOption">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="FetchCategoryOptionResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="ListCategoryOption">
             <soap:operation soapAction="http://ws.kpos.com/ListCategoryOption" style="document"/>
             <wsdl:input name="ListCategoryOption">
@@ -1225,7 +1297,6 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-
         <wsdl:operation name="UpdateSaleItemOption">
             <soap:operation soapAction="http://ws.kpos.com/UpdateSaleItemOption" style="document"/>
             <wsdl:input name="UpdateSaleItemOption">
@@ -1235,7 +1306,15 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-
+        <wsdl:operation name="FetchSaleItemOption">
+            <soap:operation soapAction="http://ws.kpos.com/FetchSaleItemOption" style="document"/>
+            <wsdl:input name="FetchSaleItemOption">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="FetchSaleItemOptionResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="DeleteSaleItemOption">
             <soap:operation soapAction="http://ws.kpos.com/DeleteSaleItemOption" style="document"/>
             <wsdl:input name="DeleteSaleItemOption">
@@ -1301,6 +1380,15 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="UpdateGlobalOptionResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="FetchGlobalOption">
+            <soap:operation soapAction="http://ws.kpos.com/FetchGlobalOption" style="document"/>
+            <wsdl:input name="FetchGlobalOption">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="FetchGlobalOptionResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>

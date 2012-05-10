@@ -208,6 +208,7 @@
 	        			}
 	        			
 	        			listSaleItemsForCat(curr_category.id);
+	        			listCatOptions(curr_category.id);
 	        		}
 	        		document.getElementById("btnNewItem").disabled = false;
 	            } else {
@@ -408,6 +409,7 @@
 	    var curr_item = localStorage.getItem('curr_item');
 	    
 		var itemOperation = "";
+		var optionOperation = "";
 		
 		var deletedItemRowId = "";
 		
@@ -471,8 +473,10 @@
 	    }
 		function selectItemRow(tableId, rowId, itemId) {
 			alert(itemId);
-			var soapType = new FetchSaleItemType(itemId);
-			call_web_service(soapType, fetchSaleItemHandler);
+			if(itemId != null && itemId != "") {
+				var soapType = new FetchSaleItemType(itemId);
+				call_web_service(soapType, fetchSaleItemHandler);
+			}
 		}
 		function fetchSaleItemHandler(jsonObj) {
 			if(jsonObj != undefined && jsonObj != null &&
@@ -536,25 +540,16 @@
 		}
 		function resetItem() {
 			document.forms[0].itemName.value = "";
-	      	//document.forms[0].itemName.disabled = false;
-	      	//document.forms[0].itemName.readOnly = false;
 	      	document.forms[0].itemDescription.value = "";
-	      	//document.forms[0].itemDescription.disabled = false;
-	      	//document.forms[0].itemDescription.readOnly = false;
 	        document.forms[0].defaultItemPrice.value = "";
-	        //document.forms[0].defaultItemPrice.disabled = false;
 	        document.forms[0].defaultItemOutPrice.value = "";
-	        //document.forms[0].defaultItemOutPrice.disabled = false;
-	        //document.forms[0].itemThumb2.disabled = false;
 	        document.forms[0].itemImg.src = "";
-	        //document.forms[0].hasDineInSizes.disabled = false;
-	        //document.forms[0].hasTakeOutSizes.disabled = false;
-	        //document.forms[0].itemTaxable.disabled = false;
-	        //document.forms[0].singleOption.disabled = false;
-	        //document.forms[0].hasSeasonPrice.disabled = false;
+	        document.forms[0].hasDineInSizes.checked = false;
+	        document.forms[0].hasTakeOutSizes.checked = false;
+	        document.forms[0].itemTaxable.checked = false;
+	        document.forms[0].singleOption.checked = false;
+	        document.forms[0].hasSeasonPrice.checked = false;
 	        document.forms[0].seasonPrice.vaue = "";
-			//document.forms[0].seasonPrice.disabled = false;
-			//document.forms[0].btnSaveItem.disabled = false;
 			document.forms[0].smallPrice.value = "";
 			document.forms[0].mediumPrice.value = "";
 			document.forms[0].largePrice.value = "";
@@ -691,7 +686,7 @@
 			
 		}
 		function listSaleItemsForCat(catId) {
-			if(catId != null) {
+			if(catId != null && catId != "") {
 				var listType = new ListSaleItemsForCategoryType(catId);
 				call_web_service(listType, listSaleItemsForCatHandler);
 			} else {
@@ -718,6 +713,125 @@
 				resetItem();
 			}
 		}
+	</script>
+	<script>
+		function resetCatOption() {
+			document.optionDetails.catOtionId.value = "";
+			document.optionDetails.catOptionName.value = "";
+			document.optionDetails.catOptionDescription.value = "";
+			document.optionDetails.catOptionPrice.value = "";
+			document.optionDetails.catOptionOutPrice.value = "";
+			document.optionDetails.catOptionThumb2.value = "";
+			document.optionDetails.catOptionImg.src = "";
+		}
+		function newCatOption() {
+	    	resetCatOption();
+	        optionOperation = ADD;
+	    }
+	    function saveCatOptionInfo() {
+	    	if(optionOperation == ADD){
+	    		createCatOption();
+	    	} else if(optionOperation == UPDATE) {
+	    		updateCatOption();
+	    	}
+	    }
+	    function createCatOption() {
+	    	if(curr_category != null && document.optionDetails.catOptionId.value=="") {
+				var catId = curr_category.id;
+				var name = document.optionDetails.catOptionName.value;
+				var desc = document.optionDetails.catOptionDescription.value;
+				var price = document.optionDetails.catOptionPrice.value;
+				var outPrice = document.optionDetails.catOptionOutPrice.value;
+				var thumb = document.optionDetails.catOptionImg.src;
+				var soapType = new CreateCategoryOptionType(catId, name, desc, price);
+				call_web_service(soapType, createCatOptionHandler);
+			}
+	    }
+	    function createCatOptionHandler(jsonObj) {
+	    	if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.createcategoryoptionresponsetype != undefined && jsonObj.createcategoryoptionresponsetype != null && 
+				jsonObj.createcategoryoptionresponsetype.result.successful == "true") {
+				document.optionDetails.catOtionId.value = jsonObj.createcategoryoptionresponsetype.optionid;
+			}
+	    }
+	    function updateCatOption() {
+	    	if(curr_category != null && document.optionDetails.catOptionId.value!=null && document.optionDetails.catOptionId.value!="") {
+	    		var id = document.optionDetails.catOtionId.value;
+				var catId = curr_category.id;
+				var name = document.optionDetails.catOptionName.value;
+				var desc = document.optionDetails.catOptionDescription.value;
+				var price = document.optionDetails.catOptionPrice.value;
+				var outPrice = document.optionDetails.catOptionOutPrice.value;
+				var thumb = document.optionDetails.catOptionImg.src;
+				var soapType = new UpdateCategoryOptionType(id, catId, name, desc, price);
+				call_web_service(soapType, updateCatOptionHandler);
+			}
+	    }
+	    function updateCatOptionHandler(jsonObj) {
+	    	if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.updatecategoryoptionresponsetype != undefined && jsonObj.updatecategoryoptionresponsetype != null && 
+				jsonObj.updatecategoryoptionresponsetype.result.successful == "true") {
+			} else {
+				alert("Failed to update option!");
+			}
+	    }
+	    function fetchCatOption(id) {
+	    	if(id != null && id != "") {
+	    		var soapType = new FetchCategoryOptionType(id);
+	    		call_web_service(soapType, fetchCatOptionHandler);
+	    	}
+	    }
+	    function fetchCatOptionHandler(jsonObj) {
+	    	if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.fetchcategoryoptionresponsetype != undefined && jsonObj.fetchcategoryoptionresponsetype != null && 
+				jsonObj.fetchcategoryoptionresponsetype.result.successful == "true") {
+				var option = jsonObj.fetchcategoryoptionresponsetype;
+				
+			}
+	    }
+	    function deleteCatOption(id) {
+	    	if(id != null && id != "") {
+	    		var soapType = new DeleteCategoryOptionType(id);
+	    		call_web_service(soapType, deleteCatOptionHandler);
+	    	}
+	    }
+	    function deleteCatOptionHandler(jsonObj) {
+	    	if(jsonObj != undefined && jsonObj != null &&
+                jsonObj.deletecategoryoptionresponsetype != undefined && jsonObj.deletecategoryoptionresponsetype != null &&
+                jsonObj.deletecategoryoptionresponsetype.result.successful == "true") {
+                var category = getCurrentCategory();
+                if(category != null) {
+                	listCatOptions(category.id);
+                	resetCatOption();
+                }
+            } else {
+            	alert("failed to delete category option!");
+            }
+	    }
+	    function listCatOptions(catId) {
+	    	if(catId != null && catId != "") {
+				var listType = new ListCategoryOptionType(catId);
+				call_web_service(listType, listCatOptionsHandler);
+			} else {
+				alert("Please select a category.");
+			}
+	    }
+	    function listCatOptionsHandler(jsonObj) {
+	    	
+	    }
+	    function addOptionRow(tableID, optionObj, selectRowFunc, deleteRowFunc) {
+	        var table = document.getElementById(tableID);
+	
+	        var rowCount = table.rows.length;
+	        var rowId = tableID + "_r" + rowCount;
+			
+			var row = table.insertRow(rowCount);
+			row.id = rowId;
+	       	var innerHTML = "<td onclick='"+selectRowFunc+"(\""+tableID+"\", \""+rowId+"\","+optionObj.id+");'>"+optionObj.name+"</td><td><a href='javascript:"+deleteRowFunc+"(\""+tableID+"\",\""+rowId+"\","+optionObj.id+");'>X</a></td>";//</tr></tbody>
+	       	row.innerHTML = innerHTML;
+	       	row.onmouseover = function(){ highlightRow(this, true); };
+	        row.onmouseout = function(){ highlightRow(this, false); };
+	    }
 	</script>
 </head>
 
@@ -894,16 +1008,66 @@
 							
 							<div id="adminTab" class="tabbertab">
 							    <h2 style="font-size: 20px">Category Options</h2>
-							    <p>List of options for the category.</p>
+							    <table width="100%">
+							    	<tr>
+							    		<td width="20%">
+							    			<table class="tableone" align="left">
+								                <thead>
+									                <tr>
+									                    <th class="th1" scope="col">Name</th>
+									                    <th class="th2" scope="col"></th>
+									                </tr>
+								                </thead>
+								                <tfoot>
+									                <tr>
+									                    <td align="center" colspan="2"><button id="btnNewCatOption"  onclick="javascript:newCatOption();">New Option</button></td>
+									                </tr>
+								                </tfoot>
+								                <tbody>
+									                <tr>
+									                    <td colspan="5">
+									                        <div class="innerb">
+									                            <table id ="categoryOption" class="tabletwo">
+									                            </table>
+									                        </div>
+									                    </td>
+									                </tr>
+							                	</tbody>
+							            	</table>
+							    		</td>
+							    		<td valign="top">
+							    			Option Details:
+							    			<form name="optionDetails">
+							    			<input type="hidden" name="catOtionId"/>
+							            	<table name="itemTable" style="border:1px solid gray" width="100%">
+					                    		<tr>
+					                    			<td>
+					                    				Name: <input type="text" id="catOptionName" name="catOptionName" value=""> <input type="checkbox" id="catOptionTaxable" name="catOptionTaxable" value="1"/>Taxable
+					                    			</td>
+					                    		</tr>
+					                    		<tr>
+					                    			<td valign="top">Description: <textarea name="catOptionDescription" id="catOptionDescription" rows="3" cols="45" value=""></textarea></td>
+					                    		</tr>
+					                    		<tr>
+					                    			<td>Default Price: <input type="text" id="catOptionPrice" name="catOptionPrice"></td>
+					                    		</tr>
+					                    		<tr>
+					                    			<td>Default Takeout Price: <input type="text" id="catOptionOutPrice" name="catOptionOutPrice"></td>
+					                    		</tr>
+					                    		<tr>
+								        			<td>
+								        				Thumbnail: <input type="file" id="catOptionThumb2" onchange="updatePicture('itemImg', this.value);"/><img id="catOptionImg" src=""/>
+								        				<input type="hidden" id="catOptionThumb" value=""/>
+								        			</td>
+								        		</tr>
+								        		<tr><td><button type="button" id="btnSaveCatOption" name="btnSaveCatOption" onclick="javascript:saveCatOptionInfo();">Save</button></td></tr>
+								            </table>
+								            </form>
+							    		</td>
+							    	</tr>
+							    </table>
 							</div>
-							<!--
-							<div id="orderTab" class="tabbertab">
-							    <h2>Order</h2>
-							    <p>Tab 3 content.</p>
-						  	</div>
-						  	-->
 						</div>
-						
 					</td>
 		    	</tr>
             </table>
