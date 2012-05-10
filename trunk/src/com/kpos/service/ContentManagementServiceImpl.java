@@ -347,6 +347,15 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     }
 
     @Override
+    public FetchResult<SaleItemOption> fetchSaleItemOption(long aId) {
+        FetchResult<SaleItemOption> result = new FetchResult<SaleItemOption>();
+        SaleItemOption option = saleItemOptionDao.findSaleItemOption(aId);
+        result.setSuccessful(option != null);
+        result.setTarget(option);
+        return result;
+    }
+
+    @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public DeleteResult deleteSaleItemOption(long aId) {
         DeleteResult result = new DeleteResult();
@@ -517,6 +526,15 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     }
 
     @Override
+    public FetchResult<CategoryOption> fetchCategoryOption(long aId) {
+        FetchResult<CategoryOption> result = new FetchResult<CategoryOption>();
+        CategoryOption catOption = categoryOptionDao.findById(aId);
+        result.setSuccessful(catOption!=null);
+        result.setTarget(catOption);
+        return result;
+    }
+
+    @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public CreateResult<CategoryOption> createCategoryOption(CategoryOptionType soapType) {
         CreateResult<CategoryOption> result = new CreateResult<CategoryOption>();
@@ -611,6 +629,17 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             result.setException(new Exception("ID can't be null!"));
         }
 
+        return result;
+    }
+
+    @Override
+    public FetchResult<GlobalOption> fetchGlobalOption(long aId) {
+        FetchResult<GlobalOption> result = new FetchResult<GlobalOption>();
+        GlobalOption option = globalOptionDao.findById(aId);
+        result.setSuccessful(option != null);
+        if(option != null) {
+            result.setTarget(option);
+        }
         return result;
     }
 

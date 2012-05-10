@@ -37,6 +37,8 @@ public interface IContentManagementService {
 
     UpdateResult<SaleItemOption> updateSaleItemOption(SaleItemOptionType soapType);
 
+    FetchResult<SaleItemOption> fetchSaleItemOption(long aId);
+
     DeleteResult deleteSaleItemOption(long aId);
     
     CreateResult<Printer> createPrinter(PrinterType soapType);
@@ -61,9 +63,13 @@ public interface IContentManagementService {
 
     UpdateResult<CategoryOption> updateCategoryOption(CategoryOptionType soapType);
 
+    FetchResult<CategoryOption> fetchCategoryOption(long aId);
+
     CreateResult<GlobalOption> createGlobalOption(GlobalOptionType soapType);
 
     UpdateResult<GlobalOption> updateGlobalOption(GlobalOptionType soapType);
+
+    FetchResult<GlobalOption> fetchGlobalOption(long aId);
 
     DeleteResult deleteGlobalOption(long aId);
 

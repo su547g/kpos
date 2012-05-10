@@ -408,6 +408,75 @@ function DeleteSaleItemType(itemId) {
         return xml;
     }
 }
+function CategoryOptionType(id, catId, name, description, price) {
+    this.myId = id;
+    this.myCatId = catId;
+    this.myName = name;
+    this.myDescription = description;
+    this.myPrice = price;
+    this.getXML = function() {
+        var xml = "<app:categoryOption>" + "<app:categoryId>" + this.myCatId + "</app:categoryId>";
+        xml += "<app:name>" + this.myName + "</app:name>";
+        if(this.myId != null) {
+            xml += "<app:id>" + this.myId + "</app:id>";
+        }
+        if(this.myDescription != null) {
+            xml += "<app:description>" + this.myDescription + "</app:description>";
+        }
+        if(this.myPrice != null) {
+            xml += "<app:price>" + this.myPrice + "</app:price>";
+        }
+        xml += "</app:categoryOption>";
+        return xml;
+    }
+}
+function CreateCategoryOptionType(catId, name, description, price) {
+    this.catOptionType = new CategoryOptionType(catId, name, description, price);
+    this.tag = "<app:CreateCategoryOptionType>";
+    this.endTag = "</app:CreateCategoryOptionType>";
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += this.tag + this.catOptionType.getXML() + this.endTag;
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function UpdateCategoryOptionType(id, catId, name, description, price) {
+    this.catOptionType = new CategoryOptionType(id, catId, name, description, price);
+    this.tag = "<app:UpdateCategoryOptionType>";
+    this.endTag = "</app:UpdateCategoryOptionType>";
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += this.tag + this.catOptionType.getXML() + this.endTag;
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function ListCategoryOptionType(catId) {
+    this.myCatId = catId;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:ListCategoryOptionType>"+"<app:categoryId>"+this.myCatId+"</app:categoryId></app:ListCategoryOptionType>";
+        return xml;
+    }
+}
+function DeleteCategoryOptionType(id) {
+    this.myId = id;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml = "<app:DeleteCategoryOptionType><app:id>" + this.myId + "</app:id></app:DeleteCategoryOptionType>";
+        return xml;
+    }
+}
+function FetchCategoryOptionType(id) {
+    this.myId = id;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml = "<app:FetchCategoryOptionType><app:id>" + this.myId + "</app:id></app:FetchCategoryOptionType>";
+        return xml;
+    }
+}
+
 function call_web_service(soapType, handler) {
     var soapXML = soapType.getXML();
     //alert(soapXML);

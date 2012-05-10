@@ -351,6 +351,31 @@ public class KPosPortImpl implements KPosPortType {
     }
 
     @Override
+    public FetchSaleItemOptionResponseType fetchSaleItemOption(
+            @WebParam(partName = "parameters", name = "FetchSaleItemOptionType", targetNamespace = NS) FetchSaleItemOptionType parameters) {
+        FetchSaleItemOptionResponseType responseType = new FetchSaleItemOptionResponseType();
+        try {
+            FetchResult<SaleItemOption> result = contentManagementService.fetchSaleItemOption(parameters.getId());
+            SaleItemOption option = result.getTarget();
+            if(result.isSuccessful()) {
+                SaleItemOptionType soapType = new SaleItemOptionType();
+                soapType.setDescription(option.getDescription());
+                soapType.setId(option.getId());
+                soapType.setIsRequired(option.isRequired());
+                soapType.setName(option.getName());
+                soapType.setPrice(option.getPrice());
+                soapType.setSaleItemId(option.getSaleItem().getId());
+                responseType.setItemOption(soapType);
+            }
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            ResultType result = this.getSoapFaultResult(e);
+            responseType.setResult(result);
+        }
+        return responseType;
+    }
+
+    @Override
     public DeleteSaleItemOptionResponseType deleteSaleItemOption(
             @WebParam(partName = "parameters", name = "DeleteSaleItemOptionType", targetNamespace = NS) DeleteSaleItemOptionType parameters) {
         DeleteSaleItemOptionResponseType responseType = new DeleteSaleItemOptionResponseType();
@@ -535,6 +560,29 @@ public class KPosPortImpl implements KPosPortType {
     }
 
     @Override
+    public FetchCategoryOptionResponseType fetchCategoryOption(
+            @WebParam(partName = "parameters", name = "FetchCategoryOptionType", targetNamespace = NS) FetchCategoryOptionType parameters) {
+        FetchCategoryOptionResponseType responseType = new FetchCategoryOptionResponseType();
+        try {
+            FetchResult<CategoryOption> result = contentManagementService.fetchCategoryOption(parameters.getId());
+            CategoryOptionType soapType = new CategoryOptionType();
+            if(result.isSuccessful()) {
+                CategoryOption option = result.getTarget() ;
+                soapType.setCategoryId(option.getMenuCategory().getId());
+                soapType.setDescription(option.getDescription());
+                soapType.setId(option.getId());
+                soapType.setName(option.getName());
+                soapType.setPrice(option.getPrice());
+                responseType.setOption(soapType);
+            }
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
+        return responseType;
+    }
+
+    @Override
     public ListCategoryOptionResponseType listCategoryOption(
             @WebParam(partName = "parameters", name = "ListCategoryOptionType", targetNamespace = NS) ListCategoryOptionType parameters) {
         ListCategoryOptionResponseType responseType = new ListCategoryOptionResponseType();
@@ -557,6 +605,7 @@ public class KPosPortImpl implements KPosPortType {
                 result.setTarget(options);
                 result.setSuccessful(true);
                 responseType.setResult(getSoapResult(result));
+                responseType.setTotal(options.size());
             } else {
                 responseType.setResult(getSoapFaultResult(new Exception("Category ["+parameters.getCategoryId()+"] doesn't exist")));
             }
@@ -572,6 +621,28 @@ public class KPosPortImpl implements KPosPortType {
         UpdateGlobalOptionResponseType responseType = new UpdateGlobalOptionResponseType();
         try {
             UpdateResult<GlobalOption> result = contentManagementService.updateGlobalOption(parameters.getGlobalOption());
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
+        return responseType;
+    }
+
+    @Override
+    public FetchGlobalOptionResponseType fetchGlobalOption(
+            @WebParam(partName = "parameters", name = "FetchGlobalOptionType", targetNamespace = NS) FetchGlobalOptionType parameters) {
+        FetchGlobalOptionResponseType responseType = new FetchGlobalOptionResponseType();
+        try {
+            FetchResult<GlobalOption> result = contentManagementService.fetchGlobalOption(parameters.getId());
+            if(result.isSuccessful()) {
+                GlobalOption option = result.getTarget();
+                GlobalOptionType soapType = new GlobalOptionType();
+                soapType.setId(option.getId());
+                soapType.setName(option.getName());
+                soapType.setPrice(option.getDineInPrice());
+                soapType.setOutPrice(option.getTakeOutPrice());
+                responseType.setGlobalOption(soapType);
+            }
             responseType.setResult(getSoapResult(result));
         } catch (Exception e) {
             responseType.setResult(getSoapFaultResult(e));
