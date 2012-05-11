@@ -144,11 +144,9 @@
 	        var bgColor = "background-color:" + cell.style.background;
 	
 	        if(highLight) {
-	            //cell.style.cssText = 'border-width: 1px; border-color: blue; ' + bgColor;
 	            cell.style.borderWidth = "1px";
 	            cell.style.borderColor = "blue";
 	        } else {
-	            //cell.style.cssText = 'border-width: 1px; border-color: #B3B1B1 ' + bgColor;
 	            cell.style.borderWidth = "1px";
 	            cell.style.borderColor = "#B3B1B1";
 	        }
@@ -236,27 +234,6 @@
 	    function deleteCategoryRow(tableId, rowID, catId) {
 	    	var deleteCategoryType = new DeleteCategoryType(catId);
             call_web_service(deleteCategoryType, deleteCategoryHandler);
-	        /*try {
-	            var table = document.getElementById(tableId);
-                var rowCount = table.rows.length;
-                for(var i = 0; i < rowCount; i++) {
-                    var row = table.rows[i];
-                    if(row.id == rowID) {
-                    	deletedRowId = rowID;
-                        var categories = getCategories();
-                        var category = categories[i];
-                        if(category.id != null) {
-                        	var deleteCategoryType = new DeleteCategoryType(category.id);
-                        	ws_delete_category(deleteCategoryType, deleteCategoryHandler);
-                        }
-                        rowCount--;
-                        i--;
-                        break;
-                    }
-                }
-	        } catch(e) {
-	            //alert(e);
-	        }*/
 	    }
 	    function deleteCategoryHandler(jsonObj) {
 			if(jsonObj != undefined && jsonObj != null &&
@@ -349,8 +326,9 @@
             			}
             		}
                 }
+                alert("Save successful!");
 	        } else {
-	            alert("failed to update category!");
+	            alert("Failed to update category!");
 	        }
 	        operation = "";
 		}
@@ -683,7 +661,13 @@
 			}
 		}
 		function updateSaleItemHandler(jsonObj) {
-			
+			if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.updatesaleitemresponsetype != undefined && jsonObj.updatesaleitemresponsetype != null && 
+				jsonObj.updatesaleitemresponsetype.result.successful == "true") {
+				alert("Save successful!");
+			} else {
+				alert("Failed to save item!");
+			}
 		}
 		function listSaleItemsForCat(catId) {
 			if(catId != null && catId != "") {
@@ -716,7 +700,7 @@
 	</script>
 	<script>
 		function resetCatOption() {
-			document.optionDetails.catOtionId.value = "";
+			document.optionDetails.catOptionId.value = "";
 			document.optionDetails.catOptionName.value = "";
 			document.optionDetails.catOptionDescription.value = "";
 			document.optionDetails.catOptionPrice.value = "";
@@ -743,7 +727,8 @@
 				var price = document.optionDetails.catOptionPrice.value;
 				var outPrice = document.optionDetails.catOptionOutPrice.value;
 				var thumb = document.optionDetails.catOptionImg.src;
-				var soapType = new CreateCategoryOptionType(catId, name, desc, price);
+				var taxable = document.optionDetails.catOptionTaxable.checked;
+				var soapType = new CreateCategoryOptionType(catId, name, desc, price, thumb, taxable);
 				call_web_service(soapType, createCatOptionHandler);
 			}
 	    }
@@ -751,19 +736,21 @@
 	    	if(jsonObj != undefined && jsonObj != null &&
 				jsonObj.createcategoryoptionresponsetype != undefined && jsonObj.createcategoryoptionresponsetype != null && 
 				jsonObj.createcategoryoptionresponsetype.result.successful == "true") {
-				document.optionDetails.catOtionId.value = jsonObj.createcategoryoptionresponsetype.optionid;
+				document.optionDetails.catOptionId.value = jsonObj.createcategoryoptionresponsetype.optionid;
+				listCatOptions(curr_category.id);
 			}
 	    }
 	    function updateCatOption() {
 	    	if(curr_category != null && document.optionDetails.catOptionId.value!=null && document.optionDetails.catOptionId.value!="") {
-	    		var id = document.optionDetails.catOtionId.value;
+	    		var id = document.optionDetails.catOptionId.value;
 				var catId = curr_category.id;
 				var name = document.optionDetails.catOptionName.value;
 				var desc = document.optionDetails.catOptionDescription.value;
 				var price = document.optionDetails.catOptionPrice.value;
 				var outPrice = document.optionDetails.catOptionOutPrice.value;
 				var thumb = document.optionDetails.catOptionImg.src;
-				var soapType = new UpdateCategoryOptionType(id, catId, name, desc, price);
+				var taxable = document.optionDetails.catOptionTaxable.checked;
+				var soapType = new UpdateCategoryOptionType(id, catId, name, desc, price, thumb, taxable);
 				call_web_service(soapType, updateCatOptionHandler);
 			}
 	    }
@@ -771,6 +758,7 @@
 	    	if(jsonObj != undefined && jsonObj != null &&
 				jsonObj.updatecategoryoptionresponsetype != undefined && jsonObj.updatecategoryoptionresponsetype != null && 
 				jsonObj.updatecategoryoptionresponsetype.result.successful == "true") {
+				alert("Save successful!");
 			} else {
 				alert("Failed to update option!");
 			}
@@ -785,8 +773,14 @@
 	    	if(jsonObj != undefined && jsonObj != null &&
 				jsonObj.fetchcategoryoptionresponsetype != undefined && jsonObj.fetchcategoryoptionresponsetype != null && 
 				jsonObj.fetchcategoryoptionresponsetype.result.successful == "true") {
-				var option = jsonObj.fetchcategoryoptionresponsetype;
-				
+				var option = jsonObj.fetchcategoryoptionresponsetype.option;
+				document.optionDetails.catOptionId.value = option.id;
+				document.optionDetails.catOptionName.value = option.name;
+				document.optionDetails.catOptionDescription.value = option.description;
+				document.optionDetails.catOptionPrice.value = option.price;
+				document.optionDetails.catOptionImg.src = option.thumb;
+				document.optionDetails.catOptionTaxable.checked = (option.taxable=="true");
+				optionOperation = UPDATE;
 			}
 	    }
 	    function deleteCatOption(id) {
@@ -817,7 +811,24 @@
 			}
 	    }
 	    function listCatOptionsHandler(jsonObj) {
-	    	
+	    	if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.listcategoryoptionresponsetype != undefined && jsonObj.listcategoryoptionresponsetype != null && 
+				jsonObj.listcategoryoptionresponsetype.result.successful == "true") {
+				document.getElementById("categoryOption").innerHTML = ""; //clear the table
+				var options = jsonObj.listcategoryoptionresponsetype.options;
+				var count = jsonObj.listcategoryoptionresponsetype.total;
+				
+				if(options != undefined && options != null) {
+	                if(count > 1) {
+						for(var i = 0; i < count; i++) {
+							addOptionRow("categoryOption", options[i], "fetchCatOption", "deleteCatOption");
+						}
+					} else {
+						addOptionRow("categoryOption", options, "fetchCatOption", "deleteCatOption");
+					}						
+				}
+				resetCatOption();
+			}
 	    }
 	    function addOptionRow(tableID, optionObj, selectRowFunc, deleteRowFunc) {
 	        var table = document.getElementById(tableID);
@@ -827,7 +838,7 @@
 			
 			var row = table.insertRow(rowCount);
 			row.id = rowId;
-	       	var innerHTML = "<td onclick='"+selectRowFunc+"(\""+tableID+"\", \""+rowId+"\","+optionObj.id+");'>"+optionObj.name+"</td><td><a href='javascript:"+deleteRowFunc+"(\""+tableID+"\",\""+rowId+"\","+optionObj.id+");'>X</a></td>";//</tr></tbody>
+	       	var innerHTML = "<td onclick='"+selectRowFunc+"("+optionObj.id+");'>"+optionObj.name+"</td><td><a href='javascript:"+deleteRowFunc+"("+optionObj.id+");'>X</a></td>";//</tr></tbody>
 	       	row.innerHTML = innerHTML;
 	       	row.onmouseover = function(){ highlightRow(this, true); };
 	        row.onmouseout = function(){ highlightRow(this, false); };
@@ -1038,7 +1049,7 @@
 							    		<td valign="top">
 							    			Option Details:
 							    			<form name="optionDetails">
-							    			<input type="hidden" name="catOtionId"/>
+							    			<input type="hidden" name="catOptionId"/>
 							            	<table name="itemTable" style="border:1px solid gray" width="100%">
 					                    		<tr>
 					                    			<td>

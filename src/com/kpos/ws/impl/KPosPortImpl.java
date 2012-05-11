@@ -573,6 +573,8 @@ public class KPosPortImpl implements KPosPortType {
                 soapType.setId(option.getId());
                 soapType.setName(option.getName());
                 soapType.setPrice(option.getPrice());
+                soapType.setThumb(option.getThumb());
+                soapType.setTaxable(option.getTaxable());
                 responseType.setOption(soapType);
             }
             responseType.setResult(getSoapResult(result));
@@ -599,6 +601,8 @@ public class KPosPortImpl implements KPosPortType {
                     soapType.setId(option.getId());
                     soapType.setName(option.getName());
                     soapType.setPrice(option.getPrice());
+                    soapType.setTaxable(option.getTaxable());
+                    soapType.setThumb(option.getThumb());
                     responseType.getOptions().add(soapType);
                 }
                 FetchResult<List<CategoryOption>> result = new FetchResult<List<CategoryOption>>();
