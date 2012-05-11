@@ -27,12 +27,17 @@ public class CategoryOption extends AbstractDomainObject {
     @Column(name = "price", nullable = true)
     private double price;
 
+    @Column(name = "thumb", nullable = true)
+    private String thumb;
+
+    @Column(name = "taxable", nullable = true)
+    private Boolean taxable = true;
+
     @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "category_id")
     private MenuCategory menuCategory;
 
     public Long getId() {
-
         return id;
     }
 
@@ -64,6 +69,22 @@ public class CategoryOption extends AbstractDomainObject {
         this.price = price;
     }
 
+    public String getThumb() {
+        return thumb;
+    }
+
+    public void setThumb(String thumb) {
+        this.thumb = thumb;
+    }
+
+    public Boolean getTaxable() {
+        return taxable;
+    }
+
+    public void setTaxable(Boolean taxable) {
+        this.taxable = taxable;
+    }
+
     public MenuCategory getMenuCategory() {
         return menuCategory;
     }
@@ -83,6 +104,7 @@ public class CategoryOption extends AbstractDomainObject {
         if (menuCategory != null ? !menuCategory.equals(that.menuCategory) : that.menuCategory != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
+        if (thumb != null ? !thumb.equals(that.thumb) : that.thumb != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
 
         return true;
@@ -95,6 +117,7 @@ public class CategoryOption extends AbstractDomainObject {
         result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (thumb != null ? thumb.hashCode() : 0);
         temp = price != +0.0d ? Double.doubleToLongBits(price) : 0L;
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (menuCategory != null ? menuCategory.hashCode() : 0);

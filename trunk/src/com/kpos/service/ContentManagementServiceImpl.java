@@ -545,6 +545,8 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             option.setDescription(soapType.getDescription());
             option.setName(soapType.getName());
             option.setPrice(soapType.getPrice());
+            option.setThumb(soapType.getThumb());
+            option.setTaxable(soapType.getTaxable());
             option.setCreatedOn(new Date());
             option.setLastUpdated(new Date());
             categoryOptionDao.insert(option);
@@ -570,6 +572,8 @@ public class ContentManagementServiceImpl implements IContentManagementService {
                 option.setName(soapType.getName());
                 option.setPrice(soapType.getPrice());
                 option.setLastUpdated(new Date());
+                option.setThumb(soapType.getThumb());
+                option.setTaxable(soapType.getTaxable());
             }
         } else {
             result.setSuccessful(false);
