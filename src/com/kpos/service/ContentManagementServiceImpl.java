@@ -191,7 +191,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         saleItem.setTaxable(aSaleItemType.isIsTaxable());
         if(aSaleItemType.getThumbPath() != null) saleItem.setThumbPath(aSaleItemType.getThumbPath());
         saleItem.setLastUpdated(new Date());
-        
+        saleItem.setTaxable(aSaleItemType.isIsTaxable());
         /*List<SaleItemOptionType> optionTypes = aSaleItemType.getOptions();
         List<SaleItemOption> options = saleItem.getOptionList();
         options.clear();

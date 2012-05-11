@@ -41,6 +41,9 @@ public class SaleItemOption extends AbstractDomainObject {
     @Column(name = "thumb_path")
     private String thumbPath;
 
+    @Column(name = "taxable", nullable = true)
+    private Boolean taxable;
+
     public Long getId() {
         return id;
     }
@@ -106,18 +109,38 @@ public class SaleItemOption extends AbstractDomainObject {
         this.thumbPath = thumPath;
     }
 
+    public String getThumbPath() {
+        return thumbPath;
+    }
+
+    public void setThumbPath(String thumbPath) {
+        this.thumbPath = thumbPath;
+    }
+
+    public Boolean getTaxable() {
+        return taxable;
+    }
+
+    public void setTaxable(Boolean taxable) {
+        this.taxable = taxable;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SaleItemOption that = (SaleItemOption) o;
+        SaleItemOption option = (SaleItemOption) o;
 
-        if (isRequired != that.isRequired) return false;
-        if (Double.compare(that.price, price) != 0) return false;
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (saleItem != null ? !saleItem.equals(that.saleItem) : that.saleItem != null) return false;
+        if (isRequired != option.isRequired) return false;
+        if (Double.compare(option.outPrice, outPrice) != 0) return false;
+        if (Double.compare(option.price, price) != 0) return false;
+        if (description != null ? !description.equals(option.description) : option.description != null) return false;
+        if (id != null ? !id.equals(option.id) : option.id != null) return false;
+        if (name != null ? !name.equals(option.name) : option.name != null) return false;
+        if (saleItem != null ? !saleItem.equals(option.saleItem) : option.saleItem != null) return false;
+        if (taxable != null ? !taxable.equals(option.taxable) : option.taxable != null) return false;
+        if (thumbPath != null ? !thumbPath.equals(option.thumbPath) : option.thumbPath != null) return false;
 
         return true;
     }
@@ -130,8 +153,13 @@ public class SaleItemOption extends AbstractDomainObject {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         temp = price != +0.0d ? Double.doubleToLongBits(price) : 0L;
         result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = outPrice != +0.0d ? Double.doubleToLongBits(outPrice) : 0L;
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (saleItem != null ? saleItem.hashCode() : 0);
         result = 31 * result + (isRequired ? 1 : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (thumbPath != null ? thumbPath.hashCode() : 0);
+        result = 31 * result + (taxable != null ? taxable.hashCode() : 0);
         return result;
     }
 }
