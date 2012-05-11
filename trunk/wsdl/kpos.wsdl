@@ -197,6 +197,7 @@
                     <xs:element name="isRequired" type="xsd:boolean" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="description" type="xsd:string" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="thumbPath" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="taxable" type="xsd:boolean" minOccurs="1" maxOccurs="1" default="true"/>
                 </xs:sequence>
             </xs:complexType>
 
