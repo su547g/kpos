@@ -42,7 +42,7 @@ public class SaleItemOption extends AbstractDomainObject {
     private String thumbPath;
 
     @Column(name = "taxable", nullable = true)
-    private Boolean taxable;
+    private Boolean taxable = true;
 
     public Long getId() {
         return id;

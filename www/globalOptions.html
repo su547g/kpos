@@ -73,6 +73,7 @@
 			if(jsonObj != undefined && jsonObj != null &&
 				jsonObj.listglobaloptionresponsetype != undefined && jsonObj.listglobaloptionresponsetype != null && 
 				jsonObj.listglobaloptionresponsetype.result.successful == "true") {
+				document.getElementById("globalOptions").innerHTML = "";
 				var options = jsonObj.listglobaloptionresponsetype.options;
 				var count = jsonObj.listglobaloptionresponsetype.count;
 				if(options != undefined && options != null) {

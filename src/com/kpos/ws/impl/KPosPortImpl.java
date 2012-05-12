@@ -132,7 +132,7 @@ public class KPosPortImpl implements KPosPortType {
             optionType.setIsRequired(option.isRequired());
             optionType.setDescription(option.getDescription());
             optionType.setThumbPath(option.getThumPath());
-            optionType.setTaxable(option.getTaxable());
+            optionType.setTaxable(option.getTaxable()==null?true:option.getTaxable());
             optionTypes.add(optionType);
         }
         //Load printers

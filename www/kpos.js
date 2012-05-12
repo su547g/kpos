@@ -95,7 +95,7 @@ function callWebService(soapXML, responseHandler) {
 }
 function call_web_service(soapType, handler) {
     var soapXML = soapType.getXML();
-    alert(soapXML);
+    //alert(soapXML);
     callWebService(soapXML, handler);
 }
 
