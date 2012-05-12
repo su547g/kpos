@@ -611,6 +611,7 @@
             <xs:complexType name="CreateGlobalOptionResponseType">
                 <xs:sequence>
                     <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="id" type="xsd:long" minOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="UpdateGlobalOptionType">
@@ -652,6 +653,7 @@
                 <xs:sequence>
                     <xs:element name="Result" type="tns:ResultType"/>
                     <xs:element name="options" type="tns:GlobalOptionType" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="count" type="xsd:int"/>
                 </xs:sequence>
             </xs:complexType>
 

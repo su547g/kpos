@@ -1,3 +1,17 @@
+function highlightRow(row, highLight) {
+    row.style.cursor = 'pointer';
+    var cell = row.cells[0];
+    var bgColor = "background-color:" + cell.style.background;
+
+    if(highLight) {
+        cell.style.borderWidth = "1px";
+        cell.style.borderColor = "blue";
+    } else {
+        cell.style.borderWidth = "1px";
+        cell.style.borderColor = "#B3B1B1";
+    }
+}
+        
 function obj2str(o){
 	var r = [];
 	if(typeof o == "string" || o == null || o == '' || o == '?') {
@@ -78,6 +92,11 @@ function callWebService(soapXML, responseHandler) {
 		}
 	}
 	xmlhttp.send(soapXML);
+}
+function call_web_service(soapType, handler) {
+    var soapXML = soapType.getXML();
+    alert(soapXML);
+    callWebService(soapXML, handler);
 }
 
 function Printer(id, name, ip) {
@@ -487,9 +506,73 @@ function FetchCategoryOptionType(id) {
         return xml;
     }
 }
-
-function call_web_service(soapType, handler) {
-    var soapXML = soapType.getXML();
-    alert(soapXML);
-    callWebService(soapXML, handler);
+function GlobalOptionType(id, name, price, outPrice) {
+    this.myId = id;
+    this.myName = name;
+    this.myPrice = price;
+    this.myOutPrice = outPrice;
+    this.getXML = function() {
+        var xml = "<app:globalOption>";
+        if(this.myId != null && this.myId != "") {
+            xml += "<app:id>" + this.myId + "</app:id>";
+        }
+        xml += "<app:name>" + this.myName + "</app:name>";
+        if(this.myPrice != null && this.myPrice != "") {
+            xml += "<app:price>" + this.myPrice + "</app:price>";
+        }
+        if(this.myOutPrice != null && this.myOutPrice != "") {
+            xml += "<app:outPrice>" + this.myOutPrice + "</app:outPrice>";
+        }
+        xml += "</app:globalOption>";
+        return xml;
+    }
+}
+function ListGlobalOptionsType() {
+    this.getXML = function() {
+        var xml = soapXMLBegin + "<app:ListGlobalOptionType/>" + soapXMLEnd;
+        return xml;
+    }
+}
+function CreateGlobalOptionType(name, price, outPrice) {
+    this.optionType = new GlobalOptionType(null, name, price, outPrice);
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:CreateGlobalOptionType>";
+        xml += this.optionType.getXML();
+        xml += "</app:CreateGlobalOptionType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function UpdateGlobalOptionType(id, name, price, outPrice) {
+    this.optionType = new GlobalOptionType(id, name, price, outPrice);
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:UpdateGlobalOptionType>";
+        xml += this.optionType.getXML();
+        xml += "</app:UpdateGlobalOptionType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function DeleteGlobalOptionType(id) {
+    this.myId = id;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:DeleteGlobalOptionType>";
+        xml += "<app:id>" + this.myId + "</app:id>";
+        xml += "</app:DeleteGlobalOptionType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function FetchGlobalOptionType(id) {
+    this.myId = id;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:FetchGlobalOptionType>" + "<app:id>" + this.myId + "</app:id>";
+        xml += "</app:FetchGlobalOptionType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
 }

@@ -55,20 +55,40 @@
 		var UPDATE = "UPDATE";
 		var action = "";
 		
-		function resetOptionForm() {
+		function resetOptionForm(disabled) {
 			document.optionForm.optionId.value = "";
+			document.optionForm.optionId.disabled = disabled;
 			document.optionForm.optionName.value = "";
+			document.optionForm.optionName.disabled = disabled;
 			document.optionForm.price.value = "";
+			document.optionForm.price.disabled = disabled;
 			document.optionForm.outPrice.value = "";
+			document.optionForm.outPrice.disabled = disabled;
 		}
 		function listAllOptions() {
-			
+			var soapType = new ListGlobalOptionsType();
+			call_web_service(soapType, listOptionsHandler);
 		}
 		function listOptionsHandler(jsonObj) {
-			
+			if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.listglobaloptionresponsetype != undefined && jsonObj.listglobaloptionresponsetype != null && 
+				jsonObj.listglobaloptionresponsetype.result.successful == "true") {
+				var options = jsonObj.listglobaloptionresponsetype.options;
+				var count = jsonObj.listglobaloptionresponsetype.count;
+				if(options != undefined && options != null) {
+	                if(count > 1) {
+						for(var i = 0; i < count; i++) {
+							addOptionRow("globalOptions", options[i], "fetchGlobalOption", "deleteGlobalOption");
+						}
+					} else if(count == 1) {
+						addOptionRow("globalOptions", options, "fetchGlobalOption", "deleteGlobalOption");
+					}						
+				}
+				resetOptionForm(true);
+			}
 		}
 		function newGlobalOption() {
-			resetOptionForm();
+			resetOptionForm(false);
 			action = ADD;
 		}
 		function saveGlobalOption() {
@@ -79,28 +99,77 @@
 			}
 		}
 		function createGlobalOption() {
-			
+			if(document.optionForm.optionId.value == null || document.optionForm.optionId.value == "") {
+				var name = document.optionForm.optionName.value;
+				var price = document.optionForm.price.value;
+				var outPrice = document.optionForm.outPrice.value;
+				var soapType = new CreateGlobalOptionType(name, price, outPrice);
+				call_web_service(soapType, createGlobalOptionHandler);
+			}
 		}
 		function createGlobalOptionHandler(jsonObj) {
-			
+			if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.createglobaloptionresponsetype != undefined && jsonObj.createglobaloptionresponsetype != null && 
+				jsonObj.createglobaloptionresponsetype.result.successful == "true") {
+				document.optionForm.optionId.value = jsonObj.createglobaloptionresponsetype.id;
+				listAllOptions();
+			}
 		}
 		function updateGlobalOption() {
-			
+			if(document.optionForm.optionId.value != null || document.optionForm.optionId.value != "") {
+				var id = document.optionForm.optionId.value;
+				var name = document.optionForm.optionName.value;
+				var price = document.optionForm.price.value;
+				var outPrice = document.optionForm.outPrice.value;
+				var soapType = new UpdateGlobalOptionType(id, name, price, outPrice);
+				call_web_service(soapType, updateGlobalOptionHandler);
+			}
 		}
-		function updateGlobalOptonHandler(jsonObj) {
-			
+		function updateGlobalOptionHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.updateglobaloptionresponsetype != undefined && jsonObj.updateglobaloptionresponsetype != null && 
+				jsonObj.updateglobaloptionresponsetype.result.successful == "true") {
+				alert("Save successful!");
+			} else {
+				alert("Failed to update option!");
+			}
 		}
 		function fetchGlobalOption(id) {
+			if(document.optionForm.optionId.value != null || document.optionForm.optionId.value != "") {
+				var soapType = new FetchGlobalOptionType(id);
+				call_web_service(soapType, fetchGlobalOptionHandler);
+			}
 			
 		}
 		function fetchGlobalOptionHandler(jsonObj) {
-			
+			if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.fetchglobaloptionresponsetype != undefined && jsonObj.fetchglobaloptionresponsetype != null && 
+				jsonObj.fetchglobaloptionresponsetype.result.successful == "true") {
+				var option = jsonObj.fetchglobaloptionresponsetype.globaloption;
+				document.optionForm.optionId.value = option.id;
+				document.optionForm.optionName.value = option.name;
+				document.optionForm.price.value = option.price;
+				document.optionForm.outPrice.value = option.outprice;
+				document.optionForm.optionName.disabled = false;
+				document.optionForm.price.disabled = false;
+				document.optionForm.outPrice.disabled = false;
+				action = UPDATE;
+			}
 		}
 		function deleteGlobalOption(id) {
-			
+			if(document.optionForm.optionId.value != null || document.optionForm.optionId.value != "") {
+				var soapType = new DeleteGlobalOptionType(id);
+				call_web_service(soapType, deleteHandler);
+			}
 		}
 		function deleteHandler(jsonObj){
-			
+			if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.deleteglobaloptionresponsetype != undefined && jsonObj.deleteglobaloptionresponsetype != null && 
+				jsonObj.deleteglobaloptionresponsetype.result.successful == "true") {
+				listAllOptions();
+			} else {
+				alert("Failed to delete option!");
+			}
 		}
 		function addOptionRow(tableID, optionObj, selectRowFunc, deleteRowFunc) {
 	        var table = document.getElementById(tableID);
@@ -153,17 +222,17 @@
 	        	<table id="globalOption" width="70%">
 	        		<tr>
 	        			<td align="left" valign="top">
-	        				Name: <input type="text" id="optionName" readonly="readonly" value=""/>
+	        				Name: <input type="text" id="optionName" disabled="true" value=""/>
 	        			</td>
 	        		</tr>
 	        		<tr>
 	        			<td align="left" valign="top">
-	        				Price: <input type="text" id="price"  value=""/>
+	        				Price: <input type="text" id="price" disabled="true" value=""/>
 	        			</td>
 	        		</tr>
 	        		<tr>
 	        			<td align="left" valign="top">
-	        				Takeout Price: <input type="text" id="outPrice" value=""/>
+	        				Takeout Price: <input type="text" id="outPrice" disabled="true" value=""/>
 	        			</td>
 	        		</tr>
 	        		<tr>
