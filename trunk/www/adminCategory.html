@@ -138,19 +138,7 @@
 			var jsonString = obj2str(categories);
 			localStorage.setItem('v_categories', jsonString);
 		}
-	    function highlightRow(row, highLight) {
-	        row.style.cursor = 'pointer';
-	        var cell = row.cells[0];
-	        var bgColor = "background-color:" + cell.style.background;
-	
-	        if(highLight) {
-	            cell.style.borderWidth = "1px";
-	            cell.style.borderColor = "blue";
-	        } else {
-	            cell.style.borderWidth = "1px";
-	            cell.style.borderColor = "#B3B1B1";
-	        }
-	    }
+	    
 		function uncheckPrinters(printers) {
 			for(var n = 0; n < printers.length; n++) {
 				printers[n].checked = false;
@@ -367,7 +355,7 @@
 	                	for(var i = 0; i < categories.length; i++) {
 	                		addCategoryRow("category", categories[i], "selectRow", "deleteCategoryRow");
 	                	}
-	                } else {
+	                } else if(count == 1){
 	                	//Only one category
 	                	addCategoryRow("category", categories, "selectRow", "deleteCategoryRow");
 	                }
@@ -690,7 +678,7 @@
 						for(var i = 0; i < count; i++) {
 							addItemRow("menuItem", items[i], "selectItemRow", "deleteItemRow");
 						}
-					} else {
+					} else if(count == 1){
 						addItemRow("menuItem", items, "selectItemRow", "deleteItemRow");
 					}						
 				}

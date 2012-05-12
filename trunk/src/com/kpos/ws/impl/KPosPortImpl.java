@@ -675,6 +675,9 @@ public class KPosPortImpl implements KPosPortType {
         CreateGlobalOptionResponseType responseType = new CreateGlobalOptionResponseType();
         try {
             CreateResult<GlobalOption> result = contentManagementService.createGlobalOption(parameters.getGlobalOption());
+            if(result.isSuccessful()) {
+                responseType.setId(result.getCreated().getId());
+            }
             responseType.setResult(getSoapResult(result));
         } catch (Exception e) {
             responseType.setResult(getSoapFaultResult(e));
@@ -698,6 +701,7 @@ public class KPosPortImpl implements KPosPortType {
                 soapType.setPrice(option.getDineInPrice());
                 responseType.getOptions().add(soapType);
             }
+            responseType.setCount(globalOptions.size());
             responseType.setResult(getSoapResult(result));
         } catch (Exception e) {
             responseType.setResult(getSoapFaultResult(e));
