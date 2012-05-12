@@ -12,6 +12,7 @@
 
     <script type="text/javascript" src="xml2json.js"></script>
     <script type="text/javascript" src="kpos.js"></script>
+    <script type="text/javascript" src="popup.js"></script>
     <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.min.js"></script>
     
     <link rel="stylesheet" href="example.css" TYPE="text/css" MEDIA="screen">
@@ -173,8 +174,8 @@
 	                if(curr_category != null) {
 	                	document.getElementById("categoryName").value = curr_category.name;
 	        			document.getElementById("categoryNotes").value = curr_category.notes;
-	        			document.getElementById("catThumb").value = curr_category.thumb;
-	        			document.getElementById("categoryImg").src = curr_category.thumb;
+	        			document.getElementById("catThumb").value = curr_category.thumbpath;
+	        			document.getElementById("categoryImg").src = curr_category.thumbpath;
 	        			document.getElementById("categoryName").readOnly = false;
 	        			document.getElementById("categoryNotes").readOnly = false;
 	        			document.getElementById("catThumb2").disabled = false;
