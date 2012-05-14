@@ -41,7 +41,7 @@
       .categoryTable td {
          border:1px solid gray;
          padding: 5px;
-         background-color:#F07800; //FF742E; //3399FF;
+         //background-color:#F07800; //FF742E; //3399FF;
          color: #FFF; //003366;
          //border-radius:3px;
          -moz-border-radius: 1px;
@@ -66,76 +66,36 @@
          -moz-border-radius: 1px;
       }
    </style>
-</head>
+   <style type="text/css">
+	input.groovybutton
+	{
+	   font-size:14px;
+	   font-weight:bold;
+	   color:#000000;//#FFFF00;
+	   width:80px;
+	   height:50px;
+	   background-color:#DDDDDD;
+	   background-image:url(texas.gif);
+	   border-width:2px;
+	}
+   </style>
+
 <script language="javascript">
-   var currentRow=-1;
-
-   function highlightRow(row, highLight) {
-      row.style.cursor = 'pointer';
-      var cell = row.cells[0];
-      if(highLight) {
-         cell.style.cssText = 'border-width: 1px; border-color: blue';
-      } else {
-         cell.style.cssText = 'border-width: 1px; border-color: #B3B1B1';
-      }
-   }
-
-   function selectRow(tableID, selectedRowID) {
-      var table = document.getElementById(tableID);
-      var rowCount = table.rows.length;
-      for(var i = 0; i < rowCount; i++) {
-          var row = table.rows[i];
-          if(row.id == selectedRowID) {
-              row.style.background='#dcfac9';
-              currentRow = i;
-          } else {
-              row.style.background='#f0c992';
-          }
-      }
-   }
-
-   function addCategoryRow(tableID) {
-      var table = document.getElementById(tableID);
-
-      var rowCount = table.rows.length;
-      var row = table.insertRow(rowCount);
-      var rowId = tableID + "_r" + rowCount;
-      //alert("rowId " + rowId);
-      row.id = rowId;
-      row.name = rowId;
-      row.setAttribute('onclick', 'selectRow("'+tableID+'", "'+rowId+'");');
-      //row.onclick = new funtion(){ selectRow("", ""); }
-
-      row.onmouseover = function(){ highlightRow(this, true); };
-      row.onmouseout = function(){ highlightRow(this, false); };
-
-      var cell1 = row.insertCell(0);
-      var element1 = document.createTextNode("category");
-      cell1.appendChild(element1);
-
-      var cell2 = row.insertCell(1);
-      var temp = "<a href='javascript:deleteRow(\"" + tableID + "\",\"" + rowId +"\");'>X</a>";
-      //alert(temp);
-      cell2.innerHTML = temp;
-   }
-
-   function deleteRow(tableID, rowID) {
-      try {
-         var table = document.getElementById(tableID);
-         var rowCount = table.rows.length;
-         for(var i = 0; i < rowCount; i++) {
-            var row = table.rows[i];
-            if(row.id == rowID) {
-               table.deleteRow(i);
-               rowCount--;
-               i--;
-            }
-         }
-      } catch(e) {
-         //alert(e);
-      }
-   }
+	function goLite(FRM,BTN)
+	{
+	   window.document.forms[FRM].elements[BTN].style.color = "#FFFF99";
+	   window.document.forms[FRM].elements[BTN].style.backgroundColor = "#11AAEE";
+	}
+	
+	function goDim(FRM,BTN)
+	{
+	   window.document.forms[FRM].elements[BTN].style.color = "#EEFFFF";
+	   window.document.forms[FRM].elements[BTN].style.backgroundColor = "#0088DD";
+	}
 </script>
+
+</head>
+
 <body>
    <div style="position:absolute; left:10px; top:10px; width:95%">
       <table width="100%" style="border:1px solid gray; border-spacing:2px">
@@ -148,7 +108,9 @@
                Menu Categories
                <table id="categories" class="categoryTable">
                   <tr>
-                     <td>Noodles</td>
+                     <td>
+						<input type="button" name="groovybtn1" class="groovybutton" value="Beef" title="">
+					 </td>
                      <td>Beef</td>
                      <td>Chicken</td>
                      <td>Rice</td>

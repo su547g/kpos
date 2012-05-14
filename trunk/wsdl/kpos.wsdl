@@ -74,6 +74,8 @@
             <xs:element name="FetchSaleItemOptionResponseType" type="tns:FetchSaleItemOptionResponseType"/>
             <xs:element name="DeleteSaleItemOptionType" type="tns:DeleteSaleItemOptionType"/>
             <xs:element name="DeleteSaleItemOptionResponseType" type="tns:DeleteSaleItemOptionResponseType"/>
+            <xs:element name="ListSaleItemOptionsType" type="tns:ListSaleItemOptionsType"/>
+            <xs:element name="ListSaleItemOptionsResponseType" type="tns:ListSaleItemOptionsResponseType"/>
 
             <xs:element name="CreatePrinterType" type="tns:CreatePrinterType"/>
             <xs:element name="CreatePrinterResponseType" type="tns:CreatePrinterResponseType"/>
@@ -197,7 +199,7 @@
                     <xs:element name="isRequired" type="xsd:boolean" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="description" type="xsd:string" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="thumbPath" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-                    <xs:element name="taxable" type="xsd:boolean" minOccurs="1" maxOccurs="1" default="true"/>
+                    <xs:element name="taxable" type="xsd:boolean" minOccurs="0" maxOccurs="1" default="true"/>
                 </xs:sequence>
             </xs:complexType>
 
@@ -556,6 +558,18 @@
                     <xs:element name="Result" type="tns:ResultType"/>
                 </xs:sequence>
             </xs:complexType>
+            <xs:complexType name="ListSaleItemOptionsType">
+                <xs:sequence>
+                    <xs:element name="itemId" type="xs:long" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListSaleItemOptionsResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="count" type="xsd:int"/>
+                    <xs:element name="options" type="tns:SaleItemOptionType" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:complexType>
 
             <xs:complexType name="CreatePrinterType">
                 <xs:sequence>
@@ -829,7 +843,6 @@
     <wsdl:message name="CreateSaleItemOptionResponseMessage">
         <wsdl:part name="parameters" element="tns:CreateSaleItemOptionResponseType"/>
     </wsdl:message>
-
     <wsdl:message name="UpdateSaleItemOptionMessage">
         <wsdl:part name="parameters" element="tns:UpdateSaleItemOptionType"/>
     </wsdl:message>
@@ -847,6 +860,12 @@
     </wsdl:message>
     <wsdl:message name="DeleteSaleItemOptionResponseMessage">
         <wsdl:part name="parameters" element="tns:DeleteSaleItemOptionResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="ListSaleItemOptionsMessage">
+        <wsdl:part name="parameters" element="tns:ListSaleItemOptionsType"/>
+    </wsdl:message>
+    <wsdl:message name="ListSaleItemOptionsResponseMessage">
+        <wsdl:part name="parameters" element="tns:ListSaleItemOptionsResponseType"/>
     </wsdl:message>
 
     <wsdl:message name="CreatePrinterMessage">
@@ -1035,6 +1054,10 @@
         <wsdl:operation name="DeleteSaleItemOption">
             <wsdl:input message="tns:DeleteSaleItemOptionMessage" name="DeleteSaleItemOption"/>
             <wsdl:output message="tns:DeleteSaleItemOptionResponseMessage" name="DeleteSaleItemOptionResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="ListSaleItemOptions">
+            <wsdl:input message="tns:ListSaleItemOptionsMessage" name="ListSaleItemOptions"/>
+            <wsdl:output message="tns:ListSaleItemOptionsResponseMessage" name="ListSaleItemOptionsResponse"/>
         </wsdl:operation>
 
         <wsdl:operation name="CreatePrinter">
@@ -1326,6 +1349,15 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="DeleteSaleItemOptionResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="ListSaleItemOptions">
+            <soap:operation soapAction="http://ws.kpos.com/ListSaleItemOptions" style="document"/>
+            <wsdl:input name="ListSaleItemOptions">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="ListSaleItemOptionsResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>

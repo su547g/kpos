@@ -120,7 +120,7 @@ public class KPosPortImpl implements KPosPortType {
         itemType.setThumbPath(item.getThumbPath());
         itemType.setDescription(item.getDescription());
         //Load item options
-        List<SaleItemOptionType> optionTypes = itemType.getOptions();
+        /*List<SaleItemOptionType> optionTypes = itemType.getOptions();
         List<SaleItemOption> options = item.getOptionList();
         for(SaleItemOption option : options) {
             SaleItemOptionType optionType = new SaleItemOptionType();
@@ -131,10 +131,10 @@ public class KPosPortImpl implements KPosPortType {
             optionType.setTakeoutPrice(option.getOutPrice());
             optionType.setIsRequired(option.isRequired());
             optionType.setDescription(option.getDescription());
-            optionType.setThumbPath(option.getThumPath());
+            optionType.setThumbPath(option.getThumbPath());
             optionType.setTaxable(option.getTaxable()==null?true:option.getTaxable());
             optionTypes.add(optionType);
-        }
+        } */
         //Load printers
         List<Long> printerIds = itemType.getPrinterIds();
         Set<Printer> printers = item.getPrinters();
@@ -365,7 +365,9 @@ public class KPosPortImpl implements KPosPortType {
                 soapType.setIsRequired(option.isRequired());
                 soapType.setName(option.getName());
                 soapType.setPrice(option.getPrice());
+                soapType.setTakeoutPrice(option .getOutPrice());
                 soapType.setSaleItemId(option.getSaleItem().getId());
+                soapType.setTaxable(option.getTaxable());
                 responseType.setItemOption(soapType);
             }
             responseType.setResult(getSoapResult(result));
@@ -383,6 +385,34 @@ public class KPosPortImpl implements KPosPortType {
         try {
             DeleteResult result = contentManagementService.deleteSaleItemOption(parameters.getId());
             responseType.setResult(getSoapResult(result));
+        } catch(Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
+        return responseType;
+    }
+
+    @Override
+    public ListSaleItemOptionsResponseType listSaleItemOptions(
+            @WebParam(partName = "parameters", name = "ListSaleItemOptionsType", targetNamespace = NS) ListSaleItemOptionsType parameters) {
+        ListSaleItemOptionsResponseType responseType = new ListSaleItemOptionsResponseType();
+        try {
+            FetchResult<SaleItem> fetchResult = contentManagementService.fetchSaleItem(parameters.getItemId());
+            SaleItem item = fetchResult.getTarget();
+            List<SaleItemOption> options = item.getOptionList();
+            for(SaleItemOption option : options) {
+                SaleItemOptionType soapType = new SaleItemOptionType();
+                soapType.setId(option.getId());
+                soapType.setIsRequired(option.isRequired());
+                soapType.setName(option.getName());
+                soapType.setPrice(option.getPrice());
+                soapType.setTakeoutPrice(option.getOutPrice());
+                soapType.setTaxable(option.getTaxable());
+                soapType.setThumbPath(option.getThumbPath());
+                soapType.setDescription(option.getDescription());
+                responseType.getOptions().add(soapType);
+            }
+            responseType.setCount(options.size());
+            responseType.setResult(getSoapResult(fetchResult));
         } catch(Exception e) {
             responseType.setResult(getSoapFaultResult(e));
         }

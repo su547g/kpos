@@ -576,3 +576,95 @@ function FetchGlobalOptionType(id) {
         return xml;
     }
 }
+function SaleItemOptionType(id, itemId, name, desc, price, outPrice, thumb, required, taxable) {
+    this.myId = id;
+    this.myItemId = itemId;
+    this.myName = name;
+    this.myDesc = desc;
+    this.myPrice = price;
+    this.myOutPrice = outPrice;
+    this.myThumb = thumb;
+    this.myRequired = required;
+    this.myTaxable = taxable;
+    this.getXML = function() {
+        var xml = "<app:saleItemId>"+this.myItemId+"</app:saleItemId>";
+        if(this.myId != null && this.myId != "") {
+            xml += "<app:id>" + this.myId + "</app:id>";
+        }
+        xml += "<app:name>"+this.myName+"</app:name>";
+        if(this.myDesc != null && this.myDesc != "") {
+            xml += "<app:description>" + this.myDesc + "</app:description>";
+        }
+        if(this.myPrice != null && this.myPrice != "") {
+            xml += "<app:price>" + this.myPrice + "</app:price>";
+        }
+        if(this.myOutPrice != null && this.myOutPrice != "") {
+            xml += "<app:takeoutPrice>"+this.myOutPrice+"</app:takeoutPrice>";
+        }
+        if(this.myThumb != null && this.myThumb != "") {
+            xml += "<app:thumbPath>"+this.myThumb+"</app:thumbPath>";
+        }
+        if(this.myRequired != null) {
+            xml += "<app:isRequired>" + this.myRequired + "</app:isRequired>";
+        }
+        if(this.myTaxable != null) {
+            xml += "<app:taxable>" + this.myTaxable + "</app:taxable>";
+        }
+        return xml;
+    }
+}
+function CreateItemOptionType(itemId, name, desc, price, outPrice, thumb, required, taxable) {
+    this.myOption = new SaleItemOptionType(null, itemId, name, desc, price, outPrice, thumb, required, taxable);
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:CreateSaleItemOptionType>";
+        xml += "<app:itemOption>" + this.myOption.getXML() + "</app:itemOption>";
+        xml += "</app:CreateSaleItemOptionType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function UpdateItemOptionType(id, itemId, name, desc, price, outPrice, thumb, required, taxable) {
+    this.myOption = new SaleItemOptionType(id, itemId, name, desc, price, outPrice, thumb, required, taxable);
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:UpdateSaleItemOptionType>";
+        xml += "<app:itemOption>" + this.myOption.getXML() + "</app:itemOption>";
+        xml += "</app:UpdateSaleItemOptionType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function FetchItemOptionType(id) {
+    this.myId = id;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:FetchSaleItemOptionType>";
+        xml += "<app:id>"+this.myId + "</app:id>";
+        xml += "</app:FetchSaleItemOptionType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function DeleteItemOptionType(id) {
+    this.myId = id;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:DeleteSaleItemOptionType>";
+        xml += "<app:id>"+this.myId + "</app:id>";
+        xml += "</app:DeleteSaleItemOptionType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function ListSaleItemOptionsType(itemId) {
+    this.myItemId = itemId;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:ListSaleItemOptionsType>";
+        xml += "<app:itemId>"+this.myItemId+"</app:itemId>";
+        xml += "</app:ListSaleItemOptionsType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}

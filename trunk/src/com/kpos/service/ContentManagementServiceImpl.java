@@ -293,11 +293,12 @@ public class ContentManagementServiceImpl implements IContentManagementService {
 
     private void convertSoapItemOptionToDomain(SaleItemOptionType soapType, SaleItemOption option) {
         option.setName(soapType.getName());
-        option.setOutPrice(soapType.getTakeoutPrice());
+        option.setOutPrice(soapType.getTakeoutPrice()==null?0:soapType.getTakeoutPrice());
         option.setPrice(soapType.getPrice());
-        option.setRequired(soapType.getIsRequired());
+        option.setRequired(soapType.getIsRequired()==null?false:soapType.getIsRequired());
+        option.setTaxable(soapType.getTaxable()==null?false:soapType.getTaxable());
         option.setDescription(soapType.getDescription());
-        option.setThumPath(soapType.getThumbPath());
+        option.setThumbPath(soapType.getThumbPath());
         option.setLastUpdated(new Date());
     }
 

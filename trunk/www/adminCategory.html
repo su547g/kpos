@@ -50,6 +50,8 @@
         .tabletwo tr.dk td {background:#ddd; color:#000;}
 
         .innerb {height:30em; overflow:auto;}
+        
+        .optionsTable {width:"50px"; overflow:auto;}
     </style>
     <script type="text/javascript">
 		/* Optional: Temporarily hide the "tabber" class so it does not "flash"
@@ -439,7 +441,6 @@
 	        row.onmouseout = function(){ highlightRow(this, false); };
 	    }
 		function selectItemRow(tableId, rowId, itemId) {
-			alert(itemId);
 			if(itemId != null && itemId != "") {
 				var soapType = new FetchSaleItemType(itemId);
 				call_web_service(soapType, fetchSaleItemHandler);
@@ -450,23 +451,24 @@
                 jsonObj.fetchsaleitemresponsetype != undefined && jsonObj.fetchsaleitemresponsetype != null &&
                 jsonObj.fetchsaleitemresponsetype.result.successful == "true") {
                 var item = jsonObj.fetchsaleitemresponsetype.saleitem;
-               	document.forms[0].itemName.value = item.name;
-               	document.forms[0].itemDescription.value = item.description==null?"":item.description;
-               	document.forms[0].defaultItemPrice.value = item.normalprice==null?"":item.normalprice;
-               	document.forms[0].defaultItemOutPrice.value = item.takeoutprice==null?"":item.takeoutprice;
-               	document.forms[0].itemImg.src = item.thumpath==null?"":item.thumbpath;
-               	document.forms[0].itemTaxable.checked = item.istaxable=="true";
-               	document.forms[0].singleOption.checked = item.issingleoption=="true";
-               	document.forms[0].hasSeasonPrice.checked = item.seasonprice!=null && item.seasonprice>0;
-               	document.forms[0].seasonPrice.vaue = item.seasonprice;
-               	document.forms[0].smallPrice.value = item.pricesmall;
-				document.forms[0].mediumPrice.value = item.pricemed;
-				document.forms[0].largePrice.value = item.pricelarge;
-				document.forms[0].smallOutPrice.value = item.outpricesmall;
-				document.forms[0].mediumOutPrice.value = item.outpricemedium;
-				document.forms[0].largeOutPrice.value = item.outpricelarge;
-				document.forms[0].hasDineInSizes.checked = item.pricesmall!=null||item.pricemed!=null||item.pricelarge!=null;
-	        	document.forms[0].hasTakeOutSizes.checked = item.outpricesmall!=null||item.outpricemedium!=null||item.outpricelarge!=null;
+                document.itemDetails.itemId.value = item.id;
+               	document.itemDetails.itemName.value = item.name;
+               	document.itemDetails.itemDescription.value = item.description==null?"":item.description;
+               	document.itemDetails.defaultItemPrice.value = item.normalprice==null?"":item.normalprice;
+               	document.itemDetails.defaultItemOutPrice.value = item.takeoutprice==null?"":item.takeoutprice;
+               	document.itemDetails.itemImg.src = item.thumpath==null?"":item.thumbpath;
+               	document.itemDetails.itemTaxable.checked = item.istaxable=="true";
+               	document.itemDetails.singleOption.checked = item.issingleoption=="true";
+               	document.itemDetails.hasSeasonPrice.checked = item.seasonprice!=null && item.seasonprice>0;
+               	document.itemDetails.seasonPrice.vaue = item.seasonprice;
+               	document.itemDetails.smallPrice.value = item.pricesmall;
+				document.itemDetails.mediumPrice.value = item.pricemed;
+				document.itemDetails.largePrice.value = item.pricelarge;
+				document.itemDetails.smallOutPrice.value = item.outpricesmall;
+				document.itemDetails.mediumOutPrice.value = item.outpricemedium;
+				document.itemDetails.largeOutPrice.value = item.outpricelarge;
+				document.itemDetails.hasDineInSizes.checked = item.pricesmall!=null||item.pricemed!=null||item.pricelarge!=null;
+	        	document.itemDetails.hasTakeOutSizes.checked = item.outpricesmall!=null||item.outpricemedium!=null||item.outpricelarge!=null;
 	        	
 				var printerIds = item.printerids;
 				var printers = document.getElementsByName("itemPrinters");
@@ -481,8 +483,9 @@
 						checkPrinters(printers, printerIds);
 					}
 				}
-				document.forms[0].itemId.value = item.id;
 				itemOperation = UPDATE;
+				document.getElementById("btnAddItemOpt").disabled = false;
+				listSaleItemOptions(item.id);
             }
 		}
 	    function deleteItemRow(tableId, rowID, itemId) {
@@ -529,6 +532,7 @@
 	        itemOperation = "";
 	        setCurrentItem(null);
 	        document.forms[0].itemId.value = "";
+	        document.getElementById("btnAddItemOpt").disabled = true;
 		}
 		function newItem() {
 	    	resetItem();
@@ -612,7 +616,7 @@
 		function updateSaleItem() {
 			if(curr_category != null && document.forms[0].itemId.value != "" && document.forms[0].itemId.value != null) {
 				var catId = curr_category.id;
-				var itemId = document.forms[0].itemId.value;
+				var itemId = document.itemDetails.itemId.value;
 				var name = document.getElementById("itemName").value;
 				var taxable = document.getElementById("itemTaxable").checked;
 				var isSingleOption = document.getElementById("singleOption").checked;
@@ -833,6 +837,182 @@
 	        row.onmouseout = function(){ highlightRow(this, false); };
 	    }
 	</script>
+	<script>
+		var itemOptionOpr = "";
+		
+		function resetItemOption() {
+			document.itemOptionForm.itemOptionId.value = "";
+			document.itemOptionForm.itemOptionName.value = "";
+			document.itemOptionForm.itemOptionDesc.value = "";
+			document.itemOptionForm.itemOptionPrice.value = "";
+			document.itemOptionForm.itemOptionOutPrice.value = "";
+			document.itemOptionForm.itemOptionThumb.value = "";
+			document.itemOptionForm.itemOptionImg.src = "";
+			document.itemOptionForm.itemOptionRequired.checked = false;
+			document.itemOptionForm.itemOptionTaxable.checked = false;
+			document.getElementById("btnDeleteItemOption").style.display="none";
+		}
+		function newItemOption() {
+	    	resetItemOption();
+	        itemOptionOpr = ADD;
+	        Popup.showModal('modal');
+	    }
+	    function saveItemOptionInfo() {
+	    	if(itemOptionOpr == ADD){
+	    		createItemOption();
+	    	} else if(itemOptionOpr == UPDATE) {
+	    		updateItemOption();
+	    	}
+	    }
+	    function createItemOption() {
+	    	var itemId = document.itemDetails.itemId.value;
+	    	if(itemId != null && itemId != "" && document.itemOptionForm.itemOptionId.value=="") {
+				var name = document.itemOptionForm.itemOptionName.value;
+				var desc = document.itemOptionForm.itemOptionDesc.value;
+				var price = document.itemOptionForm.itemOptionPrice.value;
+				var outPrice = document.itemOptionForm.itemOptionOutPrice.value;
+				var thumb = document.itemOptionForm.itemOptionImg.src;
+				var taxable = document.itemOptionForm.itemOptionTaxable.checked;
+				var required = document.itemOptionForm.itemOptionRequired.checked;
+				var soapType = new CreateItemOptionType(itemId, name, desc, price, outPrice, null, required, taxable);
+				call_web_service(soapType, createItemOptionHandler);
+			}
+	    }
+	    function createItemOptionHandler(jsonObj) {
+	    	if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.createsaleitemoptionresponsetype != undefined && jsonObj.createsaleitemoptionresponsetype != null && 
+				jsonObj.createsaleitemoptionresponsetype.result.successful == "true") {
+				document.itemOptionForm.itemOptionId.value = jsonObj.createsaleitemoptionresponsetype.itemoptionid;
+				listSaleItemOptions(document.itemDetails.itemId.value);
+				Popup.hide('modal');
+			} else {
+				alert("Failed to create option!");
+			}
+	    }
+	    function updateItemOption() {
+	    	var itemId = document.itemDetails.itemId.value;
+	    	if(itemId != null && itemId != "" && document.itemOptionForm.itemOptionId.value!=null && document.itemOptionForm.itemOptionId.value!="") {
+	    		var id = document.itemOptionForm.itemOptionId.value;
+	    		var itemId = document.itemDetails.itemId.value;
+				var name = document.itemOptionForm.itemOptionName.value;
+				var desc = document.itemOptionForm.itemOptionDesc.value;
+				var price = document.itemOptionForm.itemOptionPrice.value;
+				var outPrice = document.itemOptionForm.itemOptionOutPrice.value;
+				var thumb = document.itemOptionForm.itemOptionImg.src;
+				var taxable = document.itemOptionForm.itemOptionTaxable.checked;
+				var required = document.itemOptionForm.itemOptionRequired.checked;
+				var soapType = new UpdateItemOptionType(id, itemId, name, desc, price, outPrice, null, required, taxable);
+				call_web_service(soapType, updateItemOptionHandler);
+			}
+	    }
+	    function updateItemOptionHandler(jsonObj) {
+	    	if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.updatesaleitemoptionresponsetype != undefined && jsonObj.updatesaleitemoptionresponsetype != null && 
+				jsonObj.updatesaleitemoptionresponsetype.result.successful == "true") {
+				alert("Save successful!");
+			} else {
+				alert("Failed to update option!");
+			}
+			Popup.hide('modal');
+	    }
+	    function fetchItemOption(id) {
+	    	if(id != null && id != "") {
+	    		var soapType = new FetchItemOptionType(id);
+	    		call_web_service(soapType, fetchItemOptionHandler);
+	    	}
+	    }
+	    function fetchItemOptionHandler(jsonObj) {
+	    	if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.fetchsaleitemoptionresponsetype != undefined && jsonObj.fetchsaleitemoptionresponsetype != null && 
+				jsonObj.fetchsaleitemoptionresponsetype.result.successful == "true") {
+				var option = jsonObj.fetchsaleitemoptionresponsetype.itemoption;
+				document.itemOptionForm.itemOptionId.value = option.id;
+				document.itemOptionForm.itemOptionName.value = option.name;
+				document.itemOptionForm.itemOptionDesc.value = option.description;
+				document.itemOptionForm.itemOptionPrice.value = option.price;
+				document.itemOptionForm.itemOptionOutPrice.value = option.takeoutprice;
+				document.itemOptionForm.itemOptionImg.src = option.thumb;
+				document.itemOptionForm.itemOptionTaxable.checked = (option.taxable=="true");
+				document.itemOptionForm.itemOptionRequired.checked = (option.isrequired=="true");
+				itemOptionOpr = UPDATE;
+				document.getElementById("btnDeleteItemOption").style.display="block";
+				Popup.showModal('modal');
+			}
+	    }
+	    function deleteItemOption() {
+	    	var id = document.itemOptionForm.itemOptionId.value;
+	    	if(id != null && id != "") {
+	    		var soapType = new DeleteItemOptionType(id);
+	    		call_web_service(soapType, deleteItemOptionHandler);
+	    	}
+	    }
+	    function deleteItemOptionHandler(jsonObj) {
+	    	if(jsonObj != undefined && jsonObj != null &&
+                jsonObj.deletesaleitemoptionresponsetype != undefined && jsonObj.deletesaleitemoptionresponsetype != null &&
+                jsonObj.deletesaleitemoptionresponsetype.result.successful == "true") {
+                Popup.hide('modal');
+                var itemId = document.itemDetails.itemId.value;
+                if(itemId != null && itemId != "") {
+                	listSaleItemOptions(itemId);
+                	resetItemOption();
+                }
+            } else {
+            	alert("Failed to delete item option!");
+            }
+	    }
+	    function listSaleItemOptions(itemId) {
+	    	if(itemId != null && itemId != "") {
+				var listType = new ListSaleItemOptionsType(itemId);
+				call_web_service(listType, listItemOptionsHandler);
+			} else {
+				alert("Please select a sale item.");
+			}
+	    }
+	    function listItemOptionsHandler(jsonObj) {
+	    	if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.listsaleitemoptionsresponsetype != undefined && jsonObj.listsaleitemoptionsresponsetype != null && 
+				jsonObj.listsaleitemoptionsresponsetype.result.successful == "true") {
+				document.getElementById("itemOptionsTable").innerHTML = ""; //clear the table
+				var options = jsonObj.listsaleitemoptionsresponsetype.options;
+				var count = jsonObj.listsaleitemoptionsresponsetype.count;
+				
+				if(options != undefined && options != null) {
+					var table = document.getElementById("itemOptionsTable");
+	                if(count > 1) {
+	                	var k = 0;
+	                	var html = "";
+	                	var row = null, prevRow = null;
+						for(var i = 0; i < count; i++,k++) {
+							if(k % 8 == 0) {
+								row = addItemOptionRow(table, "itemOptionsTable");
+								if(prevRow != null) prevRow.innerHTML = html;
+								prevRow = row;
+								html = addItemOptionCell(options[i], "fetchItemOption");
+							} else {
+								html += addItemOptionCell(options[i], "fetchItemOption");
+							}
+						}
+						row.innerHTML = html;
+					} else {
+						var row = addItemOptionRow(table);
+						row.innerHTML = addItemOptionCell(options, "fetchItemOption");
+					}						
+				}
+				resetItemOption();
+			}
+	    }
+	    function addItemOptionRow(table, tableID) {
+	    	var rowCount = table.rows.length;
+			var rowId = tableID + "_r" + rowCount;
+			var row = table.insertRow(rowCount);
+			row.id = rowId;
+			return row;
+	    }
+	    function addItemOptionCell(optionObj, selectRowFunc) {
+	       	var innerHTML = "<td><a href='javascript:"+selectRowFunc+"("+optionObj.id+");'>"+optionObj.name+"</a></td>";
+	       	return innerHTML;
+	    }
+	</script>
 </head>
 
 <body onload="javascript:listAllCategories();">
@@ -1001,6 +1181,13 @@
 												<script language="javascript">setPrintersHTML("itemPrinters", setItemPrintersHTMLHandler)</script>
 								            </table>
 								            </form>
+								            <br>
+								            <div class="optionsTable">
+								            	<table id="itemOptionsTable" border="1">
+								            	</table>
+								            	<br>
+								            	<button id="btnAddItemOpt" disabled=true onclick="javasccript:newItemOption();">Add Option</button>
+								            </div>
 							    		</td>
 							    	</tr>
 							    </table>
@@ -1074,6 +1261,41 @@
         </td>
     </tr>
 </table>
+
+<div id="modal" style="border:3px solid black; background-color:#90CADE; padding:5px; font-size:100%; text-align:center; display:none;">
+	Sale Item Option<br>
+	<form name="itemOptionForm" id="itemOptionForm">
+		<input type="hidden" name="itemOptionId"/>
+	<table border="1">
+		<tr>
+			<td align="left" valign="top">Name</td><td align="left" valign="top"><input type="text" name="itemOptionName" /></td>
+		</tr>
+		<tr>
+			<td align="left" valign="top">Description</td><td align="left" valign="top"><textarea name="itemOptionDesc" cols="20" rows="3"></textarea></td>
+		</tr>
+		<tr>
+			<td align="left" valign="top">Price</td><td align="left" valign="top"><input type="text" name="itemOptionPrice"/></td>
+		</tr>
+		<tr>
+			<td align="left" valign="top">Takeout Price</td><td align="left" valign="top"><input type="text" name="itemOptionOutPrice"/></td>
+		</tr>
+		<tr>
+			<td align="left" valign="top">Required</td><td align="left" valign="top"><input type="checkbox" name="itemOptionRequired"/></td>
+		</tr>
+		<tr>
+			<td align="left" valign="top">Taxable</td><td align="left" valign="top"><input type="checkbox" name="itemOptionTaxable"/></td>
+		</tr>
+		<tr>
+			<td align="left" valign="top">Thumbnail</td><td align="left" valign="top"><input type="file" id="itemOptionThumb" onchange="updatePicture('itemImg', this.value);"/><img id="itemOptionImg" src=""/></td>
+		</tr>
+		<tr>
+			<td colspan="2" align="left">
+				<button onClick="saveItemOptionInfo();">Save</button><button id="btnDeleteItemOption" onclick="deleteItemOption();">Delete</button><button onclick="Popup.hide('modal')">Cancel</button>
+			</td>
+		</tr>
+	</table>
+	</form>	
+</div>
 
 <script type="text/javascript">
 						
