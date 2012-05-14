@@ -101,14 +101,6 @@ public class SaleItemOption extends AbstractDomainObject {
         this.description = description;
     }
 
-    public String getThumPath() {
-        return thumbPath;
-    }
-
-    public void setThumPath(String thumPath) {
-        this.thumbPath = thumPath;
-    }
-
     public String getThumbPath() {
         return thumbPath;
     }
