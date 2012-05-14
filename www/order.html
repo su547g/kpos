@@ -80,148 +80,189 @@
 	}
    </style>
 
-<script language="javascript">
-	function goLite(FRM,BTN)
-	{
-	   window.document.forms[FRM].elements[BTN].style.color = "#FFFF99";
-	   window.document.forms[FRM].elements[BTN].style.backgroundColor = "#11AAEE";
-	}
-	
-	function goDim(FRM,BTN)
-	{
-	   window.document.forms[FRM].elements[BTN].style.color = "#EEFFFF";
-	   window.document.forms[FRM].elements[BTN].style.backgroundColor = "#0088DD";
-	}
-</script>
-
+	<script language="javascript">
+		function goLite(FRM,BTN)
+		{
+		   window.document.forms[FRM].elements[BTN].style.color = "#FFFF99";
+		   window.document.forms[FRM].elements[BTN].style.backgroundColor = "#11AAEE";
+		}
+		
+		function goDim(FRM,BTN)
+		{
+		   window.document.forms[FRM].elements[BTN].style.color = "#EEFFFF";
+		   window.document.forms[FRM].elements[BTN].style.backgroundColor = "#0088DD";
+		}
+	</script>
+	<script language="javascript">
+		function listGlobalOptions() {
+			var soapType = new ListGlobalOptionsType();
+			call_web_service(soapType, listGlobalOptionsHandler);
+		}
+		function listGlobalOptionsHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.listglobaloptionresponsetype != undefined && jsonObj.listglobaloptionresponsetype != null && 
+				jsonObj.listglobaloptionresponsetype.result.successful == "true") {
+				document.getElementById("globalOptions").innerHTML = "";
+				var options = jsonObj.listglobaloptionresponsetype.options;
+				var count = jsonObj.listglobaloptionresponsetype.count;
+				if(options != undefined && options != null) {
+	                if(count > 1) {
+						for(var i = 0; i < count; i++) {
+							addOptionRow("globalOptions", options[i], "fetchGlobalOption", "deleteGlobalOption");
+						}
+					} else if(count == 1) {
+						addOptionRow("globalOptions", options, "fetchGlobalOption", "deleteGlobalOption");
+					}						
+				}
+				resetOptionForm(true);
+			}
+		}
+	</script>
 </head>
 
 <body>
    <div style="position:absolute; left:10px; top:10px; width:95%">
       <table width="100%" style="border:1px solid gray; border-spacing:2px">
          <tr>
-            <td colspan="3" align="left"><= Back</td>
-         </tr>
-         <tr>
-            <td align="left" width="64.5%" style="border:1px solid black; padding:3px">
-               <div style="height: 600px">
+            <td valign="top" align="left" width="21%" style="border:1px solid black; padding:2px">
                Menu Categories
-               <table id="categories" class="categoryTable">
+               <table id="categoryTable" class="categoryTable" width="100%">
                   <tr>
-                     <td>
-						<input type="button" name="groovybtn1" class="groovybutton" value="Beef" title="">
+                     <td width="50%">
+						<input type="button" name="groovybtn1" class="groovybutton" value="Beef" onclick="alert('hello!');">
 					 </td>
-                     <td>Beef</td>
                      <td>Chicken</td>
+                  </tr>
+                  <tr>
                      <td>Rice</td>
                      <td>Blah blah</td>
-                     <td>Blah blah</td>
+                  </tr>
+                  <tr>
                      <td>Blah blah</td>
                      <td>Blah blah</td>
                   </tr>
                   <tr>
                      <td>Blah blah</td>
                      <td>Blah blah</td>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
+                  </tr>
+                  <tr>
                      <td>Blah blah</td>
                      <td>Blah blah</td>
                   </tr>
+                  <tr>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                  </tr>
+                  <tr>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                  </tr>
+                  <tr>
+                     <td>Blah blah</td>
+                  </tr>
                </table>
-               <br>
+           </td>
+           <td valign="top" align="left" width="21%" style="border:1px solid black; padding:2px">
                Menu Items
-               <table id="menuItems" class="menuItemTable">
+               <table id="menuItemTable" class="menuItemTable" width="100%">
                   <tr>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
                      <td>Blah blah</td>
                      <td>Blah blah</td>
                   </tr>
                   <tr>
                      <td>Blah blah</td>
                      <td>Blah blah</td>
+                  </tr>
+                  <tr>
                      <td>Blah blah</td>
                      <td>Blah blah</td>
+                  </tr>
+                  <tr>
                      <td>Blah blah</td>
                      <td>Blah blah</td>
+                  </tr>
+                  <tr>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                  </tr>
+                  <tr>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                  </tr>
+                  <tr>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                  </tr>
+                  <tr>
                      <td>Blah blah</td>
                      <td>Blah blah</td>
                   </tr>
                </table>
-               <br>
+            </td>
+            <td valign="top" align="left" width="22.5%" style="border:1px solid black; padding:2px">
                Options
-               <table id="options" class="optionsTable">
+               <table id="optionsTable" class="optionsTable" width="100%">
                   <tr>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
                      <td>Blah blah</td>
                      <td>Blah blah</td>
                   </tr>
                   <tr>
                      <td>Blah blah</td>
                      <td>Blah blah</td>
+                  </tr>
+                  <tr>
                      <td>Blah blah</td>
                      <td>Blah blah</td>
+                  </tr>
+                  <tr>
                      <td>Blah blah</td>
                      <td>Blah blah</td>
+                  </tr>
+                  <tr>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                  </tr>
+                  <tr>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                  </tr>
+                  <tr>
+                     <td>Blah blah</td>
+                     <td>Blah blah</td>
+                  </tr>
+                  <tr>
                      <td>Blah blah</td>
                      <td>Blah blah</td>
                   </tr>
                </table>
-               </div>
             </td>
             <td width="0.5%"></td>
             <td width="35%" valign="top" align="left" style="border:1px solid black">
                <div>
                <table width="100%" border="1">
                   <tr>
-                     <th width="50%" valign="top" align="left">Item description</th>
+                     <th width="60%" valign="top" align="left">Item description</th>
                      <th width="5%" valign="top" align="right">Quantity</th>
-                     <th width="10%" valign="top" align="right">Price</th>
-                     <td width="5%"></td>
-                     <td width="5%"></td>
-                     <td width="5%"></td>
+                     <th width="15%" valign="top" align="right">Price</th>
                   </tr>
                   <tr>
                      <td valign="top" align="left">Fried rice with beef</td>
                      <td valign="top" align="right">1</td>
                      <td valign="top" align="right">7.95</td>
-                     <td align="center">+</td>
-                     <td align="center">-</td>
-                     <td align="center">X</td>
                   </tr>
                   <tr>
                      <td valign="top" align="left">Orange Juice</td>
                      <td valign="top" align="right">1</td>
                      <td valign="top" align="right">1.95</td>
-                     <td align="center">+</td>
-                     <td align="center">-</td>
-                     <td align="center">X</td>
                   </tr>
                   <tr><td colspan="6"><br></td></tr>
                   <tr>
                      <td colspan="2" valign="top" align="right">Tax: </td>
                      <td valign="top" align="right">1.5</td>
-                     <td align="center"></td>
-                     <td align="center"></td>
-                     <td align="center"></td>
                   </tr>
                   <tr>
                      <td colspan="2" valign="top" align="right">Total: </td>
                      <td valign="top" align="right">11.4</td>
-                     <td align="center"></td>
-                     <td align="center"></td>
-                     <td align="center"></td>
                   </tr>
                </table>
                </div>

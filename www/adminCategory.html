@@ -1264,9 +1264,9 @@
 
 <div id="modal" style="border:3px solid black; background-color:#90CADE; padding:5px; font-size:100%; text-align:center; display:none;">
 	Sale Item Option<br>
-	<form name="itemOptionForm" id="itemOptionForm">
-		<input type="hidden" name="itemOptionId"/>
 	<table border="1">
+		<form name="itemOptionForm" id="itemOptionForm">
+		<input type="hidden" name="itemOptionId"/>
 		<tr>
 			<td align="left" valign="top">Name</td><td align="left" valign="top"><input type="text" name="itemOptionName" /></td>
 		</tr>
@@ -1288,13 +1288,13 @@
 		<tr>
 			<td align="left" valign="top">Thumbnail</td><td align="left" valign="top"><input type="file" id="itemOptionThumb" onchange="updatePicture('itemImg', this.value);"/><img id="itemOptionImg" src=""/></td>
 		</tr>
+		</form>
 		<tr>
 			<td colspan="2" align="left">
 				<button onClick="saveItemOptionInfo();">Save</button><button id="btnDeleteItemOption" onclick="deleteItemOption();">Delete</button><button onclick="Popup.hide('modal')">Cancel</button>
 			</td>
 		</tr>
 	</table>
-	</form>	
 </div>
 
 <script type="text/javascript">
