@@ -16,6 +16,7 @@ public interface IContentManagementService {
     //boolean addPrintersToCategory(MenuCategory category, List<Long> printerIds);
     
     FetchResult<List<MenuCategory>> listAllCategories();
+    FetchResult<List<MenuCategory>> listAllCategories(int begin, int maxSize);
 
     FetchResult<MenuCategory> fetchCategory(long aCategoryId);
 
@@ -74,6 +75,7 @@ public interface IContentManagementService {
     DeleteResult deleteGlobalOption(long aId);
 
     FetchResult<List<GlobalOption>> listGlobalOptions();
+    FetchResult<List<GlobalOption>> listGlobalOptions(int begin, int maxSize);
 
     CreateResult<SeatingArea> createSeatingArea(SeatingAreaType soapType);
 

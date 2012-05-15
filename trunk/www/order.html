@@ -3,6 +3,19 @@
 <html>
 <head>
    <title></title>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta id="viewport" name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="apple-touch-fullscreen" content="yes" />
+
+    <script type="text/javascript" src="xml2json.js"></script>
+    <script type="text/javascript" src="kpos.js"></script>
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.min.js"></script>
+    
+    <link rel="stylesheet" href="example.css" TYPE="text/css" MEDIA="screen">
+    
    <style type="text/css">
       body{
          font-size:14px;
@@ -37,23 +50,23 @@
 
       .innerb {height:30em; overflow:auto;}
 
-      .categoryTable {border:1px solid gray; border-spacing:8px}
+      .categoryTable {border:1px solid gray; border-spacing:4px}
       .categoryTable td {
-         border:1px solid gray;
-         padding: 5px;
+         border:0px;
+         padding: 1px;
          //background-color:#F07800; //FF742E; //3399FF;
          color: #FFF; //003366;
-         //border-radius:3px;
-         -moz-border-radius: 1px;
+         border-radius:3px;
+         -moz-border-radius: 3px;
       }
 
-      .menuItemTable {border:1px solid gray; border-spacing:8px}
+      .menuItemTable {border:1px solid gray; border-spacing:4px}
       .menuItemTable td {
-         border:1px solid gray;
-         padding:5px;
+         border:0px solid gray;
+         padding:1px;
          background-color:#FFFFCC;
-         //border-radius:1px;
-         -moz-border-radius: 1px;
+         border-radius:3px;
+         -moz-border-radius: 3px;
       }
 
       .optionsTable {border:1px solid gray; border-spacing:8px}
@@ -72,10 +85,48 @@
 	   font-size:14px;
 	   font-weight:bold;
 	   color:#000000;//#FFFF00;
-	   width:80px;
-	   height:50px;
+	   width:100px;
+	   height:80px;
+	   background-color:#FFFF00;
+	   //background-image:url(texas.gif);
+	   border-width:2px;
+	}
+	input.itembutton
+	{
+	   font-size:12px;
+	   font-weight:bold;
+	   color:#000000;//#FFFF00;
+	   width:100px;
+	   height:80px;
+	   background-color:#BDBDBD;
+	   border-width:2px;
+	}
+	input.optionbutton
+	{
+	   font-size:9px;
+	   font-weight:bold;
+	   color:#000000;//#FFFF00;
+	   width:70px;
+	   height:30px;
+	   background-color:#BDBDBD;
+	   border-width:1px;
+	}
+	input.backbutton
+	{
+	   color:#000000;//#FFFF00;
+	   width:100px;
+	   height:80px;
+	   background-color:#FFFF00;
+	   background-image:url(img/back-icon.jpg);
+	   border-width:2px;
+	}
+	input.nextbutton
+	{
+	   color:#000000;//#FFFF00;
+	   width:100px;
+	   height:80px;
 	   background-color:#DDDDDD;
-	   background-image:url(texas.gif);
+	   background-image:url(img/next-icon.jpg);
 	   border-width:2px;
 	}
    </style>
@@ -94,6 +145,46 @@
 		}
 	</script>
 	<script language="javascript">
+		var catPage = 0, maxSize = 8, maxCatPage;
+		var globalOptionPage = 0, glOptionMax = 4, maxGlobalOptionPage;
+		
+		function initializeCategories(){
+			ws_list_categories(listAllCategoriesHandler);
+			
+			listGlobalOptions();
+		}
+		function listAllCategoriesHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.listcategoryresponsetype != undefined && jsonObj.listcategoryresponsetype != null &&
+				jsonObj.listcategoryresponsetype.result.successful == 'true') {
+				var count = jsonObj.listcategoryresponsetype.total;
+                maxCatPage = Math.ceil(count / maxSize);
+                if(maxCatPage > 0) maxCatPage--;
+                pageCategories(0);
+			}
+		}
+		function pageCategories(page) {
+			if(page < 0 || page > maxCatPage) return;
+			
+			catPage = page;
+			listCategories(catPage*maxSize, maxSize);
+		}
+		function listCategories(begin, maxSize) {
+			var soapType = new ListCategoryHTMLType(begin, maxSize, "clickCategory");
+			call_web_service(soapType, listCategoriesHandler);
+		}
+		function listCategoriesHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.listcategoryhtmlresponsetype != undefined && jsonObj.listcategoryhtmlresponsetype != null && 
+				jsonObj.listcategoryhtmlresponsetype.html != null) {
+				var html = jsonObj.listcategoryhtmlresponsetype.html;
+				//html = html.substring(10, html.length);
+				html = html.replace(/&lt;/g, "<");
+				html = html.replace(/&gt;/g, ">");
+				html = html.replace(/&quot;/g, "'");
+				document.getElementById("categoryTable").innerHTML = html;
+			}
+		}
 		function listGlobalOptions() {
 			var soapType = new ListGlobalOptionsType();
 			call_web_service(soapType, listGlobalOptionsHandler);
@@ -102,142 +193,78 @@
 			if(jsonObj != undefined && jsonObj != null &&
 				jsonObj.listglobaloptionresponsetype != undefined && jsonObj.listglobaloptionresponsetype != null && 
 				jsonObj.listglobaloptionresponsetype.result.successful == "true") {
-				document.getElementById("globalOptions").innerHTML = "";
-				var options = jsonObj.listglobaloptionresponsetype.options;
 				var count = jsonObj.listglobaloptionresponsetype.count;
-				if(options != undefined && options != null) {
-	                if(count > 1) {
-						for(var i = 0; i < count; i++) {
-							addOptionRow("globalOptions", options[i], "fetchGlobalOption", "deleteGlobalOption");
-						}
-					} else if(count == 1) {
-						addOptionRow("globalOptions", options, "fetchGlobalOption", "deleteGlobalOption");
-					}						
-				}
-				resetOptionForm(true);
+				maxGlobalOptionPage = Math.ceil(count / glOptionMax);
+				if(maxGlobalOptionPage > 0) maxGlobalOptionPage--;
+				pageGlobalOptions(0);
 			}
+		}
+		function pageGlobalOptions(page) {
+			if(page < 0 || page > maxGlobalOptionPage) return;
+			
+			globalOptionPage = page;
+			listGlobalOptionsHTML(globalOptionPage*glOptionMax, glOptionMax);
+		}
+		function listGlobalOptionsHTML(begin, maxSize) {
+			var soapType = new ListGlobalOptionHTMLType(begin, maxSize, "clickGlobalOption");
+			call_web_service(soapType, listGlobalOptionsHTMLHandler);
+		}
+		function listGlobalOptionsHTMLHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.listglobaloptionhtmlresponsetype != undefined && jsonObj.listglobaloptionhtmlresponsetype != null && 
+				jsonObj.listglobaloptionhtmlresponsetype.html != null) {
+				html = jsonObj.listglobaloptionhtmlresponsetype.html;
+				html = html.replace(/&lt;/g, "<");
+				html = html.replace(/&gt;/g, ">");
+				html = html.replace(/&quot;/g, "'");
+				alert(html);
+				document.getElementById("globalOptionsTable").innerHTML = html;
+			}
+		}
+		function clickCategory(catId) {
+			alert(catId);
+		}
+		function clickGlobalOption(id, price, name) {
+			alert(id + " " + price + " " + name);
 		}
 	</script>
 </head>
 
-<body>
+<body onload="javascript:initializeCategories();">
    <div style="position:absolute; left:10px; top:10px; width:95%">
       <table width="100%" style="border:1px solid gray; border-spacing:2px">
          <tr>
-            <td valign="top" align="left" width="21%" style="border:1px solid black; padding:2px">
-               Menu Categories
+            <td valign="top" align="left" width="18%" style="border:0px solid black; padding:2px">
+               <strong>Menu Categories</strong>
                <table id="categoryTable" class="categoryTable" width="100%">
-                  <tr>
-                     <td width="50%">
-						<input type="button" name="groovybtn1" class="groovybutton" value="Beef" onclick="alert('hello!');">
-					 </td>
-                     <td>Chicken</td>
-                  </tr>
-                  <tr>
-                     <td>Rice</td>
-                     <td>Blah blah</td>
-                  </tr>
-                  <tr>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                  </tr>
-                  <tr>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                  </tr>
-                  <tr>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                  </tr>
-                  <tr>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                  </tr>
-                  <tr>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                  </tr>
-                  <tr>
-                     <td>Blah blah</td>
-                  </tr>
+               </table>
+               <br>
+               <table width="100%">
+               		<tr>
+               			<td width="50%"><input type="button" class="backbutton" onclick="pageCategories(catPage - 1);"></td>
+               			<td><input type="button" class="nextbutton" onclick="pageCategories(catPage + 1);"></td>
+               		</tr>
                </table>
            </td>
-           <td valign="top" align="left" width="21%" style="border:1px solid black; padding:2px">
-               Menu Items
+           <td valign="top" align="left" width="21%" style="border:0px solid black; padding:2px">
+               <strong>Menu Items</strong>
                <table id="menuItemTable" class="menuItemTable" width="100%">
-                  <tr>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                  </tr>
-                  <tr>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                  </tr>
-                  <tr>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                  </tr>
-                  <tr>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                  </tr>
-                  <tr>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                  </tr>
-                  <tr>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                  </tr>
-                  <tr>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                  </tr>
-                  <tr>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                  </tr>
                </table>
             </td>
-            <td valign="top" align="left" width="22.5%" style="border:1px solid black; padding:2px">
-               Options
-               <table id="optionsTable" class="optionsTable" width="100%">
-                  <tr>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                  </tr>
-                  <tr>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                  </tr>
-                  <tr>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                  </tr>
-                  <tr>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                  </tr>
-                  <tr>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                  </tr>
-                  <tr>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                  </tr>
-                  <tr>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                  </tr>
-                  <tr>
-                     <td>Blah blah</td>
-                     <td>Blah blah</td>
-                  </tr>
+            <td valign="top" align="left" width="22.5%" style="border:0px solid black; padding:2px">
+               Global Options
+               <table id="globalOptionsTable" class="optionsTable" width="100%">
+               </table>
+               <br>
+               <table width="100%">
+               		<tr>
+               			<td width="50%"><input type="button" class="backbutton" onclick="alert(1.0);pageGlobalOptions(globalOptionPage - 1);"></td>
+               			<td><input type="button" class="nextbutton" onclick="pageGlobalOptions(globalOptionPage + 1);"></td>
+               		</tr>
                </table>
             </td>
             <td width="0.5%"></td>
-            <td width="35%" valign="top" align="left" style="border:1px solid black">
+            <td width="35%" valign="top" align="left" style="border:0px solid black">
                <div>
                <table width="100%" border="1">
                   <tr>

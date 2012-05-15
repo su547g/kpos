@@ -40,7 +40,17 @@ public class CategoryDao extends AbstractJpaDao<MenuCategory> implements ICatego
         Query namedQuery = this.entityManager.createNamedQuery("listCategoriesByNameAsc");
         return (List<MenuCategory>)namedQuery.getResultList();
     }
-    
+
+    @Override
+    public List<MenuCategory> listCategoriesByNameAsc(int begin, int maxSize) {
+        Query namedQuery = this.entityManager.createNamedQuery("listCategoriesByNameAsc");
+        if(begin >= 0 && maxSize >= 0) {
+            namedQuery.setFirstResult(begin);
+            namedQuery.setMaxResults(maxSize);
+        }
+        return (List<MenuCategory>)namedQuery.getResultList();
+    }
+
     public void insertCategory(MenuCategory aCategory) {
         if(aCategory.getId() == null) {
             this.insert(aCategory);

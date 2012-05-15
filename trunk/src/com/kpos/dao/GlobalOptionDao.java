@@ -28,4 +28,13 @@ public class GlobalOptionDao extends AbstractJpaDao<GlobalOption> implements IGl
             return (GlobalOption)options.get(0);
         }
     } 
+    
+    public List<GlobalOption> listRange(int begin, int maxSize) {
+        Query namedQuery = this.entityManager.createQuery("from " + getEntityClass().getName());
+        if(begin >= 0 && maxSize >= 0) {
+            namedQuery.setFirstResult(begin);
+            namedQuery.setMaxResults(maxSize);
+        }
+        return (List<GlobalOption>)namedQuery.getResultList();
+    }
 }

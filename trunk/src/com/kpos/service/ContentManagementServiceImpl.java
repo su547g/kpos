@@ -109,6 +109,13 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     }
 
     @Override
+    public FetchResult<List<MenuCategory>> listAllCategories(int begin, int maxSize) {
+        FetchResult<List<MenuCategory>> fetchResult = new FetchResult<List<MenuCategory>>();
+        fetchResult.setTarget(categoryDao.listCategoriesByNameAsc(begin, maxSize));
+        return fetchResult;
+    }
+
+    @Override
     public FetchResult<MenuCategory> fetchCategory(long aCategoryId) {
         FetchResult<MenuCategory> fetchResult = new FetchResult<MenuCategory>();
         MenuCategory category = categoryDao.findCategory(aCategoryId);
@@ -597,9 +604,9 @@ public class ContentManagementServiceImpl implements IContentManagementService {
                 result.setException(new Exception("Option with name [" + soapType.getName()+"] already exists!"));
             } else {
                 option = new GlobalOption();
-                option.setDineInPrice(soapType.getPrice());
+                if(soapType.getPrice() != null) option.setDineInPrice(soapType.getPrice());
                 option.setName(soapType.getName());
-                option.setTakeOutPrice(soapType.getOutPrice());
+                if(soapType.getOutPrice() != null) option.setTakeOutPrice(soapType.getOutPrice());
                 option.setTaxable(false);
                 option.setCreatedOn(new Date());
                 option.setLastUpdated(new Date());
@@ -667,6 +674,14 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     public FetchResult<List<GlobalOption>> listGlobalOptions() {
         FetchResult<List<GlobalOption>> result = new FetchResult<List<GlobalOption>>();
         List<GlobalOption> options = globalOptionDao.findAll();
+        result.setTarget(options);
+        result.setSuccessful(true);
+        return result;
+    }
+    @Override
+    public FetchResult<List<GlobalOption>> listGlobalOptions(int begin, int maxSize) {
+        FetchResult<List<GlobalOption>> result = new FetchResult<List<GlobalOption>>();
+        List<GlobalOption> options = globalOptionDao.listRange(begin, maxSize);
         result.setTarget(options);
         result.setSuccessful(true);
         return result;
