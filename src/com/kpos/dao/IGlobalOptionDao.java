@@ -2,6 +2,8 @@ package com.kpos.dao;
 
 import com.kpos.domain.GlobalOption;
 
+import java.util.List;
+
 /**
  * Created by IntelliJ IDEA.
  * User: kkwang
@@ -9,4 +11,5 @@ import com.kpos.domain.GlobalOption;
  */
 public interface IGlobalOptionDao extends IDao<GlobalOption> {
     GlobalOption findByName(String aName);
+    List<GlobalOption> listRange(int begin, int maxSize);
 }

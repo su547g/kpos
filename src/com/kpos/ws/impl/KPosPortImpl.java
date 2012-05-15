@@ -869,4 +869,59 @@ public class KPosPortImpl implements KPosPortType {
         htmlBuilder.append("</tbody></table>");
         return htmlBuilder.toString();
     }
+
+    @Override
+    public ListCategoryHTMLResponseType listCategoryHTML(
+            @WebParam(partName = "parameters", name = "ListCategoryHTMLType", targetNamespace = NS) ListCategoryHTMLType parameters) {
+        ListCategoryHTMLResponseType responseType = new ListCategoryHTMLResponseType();
+        try {
+            StringBuilder htmlBuilder = new StringBuilder();
+            String onclick = parameters.getOnclick();
+            FetchResult<List<MenuCategory>> fetchResult = contentManagementService.listAllCategories(parameters.getBegin(), parameters.getMaxSize());
+            int i = 0;
+            List<MenuCategory> categories = fetchResult.getTarget();
+            for(MenuCategory category : categories) {
+                if(i % 2 == 0) htmlBuilder.append("<tr>");
+                htmlBuilder.append("<td width='50%'>").append("<input type=\"button\" class=\"groovybutton\" value=\"").append(category.getName()).append("\" onclick=\"");
+                htmlBuilder.append(onclick).append("(").append(category.getId()).append(")").append("\"/>");
+                htmlBuilder.append("</td>");
+                if(i % 2 == 1) htmlBuilder.append("</tr>");
+                i++;
+            }
+            if(i % 2 != 0) htmlBuilder.append("</tr>");
+            responseType.setHtml(htmlBuilder.toString());
+        } catch(Exception e) {
+            log.error("Error in listCategoryHTML", e);
+        }
+
+        return responseType;
+    }
+
+    @Override
+    public ListGlobalOptionHTMLResponseType listGlobalOptionHTML(
+            @WebParam(partName = "parameters", name = "ListGlobalOptionHTMLType", targetNamespace = NS) ListGlobalOptionHTMLType parameters) {
+        ListGlobalOptionHTMLResponseType responseType = new ListGlobalOptionHTMLResponseType();
+        try {
+            StringBuilder htmlBuilder = new StringBuilder();
+            String onclick = parameters.getOnclick();
+            FetchResult<List<GlobalOption>> fetchResult = contentManagementService.listGlobalOptions(parameters.getBegin(), parameters.getMaxSize());
+            int i = 0;
+            List<GlobalOption> options = fetchResult.getTarget();
+            for(GlobalOption option : options) {
+                if(i % 2 == 0) htmlBuilder.append("<tr>");
+                htmlBuilder.append("<td width='50%'>").append("<input type=\"button\" class=\"optionbutton\" value=\"").append(option.getName()).append("\" onclick=\"");
+                htmlBuilder.append(onclick).append("(").append(option.getId()).append(", ");
+                htmlBuilder.append( parameters.isIsDineIn()? option.getDineInPrice():option.getTakeOutPrice());
+                htmlBuilder.append(", \\\"").append(option.getName()).append("\\\"").append(")").append("\"/>");
+                htmlBuilder.append("</td>");
+                if(i % 2 == 1) htmlBuilder.append("</tr>");
+                i++;
+            }
+            if(i % 2 != 0) htmlBuilder.append("</tr>");
+            responseType.setHtml(htmlBuilder.toString());
+        } catch(Exception e) {
+            log.error("Error in listGlobalOptionHTML", e);
+        }
+        return responseType;
+    }
 }

@@ -13,6 +13,7 @@ public interface ICategoryDao {
     MenuCategory findByName(String aName);
 
     List<MenuCategory> listCategoriesByNameAsc();
+    List<MenuCategory> listCategoriesByNameAsc(int begin, int maxSize);
 
     void insertCategory(MenuCategory aCategory);
 

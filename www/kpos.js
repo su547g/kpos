@@ -668,3 +668,33 @@ function ListSaleItemOptionsType(itemId) {
         return xml;
     }
 }
+function ListCategoryHTMLType(begin, maxSize, onclick) {
+    this.myBegin = begin;
+    this.myMax = maxSize;
+    this.myOnclick = onclick;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:ListCategoryHTMLType>";
+        xml += "<app:begin>" + this.myBegin + "</app:begin>";
+        xml += "<app:maxSize>" + this.myMax + "</app:maxSize>";
+        xml += "<app:onclick>" + this.myOnclick + "</app:onclick>";
+        xml += "</app:ListCategoryHTMLType>";
+        xml += soapXMLEnd;
+        return xml;
+    } 
+}
+function ListGlobalOptionHTMLType(begin, maxSize, onclick) {
+    this.myBegin = begin;
+    this.myMax = maxSize;
+    this.myOnclick = onclick;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:ListGlobalOptionHTMLType>";
+        xml += "<app:begin>" + this.myBegin + "</app:begin>";
+        xml += "<app:maxSize>" + this.myMax + "</app:maxSize>";
+        xml += "<app:onclick>" + this.myOnclick + "</app:onclick>";
+        xml += "</app:ListGlobalOptionHTMLType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
