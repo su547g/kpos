@@ -675,6 +675,7 @@ function ListCategoryHTMLType(begin, maxSize, onclick) {
     this.getXML = function() {
         var xml = soapXMLBegin;
         xml += "<app:ListCategoryHTMLType>";
+        xml += "<app:rowSize>2</app:rowSize>";
         xml += "<app:begin>" + this.myBegin + "</app:begin>";
         xml += "<app:maxSize>" + this.myMax + "</app:maxSize>";
         xml += "<app:onclick>" + this.myOnclick + "</app:onclick>";
@@ -683,17 +684,38 @@ function ListCategoryHTMLType(begin, maxSize, onclick) {
         return xml;
     } 
 }
-function ListGlobalOptionHTMLType(begin, maxSize, onclick) {
+function ListGlobalOptionHTMLType(rowSize, begin, maxSize, onclick) {
+    this.myRowSize = rowSize;
     this.myBegin = begin;
     this.myMax = maxSize;
     this.myOnclick = onclick;
     this.getXML = function() {
         var xml = soapXMLBegin;
         xml += "<app:ListGlobalOptionHTMLType>";
+        xml += "<app:rowSize>"+ this.myRowSize + "</app:rowSize>";
         xml += "<app:begin>" + this.myBegin + "</app:begin>";
         xml += "<app:maxSize>" + this.myMax + "</app:maxSize>";
         xml += "<app:onclick>" + this.myOnclick + "</app:onclick>";
         xml += "</app:ListGlobalOptionHTMLType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function ListCategoryOptionHTMLType(catId, rowSize, begin, maxSize, onclick) {
+    this.myCatId = catId;
+    this.myRowSize = rowSize;
+    this.myBegin = begin;
+    this.myMax = maxSize;
+    this.myOnclick = onclick;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:ListCategoryOptionHTMLType>";
+        xml += "<app:categoryId>" + this.myCatId + "</app:categoryId>";
+        xml += "<app:rowSize>"+ this.myRowSize + "</app:rowSize>";
+        xml += "<app:begin>" + this.myBegin + "</app:begin>";
+        xml += "<app:maxSize>" + this.myMax + "</app:maxSize>";
+        xml += "<app:onclick>" + this.myOnclick + "</app:onclick>";
+        xml += "</app:ListCategoryOptionHTMLType>";
         xml += soapXMLEnd;
         return xml;
     }
