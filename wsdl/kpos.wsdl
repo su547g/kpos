@@ -52,6 +52,8 @@
             <xs:element name="FetchCategoryOptionResponseType" type="tns:FetchCategoryOptionResponseType"/>
             <xs:element name="ListCategoryOptionType" type="tns:ListCategoryOptionType"/>
             <xs:element name="ListCategoryOptionResponseType" type="tns:ListCategoryOptionResponseType"/>
+            <xs:element name="ListCategoryOptionHTMLType" type="tns:ListCategoryOptionHTMLType"/>
+            <xs:element name="ListCategoryOptionHTMLResponseType" type="tns:ListCategoryOptionHTMLResponseType"/>
 
             <xs:element name="CreateSaleItemType" type="tns:CreateSaleItemType"/>
             <xs:element name="CreateSaleItemResponseType" type="tns:CreateSaleItemResponseType"/>
@@ -407,6 +409,7 @@
             </xs:complexType>
             <xs:complexType name="ListCategoryHTMLType">
                 <xs:sequence>
+                    <xs:element name="rowSize" type="xsd:int"/>
                     <xs:element name="begin" type="xsd:int" minOccurs="1"/>
                     <xs:element name="maxSize" type="xsd:int" minOccurs="1"/>
                     <xs:element name="onclick" type="xsd:string" minOccurs="1"/>
@@ -468,8 +471,24 @@
             <xs:complexType name="ListCategoryOptionResponseType">
                 <xs:sequence>
                     <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="catId" type="xsd:long"/>
                     <xs:element name="options" type="tns:CategoryOptionType" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="total" type="xsd:int"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListCategoryOptionHTMLType">
+                <xs:sequence>
+                    <xs:element name="categoryId" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="rowSize" type="xsd:int"/>
+                    <xs:element name="begin" type="xsd:int" minOccurs="1"/>
+                    <xs:element name="maxSize" type="xsd:int" minOccurs="1"/>
+                    <xs:element name="onclick" type="xsd:string" minOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListCategoryOptionHTMLResponseType">
+                <xs:sequence>
+                    <xs:element name="result" type="tns:ResultType"/>
+                    <xs:element name="html" type="xsd:string"/>
                 </xs:sequence>
             </xs:complexType>
 
@@ -493,6 +512,7 @@
             <xs:complexType name="ListSaleItemsForCategoryResponseType">
                 <xs:sequence>
                     <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="catId" type="xsd:long" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="total" type="xs:int" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="saleItems" type="tns:SaleItemType" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
@@ -688,6 +708,7 @@
             </xs:complexType>
             <xs:complexType name="ListGlobalOptionHTMLType">
                 <xs:sequence>
+                    <xs:element name="rowSize" type="xsd:int"/>
                     <xs:element name="begin" type="xsd:int"/>
                     <xs:element name="maxSize" type="xsd:int"/>
                     <xs:element name="onclick" type="xsd:string"/>
@@ -835,6 +856,12 @@
     </wsdl:message>
     <wsdl:message name="ListCategoryOptionResponseMessage">
         <wsdl:part name="parameters" element="tns:ListCategoryOptionResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="ListCategoryOptionHTMLMessage">
+        <wsdl:part name="parameters" element="tns:ListCategoryOptionHTMLType"/>
+    </wsdl:message>
+    <wsdl:message name="ListCategoryOptionHTMLResponseMessage">
+        <wsdl:part name="parameters" element="tns:ListCategoryOptionHTMLResponseType"/>
     </wsdl:message>
 
     <wsdl:message name="ListSaleItemsForCategoryMessage">
@@ -1057,6 +1084,10 @@
         <wsdl:operation name="ListCategoryOption">
             <wsdl:input message="tns:ListCategoryOptionMessage" name="ListCategoryOption"/>
             <wsdl:output message="tns:ListCategoryOptionResponseMessage" name="ListCategoryOptionResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="ListCategoryOptionHTML">
+            <wsdl:input message="tns:ListCategoryOptionHTMLMessage" name="ListCategoryOptionHTML"/>
+            <wsdl:output message="tns:ListCategoryOptionHTMLResponseMessage" name="ListCategoryOptionHTMLResponse"/>
         </wsdl:operation>
 
         <wsdl:operation name="ListSaleItemsForCategory">
@@ -1319,6 +1350,15 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="ListCategoryOptionResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="ListCategoryOptionHTML">
+            <soap:operation soapAction="http://ws.kpos.com/ListCategoryOptionHTML" style="document"/>
+            <wsdl:input name="ListCategoryOptionHTML">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="ListCategoryOptionHTMLResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>

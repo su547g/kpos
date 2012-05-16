@@ -69,14 +69,14 @@
          -moz-border-radius: 3px;
       }
 
-      .optionsTable {border:1px solid gray; border-spacing:8px}
+      .optionsTable {border:1px solid gray; border-spacing:1px}
       .optionsTable td {
-         border:1px solid gray;
-         padding:5px;
-         background-color:#3399FF;
+         border:1px solid black;
+         padding:1px;
+         background-color:gray;//#3399FF;
          color:#FFF;
-         //border-radius:1px;
-         -moz-border-radius: 1px;
+         border-radius:3px;
+         -moz-border-radius: 3px;
       }
    </style>
    <style type="text/css">
@@ -129,6 +129,24 @@
 	   background-image:url(img/next-icon.jpg);
 	   border-width:2px;
 	}
+	input.smallbackbutton
+	{
+	   color:#000000;//#FFFF00;
+	   width:65px;
+	   height:65px;
+	   background-color:#FFFF00;
+	   background-image:url(img/previous-icon-small.jpg);
+	   border-width:2px;
+	}
+	input.smallnextbutton
+	{
+	   color:#000000;//#FFFF00;
+	   width:65px;
+	   height:65px;
+	   background-color:#DDDDDD;
+	   background-image:url(img/next-icon-small.jpg);
+	   border-width:2px;
+	}
    </style>
 
 	<script language="javascript">
@@ -146,7 +164,9 @@
 	</script>
 	<script language="javascript">
 		var catPage = 0, maxSize = 8, maxCatPage;
-		var globalOptionPage = 0, glOptionMax = 4, maxGlobalOptionPage;
+		var globalOptionPage = 0, glOptionMax = 10, maxGlobalOptionPage, glOpRowSize = 4;
+		var catOptionPage = 0, catOptionMaxPerPage = 10, maxCatOptionPage, catOptionRowSize = 4;
+		var itemOptionPage = 0, itemOptMaxPerPage = 10, maxItemOptPage, itemOptionRowSize = 4;
 		
 		function initializeCategories(){
 			ws_list_categories(listAllCategoriesHandler);
@@ -203,10 +223,10 @@
 			if(page < 0 || page > maxGlobalOptionPage) return;
 			
 			globalOptionPage = page;
-			listGlobalOptionsHTML(globalOptionPage*glOptionMax, glOptionMax);
+			listGlobalOptionsHTML(glOpRowSize, globalOptionPage*glOptionMax, glOptionMax);
 		}
-		function listGlobalOptionsHTML(begin, maxSize) {
-			var soapType = new ListGlobalOptionHTMLType(begin, maxSize, "clickGlobalOption");
+		function listGlobalOptionsHTML(rowSize, begin, maxSize) {
+			var soapType = new ListGlobalOptionHTMLType(rowSize, begin, maxSize, "clickGlobalOption");
 			call_web_service(soapType, listGlobalOptionsHTMLHandler);
 		}
 		function listGlobalOptionsHTMLHandler(jsonObj) {
@@ -217,15 +237,64 @@
 				html = html.replace(/&lt;/g, "<");
 				html = html.replace(/&gt;/g, ">");
 				html = html.replace(/&quot;/g, "'");
-				alert(html);
+				html = html.replace(/\\/g, "\"");
 				document.getElementById("globalOptionsTable").innerHTML = html;
 			}
 		}
 		function clickCategory(catId) {
 			alert(catId);
+			listCatOptions(catId);
 		}
 		function clickGlobalOption(id, price, name) {
 			alert(id + " " + price + " " + name);
+		}
+		function listCatOptions(catId) {
+			var listType = new ListCategoryOptionType(catId);
+			call_web_service(listType, listCatOptionsHandler);
+		}
+		function listCatOptionsHandler(jsonObj) {
+	    	if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.listcategoryoptionresponsetype != undefined && jsonObj.listcategoryoptionresponsetype != null && 
+				jsonObj.listcategoryoptionresponsetype.result.successful == "true") {
+				var catId = jsonObj.listcategoryoptionresponsetype.catid;
+				var count = jsonObj.listcategoryoptionresponsetype.total;
+				//Max number of pages
+				maxCatOptionPage = Math.ceil(count / catOptionMaxPerPage); 
+				if(maxCatOptionPage > 0) maxCatOptionPage--;
+				pageCatOptions(catId, 0);
+			}
+		}
+		function pageCatOptions(catId, page) {
+			if(page < 0 || page > maxCatOptionPage) return;
+			
+			catOptionPage = page;
+			listCategoryOptionHTML(catId, catOptionRowSize, catOptionPage*catOptionMaxPerPage, catOptionMaxPerPage);
+		}
+		function listCategoryOptionHTML(catId, rowSize, begin, maxSize) {
+			var soapType = new ListCategoryOptionHTMLType(catId, rowSize, begin, maxSize, "clickCategoryOption");
+			call_web_service(soapType, listCategoryOptionHTMLHandler);
+		}
+		function listCategoryOptionHTMLHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.listcategoryoptionhtmlresponsetype != undefined && jsonObj.listcategoryoptionhtmlresponsetype != null && 
+				jsonObj.listcategoryoptionhtmlresponsetype.html != null) {
+				html = jsonObj.listcategoryoptionhtmlresponsetype.html;
+				html = html.replace(/&lt;/g, "<");
+				html = html.replace(/&gt;/g, ">");
+				html = html.replace(/&quot;/g, "'");
+				html = html.replace(/\\/g, "\"");
+				document.getElementById("catOptionsTable").innerHTML = html;
+			}
+		}
+		function clickCategoryOption(id, name, price) {
+			alert(id + " " + name + " " + price);
+		}
+		
+		function pageItemOptions(catId, page) {
+			if(page < 0 || page > maxItemOptionPage) return;
+			
+			itemOptionPage = page;
+			//listSaleItemHTML(catId, itemOptRowSize, itemOptionPage*itemOptMaxPerPage, itemOptMaxPerPage);
 		}
 	</script>
 </head>
@@ -252,14 +321,31 @@
                </table>
             </td>
             <td valign="top" align="left" width="22.5%" style="border:0px solid black; padding:2px">
-               Global Options
+               <strong>Global Options</strong>
                <table id="globalOptionsTable" class="optionsTable" width="100%">
                </table>
-               <br>
                <table width="100%">
                		<tr>
-               			<td width="50%"><input type="button" class="backbutton" onclick="alert(1.0);pageGlobalOptions(globalOptionPage - 1);"></td>
-               			<td><input type="button" class="nextbutton" onclick="pageGlobalOptions(globalOptionPage + 1);"></td>
+               			<td width="100%"><input type="button" class="smallbackbutton" onclick="pageGlobalOptions(globalOptionPage - 1);">
+               			<input type="button" class="smallnextbutton" onclick="pageGlobalOptions(globalOptionPage + 1);"></td>
+               		</tr>
+               </table>
+               <strong>Category Options</strong>
+               <table id="catOptionsTable" class="optionsTable" width="100%">
+               </table>
+               <table width="100%">
+               		<tr>
+               			<td width="100%"><input type="button" class="smallbackbutton" onclick="pageCatOptions(catOptionPage - 1);">
+               			<input type="button" class="smallnextbutton" onclick="pageCatOptions(catOptionPage + 1);"></td>
+               		</tr>
+               </table>
+               <strong>Item Options</strong>
+               <table id="itemOptionsTable" class="optionsTable" width="100%">
+               </table>
+               <table width="100%">
+               		<tr>
+               			<td width="100%"><input type="button" class="smallbackbutton" onclick="pageItemOptions(catOptionPage - 1);">
+               			<input type="button" class="smallnextbutton" onclick="pageItemOptions(catOptionPage + 1);"></td>
                		</tr>
                </table>
             </td>

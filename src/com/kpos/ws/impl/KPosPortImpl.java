@@ -262,6 +262,7 @@ public class KPosPortImpl implements KPosPortType {
             } else {
                 responseType.setTotal(0);
             }
+            responseType.setCatId(categoryId);
             responseType.setResult(getSoapResult(fetchResult));
         } catch (Exception e) {
             responseType.setResult(getSoapFaultResult(e));
@@ -641,6 +642,7 @@ public class KPosPortImpl implements KPosPortType {
                 result.setSuccessful(true);
                 responseType.setResult(getSoapResult(result));
                 responseType.setTotal(options.size());
+                responseType.setCatId(parameters.getCategoryId());
             } else {
                 responseType.setResult(getSoapFaultResult(new Exception("Category ["+parameters.getCategoryId()+"] doesn't exist")));
             }
@@ -878,17 +880,18 @@ public class KPosPortImpl implements KPosPortType {
             StringBuilder htmlBuilder = new StringBuilder();
             String onclick = parameters.getOnclick();
             FetchResult<List<MenuCategory>> fetchResult = contentManagementService.listAllCategories(parameters.getBegin(), parameters.getMaxSize());
+            int rowSize = parameters.getRowSize() < 0 ? 1 : parameters.getRowSize();
             int i = 0;
             List<MenuCategory> categories = fetchResult.getTarget();
             for(MenuCategory category : categories) {
-                if(i % 2 == 0) htmlBuilder.append("<tr>");
-                htmlBuilder.append("<td width='50%'>").append("<input type=\"button\" class=\"groovybutton\" value=\"").append(category.getName()).append("\" onclick=\"");
+                if(i % rowSize == 0) htmlBuilder.append("<tr>");
+                htmlBuilder.append("<td>").append("<input type=\"button\" class=\"groovybutton\" value=\"").append(category.getName()).append("\" onclick=\"");
                 htmlBuilder.append(onclick).append("(").append(category.getId()).append(")").append("\"/>");
                 htmlBuilder.append("</td>");
-                if(i % 2 == 1) htmlBuilder.append("</tr>");
+                if(i % rowSize == (rowSize-1)) htmlBuilder.append("</tr>");
                 i++;
             }
-            if(i % 2 != 0) htmlBuilder.append("</tr>");
+            if(i % rowSize != 0) htmlBuilder.append("</tr>");
             responseType.setHtml(htmlBuilder.toString());
         } catch(Exception e) {
             log.error("Error in listCategoryHTML", e);
@@ -905,22 +908,54 @@ public class KPosPortImpl implements KPosPortType {
             StringBuilder htmlBuilder = new StringBuilder();
             String onclick = parameters.getOnclick();
             FetchResult<List<GlobalOption>> fetchResult = contentManagementService.listGlobalOptions(parameters.getBegin(), parameters.getMaxSize());
+            int rowSize = parameters.getRowSize() < 0 ? 1 : parameters.getRowSize();
             int i = 0;
             List<GlobalOption> options = fetchResult.getTarget();
             for(GlobalOption option : options) {
-                if(i % 2 == 0) htmlBuilder.append("<tr>");
-                htmlBuilder.append("<td width='50%'>").append("<input type=\"button\" class=\"optionbutton\" value=\"").append(option.getName()).append("\" onclick=\"");
+                if(i % rowSize == 0) htmlBuilder.append("<tr><td width='100%'>");
+                htmlBuilder.append("").append("<input type=\"button\" class=\"optionbutton\" value=\"").append(option.getName()).append("\" onclick=\"");
                 htmlBuilder.append(onclick).append("(").append(option.getId()).append(", ");
                 htmlBuilder.append( parameters.isIsDineIn()? option.getDineInPrice():option.getTakeOutPrice());
-                htmlBuilder.append(", \\\"").append(option.getName()).append("\\\"").append(")").append("\"/>");
-                htmlBuilder.append("</td>");
-                if(i % 2 == 1) htmlBuilder.append("</tr>");
+                htmlBuilder.append(", \\").append(option.getName()).append("\\").append(")").append("\"/> ");
+                //htmlBuilder.append("</td>");
+                if(i % rowSize == (rowSize-1)) htmlBuilder.append("</td></tr>");
                 i++;
             }
-            if(i % 2 != 0) htmlBuilder.append("</tr>");
+            if(i % rowSize != 0) htmlBuilder.append("</tr>");
             responseType.setHtml(htmlBuilder.toString());
         } catch(Exception e) {
             log.error("Error in listGlobalOptionHTML", e);
+        }
+        return responseType;
+    }
+
+    @Override
+    public ListCategoryOptionHTMLResponseType listCategoryOptionHTML(
+            @WebParam(partName = "parameters", name = "ListCategoryOptionHTMLType", targetNamespace = NS) ListCategoryOptionHTMLType parameters) {
+        ListCategoryOptionHTMLResponseType responseType = new ListCategoryOptionHTMLResponseType();
+        try {
+            StringBuilder htmlBuilder = new StringBuilder();
+            String onclick = parameters.getOnclick();
+            FetchResult<MenuCategory> fetchResult = contentManagementService.fetchCategory(parameters.getCategoryId());
+            int rowSize = parameters.getRowSize() < 0 ? 1 : parameters.getRowSize();
+            int i = 0;
+            List<CategoryOption> options = fetchResult.getTarget().getOptions();
+            if(options != null) {
+                for(CategoryOption option : options) {
+                    if(i % rowSize == 0) htmlBuilder.append("<tr><td width='100%'>");
+                    htmlBuilder.append("").append("<input type=\"button\" class=\"optionbutton\" value=\"").append(option.getName()).append("\" onclick=\"");
+                    htmlBuilder.append(onclick).append("(").append(option.getId()).append(", ");
+                    htmlBuilder.append(option.getPrice());
+                    htmlBuilder.append(", \\").append(option.getName()).append("\\").append(")").append("\"/> ");
+                    //htmlBuilder.append("</td>");
+                    if(i % rowSize == (rowSize-1)) htmlBuilder.append("</td></tr>");
+                    i++;
+                }
+            }
+            if(i % rowSize != 0) htmlBuilder.append("</tr>");
+            responseType.setHtml(htmlBuilder.toString());
+        } catch(Exception e) {
+            log.error("Error in ListCategoryOptionHTMLResponseType", e);
         }
         return responseType;
     }
