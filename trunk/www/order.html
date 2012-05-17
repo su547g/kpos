@@ -12,11 +12,13 @@
 
     <script type="text/javascript" src="xml2json.js"></script>
     <script type="text/javascript" src="kpos.js"></script>
+    <script type="text/javascript" src="calculator.js"></script>
     <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.min.js"></script>
     
     <link rel="stylesheet" href="example.css" TYPE="text/css" MEDIA="screen">
+    <link rel="stylesheet" href="calculator.css" TYPE="text/css" MEDIA="screen">
     
-   <style type="text/css">
+	<style type="text/css">
       body{
          font-size:14px;
          background:white; //#F2F2F2; //c4f0f1;
@@ -60,9 +62,9 @@
          -moz-border-radius: 3px;
       }
 
-      .menuItemTable {border:1px solid gray; border-spacing:4px}
+      .menuItemTable {border:1px solid gray; border-spacing:1px}
       .menuItemTable td {
-         border:0px solid gray;
+         border:1px solid black;
          padding:1px;
          background-color:#FFFFCC;
          border-radius:3px;
@@ -78,76 +80,77 @@
          border-radius:3px;
          -moz-border-radius: 3px;
       }
-   </style>
-   <style type="text/css">
-	input.groovybutton
-	{
-	   font-size:14px;
-	   font-weight:bold;
-	   color:#000000;//#FFFF00;
-	   width:100px;
-	   height:80px;
-	   background-color:#FFFF00;
-	   //background-image:url(texas.gif);
-	   border-width:2px;
-	}
-	input.itembutton
-	{
-	   font-size:12px;
-	   font-weight:bold;
-	   color:#000000;//#FFFF00;
-	   width:100px;
-	   height:80px;
-	   background-color:#BDBDBD;
-	   border-width:2px;
-	}
-	input.optionbutton
-	{
-	   font-size:9px;
-	   font-weight:bold;
-	   color:#000000;//#FFFF00;
-	   width:70px;
-	   height:30px;
-	   background-color:#BDBDBD;
-	   border-width:1px;
-	}
-	input.backbutton
-	{
-	   color:#000000;//#FFFF00;
-	   width:100px;
-	   height:80px;
-	   background-color:#FFFF00;
-	   background-image:url(img/back-icon.jpg);
-	   border-width:2px;
-	}
-	input.nextbutton
-	{
-	   color:#000000;//#FFFF00;
-	   width:100px;
-	   height:80px;
-	   background-color:#DDDDDD;
-	   background-image:url(img/next-icon.jpg);
-	   border-width:2px;
-	}
-	input.smallbackbutton
-	{
-	   color:#000000;//#FFFF00;
-	   width:65px;
-	   height:65px;
-	   background-color:#FFFF00;
-	   background-image:url(img/previous-icon-small.jpg);
-	   border-width:2px;
-	}
-	input.smallnextbutton
-	{
-	   color:#000000;//#FFFF00;
-	   width:65px;
-	   height:65px;
-	   background-color:#DDDDDD;
-	   background-image:url(img/next-icon-small.jpg);
-	   border-width:2px;
-	}
-   </style>
+      .orderTable {border:1px solid black; border-spacing:1px border-radius:3px; -moz-border-radius: 3px;}
+      .orderTable td {
+      	 border:1px solid gray;
+         padding:1px;
+         border-radius:3px;
+         -moz-border-radius: 3px;
+      }
+      .orderTabe th { border: 0px }
+   	</style>
+   	<style type="text/css">
+		input.groovybutton {
+		   font-size:14px;
+		   font-weight:bold;
+		   color:#000000;//#FFFF00;
+		   width:100px;
+		   height:80px;
+		   background-color:#FFFF00;
+		   //background-image:url(texas.gif);
+		   border-width:2px;
+		}
+		input.itembutton {
+		   font-size:9px;
+		   font-weight:bold;
+		   color:#000000;//#FFFF00;
+		   width:80px;
+		   height:40px;
+		   background-color:#BDBDBD;
+		   border-width:1px;
+		}
+		input.optionbutton {
+		   font-size:9px;
+		   font-weight:bold;
+		   color:#000000;//#FFFF00;
+		   width:70px;
+		   height:30px;
+		   background-color:#BDBDBD;
+		   border-width:1px;
+		}
+		input.backbutton {
+		   color:#000000;//#FFFF00;
+		   width:100px;
+		   height:80px;
+		   background-color:#FFFF00;
+		   background-image:url(img/back-icon.jpg);
+		   border-width:2px;
+		}
+		input.nextbutton {
+		   color:#000000;//#FFFF00;
+		   width:100px;
+		   height:80px;
+		   background-color:#DDDDDD;
+		   background-image:url(img/next-icon.jpg);
+		   border-width:2px;
+		}
+		input.smallbackbutton {
+		   color:#000000;//#FFFF00;
+		   width:65px;
+		   height:65px;
+		   background-color:#FFFF00;
+		   background-image:url(img/previous-icon-small.jpg);
+		   border-width:2px;
+		}
+		input.smallnextbutton {
+		   color:#000000;//#FFFF00;
+		   width:65px;
+		   height:65px;
+		   background-color:#DDDDDD;
+		   background-image:url(img/next-icon-small.jpg);
+		   border-width:2px;
+		}
+   	</style>
 
 	<script language="javascript">
 		function goLite(FRM,BTN)
@@ -166,6 +169,7 @@
 		var catPage = 0, maxSize = 8, maxCatPage;
 		var globalOptionPage = 0, glOptionMax = 10, maxGlobalOptionPage, glOpRowSize = 4;
 		var catOptionPage = 0, catOptionMaxPerPage = 10, maxCatOptionPage, catOptionRowSize = 4;
+		var itemPage = 0, itemMaxPerPage = 12, maxItemPage, itemRowSize = 3;
 		var itemOptionPage = 0, itemOptMaxPerPage = 10, maxItemOptPage, itemOptionRowSize = 4;
 		
 		function initializeCategories(){
@@ -243,6 +247,8 @@
 		}
 		function clickCategory(catId) {
 			alert(catId);
+			document.getElementById("categoryId").value = catId;
+			listSaleItemsForCat(catId);
 			listCatOptions(catId);
 		}
 		function clickGlobalOption(id, price, name) {
@@ -261,12 +267,12 @@
 				//Max number of pages
 				maxCatOptionPage = Math.ceil(count / catOptionMaxPerPage); 
 				if(maxCatOptionPage > 0) maxCatOptionPage--;
-				pageCatOptions(catId, 0);
+				pageCatOptions(0);
 			}
 		}
-		function pageCatOptions(catId, page) {
+		function pageCatOptions(page) {
 			if(page < 0 || page > maxCatOptionPage) return;
-			
+			var catId = document.getElementById("categoryId").value;
 			catOptionPage = page;
 			listCategoryOptionHTML(catId, catOptionRowSize, catOptionPage*catOptionMaxPerPage, catOptionMaxPerPage);
 		}
@@ -289,12 +295,85 @@
 		function clickCategoryOption(id, name, price) {
 			alert(id + " " + name + " " + price);
 		}
-		
+		function listSaleItemsForCat(catId) {
+			if(catId != null && catId != "") {
+				var listType = new ListSaleItemsForCategoryType(catId);
+				call_web_service(listType, listSaleItemsForCatHandler);
+			} else {
+				alert("Please select a category.");
+			}
+		}
+		function listSaleItemsForCatHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.listsaleitemsforcategoryresponsetype != undefined && jsonObj.listsaleitemsforcategoryresponsetype != null && 
+				jsonObj.listsaleitemsforcategoryresponsetype.result.successful == "true") {
+				var catId = jsonObj.listsaleitemsforcategoryresponsetype.catid;
+				var count = jsonObj.listsaleitemsforcategoryresponsetype.total;
+				maxItemPage = Math.ceil(count / itemMaxPerPage); 
+				if(maxItemPage > 0) maxItemPage--;
+				pageItems(0);
+			}
+		}
+		function pageItems(page) {
+			if(page < 0 || page > maxItemPage) return;
+			var catId = document.getElementById("categoryId").value;
+			itemPage = page;
+			listSaleItemHTML(catId, itemRowSize, itemPage*itemMaxPerPage, itemMaxPerPage);
+		}
+		function listSaleItemHTML(catId, rowSize, begin, maxSize) {
+			var soapType = new ListSaleItemsForCategoryHTMLType(catId, rowSize, begin, maxSize, "clickSaleItem");
+			call_web_service(soapType, listSaleItemHTMLHandler);
+		}
+		function listSaleItemHTMLHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.listsaleitemsforcategoryhtmlresponsetype != undefined && jsonObj.listsaleitemsforcategoryhtmlresponsetype != null && 
+				jsonObj.listsaleitemsforcategoryhtmlresponsetype.html != null) {
+				html = jsonObj.listsaleitemsforcategoryhtmlresponsetype.html;
+				html = html.replace(/&lt;/g, "<");
+				html = html.replace(/&gt;/g, ">");
+				html = html.replace(/&quot;/g, "'");
+				html = html.replace(/\\/g, "\"");
+				document.getElementById("menuItemTable").innerHTML = html;
+			}
+		}
+		function clickSaleItem(itemId) {
+			alert(itemId);
+			if(itemId != null && itemId != "") {
+				document.getElementById("itemId").value = itemId;
+				var soapType = new FetchSaleItemType(itemId);
+				call_web_service(soapType, fetchSaleItemHandler);
+			}
+		}
+		function fetchSaleItemHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+                jsonObj.fetchsaleitemresponsetype != undefined && jsonObj.fetchsaleitemresponsetype != null &&
+                jsonObj.fetchsaleitemresponsetype.result.successful == "true") {
+                var item = jsonObj.fetchsaleitemresponsetype.saleitem;
+                /*
+                document.itemDetails.itemId.value = item.id;
+               	document.itemDetails.itemName.value = item.name;
+               	document.itemDetails.defaultItemPrice.value = item.normalprice==null?"":item.normalprice;
+               	document.itemDetails.defaultItemOutPrice.value = item.takeoutprice==null?"":item.takeoutprice;
+               	document.itemDetails.itemTaxable.checked = item.istaxable=="true";
+               	document.itemDetails.singleOption.checked = item.issingleoption=="true";
+               	document.itemDetails.hasSeasonPrice.checked = item.seasonprice!=null && item.seasonprice>0;
+               	document.itemDetails.seasonPrice.vaue = item.seasonprice;
+               	document.itemDetails.smallPrice.value = item.pricesmall;
+				document.itemDetails.mediumPrice.value = item.pricemed;
+				document.itemDetails.largePrice.value = item.pricelarge;
+				document.itemDetails.smallOutPrice.value = item.outpricesmall;
+				document.itemDetails.mediumOutPrice.value = item.outpricemedium;
+				document.itemDetails.largeOutPrice.value = item.outpricelarge;
+				document.itemDetails.hasDineInSizes.checked = item.pricesmall!=null||item.pricemed!=null||item.pricelarge!=null;
+	        	document.itemDetails.hasTakeOutSizes.checked = item.outpricesmall!=null||item.outpricemedium!=null||item.outpricelarge!=null;
+	        	*/
+	        }
+	   	}
 		function pageItemOptions(catId, page) {
 			if(page < 0 || page > maxItemOptionPage) return;
 			
 			itemOptionPage = page;
-			//listSaleItemHTML(catId, itemOptRowSize, itemOptionPage*itemOptMaxPerPage, itemOptMaxPerPage);
+			//
 		}
 	</script>
 </head>
@@ -305,19 +384,26 @@
          <tr>
             <td valign="top" align="left" width="18%" style="border:0px solid black; padding:2px">
                <strong>Menu Categories</strong>
+               <input type="hidden" id="categoryId"/>
                <table id="categoryTable" class="categoryTable" width="100%">
                </table>
-               <br>
                <table width="100%">
                		<tr>
-               			<td width="50%"><input type="button" class="backbutton" onclick="pageCategories(catPage - 1);"></td>
-               			<td><input type="button" class="nextbutton" onclick="pageCategories(catPage + 1);"></td>
+               			<td width="100%"><input type="button" class="smallbackbutton" onclick="pageCategories(catPage - 1);">
+               			<input type="button" class="smallnextbutton" onclick="pageCategories(catPage + 1);"></td>
                		</tr>
                </table>
            </td>
-           <td valign="top" align="left" width="21%" style="border:0px solid black; padding:2px">
+           <td valign="top" align="left" width="20%" style="border:0px solid black; padding:2px">
                <strong>Menu Items</strong>
+               <input type="hidden" id="itemId"/>
                <table id="menuItemTable" class="menuItemTable" width="100%">
+               </table>
+               <table width="100%">
+               		<tr>
+               			<td width="100%"><input type="button" class="smallbackbutton" onclick="pageItems(itemPage - 1);">
+               			<input type="button" class="smallnextbutton" onclick="pageItems(itemPage + 1);"></td>
+               		</tr>
                </table>
             </td>
             <td valign="top" align="left" width="22.5%" style="border:0px solid black; padding:2px">
@@ -349,14 +435,13 @@
                		</tr>
                </table>
             </td>
-            <td width="0.5%"></td>
-            <td width="35%" valign="top" align="left" style="border:0px solid black">
+            <td width="36%" valign="top" align="left" style="border:0px solid black">
                <div>
-               <table width="100%" border="1">
+               <table width="100%" border="0" class="orderTable">
                   <tr>
-                     <th width="60%" valign="top" align="left">Item description</th>
-                     <th width="5%" valign="top" align="right">Quantity</th>
-                     <th width="15%" valign="top" align="right">Price</th>
+                     <th width="60%" valign="top" align="left"><strong>Item description</strong></th>
+                     <th width="5%" valign="top" align="right"><strong>Quantity</strong></th>
+                     <th width="15%" valign="top" align="right"><strong>Price</strong></th>
                   </tr>
                   <tr>
                      <td valign="top" align="left">Fried rice with beef</td>
@@ -368,14 +453,14 @@
                      <td valign="top" align="right">1</td>
                      <td valign="top" align="right">1.95</td>
                   </tr>
-                  <tr><td colspan="6"><br></td></tr>
+                  <tr><td colspan="3"><br></td></tr>
                   <tr>
-                     <td colspan="2" valign="top" align="right">Tax: </td>
-                     <td valign="top" align="right">1.5</td>
+                     <td colspan="2" valign="top" align="right"><strong>Tax:</strong> </td>
+                     <td valign="top" align="right"><strong>1.5</strong></td>
                   </tr>
                   <tr>
-                     <td colspan="2" valign="top" align="right">Total: </td>
-                     <td valign="top" align="right">11.4</td>
+                     <td colspan="2" valign="top" align="right"><strong>Total:</strong> </td>
+                     <td valign="top" align="right"><strong>11.4</strong></td>
                   </tr>
                </table>
                </div>

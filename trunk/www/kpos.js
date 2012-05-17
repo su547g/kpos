@@ -720,3 +720,22 @@ function ListCategoryOptionHTMLType(catId, rowSize, begin, maxSize, onclick) {
         return xml;
     }
 }
+function ListSaleItemsForCategoryHTMLType(catId, rowSize, begin, maxSize, onclick) {
+    this.myCatId = catId;
+    this.myRowSize = rowSize;
+    this.myBegin = begin;
+    this.myMax = maxSize;
+    this.myOnclick = onclick;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:ListSaleItemsForCategoryHTMLType>";
+        xml += "<app:categoryId>" + this.myCatId + "</app:categoryId>";
+        xml += "<app:rowSize>"+ this.myRowSize + "</app:rowSize>";
+        xml += "<app:begin>" + this.myBegin + "</app:begin>";
+        xml += "<app:maxSize>" + this.myMax + "</app:maxSize>";
+        xml += "<app:onclick>" + this.myOnclick + "</app:onclick>";
+        xml += "</app:ListSaleItemsForCategoryHTMLType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}

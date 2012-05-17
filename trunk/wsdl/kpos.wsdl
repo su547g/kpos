@@ -69,6 +69,8 @@
 
             <xs:element name="ListSaleItemsForCategoryType" type="tns:ListSaleItemsForCategoryType"/>
             <xs:element name="ListSaleItemsForCategoryResponseType" type="tns:ListSaleItemsForCategoryResponseType"/>
+            <xs:element name="ListSaleItemsForCategoryHTMLType" type="tns:ListSaleItemsForCategoryHTMLType"/>
+            <xs:element name="ListSaleItemsForCategoryHTMLResponseType" type="tns:ListSaleItemsForCategoryHTMLResponseType"/>
 
             <xs:element name="CreateSaleItemOptionType" type="tns:CreateSaleItemOptionType"/>
             <xs:element name="CreateSaleItemOptionResponseType" type="tns:CreateSaleItemOptionResponseType"/>
@@ -517,6 +519,22 @@
                     <xs:element name="saleItems" type="tns:SaleItemType" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:complexType>
+            <xs:complexType name="ListSaleItemsForCategoryHTMLType">
+                <xs:sequence>
+                    <xs:element name="categoryId" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="dineIn" type="xsd:boolean"/>
+                    <xs:element name="rowSize" type="xsd:int"/>
+                    <xs:element name="begin" type="xsd:int" minOccurs="1"/>
+                    <xs:element name="maxSize" type="xsd:int" minOccurs="1"/>
+                    <xs:element name="onclick" type="xsd:string" minOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListSaleItemsForCategoryHTMLResponseType">
+                <xs:sequence>
+                    <xs:element name="catId" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="html" type="xsd:string"/>
+                </xs:sequence>
+            </xs:complexType>
 
             <xs:complexType name="UpdateSaleItemType">
                 <xs:sequence>
@@ -604,6 +622,7 @@
                     <xs:element name="Result" type="tns:ResultType"/>
                     <xs:element name="count" type="xsd:int"/>
                     <xs:element name="options" type="tns:SaleItemOptionType" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="itemId" type="xs:long"/>
                 </xs:sequence>
             </xs:complexType>
 
@@ -870,6 +889,12 @@
     <wsdl:message name="ListSaleItemsForCategoryResponseMessage">
         <wsdl:part name="parameters" element="tns:ListSaleItemsForCategoryResponseType"/>
     </wsdl:message>
+    <wsdl:message name="ListSaleItemsForCategoryHTMLMessage">
+        <wsdl:part name="parameters" element="tns:ListSaleItemsForCategoryHTMLType"/>
+    </wsdl:message>
+    <wsdl:message name="ListSaleItemsForCategoryHTMLResponseMessage">
+        <wsdl:part name="parameters" element="tns:ListSaleItemsForCategoryHTMLResponseType"/>
+    </wsdl:message>
 
     <wsdl:message name="CreateSaleItemMessage">
         <wsdl:part name="parameters" element="tns:CreateSaleItemType"/>
@@ -1093,6 +1118,10 @@
         <wsdl:operation name="ListSaleItemsForCategory">
             <wsdl:input message="tns:ListSaleItemsForCategoryMessage" name="ListSaleItemsForCategory"/>
             <wsdl:output message="tns:ListSaleItemsForCategoryResponseMessage" name="ListSaleItemsForCategoryResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="ListSaleItemsForCategoryHTML">
+            <wsdl:input message="tns:ListSaleItemsForCategoryHTMLMessage" name="ListSaleItemsForCategoryHTML"/>
+            <wsdl:output message="tns:ListSaleItemsForCategoryHTMLResponseMessage" name="ListSaleItemsForCategoryHTMLResponse"/>
         </wsdl:operation>
 
         <wsdl:operation name="CreateSaleItem">
@@ -1379,6 +1408,15 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="ListSaleItemsForCategoryResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="ListSaleItemsForCategoryHTML">
+            <soap:operation soapAction="http://ws.kpos.com/ListSaleItemsForCategoryHTML" style="document"/>
+            <wsdl:input name="ListSaleItemsForCategoryHTML">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="ListSaleItemsForCategoryHTMLResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
