@@ -398,23 +398,27 @@ public class KPosPortImpl implements KPosPortType {
         ListSaleItemOptionsResponseType responseType = new ListSaleItemOptionsResponseType();
         try {
             FetchResult<SaleItem> fetchResult = contentManagementService.fetchSaleItem(parameters.getItemId());
-            SaleItem item = fetchResult.getTarget();
-            List<SaleItemOption> options = item.getOptionList();
-            for(SaleItemOption option : options) {
-                SaleItemOptionType soapType = new SaleItemOptionType();
-                soapType.setId(option.getId());
-                soapType.setIsRequired(option.isRequired());
-                soapType.setName(option.getName());
-                soapType.setPrice(option.getPrice());
-                soapType.setTakeoutPrice(option.getOutPrice());
-                soapType.setTaxable(option.getTaxable());
-                soapType.setThumbPath(option.getThumbPath());
-                soapType.setDescription(option.getDescription());
-                responseType.getOptions().add(soapType);
+            if(fetchResult.isSuccessful()) {
+                SaleItem item = fetchResult.getTarget();
+                List<SaleItemOption> options = item.getOptionList();
+                for(SaleItemOption option : options) {
+                    SaleItemOptionType soapType = new SaleItemOptionType();
+                    soapType.setId(option.getId());
+                    soapType.setIsRequired(option.isRequired());
+                    soapType.setName(option.getName());
+                    soapType.setPrice(option.getPrice());
+                    soapType.setTakeoutPrice(option.getOutPrice());
+                    soapType.setTaxable(option.getTaxable());
+                    soapType.setThumbPath(option.getThumbPath());
+                    soapType.setDescription(option.getDescription());
+                    responseType.getOptions().add(soapType);
+                }
+                responseType.setCount(options.size());
             }
-            responseType.setCount(options.size());
+            responseType.setItemId(parameters.getItemId());
             responseType.setResult(getSoapResult(fetchResult));
         } catch(Exception e) {
+            e.printStackTrace();
             responseType.setResult(getSoapFaultResult(e));
         }
         return responseType;
@@ -826,10 +830,14 @@ public class KPosPortImpl implements KPosPortType {
                 if(result.isSuccessful()) {
                     responseType.setId(result.getCreated().getId());
                 }
+                responseType.setResult(getSoapResult(result));
             } else {
-
+                ResultType resultType = new ResultType();
+                resultType.setSuccessful(false);
+                responseType.setResult(resultType);
             }
         } catch(Exception e) {
+            e.printStackTrace();
             log.error("Error in saveOrder", e);
             responseType.setResult(getSoapFaultResult(e));
         }
@@ -894,6 +902,7 @@ public class KPosPortImpl implements KPosPortType {
             if(i % rowSize != 0) htmlBuilder.append("</tr>");
             responseType.setHtml(htmlBuilder.toString());
         } catch(Exception e) {
+            e.printStackTrace();
             log.error("Error in listCategoryHTML", e);
         }
 
@@ -910,20 +919,27 @@ public class KPosPortImpl implements KPosPortType {
             FetchResult<List<GlobalOption>> fetchResult = contentManagementService.listGlobalOptions(parameters.getBegin(), parameters.getMaxSize());
             int rowSize = parameters.getRowSize() < 0 ? 1 : parameters.getRowSize();
             int i = 0;
-            List<GlobalOption> options = fetchResult.getTarget();
-            for(GlobalOption option : options) {
-                if(i % rowSize == 0) htmlBuilder.append("<tr><td width='100%'>");
-                htmlBuilder.append("").append("<input type=\"button\" class=\"optionbutton\" value=\"").append(option.getName()).append("\" onclick=\"");
-                htmlBuilder.append(onclick).append("(").append(option.getId()).append(", ");
-                htmlBuilder.append( parameters.isIsDineIn()? option.getDineInPrice():option.getTakeOutPrice());
-                htmlBuilder.append(", \\").append(option.getName()).append("\\").append(")").append("\"/> ");
-                //htmlBuilder.append("</td>");
-                if(i % rowSize == (rowSize-1)) htmlBuilder.append("</td></tr>");
-                i++;
+            if(fetchResult.isSuccessful()) {
+                List<GlobalOption> options = fetchResult.getTarget();
+                if(options != null) {
+                    for(GlobalOption option : options) {
+                        if(i % rowSize == 0) htmlBuilder.append("<tr><td width='100%'>");
+                        htmlBuilder.append("").append("<input type=\"button\" class=\"optionbutton\" value=\"").append(option.getName()).append("\" onclick=\"");
+                        htmlBuilder.append(onclick).append("(").append(option.getId()).append(", ");
+                        htmlBuilder.append( parameters.isIsDineIn()? option.getDineInPrice():option.getTakeOutPrice());
+                        htmlBuilder.append(", \\").append(option.getName()).append("\\").append(")").append("\"/> ");
+                        //htmlBuilder.append("</td>");
+                        if(i % rowSize == (rowSize-1)) htmlBuilder.append("</td></tr>");
+                        i++;
+                    }
+                    if(i % rowSize != 0) htmlBuilder.append("</tr>");
+                } else {
+                    log.error("listGlobalOptionHTML - options is null");
+                }
             }
-            if(i % rowSize != 0) htmlBuilder.append("</tr>");
             responseType.setHtml(htmlBuilder.toString());
         } catch(Exception e) {
+            e.printStackTrace();
             log.error("Error in listGlobalOptionHTML", e);
         }
         return responseType;
@@ -939,23 +955,59 @@ public class KPosPortImpl implements KPosPortType {
             FetchResult<MenuCategory> fetchResult = contentManagementService.fetchCategory(parameters.getCategoryId());
             int rowSize = parameters.getRowSize() < 0 ? 1 : parameters.getRowSize();
             int i = 0;
-            List<CategoryOption> options = fetchResult.getTarget().getOptions();
-            if(options != null) {
-                for(CategoryOption option : options) {
-                    if(i % rowSize == 0) htmlBuilder.append("<tr><td width='100%'>");
-                    htmlBuilder.append("").append("<input type=\"button\" class=\"optionbutton\" value=\"").append(option.getName()).append("\" onclick=\"");
-                    htmlBuilder.append(onclick).append("(").append(option.getId()).append(", ");
-                    htmlBuilder.append(option.getPrice());
-                    htmlBuilder.append(", \\").append(option.getName()).append("\\").append(")").append("\"/> ");
-                    //htmlBuilder.append("</td>");
-                    if(i % rowSize == (rowSize-1)) htmlBuilder.append("</td></tr>");
-                    i++;
+            if(fetchResult.isSuccessful()) {
+                List<CategoryOption> options = fetchResult.getTarget().getOptions();
+                if(options != null) {
+                    for(CategoryOption option : options) {
+                        if(i % rowSize == 0) htmlBuilder.append("<tr><td width='100%'>");
+                        htmlBuilder.append("").append("<input type=\"button\" class=\"optionbutton\" value=\"").append(option.getName()).append("\" onclick=\"");
+                        htmlBuilder.append(onclick).append("(").append(option.getId()).append(", ");
+                        htmlBuilder.append(option.getPrice());
+                        htmlBuilder.append(", \\").append(option.getName()).append("\\").append(")").append("\"/> ");
+                        if(i % rowSize == (rowSize-1)) htmlBuilder.append("</td></tr>");
+                        i++;
+                    }
+                    if(i % rowSize != 0) htmlBuilder.append("</tr>");
+                } else {
+                    log.error("listCategoryOptionHTML - options is null for category " + parameters.getCategoryId());
                 }
             }
-            if(i % rowSize != 0) htmlBuilder.append("</tr>");
             responseType.setHtml(htmlBuilder.toString());
         } catch(Exception e) {
+            e.printStackTrace();
             log.error("Error in ListCategoryOptionHTMLResponseType", e);
+        }
+        return responseType;
+    }
+
+    @Override
+    public ListSaleItemsForCategoryHTMLResponseType listSaleItemsForCategoryHTML(
+            @WebParam(partName = "parameters", name = "ListSaleItemsForCategoryHTMLType", targetNamespace = NS) ListSaleItemsForCategoryHTMLType parameters) {
+        ListSaleItemsForCategoryHTMLResponseType responseType = new ListSaleItemsForCategoryHTMLResponseType();
+        try {
+            StringBuilder htmlBuilder = new StringBuilder();
+            String onclick = parameters.getOnclick();
+            FetchResult<MenuCategory> fetchResult = contentManagementService.fetchCategory(parameters.getCategoryId());
+            int rowSize = parameters.getRowSize() < 0 ? 1 : parameters.getRowSize();
+            int i = 0;
+            if(fetchResult.isSuccessful()) {
+                List<SaleItem> items = fetchResult.getTarget().getSaleItems();
+                if(items != null) {
+                    for(SaleItem item : items) {
+                        if(i % rowSize == 0) htmlBuilder.append("<tr><td width='100%'>");
+                        htmlBuilder.append("").append("<input type=\"button\" class=\"itembutton\" value=\"").append(item.getName()).append("\" onclick=\"");
+                        htmlBuilder.append(onclick).append("(").append(item.getId()).append(")").append("\"/> ");
+                        if(i % rowSize == (rowSize-1)) htmlBuilder.append("</td></tr>");
+                        i++;
+                    }
+                } else {
+                    log.error("listSaleItemsForCategoryHTML - items is null for category " + parameters.getCategoryId());
+                }
+            }
+            responseType.setHtml(htmlBuilder.toString());
+        } catch(Exception e) {
+            e.printStackTrace();
+            log.error("Error in listSaleItemsForCategoryHTML", e);
         }
         return responseType;
     }
