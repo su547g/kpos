@@ -61,7 +61,6 @@
 		document.write('<style type="text/css">.tabber{display:none;}<\/style>');
 		
 		var tabberOptions = {
-		
 		  /* Optional: instead of letting tabber run during the onload event,
 		     we'll start it up manually. This can be useful because the onload
 		     even runs after all the images have finished loading, and we can
@@ -86,7 +85,6 @@
 		     something that is not boolean false, */
 		
 		  'onClick': function(argsObj) {
-		
 		    var t = argsObj.tabber; /* Tabber object */
 		    var id = t.id; /* ID of the main tabber DIV */
 		    var i = argsObj.index; /* Which tab was clicked (0 is the first tab) */
@@ -99,7 +97,6 @@
 		
 		  /* Optional: set an ID for each tab navigation link */
 		  'addLinkId': true
-		
 		};
 	</script>
 
@@ -174,6 +171,7 @@
 	                	setCurrentCategory(v_categories);
 	                }
 	                if(curr_category != null) {
+	                	document.getElementById("curCatId").value = curr_category.id;
 	                	document.getElementById("categoryName").value = curr_category.name;
 	        			document.getElementById("categoryNotes").value = curr_category.notes;
 	        			document.getElementById("catThumb").value = curr_category.thumbpath;
@@ -255,7 +253,6 @@
 	        operation = ADD;
 	        setCurrentCategory(null);
 	    }
-	    
 	    function getPrinterIds(name) {
 	    	var printers = document.getElementsByName(name);
 			var printerIds = new Array();
@@ -467,8 +464,8 @@
 				document.itemDetails.smallOutPrice.value = item.outpricesmall;
 				document.itemDetails.mediumOutPrice.value = item.outpricemedium;
 				document.itemDetails.largeOutPrice.value = item.outpricelarge;
-				document.itemDetails.hasDineInSizes.checked = item.pricesmall!=null||item.pricemed!=null||item.pricelarge!=null;
-	        	document.itemDetails.hasTakeOutSizes.checked = item.outpricesmall!=null||item.outpricemedium!=null||item.outpricelarge!=null;
+				document.itemDetails.hasDineInSizes.checked = (item.pricesmall!=null&&item.pricesmall!=0)||(item.pricemed!=null&&item.pricemed!=0)||(item.pricelarge!=null&&item.pricelarge!=0);
+	        	document.itemDetails.hasTakeOutSizes.checked = (item.outpricesmall!=null&&item.outpricesmall!=0)||(item.outpricemedium!=null&&item.outpricemedium!=0)||(item.outpricelarge!=null&&item.outpricelarge!=0);
 	        	
 				var printerIds = item.printerids;
 				var printers = document.getElementsByName("itemPrinters");
@@ -516,7 +513,7 @@
 	        document.forms[0].itemImg.src = "";
 	        document.forms[0].hasDineInSizes.checked = false;
 	        document.forms[0].hasTakeOutSizes.checked = false;
-	        document.forms[0].itemTaxable.checked = false;
+	        document.forms[0].itemTaxable.checked = true;
 	        document.forms[0].singleOption.checked = false;
 	        document.forms[0].hasSeasonPrice.checked = false;
 	        document.forms[0].seasonPrice.vaue = "";
@@ -543,8 +540,7 @@
 				jsonObj.listprintershtmlresponsetype != undefined && jsonObj.listprintershtmlresponsetype != null && 
 				jsonObj.listprintershtmlresponsetype.result.successful == "true") {
 				html = jsonObj.listprintershtmlresponsetype.html;
-				var temp = unescape(html); 				
-				//alert(temp);
+				var temp = unescape(html);
 				temp = html.replace(/&lt;/g, "<");
 				temp = temp.replace(/&gt;/g, ">");
 				document.getElementById("itemPrinterCell").innerHTML = temp;
@@ -591,7 +587,7 @@
 				}
 				
 				var thumb = document.getElementById("itemImg").src;
-				var printerIds = getPrinterIds("itemPrinterCell");
+				var printerIds = getPrinterIds("itemPrinters");
 				
 				var createItemType = new CreateItemType(catId,name,description,thumb,printerIds,isSingleOption,defaultPrice,defaultOutPrice,taxable,smallPrice,mediumPrice,largePrice,smallOut,mediumOut,largeOut,seasonPrice);
 				ws_create_item(createItemType, createSaleItemHandler);
@@ -602,14 +598,13 @@
 				jsonObj.createsaleitemresponsetype != undefined && jsonObj.createsaleitemresponsetype != null && 
 				jsonObj.createsaleitemresponsetype.result.successful == "true") {
 				var itemId = jsonObj.createsaleitemresponsetype.result.id;
-				//document.forms[0].itemId.value = itemId;
-				var category = getCurrentCategory();
-                if(category != null) {
-                	listSaleItemsForCat(category.id);
+				var categoryId = document.getElementById("curCatId").value;
+                if(categoryId != null && categoryId != "") {
+                	listSaleItemsForCat(categoryId);
                 	resetItem();
                 }
 			} else {
-	            alert("failed to add sale item!");
+	            alert("Failed to add sale item!");
 	        }
 	        itemOperation = "";
 		}
@@ -647,7 +642,7 @@
 				}
 				
 				var thumb = document.getElementById("itemImg").src;
-				var printerIds = getPrinterIds("itemPrinterCell");
+				var printerIds = getPrinterIds("itemPrinters");
 				
 				var updateItemType = new UpdateItemType(itemId, catId,name,description,thumb,printerIds,isSingleOption,defaultPrice,defaultOutPrice,taxable,smallPrice,mediumPrice,largePrice,smallOut,mediumOut,largeOut,seasonPrice);
 				call_web_service(updateItemType, updateSaleItemHandler);
@@ -658,6 +653,11 @@
 				jsonObj.updatesaleitemresponsetype != undefined && jsonObj.updatesaleitemresponsetype != null && 
 				jsonObj.updatesaleitemresponsetype.result.successful == "true") {
 				alert("Save successful!");
+				var categoryId = document.getElementById("curCatId").value;
+                if(categoryId != null && categoryId != "") {
+                	listSaleItemsForCat(categoryId);
+                	//resetItem();
+                }
 			} else {
 				alert("Failed to save item!");
 			}
@@ -1046,6 +1046,7 @@
         </td>
         <td valign="top" align="left">
         	<table id="categoryInfo" width="70%">
+        		<input type="hidden" id="curCatId"/>
         		<tr>
         			<td align="left" valign="top">
         				Name: <input type="text" id="categoryName" readonly="readonly" value=""/>
@@ -1116,7 +1117,7 @@
 							            	<table name="itemTable" style="border:1px solid gray" width="100%">
 					                    		<tr>
 					                    			<td>
-					                    				Name: <input type="text" id="itemName" name="itemName" value=""> <input type="checkbox" id="itemTaxable" name="itemTaxable" value="1"/>Taxable
+					                    				Name: <input type="text" id="itemName" name="itemName" value=""> <input type="checkbox" id="itemTaxable" name="itemTaxable" checked value="1"/>Taxable
 					                    				<input type="checkbox" id="singleOption" name="singleOption" value="1"/>Allow only 1 option
 					                    			</td>
 					                    		</tr>
