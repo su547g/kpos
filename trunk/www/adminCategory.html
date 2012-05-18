@@ -215,7 +215,7 @@
 	       	row.id = rowId;
 	        row.name = rowId;
 	       	
-	       	var innerHTML = "<td onclick='"+selectRowFunc+"(\""+tableID+"\", \""+rowId+"\");'>"+categoryObj.name+"</td><td><a href='javascript:"+deleteRowFunc+"(\""+tableID+"\",\""+rowId+"\","+categoryObj.id+");'>X</a></td>";
+	       	var innerHTML = "<td onclick='"+selectRowFunc+"(\""+tableID+"\", \""+rowId+"\");'>"+categoryObj.name+"</td><td><a href='javascript:"+deleteRowFunc+"(\""+tableID+"\",\""+rowId+"\","+categoryObj.id+");'><img src=\"img\\delete-icon-small.jpg\"/></a></td>";
 	       	row.innerHTML = innerHTML;
 	       	row.onmouseover = function(){ highlightRow(this, true); };
 	        row.onmouseout = function(){ highlightRow(this, false); };
@@ -330,10 +330,8 @@
 				jsonObj.listprintershtmlresponsetype.result.successful == "true") {
 				html = jsonObj.listprintershtmlresponsetype.html;
 				var temp = unescape(html); 				
-				//alert(temp);
 				temp = html.replace(/&lt;/g, "<");
 				temp = temp.replace(/&gt;/g, ">");
-				//alert(temp);
 				document.getElementById("catPrinterCell").innerHTML = temp;
 			}
 		}
@@ -441,6 +439,20 @@
 			if(itemId != null && itemId != "") {
 				var soapType = new FetchSaleItemType(itemId);
 				call_web_service(soapType, fetchSaleItemHandler);
+				
+				var table = document.getElementById(tableId);
+				for(var i = 0; i < table.rows.length; i++) {
+		            var row = table.rows[i];
+		            if(row.id == rowId) {
+		                row.style.background = '#dcfac9';
+		                row.cells[0].style.background = '#dcfac9';
+		                row.cells[1].style.background = '#dcfac9';
+		            } else {
+		                row.style.background = '';
+		                row.cells[0].style.background = '';
+		                row.cells[1].style.background = '';
+		            }
+		        }
 			}
 		}
 		function fetchSaleItemHandler(jsonObj) {
