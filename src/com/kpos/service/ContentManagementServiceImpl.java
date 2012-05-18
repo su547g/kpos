@@ -180,23 +180,23 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     }
 
     private void convertSoapItemToSaleItem(SaleItem saleItem, SaleItemType aSaleItemType) {
-        if(aSaleItemType.getIsAllowedHH() != null) saleItem.setAllowedHH(aSaleItemType.getIsAllowedHH());
-        if(aSaleItemType.getHhPrice() != null) saleItem.setHh_price(aSaleItemType.getHhPrice());
-        if(aSaleItemType.getHhRate() != null) saleItem.setHhRate(aSaleItemType.getHhRate());
-        if(aSaleItemType.getSeasonPrice() != null) saleItem.setSeasonPrice(aSaleItemType.getSeasonPrice());
-        if(aSaleItemType.getTakeoutPrice() != null) saleItem.setOutPrice(aSaleItemType.getTakeoutPrice());
-        if(aSaleItemType.getOutPriceLarge() != null) saleItem.setOutPriceLarge(aSaleItemType.getOutPriceLarge());
-        if(aSaleItemType.getOutPriceMedium() != null) saleItem.setOutPriceMed(aSaleItemType.getOutPriceMedium());
-        if(aSaleItemType.getOutPriceSmall() != null) saleItem.setOutPriceSmall(aSaleItemType.getOutPriceSmall());
+        saleItem.setAllowedHH(aSaleItemType.getIsAllowedHH()!=null?aSaleItemType.getIsAllowedHH():false);
+        saleItem.setHh_price(aSaleItemType.getHhPrice()!=null?aSaleItemType.getHhPrice():0);
+        saleItem.setHhRate(aSaleItemType.getHhRate()!=null?aSaleItemType.getHhRate():1);
+        saleItem.setSeasonPrice(aSaleItemType.getSeasonPrice() != null?aSaleItemType.getSeasonPrice():0);
+        saleItem.setOutPrice(aSaleItemType.getTakeoutPrice()!=null?aSaleItemType.getTakeoutPrice():0);
+        saleItem.setOutPriceLarge(aSaleItemType.getOutPriceLarge()!=null?aSaleItemType.getOutPriceLarge():0);
+        saleItem.setOutPriceMed(aSaleItemType.getOutPriceMedium()!=null?aSaleItemType.getOutPriceMedium():0);
+        saleItem.setOutPriceSmall(aSaleItemType.getOutPriceSmall()!=null?aSaleItemType.getOutPriceSmall():0);
         saleItem.setPrice(aSaleItemType.getNormalPrice());
-        if(aSaleItemType.getPriceLarge() != null) saleItem.setPriceLarge(aSaleItemType.getPriceLarge());
-        if(aSaleItemType.getPriceLarge() != null) saleItem.setPriceMedium(aSaleItemType.getPriceMed());
-        if(aSaleItemType.getPriceSmall() != null) saleItem.setPriceSmall(aSaleItemType.getPriceSmall());
-        if(aSaleItemType.getName() != null) saleItem.setName(aSaleItemType.getName());
-        if(aSaleItemType.getDescription() != null) saleItem.setDescription(aSaleItemType.getDescription());
-        if(aSaleItemType.getIsSingleOption() != null) saleItem.setSingleOptionOnly(aSaleItemType.getIsSingleOption());
+        saleItem.setPriceLarge(aSaleItemType.getPriceLarge() != null?aSaleItemType.getPriceLarge():0);
+        saleItem.setPriceMedium(aSaleItemType.getPriceLarge() != null?aSaleItemType.getPriceMed():0);
+        saleItem.setPriceSmall(aSaleItemType.getPriceSmall() != null?aSaleItemType.getPriceSmall():0);
+        saleItem.setName(aSaleItemType.getName() != null?aSaleItemType.getName():"");
+        saleItem.setDescription(aSaleItemType.getDescription());
+        saleItem.setSingleOptionOnly(aSaleItemType.getIsSingleOption() != null?aSaleItemType.getIsSingleOption():false);
         saleItem.setTaxable(aSaleItemType.isIsTaxable());
-        if(aSaleItemType.getThumbPath() != null) saleItem.setThumbPath(aSaleItemType.getThumbPath());
+        saleItem.setThumbPath(aSaleItemType.getThumbPath());
         saleItem.setLastUpdated(new Date());
         saleItem.setTaxable(aSaleItemType.isIsTaxable());
         /*List<SaleItemOptionType> optionTypes = aSaleItemType.getOptions();
