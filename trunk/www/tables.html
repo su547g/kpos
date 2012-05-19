@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript" src="js/dragAndDrop.js"></script>
+    <style type="text/css">
+        .drag {
+            position: relative;
+        }
+    </style>
+</head>
+<body onload="InitDragDrop()">
+
+<br>
+&nbsp;
+<table width="100%">
+	<tr>
+		<td width="100%">
+			<div>
+			<div id="pageContainer" style="outline:solid black thin; width: 800px; height: 500px; background-color: grey; float: left">
+			</div>
+			<div style="width: 10px; float: left;">&nbsp;</div>
+			<textarea id="log" style="outline:solid black thin; width: 200px; height: 500px; background-color: grey; float: left"></textarea>
+			</div>
+		</td>
+	</tr>
+	<tr><td>&nbsp;</td></tr>
+	<tr>
+		<td>
+			Table Name: <input type="text" id="tableName" value=""/>
+			<button onclick="addTable()" id="addTableButton" style="padding: 5px">Add Table</button>
+			<button onclick="getLocations()" id="getLocationsButton" style="padding: 5px">Locations</button>
+		</td>
+	</tr>
+</table>
+<script type="text/javascript">
+    var tableNum = 0;
+
+    function addTable() {
+		var tableName = document.getElementById('tableName').value;
+		if(tableName != null && tableName != "") {
+			var container = document.getElementById('pageContainer');
+	        var i = document.createElement('div');
+			//i.setAttribute('src', 'img/tan-square.png');
+	        i.setAttribute('class', 'drag');
+			var top = 5 - (tableNum++ * 75);
+	        i.setAttribute('id', tableName);
+	        i.setAttribute('style', 'outline:solid black medium; width: 80px; height: 80px; background-color: brown;left: 5px;top: ' + top + 'px;');
+	        i.innerHTML = '<br><center>' + tableName + '</center>';
+	        container.appendChild(i);
+	        document.getElementById('tableName').value = "";
+	   } else {
+	   		alert("Please enter a table name");
+	   }
+    }
+
+    function getLocations() {
+        var container = document.getElementById('pageContainer');
+        var log = document.getElementById('log');
+        var tables = document.getElementsByClassName('drag');
+        var containerLeft = container.offsetLeft;
+        var containerTop = container.offsetTop;
+
+        var buffer = '';
+        for(var i=0;i<tableNum;i++) {
+            var table = document.getElementById('table-' + i);
+            console.log("table x: " + (table.offsetLeft - containerLeft) + " table y: " + (table.offsetTop - containerTop));
+            buffer += 'x: ' + (table.offsetLeft - containerLeft) + ' y: ' + (table.offsetTop - containerTop) + '\n';
+        }
+        log.innerHTML = buffer;
+    }
+</script>
+</body>
+</html>
