@@ -99,7 +99,7 @@ public class KPosPortImpl implements KPosPortType {
       return result;
     }
    
-    private SaleItemType convertSaleItemToSoap(SaleItem item) {
+    private SaleItemType convertSaleItemToSoap(SaleItem item, boolean fetchOptions) {
         SaleItemType itemType = new SaleItemType();
         itemType.setHhPrice(item.getHh_price());
         itemType.setHhRate(item.getHhRate());
@@ -120,21 +120,23 @@ public class KPosPortImpl implements KPosPortType {
         itemType.setThumbPath(item.getThumbPath());
         itemType.setDescription(item.getDescription());
         //Load item options
-        /*List<SaleItemOptionType> optionTypes = itemType.getOptions();
-        List<SaleItemOption> options = item.getOptionList();
-        for(SaleItemOption option : options) {
-            SaleItemOptionType optionType = new SaleItemOptionType();
-            optionType.setId(option.getId());
-            optionType.setName(option.getName());
-            optionType.setPrice(option.getPrice());
-            optionType.setSaleItemId(item.getId());
-            optionType.setTakeoutPrice(option.getOutPrice());
-            optionType.setIsRequired(option.isRequired());
-            optionType.setDescription(option.getDescription());
-            optionType.setThumbPath(option.getThumbPath());
-            optionType.setTaxable(option.getTaxable()==null?true:option.getTaxable());
-            optionTypes.add(optionType);
-        } */
+        if(fetchOptions) {
+            List<SaleItemOptionType> optionTypes = itemType.getOptions();
+            List<SaleItemOption> options = item.getOptionList();
+            for(SaleItemOption option : options) {
+                SaleItemOptionType optionType = new SaleItemOptionType();
+                optionType.setId(option.getId());
+                optionType.setName(option.getName());
+                optionType.setPrice(option.getPrice());
+                optionType.setSaleItemId(item.getId());
+                optionType.setTakeoutPrice(option.getOutPrice());
+                optionType.setIsRequired(option.isRequired());
+                optionType.setDescription(option.getDescription());
+                optionType.setThumbPath(option.getThumbPath());
+                optionType.setTaxable(option.getTaxable()==null?true:option.getTaxable());
+                optionTypes.add(optionType);
+            }
+        }
         //Load printers
         List<Long> printerIds = itemType.getPrinterIds();
         Set<Printer> printers = item.getPrinters();
@@ -255,7 +257,7 @@ public class KPosPortImpl implements KPosPortType {
                 responseType.setTotal(saleItems.size());
                 List<SaleItemType> saleItemTypes = responseType.getSaleItems();
                 for(SaleItem item : saleItems) {
-                    SaleItemType itemType = convertSaleItemToSoap(item);
+                    SaleItemType itemType = convertSaleItemToSoap(item, false);
                     itemType.setCatId(categoryId);
                     saleItemTypes.add(itemType);
                 }
@@ -291,7 +293,7 @@ public class KPosPortImpl implements KPosPortType {
             FetchResult<SaleItem> fetchResult = contentManagementService.fetchSaleItem(parameters.getItemId());
             SaleItem item = fetchResult.getTarget();
             if(item != null) {
-                SaleItemType soapType = convertSaleItemToSoap(item);
+                SaleItemType soapType = convertSaleItemToSoap(item, parameters.getFetchOptions());
                 soapType.setCatId(item.getMenuCategory().getId());
 
                 responseType.setSaleItem(soapType);
