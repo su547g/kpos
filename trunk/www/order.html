@@ -432,12 +432,18 @@
 	   	function refreshOrderTable() {
 	   		var table = document.getElementById("orderTable");
 	   		table.innerHTML = ORDER_TITLE_ROW_HTML;
+            var total = 0, tax = 0;
             for(var i = 0; i < orderItems.length; i++) {
 	            var html = "<tr><td valign='top' align='left'>"+orderItems[i].displayText+"</td>";
 	            html += "<td valign='top' align='right''>"+orderItems[i].quantity+"</td>";
 				html += "<td valign='top' align='right'>"+orderItems[i].price+"</td></tr>";
-	            table.innerHTML += html;
+                total += orderItems[i].price;
 	        }
+            html += "<tr><td colspan='3'><br></td></tr><tr><td colspan='2' valign='top' align='right'><strong>Tax:</strong> </td>";
+            html += "<td valign='top' align='right'><strong>" + tax + "</strong></td></tr><tr>";
+            html += "<td colspan='2' valign='top' align='right'><strong>Total:</strong> </td>";
+            html += "<td valign='top' align='right'><strong>"+total+"</strong></td></tr>";
+            table.innerHTML += html;
 	   	}
 		function pageItemOptions(catId, page) {
 			if(page < 0 || page > maxItemOptionPage) return;
