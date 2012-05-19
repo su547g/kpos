@@ -229,7 +229,7 @@ CREATE TABLE `global_option` (
   `last_updated_by` int(11) DEFAULT NULL,
   `version` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -238,6 +238,7 @@ CREATE TABLE `global_option` (
 
 LOCK TABLES `global_option` WRITE;
 /*!40000 ALTER TABLE `global_option` DISABLE KEYS */;
+INSERT INTO `global_option` VALUES (1,'Global Option 1',1,1,0,'2012-05-14 23:41:35','2012-05-14 23:41:35',NULL,NULL,'0'),(2,'Global Option 2',0,0,0,'2012-05-14 23:45:22','2012-05-14 23:45:22',NULL,NULL,'0'),(3,'Global Option 3',0,0,0,'2012-05-14 23:45:34','2012-05-14 23:45:34',NULL,NULL,'0'),(4,'Global Option 4',0,0,0,'2012-05-14 23:45:39','2012-05-14 23:45:39',NULL,NULL,'0'),(5,'酱油',0,0,0,'2012-05-14 23:45:50','2012-05-14 23:45:50',NULL,NULL,'0'),(6,'醋',0,0,0,'2012-05-14 23:46:05','2012-05-14 23:46:05',NULL,NULL,'0'),(7,'烧烤酱',0,0,0,'2012-05-14 23:46:17','2012-05-14 23:46:17',NULL,NULL,'0');
 /*!40000 ALTER TABLE `global_option` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -264,7 +265,7 @@ CREATE TABLE `item_printer_assoc` (
 
 LOCK TABLES `item_printer_assoc` WRITE;
 /*!40000 ALTER TABLE `item_printer_assoc` DISABLE KEYS */;
-INSERT INTO `item_printer_assoc` VALUES (4,1);
+INSERT INTO `item_printer_assoc` VALUES (4,3),(8,5),(9,3);
 /*!40000 ALTER TABLE `item_printer_assoc` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -317,20 +318,16 @@ CREATE TABLE `order_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `quantity` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
-  `notes` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `display_text` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `sale_price` double DEFAULT NULL,
-  `override_name` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_on` datetime DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
   `last_updated` datetime DEFAULT NULL,
   `last_updated_by` int(11) DEFAULT NULL,
   `version` int(11) DEFAULT NULL,
-  `sale_item_id` int(10) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `ITEM_2_ORDER_FK` (`order_id`),
-  KEY `ORDER_ITEM_2_SALEITEM_FK` (`sale_item_id`),
-  CONSTRAINT `ITEM_2_ORDER_FK` FOREIGN KEY (`order_id`) REFERENCES `order_bill` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `ORDER_ITEM_2_SALEITEM_FK` FOREIGN KEY (`sale_item_id`) REFERENCES `sale_item` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `ITEM_2_ORDER_FK` FOREIGN KEY (`order_id`) REFERENCES `order_bill` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -512,7 +509,7 @@ CREATE TABLE `sale_item` (
   PRIMARY KEY (`id`),
   KEY `SALEITEM_2_CAT_FK` (`category_id`),
   CONSTRAINT `SALEITEM_2_CAT_FK` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -521,7 +518,7 @@ CREATE TABLE `sale_item` (
 
 LOCK TABLES `sale_item` WRITE;
 /*!40000 ALTER TABLE `sale_item` DISABLE KEYS */;
-INSERT INTO `sale_item` VALUES (4,'fhalsdfjhals','fhalsfjha',8,0,1,5,3,8,0,'C:\\hflasjkfha','2012-04-21 20:54:11','2012-04-21 20:54:11',NULL,NULL,NULL,0,10,0,7,8,9,7,8,9),(8,'item2','aafdfdas',6,0,1,0,13,6,1,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-09 00:00:22','2012-05-09 00:00:22',NULL,NULL,NULL,0,0,1,1,2,3,5,4,6);
+INSERT INTO `sale_item` VALUES (4,'item7','fhalsfjha',8,0,1,5,3,8,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-04-21 20:54:11','2012-05-17 23:16:15',NULL,NULL,NULL,4,10,0,7,8,9,8,7,9),(8,'item1','hello!',6,0,1,0,13,6,1,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-09 00:00:22','2012-05-17 23:25:45',NULL,NULL,NULL,2,0,1,1,2,3,5,4,6),(9,'item1','hello world!',10,0,1,0,3,0,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-16 23:54:17','2012-05-18 00:05:11',NULL,NULL,NULL,3,0,1,0,0,0,0,0,0),(10,'item2','aadafd',6,0,1,0,3,6,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-16 23:57:39','2012-05-16 23:57:39',NULL,NULL,NULL,0,0,0,0,0,0,0,0,0),(11,'item3','fadfasff',10,0,1,0,3,10,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-17 22:40:12','2012-05-17 22:40:12',NULL,NULL,NULL,0,0,1,6,7,10,7,6,9),(12,'item4','fasfsa',6,0,1,0,3,5,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-17 22:43:28','2012-05-17 22:43:28',NULL,NULL,NULL,0,0,1,6,6,6,0,0,0),(13,'item6','fadasfs',6,0,1,0,3,5,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-17 22:46:31','2012-05-17 23:08:39',NULL,NULL,NULL,1,0,1,6,6,6,5,5,5),(14,'item5','fadsf',7,0,1,0,3,6,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-17 22:54:15','2012-05-17 22:54:15',NULL,NULL,NULL,0,0,1,7,7,7,6,6,6);
 /*!40000 ALTER TABLE `sale_item` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -550,7 +547,7 @@ CREATE TABLE `sale_item_option` (
   PRIMARY KEY (`id`),
   KEY `OPTION_2_ITEM_FK` (`sale_item_id`),
   CONSTRAINT `OPTION_2_ITEM_FK` FOREIGN KEY (`sale_item_id`) REFERENCES `sale_item` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -559,7 +556,7 @@ CREATE TABLE `sale_item_option` (
 
 LOCK TABLES `sale_item_option` WRITE;
 /*!40000 ALTER TABLE `sale_item_option` DISABLE KEYS */;
-INSERT INTO `sale_item_option` VALUES (4,'option 1','hfladfh',0.5,0.5,4,0,'fhalfdsjhll','2012-04-21 20:54:29','2012-04-21 20:54:29',NULL,NULL,0,NULL);
+INSERT INTO `sale_item_option` VALUES (4,'option 1','hfladfh',0.5,0.5,4,0,'fhalfdsjhll','2012-04-21 20:54:29','2012-04-21 20:54:29',NULL,NULL,0,NULL),(6,'aaa','bbb',1,1,8,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-13 17:59:00','2012-05-13 17:59:00',NULL,NULL,0,0),(7,'bbb','bbb',1,1,8,1,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-13 18:01:53','2012-05-13 18:01:53',NULL,NULL,0,1),(8,'ccc','fsdaf',1,1,8,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-13 18:11:21','2012-05-13 18:11:21',NULL,NULL,0,0),(9,'d','d',11,1,8,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-13 20:18:42','2012-05-13 20:18:42',NULL,NULL,0,0),(10,'eeee','eee',0,0,8,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-13 20:19:16','2012-05-13 20:19:16',NULL,NULL,0,0),(11,'fffff','fff',0,0,8,0,NULL,'2012-05-13 20:32:26','2012-05-13 20:32:26',NULL,NULL,0,0),(12,'fdasfsaga2','fdasfs2',0,0,8,0,NULL,'2012-05-13 22:54:58','2012-05-13 22:55:10',NULL,NULL,1,0);
 /*!40000 ALTER TABLE `sale_item_option` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -602,4 +599,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-05-10 23:57:56
+-- Dump completed on 2012-05-19  0:47:03

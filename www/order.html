@@ -393,11 +393,23 @@
                 var itemOptions = item.options;
                 if(itemOptions!=null) {
                 	document.getElementById("itemOptionsRow").style.display = "block";
+                	var table = document.getElementById("itemOptionsTable");
+                	var row = table.insertRow(table.rows.length);
+                	var optionsHtml = "<td>";
+                	var name = item.name + "_option";
                 	if(itemOptions.length != undefined) { //Array of item options
-                		
+                		for(var i = 0; i < itemOptions.length; i++) {
+                			if(item.issingleoption) {
+	        					optionsHtml += "<input type='radio' name='"+ name + "' value='"+itemOptions[i].name+"'/>" + itemOptions[i].name;
+                			} else {
+                				optionsHtml += "<input type='checkbox' name='"+ name + "' value='"+itemOptions[i].name+"'/>"+itemOptions[i].name;
+                			}
+                		}
                 	} else { //Single item option
-                		
+                		optionsHtml = "<input type='checkbox' name='"+ name + "' value='"+itemOptions.name+"'/>" + +itemOptions.name;
                 	}
+                	optionsHtml += "</td>";
+                	row.innerHTML = optionsHtml;
                 } else {
                 	document.getElementById("itemOptionsRow").style.display = "none";
                 }
