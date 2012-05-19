@@ -437,7 +437,7 @@
 	    }
 		function selectItemRow(tableId, rowId, itemId) {
 			if(itemId != null && itemId != "") {
-				var soapType = new FetchSaleItemType(itemId);
+				var soapType = new FetchSaleItemType(itemId, false);
 				call_web_service(soapType, fetchSaleItemHandler);
 				
 				var table = document.getElementById(tableId);

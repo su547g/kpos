@@ -199,19 +199,20 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         saleItem.setThumbPath(aSaleItemType.getThumbPath());
         saleItem.setLastUpdated(new Date());
         saleItem.setTaxable(aSaleItemType.isIsTaxable());
-        /*List<SaleItemOptionType> optionTypes = aSaleItemType.getOptions();
-        List<SaleItemOption> options = saleItem.getOptionList();
-        options.clear();
-        for(SaleItemOptionType optionType : optionTypes) {
-            SaleItemOption option = new SaleItemOption();
-            option.setName(optionType.getName());
-            if(optionType.getTakeoutPrice() != null) option.setOutPrice(optionType.getTakeoutPrice());
-            option.setPrice(optionType.getPrice());
-            if(optionType.getIsRequired() != null) option.setRequired(optionType.getIsRequired());
-            option.setSaleItem(saleItem);
-            options.add(option);
-        }*/
-        
+        /*if(fetchOptions) {
+            List<SaleItemOptionType> optionTypes = aSaleItemType.getOptions();
+            List<SaleItemOption> options = saleItem.getOptionList();
+            options.clear();
+            for(SaleItemOptionType optionType : optionTypes) {
+                SaleItemOption option = new SaleItemOption();
+                option.setName(optionType.getName());
+                if(optionType.getTakeoutPrice() != null) option.setOutPrice(optionType.getTakeoutPrice());
+                option.setPrice(optionType.getPrice());
+                if(optionType.getIsRequired() != null) option.setRequired(optionType.getIsRequired());
+                option.setSaleItem(saleItem);
+                options.add(option);
+            }
+        }  */
         List<Long> printerIds = aSaleItemType.getPrinterIds();
         Set<Printer> printers = saleItem.getPrinters();
         printers.clear();
@@ -817,18 +818,17 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         
         for(OrderItemType itemType : orderType.getOrderItems()) {
             OrderItem orderItem = new OrderItem();
-            orderItem.setNotes(itemType.getNotes());
+            orderItem.setDisplayText(itemType.getDisplayText());
             orderItem.setQuantity(itemType.getQuantity());
             orderItem.setCreatedOn(new Date());
             orderItem.setLastUpdated(new Date());
-            SaleItem saleItem = saleItemDao.findSaleItem(itemType.getSaleItemId());
-            orderItem.setSaleItem(saleItem);
+            //SaleItem saleItem = saleItemDao.findSaleItem(itemType.getSaleItemId());
             if(itemType.getPrice() != null && itemType.getPrice() > 0) {
                 orderItem.setSalePrice(itemType.getPrice());
-            } else {
+            }/* else {
                 orderItem.setSalePrice(0);
-            }
-            for(OrderItemOptionType optionType : itemType.getOptions()) {
+            }*/
+            /*for(OrderItemOptionType optionType : itemType.getOptions()) {
                 SaleItemOption saleItemOption = saleItemOptionDao.findSaleItemOption(optionType.getItemOptionId());
                 if(saleItemOption != null) {
                     OrderItemOption orderItemOption = new OrderItemOption();
@@ -838,7 +838,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
                     
                     orderItem.getOptions().add(orderItemOption);
                 }
-            }
+            }*/
             order.getOrderItems().add(orderItem);
         }
         

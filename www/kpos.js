@@ -405,13 +405,14 @@ function ListSaleItemsForCategoryType(catId) {
         return xml;
     };
 }
-function FetchSaleItemType(itemId) {
+function FetchSaleItemType(itemId, fetchOptions) {
     this.myId = itemId;
+    this.myFetchOptions = fetchOptions;
     this.tag = "<app:FetchSaleItemType>";
     this.endTag = "</app:FetchSaleItemType>";
     this.getXML = function() {
         var xml = soapXMLBegin;
-        xml += this.tag + "<app:itemId>"+this.myId+"</app:itemId>" + this.endTag;
+        xml += this.tag + "<app:itemId>"+this.myId+"</app:itemId><app:fetchOptions>" + this.myFetchOptions + "</app:fetchOptions>" + this.endTag;
         xml += soapXMLEnd;
         return xml;
     }
@@ -738,4 +739,10 @@ function ListSaleItemsForCategoryHTMLType(catId, rowSize, begin, maxSize, onclic
         xml += soapXMLEnd;
         return xml;
     }
+}
+
+function OrderItem(aDisplayText, aPrice, aQuantity) {
+    this.displayText = aDisplayText;
+    this.price = aPrice;
+    this.quantity = aQuantity;
 }
