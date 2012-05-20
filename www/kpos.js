@@ -745,4 +745,5 @@ function OrderItem(aDisplayText, aPrice, aQuantity) {
     this.displayText = aDisplayText;
     this.price = aPrice;
     this.quantity = aQuantity;
+    this.childItems = new Array();
 }

@@ -83,10 +83,15 @@
       }
       .orderTable {border:1px solid black; border-spacing:1px border-radius:3px; -moz-border-radius: 3px;}
       .orderTable td {
+      	 font-size:14px;
+      	 color: blue;
       	 border:1px solid gray;
          padding:1px;
          border-radius:3px;
          -moz-border-radius: 3px;
+      }
+      .orderTable span {
+      	text-indent: 15px;
       }
       .orderTabe th { border: 0px }
    	</style>
@@ -161,14 +166,11 @@
    	</style>
 
 	<script language="javascript">
-		function goLite(FRM,BTN)
-		{
+		function goLite(FRM,BTN) {
 		   window.document.forms[FRM].elements[BTN].style.color = "#FFFF99";
 		   window.document.forms[FRM].elements[BTN].style.backgroundColor = "#11AAEE";
 		}
-		
-		function goDim(FRM,BTN)
-		{
+		function goDim(FRM,BTN) {
 		   window.document.forms[FRM].elements[BTN].style.color = "#EEFFFF";
 		   window.document.forms[FRM].elements[BTN].style.backgroundColor = "#0088DD";
 		}
@@ -180,12 +182,13 @@
 		var itemPage = 0, itemMaxPerPage = 12, maxItemPage, itemRowSize = 3;
 		var itemOptionPage = 0, itemOptMaxPerPage = 10, maxItemOptPage, itemOptionRowSize = 4;
 		
+		var selectedItemIndex = -1;
+		
 		var orderItems = new Array();
 		var ORDER_TITLE_ROW_HTML = "<tr><th width='60%' valign='top' align='left'><strong>Item description</strong></th><th width='5%' valign='top' align='right'><strong>Quantity</strong></th><th width='15%' valign='top' align='right'><strong>Price</strong></th></tr>";
 		
 		function initializeCategories(){
 			ws_list_categories(listAllCategoriesHandler);
-			
 			listGlobalOptions();
 		}
 		function listAllCategoriesHandler(jsonObj) {
@@ -200,7 +203,6 @@
 		}
 		function pageCategories(page) {
 			if(page < 0 || page > maxCatPage) return;
-			
 			catPage = page;
 			listCategories(catPage*maxSize, maxSize);
 		}
@@ -213,7 +215,6 @@
 				jsonObj.listcategoryhtmlresponsetype != undefined && jsonObj.listcategoryhtmlresponsetype != null && 
 				jsonObj.listcategoryhtmlresponsetype.html != null) {
 				var html = jsonObj.listcategoryhtmlresponsetype.html;
-				//html = html.substring(10, html.length);
 				html = html.replace(/&lt;/g, "<");
 				html = html.replace(/&gt;/g, ">");
 				html = html.replace(/&quot;/g, "'");
@@ -236,7 +237,6 @@
 		}
 		function pageGlobalOptions(page) {
 			if(page < 0 || page > maxGlobalOptionPage) return;
-			
 			globalOptionPage = page;
 			listGlobalOptionsHTML(glOpRowSize, globalOptionPage*glOptionMax, glOptionMax);
 		}
@@ -263,6 +263,13 @@
 		}
 		function clickGlobalOption(id, price, name) {
 			alert(id + " " + price + " " + name);
+			if(selectedItemIndex >= 0) {
+				var orderItem = orderItems[selectedItemIndex];
+				alert(orderItem.displayText + ", " + orderItem.price + ", " + orderItem.quantity);
+				var optionItem = new OrderItem(name, price, 1);
+				orderItem.childItems.push(optionItem);
+				refreshOrderTable();
+			}
 		}
 		function listCatOptions(catId) {
 			var listType = new ListCategoryOptionType(catId);
@@ -308,6 +315,13 @@
 		}
 		function clickCategoryOption(id, name, price) {
 			alert(id + " " + name + " " + price);
+			if(selectedItemIndex >= 0) {
+				var orderItem = orderItems[selectedItemIndex];
+				alert(orderItem.displayText + ", " + orderItem.price + ", " + orderItem.quantity);
+				var optionItem = new OrderItem(name, price, 1);
+				orderItem.childItems.push(optionItem);
+				refreshOrderTable();
+			}
 		}
 		function listSaleItemsForCat(catId) {
 			if(catId != null && catId != "") {
@@ -355,7 +369,6 @@
 			}
 		}
 		function clickSaleItem(itemId) {
-			//alert(itemId);
 			if(itemId != null && itemId != "") {
 				document.getElementById("itemId").value = itemId;
 				var soapType = new FetchSaleItemType(itemId, true);
@@ -367,7 +380,6 @@
                 jsonObj.fetchsaleitemresponsetype != undefined && jsonObj.fetchsaleitemresponsetype != null &&
                 jsonObj.fetchsaleitemresponsetype.result.successful == "true") {
                 var item = jsonObj.fetchsaleitemresponsetype.saleitem;
-                //var orderItem = new OrderItem();
                 document.getElementById('menuItemName').innerText = "Name: " + item.name;
                 document.getElementById('menuItemDesc').innerText = "Description: " + item.description;
                 if(item.seasonprice != null && item.seasonprice > 0) {
@@ -378,17 +390,19 @@
                 	document.getElementById('cancelRow').style.display = "none";
                 } else if((item.pricesmall==null || item.pricesmall==0) && 
                 			(item.pricemed==null || item.pricemed==0) && (item.pricelarge==null || item.pricelarge==0)) {
-                	//TODO: check order type
+                	//TODO: check order type for price
                 	document.menuItemForm.btnItemSmall.value = "Small $" + item.pricesmall;
-                	document.menuItemForm.btnItemSmall.onclick = function() { addItem(item.name, itempricesmall, document.menuItemForm.menuItemQuantity.value); };
-                	document.menuItemForm.btnItemSmall.value = "Medium $" + item.pricemed;
-                	document.menuItemForm.btnItemSmall.value = "Large $" + item.pricelarge;
+                	document.menuItemForm.btnItemSmall.onclick = function() { addItem(item.name, item.pricesmall, document.menuItemForm.menuItemQuantity.value); };
+                	document.menuItemForm.btnItemMed.value = "Medium $" + item.pricemed;
+                	document.menuItemForm.btnItemMed.onclick = function() { addItem(item.name, item.pricemed, document.menuItemForm.menuItemQuantity.value); };
+                	document.menuItemForm.btnItemLarge.value = "Large $" + item.pricelarge;
+                	document.menuItemForm.btnItemLarge.onclick = function() { addItem(item.name, item.pricelarge, document.menuItemForm.menuItemQuantity.value); };
                 	document.getElementById('singlePrice').style.display = "none";
                 	document.getElementById('itemSizes').style.display = "block";
                 	document.getElementById('confirmRow').style.display = "none";
                 	document.getElementById('cancelRow').style.display = "block";
                 } else { //
-                	//TODO: check order type
+                	//TODO: check order type for price
                 	document.menuItemForm.btnItemAdd.onclick = function () { addItem(item.name, item.normalprice, document.menuItemForm.menuItemQuantity.value); };
                 	document.getElementById('menuItemPrice').innerText = "Price: $" + item.normalprice;
                 	document.getElementById('singlePrice').style.display = "block";
@@ -412,45 +426,66 @@
                 			}
                 		}
                 	} else { //Single item option
-                		optionsHtml = "<input type='checkbox' name='"+ name + "' value='"+itemOptions.name+"'/>" + +itemOptions.name;
+                		optionsHtml = "<input type='checkbox' name='"+ name + "' value='"+itemOptions.name+"'/>"+itemOptions.name;
                 	}
                 	optionsHtml += "</td>";
                 	row.innerHTML = optionsHtml;
+                	Popup.show('modal');
                 } else {
                 	document.getElementById("itemOptionsRow").style.display = "none";
+                	//TODO: Check order type for price
+                	addItem(item.name, item.normalprice, 1);
                 }
-                Popup.show('modal');
 	        }
 	   	}
 	   	function addItem(name, price, quantity) {
-	   		alert(name + ", " + price + ", " + quantity);
+	   		//alert(name + ", " + price + ", " + quantity);
 	   		var item = new OrderItem(name, price, quantity);
 	   		orderItems.push(item);
 	   		refreshOrderTable();
 	   		//TODO: check which item options are selected
+	   		
+	   		selectedItemIndex = orderItems.length - 1;
+	   		Popup.hide('modal');
+	   	}
+	   	function clickOrderItem(index) {
+	   		alert(index);
+	   		selectedItemIndex = index;
+	   		var cell = document.getElementById("btmQty");
+	   		cell.innerText = orderItems[index].quantity;
+	   	}
+	   	function clickOptionItem(itemIndex, optionIndex) {
+	   		selectedItemIndex = itemIndex;
+	   		var cell = document.getElementById("btmQty");
+	   		cell.innerText = orderItems[itemIndex].childItems[optionIndex].quantity;
 	   	}
 	   	function refreshOrderTable() {
 	   		var table = document.getElementById("orderTable");
-	   		table.innerHTML = ORDER_TITLE_ROW_HTML;
             var total = 0, tax = 0;
+            var taxRate = 0.08;
+            var html = ORDER_TITLE_ROW_HTML;
             for(var i = 0; i < orderItems.length; i++) {
-	            var html = "<tr><td valign='top' align='left'>"+orderItems[i].displayText+"</td>";
+	            html += "<tr id='"+i+"'><td valign='top' align='left' onclick='clickOrderItem("+i+")'><strong>"+orderItems[i].displayText+"</strong></td>";
 	            html += "<td valign='top' align='right''>"+orderItems[i].quantity+"</td>";
-				html += "<td valign='top' align='right'>"+orderItems[i].price+"</td></tr>";
-                total += orderItems[i].price;
+				html += "<td valign='top' align='right'><strong>"+(orderItems[i].price==0?"":orderItems[i].price.toFixed(2))+"</strong></td></tr>";
+				for(var k = 0; k < orderItems[i].childItems.length; k++) {
+					var optionItem = orderItems[i].childItems[k];
+					html += "<tr id='"+i+"-"+k+"'><td valign='top' align='left' onclick='clickOptionItem("+i+","+k+")'>&nbsp;&nbsp;&nbsp;-&nbsp;"+optionItem.displayText+"</td>";
+	            	html += "<td valign='top' align='right''>"+optionItem.quantity+"</td>";
+					html += "<td valign='top' align='right'><strong>"+(optionItem.price==0?"":optionItem.price.toFixed(2))+"</strong></td></tr>";
+					total += optionItem.price * optionItem.quantity;
+				}
+                total += orderItems[i].price * orderItems[i].quantity;
 	        }
+	        tax = total * taxRate;
+            html += "<tr><td colspan='2' valign='top' align='right'><strong>Subtotal:</strong> </td>";
+            html += "<td valign='top' align='right'><strong>"+total.toFixed(2)+"</strong></td></tr>";
             html += "<tr><td colspan='3'><br></td></tr><tr><td colspan='2' valign='top' align='right'><strong>Tax:</strong> </td>";
-            html += "<td valign='top' align='right'><strong>" + tax + "</strong></td></tr><tr>";
-            html += "<td colspan='2' valign='top' align='right'><strong>Total:</strong> </td>";
-            html += "<td valign='top' align='right'><strong>"+total+"</strong></td></tr>";
-            table.innerHTML += html;
+            html += "<td valign='top' align='right'><strong>" + tax.toFixed(2) + "</strong></td></tr>";
+            html += "<tr><td colspan='2' valign='top' align='right'><strong>TOTAL:</strong></td>";
+            html += "<td valign='top' align='right'><strong>"+(total+tax).toFixed(2)+"</strong></td></tr>";
+            table.innerHTML = html;
 	   	}
-		function pageItemOptions(catId, page) {
-			if(page < 0 || page > maxItemOptionPage) return;
-			
-			itemOptionPage = page;
-			//
-		}
 	</script>
 </head>
 
@@ -503,7 +538,6 @@
                </table>
             </td>
             <td width="36%" valign="top" align="left" style="border:0px solid black">
-               <div>
                <table width="100%" border="0" id="orderTable" class="orderTable">
                   <tr>
                      <th width="60%" valign="top" align="left"><strong>Item description</strong></th>
@@ -530,7 +564,11 @@
                      <td valign="top" align="right"><strong>11.4</strong></td>
                   </tr>
                </table>
-               </div>
+               <table>
+                   <tr>
+                   		<td>Quantity:</td><td id="btmQty"></td>
+                   </tr>
+               </table>
             </td>
          </tr>
       </table>
@@ -573,14 +611,6 @@
 			<td><strong>Item Options</strong>
 	           	<table id="itemOptionsTable" class="optionsTable" width="100%">
 	           	</table>
-	           	<!--
-	           	<table width="100%">
-	           		<tr>
-	           			<td width="100%"><input type="button" class="smallbackbutton" onclick="pageItemOptions(catOptionPage - 1);">
-	           			<input type="button" class="smallnextbutton" onclick="pageItemOptions(catOptionPage + 1);"></td>
-	           		</tr>
-	           	</table>
-	           	-->
            	</td>
 		</tr>
 		
