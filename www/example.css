@@ -107,3 +107,13 @@ ul.tabbernav li.tabberactive a:hover
  height:400px;
  overflow:auto;
 }
+
+input.navibutton {
+   font-size:14px;
+   font-weight:bold;
+   color:#000000;//#FFFF00;
+   width:80px;
+   height:40px;
+   background-color:gray;
+   border-width:2px;
+}

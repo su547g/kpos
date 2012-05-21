@@ -14,6 +14,10 @@ import javax.persistence.*;
 @Entity
 @Table(name = "ORDER_ITEM_OPTION")
 public class OrderItemOption extends AbstractDomainObject {
+    public static final String GLOBAL_OP = "GLOBAL";
+    public static final String CATEGORY_OP = "CATEGORY";
+    public static final String ITEM_OP = "ITEM";
+
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "id")
@@ -25,16 +29,19 @@ public class OrderItemOption extends AbstractDomainObject {
     @Column(name = "price")
     private double price;
 
+    @Column(name = "display_text")
+    private String displayText;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_item_id")
     @ForeignKey(name = "ORDER_OPTION_2_ITEM_FK")
     private OrderItem orderItem;
 
-    @OneToOne(cascade = CascadeType.REFRESH)
-    @JoinColumn(name = "sale_item_option_id")
-    @ForeignKey(name = "ORD_OPT_2_SALEI_OPT_FK")
-    @OnDelete(action = OnDeleteAction.NO_ACTION)
-    private SaleItemOption saleItem;
+    @Column(name="option_id")
+    private long optionId;
+    
+    @Column(name="option_type")
+    private String optionType = "";
 
     public Long getId() {
         return id;
@@ -60,20 +67,36 @@ public class OrderItemOption extends AbstractDomainObject {
         this.price = price;
     }
 
+    public String getDisplayText() {
+        return displayText;
+    }
+
+    public void setDisplayText(String displayText) {
+        this.displayText = displayText;
+    }
+
+    public long getOptionId() {
+        return optionId;
+    }
+
+    public void setOptionId(long optionId) {
+        this.optionId = optionId;
+    }
+
+    public String getOptionType() {
+        return optionType;
+    }
+
+    public void setOptionType(String optionType) {
+        this.optionType = optionType;
+    }
+
     public OrderItem getOrderItem() {
         return orderItem;
     }
 
     public void setOrderItem(OrderItem orderItem) {
         this.orderItem = orderItem;
-    }
-
-    public SaleItemOption getSaleItem() {
-        return saleItem;
-    }
-
-    public void setSaleItem(SaleItemOption saleItem) {
-        this.saleItem = saleItem;
     }
 
     @Override
@@ -85,6 +108,9 @@ public class OrderItemOption extends AbstractDomainObject {
 
         if (Double.compare(that.price, price) != 0) return false;
         if (quantity != that.quantity) return false;
+        if (displayText != null ? !displayText.equals(that.displayText) : that.displayText != null) return false;
+        if (optionId != that.optionId) return false;
+        if (optionType != null ? !optionType.equals(that.optionType) : that.optionType != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
 
         return true;
@@ -95,6 +121,9 @@ public class OrderItemOption extends AbstractDomainObject {
         int result;
         long temp;
         result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (displayText != null ? displayText.hashCode() : 0);
+        result = 31 * result + (optionType != null ? optionType.hashCode() : 0);
+        temp = optionId != +0.0d ? Double.doubleToLongBits(optionId) : 0L;
         result = 31 * result + quantity;
         temp = price != +0.0d ? Double.doubleToLongBits(price) : 0L;
         result = 31 * result + (int) (temp ^ (temp >>> 32));

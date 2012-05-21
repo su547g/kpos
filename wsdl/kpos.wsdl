@@ -107,6 +107,8 @@
 
             <xs:element name="SaveOrderType" type="tns:SaveOrderType"/>
             <xs:element name="SaveOrderResponseType" type="tns:SaveOrderResponseType"/>
+            <xs:element name="DeleteOrderType" type="tns:DeleteOrderType"/>
+            <xs:element name="DeleteOrderResponseType" type="tns:DeleteOrderResponseType"/>
 
             <xs:element name="ListPrintersHTMLType" type="tns:ListPrintersHTMLType"/>
             <xs:element name="ListPrintersHTMLResponseType" type="tns:ListPrintersHTMLResponseType"/>
@@ -234,23 +236,22 @@
                 <xs:sequence>
                     <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="orderId" type="xsd:long" minOccurs="0" maxOccurs="1"/>
-                    <!--This is the id of the SaleItem object.
+                    <!--This is the id of the SaleItem object.-->
                     <xs:element name="saleItemId" type="xsd:long" minOccurs="0" maxOccurs="1"/>
-                    -->
                     <xs:element name="quantity" type="xsd:int" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="price" type="xsd:double" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="displayText" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-                    <!--
                     <xs:element name="options" type="tns:OrderItemOptionType" minOccurs="0" maxOccurs="unbounded"/>
-                    -->
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="OrderItemOptionType">
                 <xs:sequence>
                     <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
-                    <xs:element name="orderItemId" type="xsd:long" minOccurs="0" maxOccurs="1"/>
-                    <!--This is the id of the SaleItemOption object.-->
-                    <xs:element name="itemOptionId" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="displayText" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                    <!--This is the id of the SaleItemOption object.
+                    <xs:element name="orderItemId" type="xsd:long" minOccurs="0" maxOccurs="1"/>-->
+                    <xs:element name="optionId" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="optionType" type="xsd:string" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="quantity" type="xsd:int" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="price" type="xsd:double" minOccurs="0" maxOccurs="1"/>
                 </xs:sequence>
@@ -755,6 +756,16 @@
                     <xs:element name="id" type="xsd:long" minOccurs="1" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
+            <xs:complexType name="DeleteOrderType">
+                <xs:sequence>
+                    <xs:element name="orderId" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeleteOrderResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
 
             <xs:complexType name="ListPrintersHTMLType">
                 <xs:sequence>
@@ -1027,6 +1038,12 @@
     <wsdl:message name="SaveOrderResponseMessage">
         <wsdl:part name="parameters" element="tns:SaveOrderResponseType"/>
     </wsdl:message>
+    <wsdl:message name="DeleteOrderMessage">
+        <wsdl:part name="parameters" element="tns:DeleteOrderType"/>
+    </wsdl:message>
+    <wsdl:message name="DeleteOrderResponseMessage">
+        <wsdl:part name="parameters" element="tns:DeleteOrderResponseType"/>
+    </wsdl:message>
 
     <wsdl:message name="ListPrintersHTMLMessage">
         <wsdl:part name="parameters" element="tns:ListPrintersHTMLType"/>
@@ -1214,7 +1231,10 @@
             <wsdl:input message="tns:SaveOrderMessage" name="SaveOrder"/>
             <wsdl:output message="tns:SaveOrderResponseMessage" name="SaveOrderResponse"/>
         </wsdl:operation>
-
+        <wsdl:operation name="DeleteOrder">
+            <wsdl:input message="tns:DeleteOrderMessage" name="DeleteOrder"/>
+            <wsdl:output message="tns:DeleteOrderResponseMessage" name="DeleteOrderResponse"/>
+        </wsdl:operation>
         <wsdl:operation name="ListPrintersHTML">
             <wsdl:input message="tns:ListPrintersHTMLMessage" name="ListPrintersHTML"/>
             <wsdl:output message="tns:ListPrintersHTMLResponseMessage" name="ListPrintersHTMLResponse"/>
@@ -1604,7 +1624,15 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-
+        <wsdl:operation name="DeleteOrder">
+            <soap:operation soapAction="http://ws.kpos.com/DeleteOrder" style="document"/>
+            <wsdl:input name="DeleteOrder">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DeleteOrderResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="ListPrintersHTML">
             <soap:operation soapAction="http://ws.kpos.com/ListPrinters" style="document"/>
             <wsdl:input name="ListPrintersHTML">
