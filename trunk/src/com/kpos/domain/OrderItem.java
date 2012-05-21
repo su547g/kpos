@@ -23,14 +23,14 @@ public class OrderItem extends AbstractDomainObject {
     @Column(name = "id")
     private Long id;
     
-    /*@OneToOne(cascade = CascadeType.REFRESH)
+    @OneToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "sale_item_id")
     @ForeignKey(name = "ORDER_ITEM_2_SALEITEM_FK")
     @OnDelete(action = OnDeleteAction.NO_ACTION)
-    private SaleItem saleItem;*/
+    private SaleItem saleItem;
     
     @Column(name = "quantity")
-    private float quantity;
+    private int quantity;
 
     //owning entity
     @ManyToOne(cascade = CascadeType.ALL)
@@ -39,10 +39,10 @@ public class OrderItem extends AbstractDomainObject {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Order order;
 
-    /*@OneToMany(cascade = CascadeType.ALL, mappedBy = "orderItem", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderItem", orphanRemoval = true, fetch = FetchType.LAZY)
     @ForeignKey(name = "ORDER_OPTION_2_ITEM_FK")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<OrderItemOption> options = new ArrayList<OrderItemOption>();*/
+    private List<OrderItemOption> options = new ArrayList<OrderItemOption>();
     
     @Column(name = "displayText")
     private String displayText = "";
@@ -58,19 +58,19 @@ public class OrderItem extends AbstractDomainObject {
         this.id = id;
     }
 
-    /*public SaleItem getSaleItem() {
+    public SaleItem getSaleItem() {
         return saleItem;
     }
 
     public void setSaleItem(SaleItem saleItem) {
         this.saleItem = saleItem;
-    } */
+    }
     
     public float getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(float quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
@@ -96,6 +96,14 @@ public class OrderItem extends AbstractDomainObject {
 
     public void setSalePrice(double salePrice) {
         this.salePrice = salePrice;
+    }
+
+    public List<OrderItemOption> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<OrderItemOption> options) {
+        this.options = options;
     }
 
     @Override

@@ -741,9 +741,101 @@ function ListSaleItemsForCategoryHTMLType(catId, rowSize, begin, maxSize, onclic
     }
 }
 
-function OrderItem(aDisplayText, aPrice, aQuantity) {
+function OrderItem(aDisplayText, aPrice, aQuantity, aSaleItemId) {
+    this.id = null;
+    this.orderId = null;
+    this.saleItemId = aSaleItemId;
     this.displayText = aDisplayText;
     this.price = aPrice;
     this.quantity = aQuantity;
     this.childItems = new Array();
+    this.getXML = function() {
+        var xml = "<app:orderItems>";
+        if(this.id != null && this.id != "") {
+            xml += "<app:id>"+ this.id + "</app:id>";
+        }
+        if(this.orderId != null && this.orderId != "") {
+            xml += "<app:orderId>"+ this.orderId + "</app:orderId>";
+        }
+        xml += "<app:saleItemId>"+this.saleItemId+"</app:saleItemId>";
+        if(this.price != null && this.price != "") {
+            xml += "<app:price>" + this.price + "</app:price>";
+        }
+        xml += "<app:quantity>"+this.quantity+"</app:quantity>";
+        xml += "<app:displayText>"+this.displayText+"</app:displayText>";
+        for(var i = 0; i < this.childItems.length; i++) {
+            xml += this.childItems[i].getXML();
+        } 
+        xml += "</app:orderItems>";
+        return xml;
+    }
+}
+function OrderOption(aDisplayText, aPrice, aQuantity, aId, aType) {
+    this.id = null;
+    this.optionId = aId;
+    this.type = aType;
+    this.displayText = aDisplayText;
+    this.price = aPrice;
+    this.quantity = aQuantity;
+    this.getXML = function() {
+        xml = "<app:options>";
+        if(this.id != null && this.id != "") {
+            xml += "<app:id>"+ this.id + "</app:id>";
+        }
+        xml += "<app:displayText>"+this.displayText+"</app:displayText>";
+        xml += "<app:optionId>"+this.optionId+"</app:optionId>";
+        xml += "<app:optionType>"+this.type+"</app:optionType>";
+        if(this.price != null && this.price != "") {
+            xml += "<app:price>" + this.price + "</app:price>";
+        }
+        xml += "<app:quantity>"+this.quantity+"</app:quantity>";
+        xml += "</app:options>";
+        return xml;
+    }
+}
+function Order(aId, aType, aPrice, aStatus, aNumGuests, aCustomer) {
+    this.id = aId;
+    this.type = aType;
+    this.tableId = null;
+    this.tableName = null;
+    this.totalPrice = aPrice;
+    this.status = aStatus;
+    this.numOfGuests = aNumGuests;
+    this.customer = aCustomer;
+    this.orderItems = new Array();
+    this.getXML = function() {
+        var xml = "<app:order>";
+        if(this.id != null && this.id != "") {
+            xml += "<app:id>" + this.id + "</app:id>";
+        }
+        xml += "<app:type>" + this.type + "</app:type>";
+        if(this.tableId != null && this.tableId != "") {
+            xml += "<app:tableId>" + this.tableId + "</app:tableId>";
+        }
+        if(this.tableName != null && this.tableName != "") {
+            xml += "<app:tableName>" + this.tableName + "</app:tableName>";
+        }
+        xml += "<app:totalPrice>" + this.totalPrice + "</app:totalPrice>";
+        xml += "<app:status>" + this.status + "</app:status>";
+        xml += "<app:numOfGuests>" + this.numOfGuests + "</app:numOfGuests>";
+        for(var i = 0; i < this.orderItems.length; i++) {
+            xml += this.orderItems[i].getXML();
+        }
+        if(this.customer != null) {
+            xml += this.customer.getXML();
+        }
+        xml += "</app:order>";
+        return xml;
+    }
+}
+function SaveOrderType(aId, aType, aPrice, aStatus, aNumGuests, aCustomer) {
+    this.order = new Order(aId, aType, aPrice, aStatus, aNumGuests);
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:SaveOrderType>";
+        xml += this.order.getXML();
+        xml += "</app:SaveOrderType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
 }

@@ -58,6 +58,9 @@ public class ContentManagementServiceImpl implements IContentManagementService {
 
     @Autowired
     private IOrderDao orderDao;
+
+    @Autowired
+    private IOrderItemDao orderItemDao;
     
     @Autowired
     private IOrderItemOptionDao orderItemOptionDao;
@@ -793,7 +796,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         Order order = new Order();
         order.setNotes(orderType.getNotes());
         order.setOrderType(orderType.getType());
-        order.setNumOfGuests(orderType.getNumOfGuests());
+        order.setNumOfGuests(orderType.getNumOfGuests()==null?0:orderType.getNumOfGuests());
         order.setCreatedOn(new Date());
         order.setLastUpdated(new Date());
         order.setTotalPrice(orderType.getTotalPrice());
@@ -818,28 +821,28 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         
         for(OrderItemType itemType : orderType.getOrderItems()) {
             OrderItem orderItem = new OrderItem();
-            orderItem.setDisplayText(itemType.getDisplayText());
-            orderItem.setQuantity(itemType.getQuantity());
-            orderItem.setCreatedOn(new Date());
-            orderItem.setLastUpdated(new Date());
-            //SaleItem saleItem = saleItemDao.findSaleItem(itemType.getSaleItemId());
-            if(itemType.getPrice() != null && itemType.getPrice() > 0) {
-                orderItem.setSalePrice(itemType.getPrice());
-            }/* else {
-                orderItem.setSalePrice(0);
-            }*/
-            /*for(OrderItemOptionType optionType : itemType.getOptions()) {
-                SaleItemOption saleItemOption = saleItemOptionDao.findSaleItemOption(optionType.getItemOptionId());
-                if(saleItemOption != null) {
+            SaleItem saleItem = saleItemDao.findSaleItem(itemType.getSaleItemId());
+            if(saleItem != null) {
+                orderItem.setSaleItem(saleItem);
+                orderItem.setDisplayText(itemType.getDisplayText());
+                orderItem.setQuantity(itemType.getQuantity());
+                orderItem.setCreatedOn(new Date());
+                orderItem.setLastUpdated(new Date());
+                orderItem.setSalePrice(itemType.getPrice()==null?0:itemType.getPrice());
+                orderItem.setOrder(order);
+
+                for(OrderItemOptionType optionType : itemType.getOptions()) {
                     OrderItemOption orderItemOption = new OrderItemOption();
                     orderItemOption.setOrderItem(orderItem);
-                    orderItemOption.setPrice(order.getOrderType().equalsIgnoreCase(Order.OrderType.IN.name()) ? saleItemOption.getPrice() : saleItemOption.getOutPrice());
+                    orderItemOption.setDisplayText(optionType.getDisplayText());
+                    orderItemOption.setPrice(optionType.getPrice()==null?0:optionType.getPrice());
                     orderItemOption.setQuantity(optionType.getQuantity());
-                    
+                    orderItemOption.setOptionId(optionType.getOptionId());
+                    orderItemOption.setOptionType(optionType.getOptionType());
                     orderItem.getOptions().add(orderItemOption);
                 }
-            }*/
-            order.getOrderItems().add(orderItem);
+                order.getOrderItems().add(orderItem);
+            }
         }
         
         orderDao.insert(order);
@@ -852,7 +855,57 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public UpdateResult<Order> updateOrder(OrderType orderType) {
         UpdateResult<Order> result = new UpdateResult<Order>();
+        Order order = orderDao.findById(orderType.getId());
+        if(order != null) {
+            order.setNotes(orderType.getNotes());
+            order.setOrderType(orderType.getType());
+            order.setNumOfGuests(orderType.getNumOfGuests()==null?0:orderType.getNumOfGuests());
+            order.setLastUpdated(new Date());
+            //order.setTotalPrice(orderType.getTotalPrice());
+            if(orderType.getTableId() != null) {
+                RestaurantTable table = tableDao.findById(orderType.getTableId());
+                order.setTable(table);
+            }
+            if(orderType.getCustomer() != null){
+                CustomerInfo customer = customerInfoDao.findByPhoneNumber(String.valueOf(orderType.getCustomer().getPhoneNumber()));
+                if(null == customer) {
+                    customer = new CustomerInfo();
+                    customer.setAddress(orderType.getCustomer().getStreet1() + " " + orderType.getCustomer().getApartment());
+                    customer.setBuzz(orderType.getCustomer().getBuzz());
+                    customer.setName(orderType.getCustomer().getName());
+                    customer.setPhone(orderType.getCustomer().getPhoneNumber());
+                    customer.setCreatedOn(new Date());
+                    customer.setLastUpdated(new Date());
+                }
+                order.setCustomerInfo(customer);
+            }
+            order.getOrderItems().clear();
+            for(OrderItemType itemType : orderType.getOrderItems()) {
+                OrderItem orderItem = new OrderItem();
+                SaleItem saleItem = saleItemDao.findSaleItem(itemType.getSaleItemId());
+                if(saleItem != null) {
+                    orderItem.setSaleItem(saleItem);
+                    orderItem.setDisplayText(itemType.getDisplayText());
+                    orderItem.setQuantity(itemType.getQuantity());
+                    orderItem.setCreatedOn(new Date());
+                    orderItem.setLastUpdated(new Date());
+                    orderItem.setSalePrice(itemType.getPrice()==null?0:itemType.getPrice());
+                    orderItem.setOrder(order);
 
+                    for(OrderItemOptionType optionType : itemType.getOptions()) {
+                        OrderItemOption orderItemOption = new OrderItemOption();
+                        orderItemOption.setOrderItem(orderItem);
+                        orderItemOption.setDisplayText(optionType.getDisplayText());
+                        orderItemOption.setPrice(optionType.getPrice()==null?0:optionType.getPrice());
+                        orderItemOption.setQuantity(optionType.getQuantity());
+                        orderItemOption.setOptionId(optionType.getOptionId());
+                        orderItemOption.setOptionType(optionType.getOptionType());
+                        orderItem.getOptions().add(orderItemOption);
+                    }
+                    order.getOrderItems().add(orderItem);
+                }
+            }
+        }
         return result;
     }
 

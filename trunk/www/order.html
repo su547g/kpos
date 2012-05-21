@@ -103,7 +103,6 @@
 		   width:100px;
 		   height:80px;
 		   background-color:#FFFF00;
-		   //background-image:url(texas.gif);
 		   border-width:2px;
 		}
 		input.itembutton {
@@ -163,6 +162,22 @@
 		   background-color:gray;
 		   border-width:2px;
 		}
+		input.plusbutton {
+		   color:#000000;//#FFFF00;
+		   width:48px;
+		   height:48px;
+		   background-color:#DDDDDD;
+		   background-image:url(img/plus.jpg);
+		   border-width:1px;
+		}
+		input.minusbutton {
+		   color:#000000;//#FFFF00;
+		   width:48px;
+		   height:48px;
+		   background-color:#DDDDDD;
+		   background-image:url(img/minus.jpg);
+		   border-width:1px;
+		}
    	</style>
 
 	<script language="javascript">
@@ -181,11 +196,14 @@
 		var catOptionPage = 0, catOptionMaxPerPage = 10, maxCatOptionPage, catOptionRowSize = 4;
 		var itemPage = 0, itemMaxPerPage = 12, maxItemPage, itemRowSize = 3;
 		var itemOptionPage = 0, itemOptMaxPerPage = 10, maxItemOptPage, itemOptionRowSize = 4;
-		
-		var selectedItemIndex = -1;
+		var taxRate = 0.08;
+		var selectedItemIndex = -1, selectedOptionIndex = -1;
 		
 		var orderItems = new Array();
-		var ORDER_TITLE_ROW_HTML = "<tr><th width='60%' valign='top' align='left'><strong>Item description</strong></th><th width='5%' valign='top' align='right'><strong>Quantity</strong></th><th width='15%' valign='top' align='right'><strong>Price</strong></th></tr>";
+		var ORDER_TITLE_ROW_HTML = "<tr><th width='60%' valign='top' align='left'><strong>Items</strong></th><th width='5%' valign='top' align='right'><strong>Quantity</strong></th><th width='15%' valign='top' align='right'><strong>Price</strong></th></tr>";
+		var GLOBAL_OP = "GLOBAL_OP", CAT_OP = "CAT_OP", ITEM_OP = "ITEM_OP";
+		
+		var smallClicked = 0, medClicked = 0, largeClicked = 0;
 		
 		function initializeCategories(){
 			ws_list_categories(listAllCategoriesHandler);
@@ -266,7 +284,7 @@
 			if(selectedItemIndex >= 0) {
 				var orderItem = orderItems[selectedItemIndex];
 				alert(orderItem.displayText + ", " + orderItem.price + ", " + orderItem.quantity);
-				var optionItem = new OrderItem(name, price, 1);
+				var optionItem = new OrderOption(name, price, 1, id, GLOBAL_OP);
 				orderItem.childItems.push(optionItem);
 				refreshOrderTable();
 			}
@@ -313,12 +331,12 @@
 				}
 			}
 		}
-		function clickCategoryOption(id, name, price) {
+		function clickCategoryOption(id, price, name) {
 			alert(id + " " + name + " " + price);
 			if(selectedItemIndex >= 0) {
 				var orderItem = orderItems[selectedItemIndex];
 				alert(orderItem.displayText + ", " + orderItem.price + ", " + orderItem.quantity);
-				var optionItem = new OrderItem(name, price, 1);
+				var optionItem = new OrderOption(name, price, 1, id, CAT_OP);//aDisplayText, aPrice, aQuantity, aId, aType
 				orderItem.childItems.push(optionItem);
 				refreshOrderTable();
 			}
@@ -375,122 +393,259 @@
 				call_web_service(soapType, fetchSaleItemHandler);
 			}
 		}
+		function setSizeButtonColor(size) {
+			if(size == 1) {
+				smallClicked = 1 - smallClicked; medClicked = 0; largeClicked = 0;
+				document.menuItemForm.btnItemSmall.style.backgroundColor = smallClicked==1?"white":"#FFFF00";
+			} else if(size == 2) {
+				medClicked = 1 - medClicked; smallClicked = 0; largeClicked = 0;
+				document.menuItemForm.btnItemMed.style.backgroundColor = medClicked==1?"white":"#FFFF00";
+			} else {
+				largeClicked = 1 - largeClicked; smallClicked = 0; medClicked = 0;
+				document.menuItemForm.btnItemLarge.style.backgroundColor = largeClicked==1?"white":"#FFFF00";
+			}
+		}
 		function fetchSaleItemHandler(jsonObj) {
 			if(jsonObj != undefined && jsonObj != null &&
                 jsonObj.fetchsaleitemresponsetype != undefined && jsonObj.fetchsaleitemresponsetype != null &&
                 jsonObj.fetchsaleitemresponsetype.result.successful == "true") {
                 var item = jsonObj.fetchsaleitemresponsetype.saleitem;
+                document.menuItemForm.menuItemId.value = item.id;
+                document.menuItemForm.itemName.value = item.name;
                 document.getElementById('menuItemName').innerText = "Name: " + item.name;
                 document.getElementById('menuItemDesc').innerText = "Description: " + item.description;
+                var hasSizes = false;
                 if(item.seasonprice != null && item.seasonprice > 0) {
                 	document.getElementById('menuItemPrice').innerText = "Price: $" + item.seasonprice;
+                	document.menuItemForm.itemPrice.value = item.seasonprice;
                 	document.getElementById('singlePrice').style.display = "block";
-                	document.getElementById('itemSizes').style.display = "none";
-                	document.getElementById('confirmRow').style.display = "block";
-                	document.getElementById('cancelRow').style.display = "none";
-                } else if((item.pricesmall==null || item.pricesmall==0) && 
-                			(item.pricemed==null || item.pricemed==0) && (item.pricelarge==null || item.pricelarge==0)) {
+                	document.getElementById('itemSizes').style.display = "none";                	
+                } 
+                //TODO: This comparison needs to consider order type!
+                else if((item.pricesmall!=null && item.pricesmall!=0) && 
+                			(item.pricemed!=null && item.pricemed!=0) && (item.pricelarge!=null && item.pricelarge!=0)) {
                 	//TODO: check order type for price
+                	hasSizes = true;
                 	document.menuItemForm.btnItemSmall.value = "Small $" + item.pricesmall;
-                	document.menuItemForm.btnItemSmall.onclick = function() { addItem(item.name, item.pricesmall, document.menuItemForm.menuItemQuantity.value); };
+                	document.menuItemForm.btnItemSmall.onclick = function() {document.menuItemForm.itemPrice.value = item.pricesmall;setSizeButtonColor(1);}
                 	document.menuItemForm.btnItemMed.value = "Medium $" + item.pricemed;
-                	document.menuItemForm.btnItemMed.onclick = function() { addItem(item.name, item.pricemed, document.menuItemForm.menuItemQuantity.value); };
+                	document.menuItemForm.btnItemMed.onclick = function() {document.menuItemForm.itemPrice.value = item.pricemed;setSizeButtonColor(2);}
                 	document.menuItemForm.btnItemLarge.value = "Large $" + item.pricelarge;
-                	document.menuItemForm.btnItemLarge.onclick = function() { addItem(item.name, item.pricelarge, document.menuItemForm.menuItemQuantity.value); };
+                	document.menuItemForm.btnItemLarge.onclick = function() {document.menuItemForm.itemPrice.value = item.pricelarge;setSizeButtonColor(3);}
                 	document.getElementById('singlePrice').style.display = "none";
                 	document.getElementById('itemSizes').style.display = "block";
-                	document.getElementById('confirmRow').style.display = "none";
-                	document.getElementById('cancelRow').style.display = "block";
                 } else { //
                 	//TODO: check order type for price
-                	document.menuItemForm.btnItemAdd.onclick = function () { addItem(item.name, item.normalprice, document.menuItemForm.menuItemQuantity.value); };
                 	document.getElementById('menuItemPrice').innerText = "Price: $" + item.normalprice;
                 	document.getElementById('singlePrice').style.display = "block";
                 	document.getElementById('itemSizes').style.display = "none";
-                	document.getElementById('confirmRow').style.display = "block";
-                	document.getElementById('cancelRow').style.display = "none";
                 }
                 var itemOptions = item.options;
                 if(itemOptions!=null) {
                 	document.getElementById("itemOptionsRow").style.display = "block";
                 	var table = document.getElementById("itemOptionsTable");
+                	table.innerHTML = "";
                 	var row = table.insertRow(table.rows.length);
                 	var optionsHtml = "<td>";
                 	var name = item.name + "_option";
                 	if(itemOptions.length != undefined) { //Array of item options
                 		for(var i = 0; i < itemOptions.length; i++) {
                 			if(item.issingleoption) {
-	        					optionsHtml += "<input type='radio' name='"+ name + "' value='"+itemOptions[i].name+"'/>" + itemOptions[i].name;
+	        					optionsHtml += "<input type='radio' id='"+name+"' name='"+name+"' value='"+itemOptions[i].name+"^"+itemOptions[i].id+"^"+itemOptions[i].price+"'/>" + itemOptions[i].name+" ($"+itemOptions[i].price+")";
                 			} else {
-                				optionsHtml += "<input type='checkbox' name='"+ name + "' value='"+itemOptions[i].name+"'/>"+itemOptions[i].name;
+                				optionsHtml += "<input type='checkbox' id='"+name+"' name='"+ name + "' value='"+itemOptions[i].name+"^"+itemOptions[i].id+"^"+itemOptions[i].price+"'/>"+itemOptions[i].name+" ($"+itemOptions[i].price+")";
                 			}
                 		}
+                		document.menuItemForm.optionsSize.value = itemOptions.length;
                 	} else { //Single item option
-                		optionsHtml = "<input type='checkbox' name='"+ name + "' value='"+itemOptions.name+"'/>"+itemOptions.name;
+                		document.menuItemForm.optionsSize.value = 1;
+                		optionsHtml = "<input type='checkbox' id='"+name+"' name='"+ name + "' value='"+itemOptions.name+"^"+itemOptions.id+"^"+itemOptions.price+"'/>"+itemOptions.name+" ($"+itemOptions.price+")";
                 	}
                 	optionsHtml += "</td>";
                 	row.innerHTML = optionsHtml;
+                	document.menuItemForm.btnItemAdd.onclick = function() {addItemFromPopup(hasSizes);}
+                	Popup.show('modal');
+                } else if(hasSizes) {
+                	document.menuItemForm.btnItemAdd.onclick = function() {addItemFromPopup(hasSizes);}
                 	Popup.show('modal');
                 } else {
                 	document.getElementById("itemOptionsRow").style.display = "none";
                 	//TODO: Check order type for price
-                	addItem(item.name, item.normalprice, 1);
+                	addItem(item.name, item.normalprice, 1, item.id);
                 }
 	        }
 	   	}
-	   	function addItem(name, price, quantity) {
+	   	function addItem(name, price, quantity, itemId) {
 	   		//alert(name + ", " + price + ", " + quantity);
-	   		var item = new OrderItem(name, price, quantity);
+	   		var item = new OrderItem(name, price, quantity, itemId);
 	   		orderItems.push(item);
 	   		refreshOrderTable();
-	   		//TODO: check which item options are selected
 	   		
 	   		selectedItemIndex = orderItems.length - 1;
+	   		selectedOptionIndex = -1;
 	   		Popup.hide('modal');
+	   	}
+	   	function addItemFromPopup(hasSizes) {
+	   		if(hasSizes && smallClicked == 0 && medClicked == 0 && largeClicked==0) { alert("Please pick a size!"); return;}
+	   		
+	   		var itemId = document.menuItemForm.menuItemId.value;
+	   		if(itemId != null && itemId > 0) {
+	   			var name = document.menuItemForm.itemName.value;
+	   			var price = document.menuItemForm.itemPrice.value;
+	   			var quantity = document.menuItemForm.menuItemQuantity.value;
+	   			
+	   			var item = new OrderItem(name, price, quantity, itemId);
+	   			var options = document.getElementById(name+"_option");
+	   			if(options != null) {
+	   				if(document.menuItemForm.optionsSize.value > 1) {
+		   				for (var i=0; i < options.length; i++) {
+		   					if(options[i].checked) {
+		   						var value = options[i].value;
+		   						var temp = value.split("^");
+		   						var option = new OrderOption(temp[0], temp[2], 1, temp[1], ITEM_OP); //(name, price, quantity, id, type)
+		   						item.childItems.push(option); 
+		   					}
+		   				}
+		   			} else {
+		   				if(options.checked) {
+	   						var value = options.value;
+	   						var temp = value.split("^");
+	   						var option = new OrderOption(temp[0], temp[2], 1, temp[1], ITEM_OP); //(name, price, quantity, id, type)
+		   					item.childItems.push(option);
+	   					}
+		   			}
+	   			}
+	   			orderItems.push(item);
+	   			
+	   			selectedItemIndex = orderItems.length - 1;
+	   			selectedOptionIndex = -1;
+	   			refreshOrderTable();
+	   			Popup.hide('modal');
+	   		}
+	   		document.getElementById('itemOptionsTable').innerHTML = "";
+	   		document.getElementById("itemOptionsRow").style.display = "block";
+	   	}
+	   	function highlightOrderRow(index) {
+	   		var table = document.getElementById("orderTable");
+	   		var rowCount = table.rows.length;
+	   		for(var i = 0; i < rowCount; i++) {
+	            var row = table.rows[i];
+	            if(row.id != null && row.id!= "") {
+	            	if(row.id == index) {
+		                row.style.background = '#dcfac9';
+		                row.cells[0].style.background = '#dcfac9';
+		                row.cells[1].style.background = '#dcfac9';
+		                row.cells[2].style.background = '#dcfac9';
+		            } else {
+		                row.style.background = '';
+		                row.cells[0].style.background = '';
+		                row.cells[1].style.background = '';
+		                row.cells[2].style.background = '';
+		            }
+	            }
+	        }
 	   	}
 	   	function clickOrderItem(index) {
 	   		alert(index);
 	   		selectedItemIndex = index;
+	   		selectedOptionIndex = -1;
 	   		var cell = document.getElementById("btmQty");
 	   		cell.innerText = orderItems[index].quantity;
+	   		
+	   		highlightOrderRow(index);
 	   	}
 	   	function clickOptionItem(itemIndex, optionIndex) {
 	   		selectedItemIndex = itemIndex;
+	   		selectedOptionIndex = optionIndex;
+	   		alert(itemIndex + " - " + optionIndex);
 	   		var cell = document.getElementById("btmQty");
 	   		cell.innerText = orderItems[itemIndex].childItems[optionIndex].quantity;
+	   		highlightOrderRow(itemIndex + "-" + optionIndex);
 	   	}
 	   	function refreshOrderTable() {
 	   		var table = document.getElementById("orderTable");
             var total = 0, tax = 0;
-            var taxRate = 0.08;
             var html = ORDER_TITLE_ROW_HTML;
             for(var i = 0; i < orderItems.length; i++) {
-	            html += "<tr id='"+i+"'><td valign='top' align='left' onclick='clickOrderItem("+i+")'><strong>"+orderItems[i].displayText+"</strong></td>";
+            	var price = parseFloat(orderItems[i].price);
+            	var quantity = parseInt(orderItems[i].quantity);
+	            html += "<tr id='"+i+"'><td valign='top' align='left' onclick='clickOrderItem("+i+");'><strong>"+orderItems[i].displayText+"</strong></td>";
 	            html += "<td valign='top' align='right''>"+orderItems[i].quantity+"</td>";
-				html += "<td valign='top' align='right'><strong>"+(orderItems[i].price==0?"":orderItems[i].price.toFixed(2))+"</strong></td></tr>";
+				html += "<td valign='top' align='right'><strong>"+(price==0?"":price.toFixed(2))+"</strong></td></tr>";
 				for(var k = 0; k < orderItems[i].childItems.length; k++) {
 					var optionItem = orderItems[i].childItems[k];
+					var optionPrice = parseFloat(optionItem.price);
+					var optionQuantity = parseInt(optionItem.quantity);
 					html += "<tr id='"+i+"-"+k+"'><td valign='top' align='left' onclick='clickOptionItem("+i+","+k+")'>&nbsp;&nbsp;&nbsp;-&nbsp;"+optionItem.displayText+"</td>";
 	            	html += "<td valign='top' align='right''>"+optionItem.quantity+"</td>";
-					html += "<td valign='top' align='right'><strong>"+(optionItem.price==0?"":optionItem.price.toFixed(2))+"</strong></td></tr>";
-					total += optionItem.price * optionItem.quantity;
+					html += "<td valign='top' align='right'><strong>"+(optionPrice==0?"":optionPrice.toFixed(2))+"</strong></td></tr>";
+					total += optionPrice * optionQuantity;
 				}
-                total += orderItems[i].price * orderItems[i].quantity;
+                total += price * quantity;
 	        }
 	        tax = total * taxRate;
+	        var grossTotal = (total+tax).toFixed(2);
             html += "<tr><td colspan='2' valign='top' align='right'><strong>Subtotal:</strong> </td>";
             html += "<td valign='top' align='right'><strong>"+total.toFixed(2)+"</strong></td></tr>";
             html += "<tr><td colspan='3'><br></td></tr><tr><td colspan='2' valign='top' align='right'><strong>Tax:</strong> </td>";
             html += "<td valign='top' align='right'><strong>" + tax.toFixed(2) + "</strong></td></tr>";
             html += "<tr><td colspan='2' valign='top' align='right'><strong>TOTAL:</strong></td>";
-            html += "<td valign='top' align='right'><strong>"+(total+tax).toFixed(2)+"</strong></td></tr>";
+            html += "<td valign='top' align='right'><strong>"+grossTotal+"</strong></td></tr>";
             table.innerHTML = html;
+            document.orderForm.totalPrice.value = grossTotal;
+            
+            /*if(selectedItemIndex > -1) {
+            	if(selectedOptionIndex > -1 && ) highlightOrderRow(selectedItemIndex + "-" + selectedOptionIndex);
+            	else highlightOrderRow(selectedItemIndex);
+            }*/
+	   	}
+	   	function updateQuantity(increment) {
+	   		if(selectedItemIndex >= 0) {
+	   			var item = orderItems[selectedItemIndex];
+	   			if(item != null) {
+		   			var cell = document.getElementById("btmQty");
+		   			if(selectedOptionIndex >= 0) {
+		   				var option = item.childItems[selectedOptionIndex];
+		   				option.quantity += increment;
+		   				cell.innerText = option.quantity;
+		   				if(option.quantity <= 0) {
+		   					item.childItems.splice(selectedOptionIndex, 1);
+		   				}
+		   			} else {
+		   				item.quantity += increment;
+		   				cell.innerText = item.quantity;
+		   				if(item.quantity <= 0) {
+		   					orderItems.splice(selectedItemIndex, 1);
+		   				}
+		   			}
+		   			refreshOrderTable();
+		   		}
+	   		}
+	   	}
+	   	function saveOrder() {
+	   		var total = document.orderForm.totalPrice.value;
+	   		var orderId = document.orderForm.orderId.value;
+	   		var orderType = new SaveOrderType(orderId, "OUT", total, "INITIAL", 1, null);//aId, aType, aPrice, aStatus, aNumGuests, aCustomer
+	   		orderType.order.orderItems = orderItems;
+			call_web_service(orderType, saveOrderHandler);
+	   	}
+	   	function saveOrderHandler(jsonObj) {
+	   		if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.saveorderresponsetype != undefined && jsonObj.saveorderresponsetype != null && 
+				jsonObj.saveorderresponsetype.result.successful == "true") {
+				alert("Order saved!");
+				document.orderForm.orderId = jsonObj.saveorderresponsetype.result.id;
+				document.getElementById("orderHeader").innerText = "Order " + jsonObj.saveorderresponsetype.result.id;
+			}
 	   	}
 	</script>
 </head>
 
 <body onload="javascript:initializeCategories();">
    <div style="position:absolute; left:10px; top:10px; width:95%">
+   	<table>
+		<tr><td><input type="button" class="navibutton" onclick="window.location.href='home.html';" value="<< Back"></td>
+	</table>
       <table width="100%" style="border:1px solid gray; border-spacing:2px">
          <tr>
             <td valign="top" align="left" width="18%" style="border:0px solid black; padding:2px">
@@ -538,21 +693,20 @@
                </table>
             </td>
             <td width="36%" valign="top" align="left" style="border:0px solid black">
+               <form name="orderForm">
+               	<input type="hidden" name="orderId"/>
+               	<input type="hidden" name="orderType"/>
+               	<input type="hidden" name="totalPrice"/>
+               	<table width="100%">
+               		<tr>
+               			<th width="100%" valign="center" align="center" id="orderHeader">Order</th>
+                	</tr>
+               	</table>
                <table width="100%" border="0" id="orderTable" class="orderTable">
                   <tr>
-                     <th width="60%" valign="top" align="left"><strong>Item description</strong></th>
+                     <th width="60%" valign="top" align="left"><strong>Items</strong></th>
                      <th width="5%" valign="top" align="right"><strong>Quantity</strong></th>
                      <th width="15%" valign="top" align="right"><strong>Price</strong></th>
-                  </tr>
-                  <tr>
-                     <td valign="top" align="left">Fried rice with beef</td>
-                     <td valign="top" align="right">1</td>
-                     <td valign="top" align="right">7.95</td>
-                  </tr>
-                  <tr>
-                     <td valign="top" align="left">Orange Juice</td>
-                     <td valign="top" align="right">1</td>
-                     <td valign="top" align="right">1.95</td>
                   </tr>
                   <tr><td colspan="3"><br></td></tr>
                   <tr>
@@ -564,9 +718,17 @@
                      <td valign="top" align="right"><strong>11.4</strong></td>
                   </tr>
                </table>
+               </form>
                <table>
                    <tr>
                    		<td>Quantity:</td><td id="btmQty"></td>
+                   		<td>
+                   			<input type="button" name="btnPlus" value="" class="plusbutton" onclick="updateQuantity(1);"/>
+                   			<input type="button" name="btnMinus" value="" class="minusbutton" onclick="updateQuantity(-1);"/>
+                   		</td>
+                   </tr>
+                   <tr>
+                   		<td><input type="button" name="btnSave" value="Save Order" class="groovybutton" onclick="saveOrder();"/></td>
                    </tr>
                </table>
             </td>
@@ -574,11 +736,15 @@
       </table>
    </div>
    
-   <div id="modal" style="width:450px; height: 400px; border:3px solid black; background-color:white; padding:5px; font-size:100%; display:none;">
+   <div id="modal" style="width:450px; height: 400px; border:2px solid #CC6600; background-color:white; padding:5px; font-size:100%; display:none;">
 	<table border="0" width="100%">
 		<form name="menuItemForm" id="menuItemForm">
+			<input type="hidden" name="menuItemId" value=""/>
+			<input type="hidden" name="itemName" value=""/>
+			<input type="hidden" name="itemPrice" value=""/>
+			<input type="hidden" name="optionsSize" value=""/>
 		<tr>
-			<td align="left" valign="top" id="menuItemName"></td>
+			<td align="left" valign="top" id="menuItemName" name="menuItemName"></td>
 		</tr>
 		<tr>
 			<td align="left" valign="top" id="menuItemDesc" name="menuItemDesc"></td>
@@ -600,9 +766,9 @@
 			<td align="left" valign="top">
 				<table id="itemSizes" width="100%" style="display: block">
 					<tr>
-						<td width="33.3%"><input type="button" name="btnItemSmall" value="Small $5" class="groovybutton" onclick=""/></td>
-						<td width="33.3%"><input type="button" name="btnItemMed"  value="Medium $6" class="groovybutton" onclick=""/></td>
-						<td width="33.3%"><input type="button" name="btnItemLarge" value="Large $7" class="groovybutton" onclick=""/></td>
+						<td width="33.3%"><input type="button" name="btnItemSmall" value="" class="groovybutton" onclick=""/></td>
+						<td width="33.3%"><input type="button" name="btnItemMed"  value="" class="groovybutton" onclick=""/></td>
+						<td width="33.3%"><input type="button" name="btnItemLarge" value="" class="groovybutton" onclick=""/></td>
 					</tr>
 				</table>
 			</td>
@@ -617,16 +783,11 @@
 		<tr><td >&nbsp;</td></tr>
 		<tr id="confirmRow">
 			<td align="center">
-				<input type="button" name="btnItemAdd" class="cancelbutton" onclick="Popup.hide('modal')" value="ADD"></input>
+				<input type="button" name="btnItemAdd" class="cancelbutton" onclick="" value="ADD"></input>
 				<input type="button" class="cancelbutton" onclick="Popup.hide('modal')" value="CANCEL"></input>
 			</td>
 		</tr>
 		</form>
-		<tr id="cancelRow">
-			<td align="center">
-				<input type="button" class="cancelbutton" onclick="Popup.hide('modal')" value="CANCEL"></input>
-			</td>
-		</tr>
 	</table>
 </div>
 </body>

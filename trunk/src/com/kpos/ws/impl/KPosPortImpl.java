@@ -835,6 +835,7 @@ public class KPosPortImpl implements KPosPortType {
                 responseType.setResult(getSoapResult(result));
             } else {
                 ResultType resultType = new ResultType();
+                contentManagementService.updateOrder(orderType);
                 resultType.setSuccessful(false);
                 responseType.setResult(resultType);
             }
@@ -843,6 +844,14 @@ public class KPosPortImpl implements KPosPortType {
             log.error("Error in saveOrder", e);
             responseType.setResult(getSoapFaultResult(e));
         }
+        return responseType;
+    }
+
+    @Override
+    public DeleteOrderResponseType deleteOrder(
+            @WebParam(partName = "parameters", name = "DeleteOrderType", targetNamespace = NS) DeleteOrderType parameters) {
+        DeleteOrderResponseType responseType = new DeleteOrderResponseType();
+
         return responseType;
     }
 

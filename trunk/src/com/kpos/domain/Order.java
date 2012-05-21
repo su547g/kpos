@@ -36,11 +36,6 @@ public class Order extends AbstractDomainObject {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<OrderItem> orderItems = new ArrayList<OrderItem>();
 
-    /*@OneToOne(cascade = CascadeType.ALL, mappedBy = "order", orphanRemoval = true, fetch = FetchType.LAZY)
-    @ForeignKey(name = "BILL_2_ORDER_FK")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Bill bill;*/
-
     @Column(name = "status")
     @org.hibernate.annotations.Type(type = "com.kpos.domain.OrderStatusEnumAdaptor")
     @Index(name = "ORDER_FK2")
@@ -60,7 +55,8 @@ public class Order extends AbstractDomainObject {
     @JoinColumn(name = "table_id")
     private RestaurantTable table;
 
-    @OneToOne(cascade = CascadeType.REFRESH)
+    @ManyToOne(cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "customer_id")
     @ForeignKey(name = "ORDER_2_CUSTOMER_FK")
     private CustomerInfo customerInfo;
 
