@@ -33,10 +33,10 @@ public class OrderItem extends AbstractDomainObject {
     private int quantity;
 
     //owning entity
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "order_id")
     @ForeignKey(name = "ITEM_2_ORDER_FK")
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private Order order;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderItem", orphanRemoval = true, fetch = FetchType.LAZY)

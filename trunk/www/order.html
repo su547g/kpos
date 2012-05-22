@@ -623,19 +623,23 @@
 	   		}
 	   	}
 	   	function saveOrder() {
-	   		var total = document.orderForm.totalPrice.value;
-	   		var orderId = document.orderForm.orderId.value;
-	   		var orderType = new SaveOrderType(orderId, "OUT", total, "INITIAL", 1, null);//aId, aType, aPrice, aStatus, aNumGuests, aCustomer
-	   		orderType.order.orderItems = orderItems;
-			call_web_service(orderType, saveOrderHandler);
+	   		if(orderItems != null && orderItems.length > 0) {
+		   		var total = document.orderForm.totalPrice.value;
+		   		var orderId = document.orderForm.orderId.value;
+		   		var orderType = new SaveOrderType(orderId, "OUT", total, "INITIAL", 1, null);//aId, aType, aPrice, aStatus, aNumGuests, aCustomer
+		   		orderType.order.orderItems = orderItems;
+				call_web_service(orderType, saveOrderHandler);
+			}
 	   	}
 	   	function saveOrderHandler(jsonObj) {
 	   		if(jsonObj != undefined && jsonObj != null &&
 				jsonObj.saveorderresponsetype != undefined && jsonObj.saveorderresponsetype != null && 
 				jsonObj.saveorderresponsetype.result.successful == "true") {
 				alert("Order saved!");
-				document.orderForm.orderId = jsonObj.saveorderresponsetype.result.id;
+				document.orderForm.orderId.value = jsonObj.saveorderresponsetype.id;
 				document.getElementById("orderHeader").innerText = "Order " + jsonObj.saveorderresponsetype.result.id;
+			} else {
+				alert("Failed to save order!");
 			}
 	   	}
 	</script>

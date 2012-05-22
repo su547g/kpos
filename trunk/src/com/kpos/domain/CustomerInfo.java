@@ -31,7 +31,7 @@ public class CustomerInfo extends AbstractDomainObject {
     @Column(name = "address")
     private String address;
     
-    @Column(name = "buzz_number")
+    @Column(name = "buzz")
     private String buzz;
     
     @Column(name = "email")
