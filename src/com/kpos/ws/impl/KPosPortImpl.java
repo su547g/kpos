@@ -851,7 +851,14 @@ public class KPosPortImpl implements KPosPortType {
     public DeleteOrderResponseType deleteOrder(
             @WebParam(partName = "parameters", name = "DeleteOrderType", targetNamespace = NS) DeleteOrderType parameters) {
         DeleteOrderResponseType responseType = new DeleteOrderResponseType();
-
+        try {
+            DeleteResult result = contentManagementService.deleteOrder(parameters.getOrderId());
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("deleteOrder failed!", e);
+            responseType.setResult(getSoapFaultResult(e));
+        }
         return responseType;
     }
 

@@ -746,8 +746,8 @@ function OrderItem(aDisplayText, aPrice, aQuantity, aSaleItemId) {
     this.orderId = null;
     this.saleItemId = aSaleItemId;
     this.displayText = aDisplayText;
-    this.price = aPrice;
-    this.quantity = aQuantity;
+    this.price = parseFloat(aPrice);
+    this.quantity = parseInt(aQuantity);
     this.childItems = new Array();
     this.getXML = function() {
         var xml = "<app:orderItems>";
@@ -775,8 +775,8 @@ function OrderOption(aDisplayText, aPrice, aQuantity, aId, aType) {
     this.optionId = aId;
     this.type = aType;
     this.displayText = aDisplayText;
-    this.price = aPrice;
-    this.quantity = aQuantity;
+    this.price = parseFloat(aPrice);
+    this.quantity = parseInt(aQuantity);
     this.getXML = function() {
         xml = "<app:options>";
         if(this.id != null && this.id != "") {

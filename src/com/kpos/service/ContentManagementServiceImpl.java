@@ -861,7 +861,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             order.setOrderType(orderType.getType());
             order.setNumOfGuests(orderType.getNumOfGuests()==null?0:orderType.getNumOfGuests());
             order.setLastUpdated(new Date());
-            //order.setTotalPrice(orderType.getTotalPrice());
+            order.setTotalPrice(orderType.getTotalPrice());
             if(orderType.getTableId() != null) {
                 RestaurantTable table = tableDao.findById(orderType.getTableId());
                 order.setTable(table);
@@ -905,6 +905,10 @@ public class ContentManagementServiceImpl implements IContentManagementService {
                     order.getOrderItems().add(orderItem);
                 }
             }
+            result.setSuccessful(true);
+            result.setManagedObject(order);
+        } else {
+            result.setSuccessful(false);
         }
         return result;
     }
