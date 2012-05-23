@@ -493,7 +493,7 @@ public class KPosPortImpl implements KPosPortType {
             @WebParam(partName = "parameters", name = "ListTablesType", targetNamespace = NS) ListTablesType parameters) {
         ListTablesResponseType responseType = new ListTablesResponseType();
         try {
-            FetchResult<List<RestaurantTable>> result = contentManagementService.listTables();
+            FetchResult<List<RestaurantTable>> result = contentManagementService.listTables(parameters.getAreaId());
             List<RestaurantTable> tables = result.getTarget();
             for(RestaurantTable table : tables) {
                 TableType soapTable = new TableType();
@@ -769,6 +769,37 @@ public class KPosPortImpl implements KPosPortType {
                     }
                 }
             }
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+        }
+        return responseType;
+    }
+
+    @Override
+    public ListAreasResponseType listAreas(
+            @WebParam(partName = "parameters", name = "ListAreasType", targetNamespace = NS) ListAreasType parameters) {
+        ListAreasResponseType responseType = new ListAreasResponseType();
+        try {
+            FetchResult<List<SeatingArea>> result = contentManagementService.listSeatingAreas();
+            if(result.isSuccessful()) {
+                for(SeatingArea area : result.getTarget()) {
+                    SeatingAreaType soapType = new SeatingAreaType();
+                    soapType.setId(area.getId());
+                    soapType.setName(area.getName());
+                    List<RestaurantTable> tables = area.getTables();
+                    for(RestaurantTable table : tables) {
+                        TableType soapTable = new TableType();
+                        soapTable.setAreaId(area.getId());
+                        soapTable.setId(table.getId());
+                        soapTable.setName(table.getName());
+                        soapTable.setX(table.getCoordinate_x());
+                        soapTable.setY(table.getCoordinate_y());
+                        soapType.getTables().add(soapTable);
+                    }
+                    responseType.getAreas().add(soapType);
+                }
+            }
+            responseType.setResult(getSoapResult(result));
         } catch (Exception e) {
             responseType.setResult(getSoapFaultResult(e));
         }

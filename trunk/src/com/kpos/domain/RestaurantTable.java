@@ -15,6 +15,10 @@ import javax.persistence.*;
     @NamedQuery(
             name = "listTablesByNameAsc",
             query = "from RestaurantTable p order by p.name asc"
+    ),
+    @NamedQuery(
+            name = "listTablesForArea",
+            query = "from RestaurantTable p where p.area.id = :aId"
     )
 })
 @Entity

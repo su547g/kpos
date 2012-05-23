@@ -13,4 +13,6 @@ public interface ITableDao extends IDao<RestaurantTable> {
     RestaurantTable findTableByName(String aName);
 
     List<RestaurantTable> listTablesByNameAsc();
+    
+    List<RestaurantTable> listTablesForArea(long aId);
 }

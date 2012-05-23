@@ -839,3 +839,52 @@ function SaveOrderType(aId, aType, aPrice, aStatus, aNumGuests, aCustomer) {
         return xml;
     }
 }
+function DeleteOrderType(aId) {
+    this.id = aId;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:DeleteOrderType>";
+        xml += "<app:orderId>" + this.id + "</app:orderId>";
+        xml += "</app:DeleteOrderType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function Table(aId, aName, aX, aY, aAreaId) {
+    this.id = aId;
+    this.name = aName;
+    this.x = aX;
+    this.y = aY;
+    this.areaId = aAreaId;
+    this.getXML = function() {
+        var xml = "<app:table>";
+        xml += "<app:name>"+this.name+"</app:name>";
+        xml += "<app:x>" + this.x + "</app:x>";
+        xml += "<app:y>" + this.y + "</app:y>";
+        if(this.areaId != null && parseInt(this.areaId) > 0) {
+            xml += "<app:areaId>" + this.areaId + "</app:areaId>";
+        }
+        xml += "</app:table>";
+        return xml;
+    }
+}
+function SaveTableType(aTable) {
+    this.table = aTable;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:SaveTableType>";
+        xml += this.table.getXML();
+        xml += "</app:SaveTableType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function DeleteTableType(aId) {
+    this.id = aId;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:DeleteTableType><app:id>"+this.id+"</app:id></app:DeleteTableType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}

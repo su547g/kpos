@@ -34,20 +34,12 @@ public class User {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "facebook_id")
-    private String facebookId;
+    @OneToOne(cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "staff_id")
+    private StaffMember staff;
 
     @Column(name = "password")
     private String password;
-
-    @Column(name = "user_email")
-    private String email;
-
-    @Column(name = "last_login")
-    private Date lastLogin;
-
-    @Column(name = "session_key")
-    private String sessionKey;
 
     @Column(name = "CREATED_ON")
     protected Date createdOn;
@@ -63,44 +55,12 @@ public class User {
         return id;
     }
 
-    public void setFacebookId(String facebookId) {
-        this.facebookId = facebookId;
-    }
-
-    public String getFacebookId() {
-        return facebookId;
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }
 
     public String getPassword() {
         return password;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setLastLogin(Date lastLogin) {
-        this.lastLogin = lastLogin;
-    }
-
-    public Date getLastLogin() {
-        return lastLogin;
-    }
-
-    public void setSessionKey(String sessionKey) {
-        this.sessionKey = sessionKey;
-    }
-
-    public String getSessionKey() {
-        return sessionKey;
     }
 
     public Date getCreatedOn() {
@@ -117,5 +77,37 @@ public class User {
 
     public void setLastUpdated(Date date) {
         lastUpdated = date;
+    }
+
+    public StaffMember getStaff() {
+        return staff;
+    }
+
+    public void setStaff(StaffMember staff) {
+        this.staff = staff;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (createdOn != null ? !createdOn.equals(user.createdOn) : user.createdOn != null) return false;
+        if (id != null ? !id.equals(user.id) : user.id != null) return false;
+        if (lastUpdated != null ? !lastUpdated.equals(user.lastUpdated) : user.lastUpdated != null) return false;
+        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (createdOn != null ? createdOn.hashCode() : 0);
+        result = 31 * result + (lastUpdated != null ? lastUpdated.hashCode() : 0);
+        return result;
     }
 }
