@@ -50,7 +50,7 @@ public interface IContentManagementService {
         
     FetchResult<List<Printer>> listPrinters();
 
-    FetchResult<List<RestaurantTable>> listTables();
+    FetchResult<List<RestaurantTable>> listTables(Long aAreaId);
 
     CreateResult<RestaurantTable> createRestaurantTable(TableType soapType);
 
@@ -82,7 +82,7 @@ public interface IContentManagementService {
     UpdateResult<SeatingArea> updateSeatingArea(SeatingAreaType soapType);
     
     DeleteResult deleteSeatingArea(long aId);
-
+    FetchResult<List<SeatingArea>> listSeatingAreas();
     FetchResult<SeatingArea> fetchSeatingArea(long aId);
 
     CreateResult<Order> createNewOrder(OrderType orderType);

@@ -18,6 +18,8 @@
             <xs:element name="FetchSeatingAreaResponseType" type="tns:FetchSeatingAreaResponseType"/>
             <xs:element name="DeleteSeatingAreaType" type="tns:DeleteSeatingAreaType"/>
             <xs:element name="DeleteSeatingAreaResponseType" type="tns:DeleteSeatingAreaResponseType"/>
+            <xs:element name="ListAreasType" type="tns:ListAreasType"/>
+            <xs:element name="ListAreasResponseType" type="tns:ListAreasResponseType"/>
 
             <xs:element name="SaveTableType" type="tns:SaveTableType"/>
             <xs:element name="SaveTableResponseType" type="tns:SaveTableResponseType"/>
@@ -318,7 +320,16 @@
                     <xs:element name="Result" type="tns:ResultType"/>
                 </xs:sequence>
             </xs:complexType>
-
+            <xs:complexType name="ListAreasType">
+                <xs:sequence></xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListAreasResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="areas" type="tns:SeatingAreaType" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:complexType>
+            
             <xs:complexType name="SaveTableType">
                 <xs:sequence>
                     <xs:element name="table" type="tns:TableType" minOccurs="1" maxOccurs="1"/>
@@ -353,6 +364,7 @@
             </xs:complexType>
             <xs:complexType name="ListTablesType">
                 <xs:sequence>
+                    <xs:element name="areaId" type="xsd:long" minOccurs="0"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="ListTablesResponseType">
@@ -801,6 +813,12 @@
     <wsdl:message name="DeleteSeatingAreaResponseMessage">
         <wsdl:part name="parameters" element="tns:DeleteSeatingAreaResponseType"/>
     </wsdl:message>
+    <wsdl:message name="ListAreasMessage">
+        <wsdl:part name="parameters" element="tns:ListAreasType"/>
+    </wsdl:message>
+    <wsdl:message name="ListAreasResponseMessage">
+        <wsdl:part name="parameters" element="tns:ListAreasResponseType"/>
+    </wsdl:message>
 
     <wsdl:message name="SaveTableMessage">
         <wsdl:part name="parameters" element="tns:SaveTableType"/>
@@ -1066,7 +1084,10 @@
             <wsdl:input message="tns:DeleteSeatingAreaMessage" name="DeleteSeatingArea"/>
             <wsdl:output message="tns:DeleteSeatingAreaResponseMessage" name="DeleteSeatingAreaResponse"/>
         </wsdl:operation>
-
+        <wsdl:operation name="ListAreas">
+            <wsdl:input message="tns:ListAreasMessage" name="ListAreas"/>
+            <wsdl:output message="tns:ListAreasResponseMessage" name="ListAreasResponse"/>
+        </wsdl:operation>
         <wsdl:operation name="SaveTable">
             <wsdl:input message="tns:SaveTableMessage" name="SaveTable"/>
             <wsdl:output message="tns:SaveTableResponseMessage" name="SaveTableResponse"/>
@@ -1268,6 +1289,15 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="DeleteSeatingAreaResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="ListAreas">
+            <soap:operation soapAction="http://ws.kpos.com/ListAreas" style="document"/>
+            <wsdl:input name="ListAreas">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="ListAreasResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>

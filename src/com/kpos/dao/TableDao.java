@@ -34,4 +34,11 @@ public class TableDao extends AbstractJpaDao<RestaurantTable> implements ITableD
         Query namedQuery = this.entityManager.createNamedQuery("listTablesByNameAsc");
         return (List<RestaurantTable>)namedQuery.getResultList();
     }
+
+    @Override
+    public List<RestaurantTable> listTablesForArea(long aId) {
+        Query namedQuery = this.entityManager.createNamedQuery("listTablesForArea");
+        namedQuery.setParameter("aId", aId);
+        return (List<RestaurantTable>)namedQuery.getResultList();
+    }
 }

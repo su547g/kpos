@@ -447,14 +447,19 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     }
     
     @Override
-    public FetchResult<List<RestaurantTable>> listTables() {
+    public FetchResult<List<RestaurantTable>> listTables(Long aAreaId) {
         FetchResult<List<RestaurantTable>> result = new FetchResult<List<RestaurantTable>>();
-        List<RestaurantTable> tables = tableDao.listTablesByNameAsc();
+        List<RestaurantTable> tables = null;
+        if(aAreaId != null) {
+            tables = tableDao.listTablesForArea(aAreaId);
+        } else {
+            tableDao.listTablesByNameAsc();
+        }
         result.setSuccessful(true);
         result.setTarget(tables);
         return result;
     }
-
+    
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public CreateResult<RestaurantTable> createRestaurantTable(TableType soapType) {
@@ -787,6 +792,19 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             result.setSuccessful(false);
         }
         return result;
+    }
+
+    @Override
+    public FetchResult<List<SeatingArea>> listSeatingAreas() {
+        FetchResult<List<SeatingArea>> fetchResult = new FetchResult<List<SeatingArea>>();
+        List<SeatingArea> areas = seatingAreaDao.listByName(true);
+        if(areas != null) {
+            fetchResult.setTarget(areas);
+            fetchResult.setSuccessful(true);
+        } else {
+            fetchResult.setSuccessful(false);
+        }
+        return fetchResult;
     }
 
     @Override

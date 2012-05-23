@@ -642,6 +642,22 @@
 				alert("Failed to save order!");
 			}
 	   	}
+	   	function deleteOrder() {
+	   		var orderId = document.orderForm.orderId.value;
+	   		if(orderId != null && parseInt(orderId) > 0) {
+	   			var soapType = new DeleteOrderType(orderId);
+	   			call_web_service(soapType, deleteOrderHandler);
+	   		}
+	   	}
+	   	function deleteOrderHandler(jsonObj) {
+	   		if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.deleteorderresponsetype != undefined && jsonObj.deleteorderresponsetype != null && 
+				jsonObj.deleteorderresponsetype.result.successful == "true") {
+				document.orderForm.orderId.value = "";
+				localStorage.setItem('curr_order_id', 0);
+				window.location.href = "home.html";
+			}
+	   	}
 	</script>
 </head>
 
@@ -732,7 +748,10 @@
                    		</td>
                    </tr>
                    <tr>
-                   		<td><input type="button" name="btnSave" value="Save Order" class="groovybutton" onclick="saveOrder();"/></td>
+                   		<td>
+                   			<input type="button" name="btnSave" value="Save Order" class="groovybutton" onclick="saveOrder();"/>
+                   			<input type="button" name="btnDelete" value="Void Order" class="groovybutton" onclick="deleteOrder();"/>
+                   		</td>
                    </tr>
                </table>
             </td>

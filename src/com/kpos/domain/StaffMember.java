@@ -1,5 +1,9 @@
 package com.kpos.domain;
 
+import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -9,7 +13,7 @@ import java.util.Date;
  * Date: 3/28/12 11:46 PM
  */
 @Entity
-@Table(name = "STAFF")
+@Table(name = "STAFF_MEMBER")
 public class StaffMember extends AbstractDomainObject {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -36,6 +40,12 @@ public class StaffMember extends AbstractDomainObject {
 
     @Column(name = "hourly_wage")
     private double hourlyWage;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    @ForeignKey(name = "STAFF_2_USER_FK")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User user;
 
     public Long getId() {
         return id;
@@ -99,6 +109,14 @@ public class StaffMember extends AbstractDomainObject {
 
     public void setHourlyWage(double hourlyWage) {
         this.hourlyWage = hourlyWage;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
