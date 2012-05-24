@@ -37,7 +37,7 @@
 <table width="100%">
 	<tr>
 		<td width="100%">
-			<input type="hidden" name='areaId' value=""/>
+			<input type="hidden" id='areaId' value=""/>
 			Area: <input type="text" id="areaName"/><input type="button" onclick="addSeatingArea()" value="Create New"/>
 			<input type="button" onclick="saveSeatingArea()" value="Update"/>
 			<input type="button" onclick="deleteSeatingArea()" value="Delete"/>
@@ -53,16 +53,17 @@
 			<div>
 				<div id="pageContainer" style="outline:solid black thin; width: 700px; height: 500px; background-color: #F5DA81; float: left"></div>
 				<div style="width: 5px; float: left;">&nbsp;</div>
-				<textarea id="log" style="outline:solid black thin; width: 150px; height: 300px; background-color: gray; float: left"></textarea>
+				Table Name: <input type="text" id="tableName" value=""/><br>
+				<button onclick="addTable()" id="addTableButton" style="padding: 5px">New Table</button>
+				<button onclick="saveTable()" id="saveTableButton" style="padding: 5px">Save Table</button>
+				<button onclick="deleteTable()" id="deleteTableButton" style="padding: 5px">Delete Table</button>
+				<br/>
+				<textarea id="log" style="outline:solid black thin; width: 200px; height: 50px; background-color: gray; float: left"></textarea>
 			</div>
 		</td>
 	</tr>
 	<tr>
 		<td>
-			Table Name: <input type="text" id="tableName" value=""/>
-			<button onclick="addTable()" id="addTableButton" style="padding: 5px">New Table</button>
-			<button onclick="saveTable()" id="saveTableButton" style="padding: 5px">Save Table</button>
-			<button onclick="deleteTable()" id="deleteTableButton" style="padding: 5px">Delete Table</button>
 		</td>
 	</tr>
 	<tr>
@@ -82,6 +83,24 @@
 		var soapType = new ListAreasType();
 		call_web_service(soapType, listSeatingAreasHandler);
 	}
+	function loadTables(soapTables) {
+		if(soapTables != null) {
+			if(soapTables.length != undefined) {
+				for(var k = 0; k < soapTables.length; k++) {
+					var domainTable = soapTables[k];
+					tables[domainTable.name] = new Table(domainTable.id, domainTable.name, domainTable.x, domainTable.y, domainTable.areaid);
+				}
+			} else {
+				tables[soapTables.name] = new Table(soapTables.id, soapTables.name, soapTables.x, soapTables.y, soapTables.areaid);
+			}
+		}
+	}
+	function clearTables() {
+		var node = document.getElementById('pageContainer');
+		while (node.hasChildNodes()) {
+		    node.removeChild(node.lastChild);
+		}
+	}
 	function listSeatingAreasHandler(jsonObj) {
 		if(jsonObj != undefined && jsonObj != null &&
 			jsonObj.listareasresponsetype != undefined && jsonObj.listareasresponsetype != null && 
@@ -92,28 +111,23 @@
 						var name = jsonObj.listareasresponsetype.areas[i].name;
 						var id = jsonObj.listareasresponsetype.areas[i].id;
 						areas.push(new SaveAreaType(name, id));
-						var tempTables = areas.tables;
-						if(tempTables != null) {
-							if(tempTables.length != undefined) {
-								for(var k = 0; k < tempTables.length; k++) {
-									var domainTable = tempTables[k];
-									tables[domainTable.name] = new Table(domainTable.id, domainTable.name, domainTable.x, domainTable.y, domainTable.areaid);
-								}
-							} else {
-								tables[tempTables.name] = new Table(tempTables.id, tempTables.name, tempTables.x, tempTables.y, tempTables.areaid);
-							}
+						var soapTables = jsonObj.listareasresponsetype.areas[i].tables;
+						if(soapTables != null) {
+							loadTables(soapTables);
 						}
 					}
 				} else {
 					areas.push(jsonObj.listareasresponsetype.areas.name, jsonObj.listareasresponsetype.areas.id);
+					loadTables(jsonObj.listareasresponsetype.areas.tables);
 				}
 				var html = "<tr>";
 				for(var i = 0; i < areas.length; i++) {
-					html += "<td><input type='button' onclick='' value='" + areas[i].name + "' id='"+i+"' class='groovybutton'/></td>";
+					html += "<td><input type='button' onclick='clickSeatingArea("+i+")' value='" + areas[i].name + "' id='"+i+"' class='groovybutton'/></td>";
 				}
 				html += "</tr>"
 				document.getElementById("areaList").innerHTML = html;
 				disableTables(true);
+				clearTables();
 			}
 		} else {
 			alert("Failed to load seating areas!");
@@ -127,25 +141,27 @@
 	}
 	function clickSeatingArea(i) {
 		var button = document.getElementById(i);
-		button.style.backgroundColor = "white";
+		button.style.backgroundColor = "#2ECCFA";
 		for(var k = 0; k < areas.length; k++) {
-			if(k!=i) document.getElementById(k).backgroundColor = "#FFFF00";
+			if(k!=i) document.getElementById(k).style.backgroundColor = "#FFFF00";
 		} 
 		var area = areas[i];
 		document.getElementById("areaName").value = area.name;
 		document.getElementById("areaId").value = area.id;
 		disableTables(false);
+		clearTables();
+		
 		var container = document.getElementById('pageContainer');
 		document.getElementById('tableName').value = "";
 		for(var t in tables) {
-			if(tables[t].areaid != area.id) {
+			if(tables[t].areaId == area.id) {
 		        var tableDiv = document.createElement('div');
 				//tableDiv.setAttribute('src', 'img/tan-square.png');
 		        tableDiv.setAttribute('class', 'drag');
-		        tableDiv.setAttribute('id', t.name);
-		        tableDiv.setAttribute('style', 'outline:solid black medium; width: 80px; height: 80px; background-color: brown;left: '+t.y+';top: '+t.x+'px;');
-		        tableDiv.innerHTML = '<br><center>' + t.name + '</center>';
-		        tableDiv.onclick = function() { clickTable(t.name); }
+		        tableDiv.setAttribute('id', tables[t].name);
+		        tableDiv.setAttribute('style', 'border:solid black 1px; width: 80px; height: 80px; background-color: brown;left: '+tables[t].y+';top: '+tables[t].x+'px;');
+		        tableDiv.innerHTML = '<br><center>' + tables[t].name + '</center>';
+		        tableDiv.onclick = function() { clickTable(t); }
 		        container.appendChild(tableDiv);
 			}
 		}
@@ -180,7 +196,7 @@
 		}
 	}
 	function deleteSeatingAreaHandler(jsonObj) {
-		
+		listSeatingAreas();
 	}
     function addTable() {
 		var tableName = document.getElementById('tableName').value;
@@ -194,7 +210,7 @@
 	        tableDiv.setAttribute('class', 'drag');
 			var top = 5 - (tableNum++ * 75);
 	        tableDiv.setAttribute('id', tableName);
-	        tableDiv.setAttribute('style', 'outline:solid black medium; width: 80px; height: 80px; background-color: brown;left: 5px;top: ' + top + 'px;');
+	        tableDiv.setAttribute('style', 'border:solid black 1px; width: 80px; height: 80px; background-color: brown;left: 5px;top: ' + top + 'px;');
 	        tableDiv.innerHTML = '<br><center>' + tableName + '</center>';
 	        tableDiv.onclick = function() { clickTable(tableName); }
 	        container.appendChild(tableDiv);
@@ -209,7 +225,7 @@
 	function clickTable(id) {
 		var tableDiv = document.getElementById(id);
 		document.getElementById('tableName').value = id;
-		tableDiv.style.backgroundColor = "yellow";
+		tableDiv.style.backgroundColor = "#2ECCFA";
 		selected = id;
 		for(var t in tables) {
 			if(tables[t].name != id) {
