@@ -888,3 +888,35 @@ function DeleteTableType(aId) {
         return xml;
     }
 }
+function ListAreasType() {
+    this.getXML = function() {
+        var xml = soapXMLBegin + "<app:ListAreasType/>" + soapXMLEnd;
+        return xml;
+    }
+}
+function SaveAreaType(aName, aId) {
+    this.name = aName;
+    this.id = aId
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:SaveSeatingAreaType>";
+        xml += "<app:areaType><app:name>" + this.name + "</app:name>";
+        if(this.id != null && this.id != "") {
+            xml += "<app:id>" + tis.id + "</app:id>";
+        }
+        xml += "</app:areaType></app:SaveSeatingAreaType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function DeleteAreaType(aId) {
+    this.id = aId;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:DeleteSeatingAreaType>"
+        xml += "<app:id>" + aId + "</app:id>";
+        xml += "</app:DeleteSeatingAreaType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}

@@ -18,48 +18,170 @@
         .drag {
             position: relative;
         }
+        
+        input.groovybutton {
+		   font-size:14px;
+		   font-weight:bold;
+		   color:#000000;//#FFFF00;
+		   width:60px;
+		   height:40px;
+		   background-color:#FFFF00;
+		   border-width:1px;
+		}
     </style>
 </head>
-<body onload="InitDragDrop()">
+<body onload="InitDragDrop(); listSeatingAreas();">
 <table>
 	<tr><td><input type="button" class="navibutton" onclick="window.location.href='home.html';" value="<< Back"></td>
 </table>
 <table width="100%">
 	<tr>
 		<td width="100%">
+			<input type="hidden" name='areaId' value=""/>
+			Area: <input type="text" id="areaName"/><input type="button" onclick="addSeatingArea()" value="Create New"/>
+			<input type="button" onclick="saveSeatingArea()" value="Update"/>
+			<input type="button" onclick="deleteSeatingArea()" value="Delete"/>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<table id="areaList"></table>
+		</td>
+	</tr>
+	<tr>
+		<td width="100%">
 			<div>
-				<div style="width: 5px; float: left;">
-					<table id="areaList">
-						
-					</table>
-				</div>
-				<div id="pageContainer" style="outline:solid black thin; width: 700px; height: 500px; background-color: gray; float: left"></div>
+				<div id="pageContainer" style="outline:solid black thin; width: 700px; height: 500px; background-color: #F5DA81; float: left"></div>
 				<div style="width: 5px; float: left;">&nbsp;</div>
 				<textarea id="log" style="outline:solid black thin; width: 150px; height: 300px; background-color: gray; float: left"></textarea>
 			</div>
 		</td>
 	</tr>
-	<tr><td>&nbsp;</td></tr>
 	<tr>
 		<td>
 			Table Name: <input type="text" id="tableName" value=""/>
 			<button onclick="addTable()" id="addTableButton" style="padding: 5px">New Table</button>
-			<button onclick="getLocations()" id="getLocationsButton" style="padding: 5px">Locations</button>
+			<button onclick="saveTable()" id="saveTableButton" style="padding: 5px">Save Table</button>
+			<button onclick="deleteTable()" id="deleteTableButton" style="padding: 5px">Delete Table</button>
 		</td>
 	</tr>
 	<tr>
 		<td>
-			<button onclick="saveTable()" id="saveTableButton" style="padding: 5px">Save Table</button>
-			<button onclick="deleteTable()" id="deleteTableButton" style="padding: 5px">Delete Table</button>
+			<button onclick="getLocations()" id="getLocationsButton" style="padding: 5px">Locations</button>
 		</td>
 	</tr>
 </table>
 <script type="text/javascript">
     var tableNum = 0;
+    var areas = new Array();
 	var tables = {};
 	var selected = null;
 	var savedTable = null;
 	
+	function listSeatingAreas() {
+		var soapType = new ListAreasType();
+		call_web_service(soapType, listSeatingAreasHandler);
+	}
+	function listSeatingAreasHandler(jsonObj) {
+		if(jsonObj != undefined && jsonObj != null &&
+			jsonObj.listareasresponsetype != undefined && jsonObj.listareasresponsetype != null && 
+			jsonObj.listareasresponsetype.result.successful == "true") {
+			if(jsonObj.listareasresponsetype.areas != null) {
+				if(jsonObj.listareasresponsetype.areas.length != undefined) {
+					for(var i = 0; i < jsonObj.listareasresponsetype.areas.length; i++) {
+						var name = jsonObj.listareasresponsetype.areas[i].name;
+						var id = jsonObj.listareasresponsetype.areas[i].id;
+						areas.push(new SaveAreaType(name, id));
+						var tempTables = areas.tables;
+						if(tempTables != null) {
+							if(tempTables.length != undefined) {
+								for(var k = 0; k < tempTables.length; k++) {
+									var domainTable = tempTables[k];
+									tables[domainTable.name] = new Table(domainTable.id, domainTable.name, domainTable.x, domainTable.y, domainTable.areaid);
+								}
+							} else {
+								tables[tempTables.name] = new Table(tempTables.id, tempTables.name, tempTables.x, tempTables.y, tempTables.areaid);
+							}
+						}
+					}
+				} else {
+					areas.push(jsonObj.listareasresponsetype.areas.name, jsonObj.listareasresponsetype.areas.id);
+				}
+				var html = "<tr>";
+				for(var i = 0; i < areas.length; i++) {
+					html += "<td><input type='button' onclick='' value='" + areas[i].name + "' id='"+i+"' class='groovybutton'/></td>";
+				}
+				html += "</tr>"
+				document.getElementById("areaList").innerHTML = html;
+				disableTables(true);
+			}
+		} else {
+			alert("Failed to load seating areas!");
+		}
+	}
+	function disableTables(isDisabled) {
+		document.getElementById("addTableButton").disabled = isDisabled;
+		document.getElementById("saveTableButton").disabled = isDisabled;
+		document.getElementById("deleteTableButton").disabled = isDisabled;
+		document.getElementById("tableName").readOnly = isDisabled;
+	}
+	function clickSeatingArea(i) {
+		var button = document.getElementById(i);
+		button.style.backgroundColor = "white";
+		for(var k = 0; k < areas.length; k++) {
+			if(k!=i) document.getElementById(k).backgroundColor = "#FFFF00";
+		} 
+		var area = areas[i];
+		document.getElementById("areaName").value = area.name;
+		document.getElementById("areaId").value = area.id;
+		disableTables(false);
+		var container = document.getElementById('pageContainer');
+		document.getElementById('tableName').value = "";
+		for(var t in tables) {
+			if(tables[t].areaid != area.id) {
+		        var tableDiv = document.createElement('div');
+				//tableDiv.setAttribute('src', 'img/tan-square.png');
+		        tableDiv.setAttribute('class', 'drag');
+		        tableDiv.setAttribute('id', t.name);
+		        tableDiv.setAttribute('style', 'outline:solid black medium; width: 80px; height: 80px; background-color: brown;left: '+t.y+';top: '+t.x+'px;');
+		        tableDiv.innerHTML = '<br><center>' + t.name + '</center>';
+		        tableDiv.onclick = function() { clickTable(t.name); }
+		        container.appendChild(tableDiv);
+			}
+		}
+	}
+	function addSeatingArea() {
+		document.getElementById("areaName").value = "";
+		document.getElementById("areaId").value = "";
+		disableTables(true);
+	}
+	function saveSeatingArea() {
+		var areaName = document.getElementById("areaName").value;
+		if(areaName != null && areaName != "") {
+			var soapType = new SaveAreaType(areaName, document.getElementById("areaId".value));
+			call_web_service(soapType, saveSeatingAreaHandler);
+		} else {
+			alert("Please enter a name for the area!");
+		}
+	}
+	function saveSeatingAreaHandler(jsonObj) {
+		if(jsonObj != undefined && jsonObj != null &&
+			jsonObj.saveseatingarearesponsetype != undefined && jsonObj.saveseatingarearesponsetype != null && 
+			jsonObj.saveseatingarearesponsetype.result.successful == "true") {
+			document.getElementById("areaId").value = jsonObj.saveseatingarearesponsetype.areaid;
+			listSeatingAreas();
+		}
+	}
+	function deleteSeatingArea() {
+		var id = document.getElementById("areaId").value;
+		if(id != null && id != "") {
+			var soapType = new DeleteAreaType(id);
+			call_web_service(soapType, deleteSeatingAreaHandler);
+		}
+	}
+	function deleteSeatingAreaHandler(jsonObj) {
+		
+	}
     function addTable() {
 		var tableName = document.getElementById('tableName').value;
 		if(tableName != null && tableName != "") {
@@ -114,8 +236,8 @@
     	var tableDiv = document.getElementById(selected); 
     	if(tableDiv != null) {
     		var table = tables[selected];
-    		table.x = table.offsetLeft - containerLeft;
-    		table.y = table.offsetTop - containerTop;
+    		table.x = tableDiv.offsetLeft - containerLeft;
+    		table.y = tableDiv.offsetTop - containerTop;
     		var soapType = new SaveTableType(table);
     		call_web_service(soapType, saveTableHandler);
     		document.getElementById("saveTableButton").disabled = true;
