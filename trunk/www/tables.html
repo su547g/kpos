@@ -39,8 +39,8 @@
 		<td width="100%">
 			<input type="hidden" id='areaId' value=""/>
 			Area: <input type="text" id="areaName"/><input type="button" onclick="addSeatingArea()" value="Create New"/>
-			<input type="button" onclick="saveSeatingArea()" value="Update"/>
-			<input type="button" onclick="deleteSeatingArea()" value="Delete"/>
+			<input type="button" onclick="saveSeatingArea()" value="Save Area"/>
+			<input type="button" onclick="deleteSeatingArea()" value="Delete Area"/>
 		</td>
 	</tr>
 	<tr>
@@ -106,6 +106,8 @@
 			jsonObj.listareasresponsetype != undefined && jsonObj.listareasresponsetype != null && 
 			jsonObj.listareasresponsetype.result.successful == "true") {
 			if(jsonObj.listareasresponsetype.areas != null) {
+				areas = new Array();
+				tables = {};
 				if(jsonObj.listareasresponsetype.areas.length != undefined) {
 					for(var i = 0; i < jsonObj.listareasresponsetype.areas.length; i++) {
 						var name = jsonObj.listareasresponsetype.areas[i].name;
@@ -117,7 +119,7 @@
 						}
 					}
 				} else {
-					areas.push(jsonObj.listareasresponsetype.areas.name, jsonObj.listareasresponsetype.areas.id);
+					areas.push(new SaveAreaType(jsonObj.listareasresponsetype.areas.name, jsonObj.listareasresponsetype.areas.id));
 					loadTables(jsonObj.listareasresponsetype.areas.tables);
 				}
 				var html = "<tr>";
@@ -153,15 +155,16 @@
 		
 		var container = document.getElementById('pageContainer');
 		document.getElementById('tableName').value = "";
+		var tableDiv;
 		for(var t in tables) {
 			if(tables[t].areaId == area.id) {
-		        var tableDiv = document.createElement('div');
+		        tableDiv = document.createElement('div');
 				//tableDiv.setAttribute('src', 'img/tan-square.png');
 		        tableDiv.setAttribute('class', 'drag');
 		        tableDiv.setAttribute('id', tables[t].name);
 		        tableDiv.setAttribute('style', 'border:solid black 1px; width: 80px; height: 80px; background-color: brown;left: '+tables[t].y+';top: '+tables[t].x+'px;');
 		        tableDiv.innerHTML = '<br><center>' + tables[t].name + '</center>';
-		        tableDiv.onclick = function() { clickTable(t); }
+		        tableDiv.onclick = function() { clickTable(this); }
 		        container.appendChild(tableDiv);
 			}
 		}
@@ -173,8 +176,25 @@
 	}
 	function saveSeatingArea() {
 		var areaName = document.getElementById("areaName").value;
+		var areaId = document.getElementById("areaId").value;
 		if(areaName != null && areaName != "") {
-			var soapType = new SaveAreaType(areaName, document.getElementById("areaId".value));
+			var container = document.getElementById('pageContainer');
+			var tableDivs = document.getElementsByClassName('drag');
+	        var containerLeft = container.offsetLeft;
+	        var containerTop = container.offsetTop;
+	        var buffer = '';
+	        for(var i = 0; i < tableDivs.length; i++) {
+	            var table = tableDivs[i];
+	            var tId = table.id;
+	            tables[tId].x = table.offsetLeft - containerLeft;
+	            tables[tId].y = table.offsetTop - containerTop;
+	        }
+			var soapType = new SaveAreaType(areaName, areaId);
+			for(var t in tables) {
+				if(tables[t].areaId == areaId) {
+					soapType.tables.push(tables[t]);
+				}
+			}
 			call_web_service(soapType, saveSeatingAreaHandler);
 		} else {
 			alert("Please enter a name for the area!");
@@ -186,6 +206,8 @@
 			jsonObj.saveseatingarearesponsetype.result.successful == "true") {
 			document.getElementById("areaId").value = jsonObj.saveseatingarearesponsetype.areaid;
 			listSeatingAreas();
+		} else {
+			alert("Failed to save - " + jsonObj.saveseatingarearesponsetype.result.failurereason);
 		}
 	}
 	function deleteSeatingArea() {
@@ -212,23 +234,23 @@
 	        tableDiv.setAttribute('id', tableName);
 	        tableDiv.setAttribute('style', 'border:solid black 1px; width: 80px; height: 80px; background-color: brown;left: 5px;top: ' + top + 'px;');
 	        tableDiv.innerHTML = '<br><center>' + tableName + '</center>';
-	        tableDiv.onclick = function() { clickTable(tableName); }
+	        tableDiv.onclick = function() { clickTable(this); }
 	        container.appendChild(tableDiv);
 	        document.getElementById('tableName').value = "";
 	        tables[tableName] = new Table(null, tableName, 0, 0, null); //aId, aName, aX, aY, aAreaId
 	        selected = tableName;
-	        clickTable(tableName);
+	        clickTable(tableDiv);
 	   } else {
 	   		alert("Please enter a table name");
 	   }
     }
-	function clickTable(id) {
-		var tableDiv = document.getElementById(id);
-		document.getElementById('tableName').value = id;
+	function clickTable(tableDiv) {
+		//var tableDiv = document.getElementById(id);
+		document.getElementById('tableName').value = tableDiv.id;
 		tableDiv.style.backgroundColor = "#2ECCFA";
-		selected = id;
+		selected = tableDiv.id;
 		for(var t in tables) {
-			if(tables[t].name != id) {
+			if(tables[t].name != tableDiv.id && document.getElementById(t)!=null) {
 				document.getElementById(t).style.backgroundColor = "brown";
 			}
 		}
@@ -236,13 +258,13 @@
     function getLocations() {
         var container = document.getElementById('pageContainer');
         var log = document.getElementById('log');
-        var tables = document.getElementsByClassName('drag');
+        var tableDivs = document.getElementsByClassName('drag');
         var containerLeft = container.offsetLeft;
         var containerTop = container.offsetTop;
 
         var buffer = '';
-        for(var i = 0; i < tableIds.length; i++) {
-            var table = document.getElementById(tableIds[i]);
+        for(var i = 0; i < tableDivs.length; i++) {
+            var table = tableDivs[i];
             console.log("table x: " + (table.offsetLeft - containerLeft) + " table y: " + (table.offsetTop - containerTop));
             buffer += 'x: ' + (table.offsetLeft - containerLeft) + ' y: ' + (table.offsetTop - containerTop) + '\n';
         }
@@ -250,15 +272,19 @@
     }
     function saveTable() {
     	var tableDiv = document.getElementById(selected); 
+    	var container = document.getElementById('pageContainer');
+    	var containerLeft = container.offsetLeft;
+        var containerTop = container.offsetTop;
     	if(tableDiv != null) {
     		var table = tables[selected];
+    		table.name = document.getElementById("tableName").value;
     		table.x = tableDiv.offsetLeft - containerLeft;
     		table.y = tableDiv.offsetTop - containerTop;
-    		var soapType = new SaveTableType(table);
-    		call_web_service(soapType, saveTableHandler);
     		document.getElementById("saveTableButton").disabled = true;
     		document.getElementById("deleteTableButton").disabled = true;
     		savedTable = table;
+    		var soapType = new SaveTableType(table);
+    		call_web_service(soapType, saveTableHandler);
     	}
     }
     function saveTableHandler(jsonObj) {
@@ -283,7 +309,9 @@
     			var soapType = new DeleteTableType(table.id);
     			call_web_service(soapType, deleteTableHandler);
     		} else {
-    			tableDiv.parent.removeChild(tableDiv);
+    			tableDiv.parentNode.removeChild(tableDiv);
+    			document.getElementById("tableName").value = "";
+    			delete tables[selected];
     		}
     	}
     }
@@ -291,8 +319,9 @@
     	if(jsonObj != undefined && jsonObj != null &&
 			jsonObj.deletetableresponsetype != undefined && jsonObj.deletetableresponsetype != null && 
 			jsonObj.deletetableresponsetype.result.successful == "true") {
-			var div = document.getElementById(savedTable.name);
-			div.parent.removeChild(tableDiv);
+			var tableDiv = document.getElementById(savedTable.name);
+			div.parentNode.removeChild(tableDiv);
+			delete tables[savedTable.name];
 		} else {
 			alert("Failed to delete table!");
 		}

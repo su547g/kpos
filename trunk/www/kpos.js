@@ -858,6 +858,9 @@ function Table(aId, aName, aX, aY, aAreaId) {
     this.areaId = aAreaId;
     this.getXML = function() {
         var xml = "<app:table>";
+        if(this.id != null && parseInt(this.id) > 0) {
+            xml += "<app:id>" + this.id + "</app:id>";
+        }
         xml += "<app:name>"+this.name+"</app:name>";
         xml += "<app:x>" + this.x + "</app:x>";
         xml += "<app:y>" + this.y + "</app:y>";
@@ -896,13 +899,22 @@ function ListAreasType() {
 }
 function SaveAreaType(aName, aId) {
     this.name = aName;
-    this.id = aId
+    this.id = aId;
+    this.tables = new Array();
     this.getXML = function() {
         var xml = soapXMLBegin;
         xml += "<app:SaveSeatingAreaType>";
         xml += "<app:areaType><app:name>" + this.name + "</app:name>";
         if(this.id != null && this.id != "") {
-            xml += "<app:id>" + tis.id + "</app:id>";
+            xml += "<app:id>" + this.id + "</app:id>";
+        }
+        for(var i = 0; i < this.tables.length; i++) {
+            xml += "<app:tables>";
+            xml += "<app:name>"+this.tables[i].name+"</app:name>";
+            xml += "<app:x>" + this.tables[i].x + "</app:x>";
+            xml += "<app:y>" + this.tables[i].y + "</app:y>";
+            xml += "<app:areaId>" + this.id + "</app:areaId>";
+            xml += "</app:tables>";
         }
         xml += "</app:areaType></app:SaveSeatingAreaType>";
         xml += soapXMLEnd;
