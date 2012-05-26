@@ -290,12 +290,14 @@ CREATE TABLE `order_bill` (
   `last_updated_by` int(11) DEFAULT NULL,
   `version` int(11) DEFAULT NULL,
   `num_guests` int(11) DEFAULT NULL,
+  `tax` double NOT NULL DEFAULT '0',
+  `gratuity` double DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `table_id` (`table_id`),
   KEY `ORDER_2_CUSTOMER_FK` (`customer_id`),
   CONSTRAINT `ORDER_2_CUSTOMER_FK` FOREIGN KEY (`customer_id`) REFERENCES `customer_info` (`id`),
   CONSTRAINT `order_bill_ibfk_1` FOREIGN KEY (`table_id`) REFERENCES `restaurant_table` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -304,6 +306,7 @@ CREATE TABLE `order_bill` (
 
 LOCK TABLES `order_bill` WRITE;
 /*!40000 ALTER TABLE `order_bill` DISABLE KEYS */;
+INSERT INTO `order_bill` VALUES (4,'0','OUT',NULL,17.28,NULL,NULL,'2012-05-20 23:53:05','2012-05-20 23:53:05',NULL,NULL,0,1,0,0),(5,'0','OUT',NULL,17.28,NULL,NULL,'2012-05-20 23:56:12','2012-05-20 23:56:12',NULL,NULL,0,1,0,0),(6,'0','OUT',NULL,23.76,NULL,NULL,'2012-05-21 00:00:55','2012-05-21 00:00:55',NULL,NULL,0,1,0,0),(7,'0','OUT',NULL,17.28,NULL,NULL,'2012-05-21 20:53:32','2012-05-21 20:53:32',NULL,NULL,0,1,0,0),(8,'0','OUT',NULL,10.8,NULL,NULL,'2012-05-21 20:53:59','2012-05-21 20:53:59',NULL,NULL,0,1,0,0),(9,'0','OUT',NULL,21.6,NULL,NULL,'2012-05-21 21:04:36','2012-05-21 21:04:36',NULL,NULL,0,1,0,0),(10,'0','OUT',NULL,6.48,NULL,NULL,'2012-05-21 21:04:56','2012-05-21 21:04:56',NULL,NULL,0,1,0,0),(11,'0','OUT',NULL,12.96,NULL,NULL,'2012-05-21 21:05:27','2012-05-21 21:05:27',NULL,NULL,0,1,0,0),(12,'0','OUT',NULL,10.8,NULL,NULL,'2012-05-21 21:06:54','2012-05-21 21:06:54',NULL,NULL,0,1,0,0),(13,'0','OUT',NULL,7.56,NULL,NULL,'2012-05-21 21:12:25','2012-05-21 21:30:24',NULL,NULL,1,1,0,0),(14,'0','OUT',NULL,27,NULL,NULL,'2012-05-26 17:11:21','2012-05-26 17:14:48',NULL,NULL,1,1,0,0);
 /*!40000 ALTER TABLE `order_bill` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -325,10 +328,11 @@ CREATE TABLE `order_item` (
   `last_updated` datetime DEFAULT NULL,
   `last_updated_by` int(11) DEFAULT NULL,
   `version` int(11) DEFAULT NULL,
+  `sale_item_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `ITEM_2_ORDER_FK` (`order_id`),
   CONSTRAINT `ITEM_2_ORDER_FK` FOREIGN KEY (`order_id`) REFERENCES `order_bill` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -337,6 +341,7 @@ CREATE TABLE `order_item` (
 
 LOCK TABLES `order_item` WRITE;
 /*!40000 ALTER TABLE `order_item` DISABLE KEYS */;
+INSERT INTO `order_item` VALUES (3,1,4,'item1',10,'2012-05-20 23:53:05',NULL,'2012-05-20 23:53:05',NULL,0,9),(4,1,4,'item2',6,'2012-05-20 23:53:05',NULL,'2012-05-20 23:53:05',NULL,0,10),(5,1,5,'item1',10,'2012-05-20 23:56:12',NULL,'2012-05-20 23:56:12',NULL,0,9),(6,1,5,'item2',6,'2012-05-20 23:56:12',NULL,'2012-05-20 23:56:12',NULL,0,10),(7,1,6,'item1',10,'2012-05-21 00:00:55',NULL,'2012-05-21 00:00:55',NULL,0,9),(8,1,6,'item2',6,'2012-05-21 00:00:55',NULL,'2012-05-21 00:00:55',NULL,0,10),(9,1,6,'item4',6,'2012-05-21 00:00:55',NULL,'2012-05-21 00:00:55',NULL,0,12),(10,1,7,'item1',10,'2012-05-21 20:53:33',NULL,'2012-05-21 20:53:33',NULL,0,9),(11,1,7,'item2',6,'2012-05-21 20:53:33',NULL,'2012-05-21 20:53:33',NULL,0,10),(12,1,8,'item1',10,'2012-05-21 20:54:03',NULL,'2012-05-21 20:54:03',NULL,0,9),(13,2,9,'item1',10,'2012-05-21 21:04:39',NULL,'2012-05-21 21:04:39',NULL,0,9),(14,1,10,'item2',6,'2012-05-21 21:04:59',NULL,'2012-05-21 21:04:59',NULL,0,10),(15,2,11,'item2',6,'2012-05-21 21:05:31',NULL,'2012-05-21 21:05:31',NULL,0,10),(16,1,12,'item3',10,'2012-05-21 21:06:57',NULL,'2012-05-21 21:06:57',NULL,0,11),(19,1,13,'item3',7,'2012-05-21 21:30:24',NULL,'2012-05-21 21:30:24',NULL,0,11),(23,1,14,'item3',7,'2012-05-26 17:14:48',NULL,'2012-05-26 17:14:48',NULL,0,11),(24,2,14,'item6',6,'2012-05-26 17:14:48',NULL,'2012-05-26 17:14:48',NULL,0,13),(25,1,14,'item6',6,'2012-05-26 17:14:48',NULL,'2012-05-26 17:14:48',NULL,0,13);
 /*!40000 ALTER TABLE `order_item` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -348,22 +353,22 @@ DROP TABLE IF EXISTS `order_item_option`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `order_item_option` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `quantity` int(11) NOT NULL,
   `price` double DEFAULT NULL,
   `order_item_id` int(11) NOT NULL,
-  `sale_item_option_id` int(11) NOT NULL,
   `version` int(11) DEFAULT NULL,
   `created_on` datetime DEFAULT NULL,
   `last_updated` datetime DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
   `last_updated_by` int(11) DEFAULT NULL,
+  `display_text` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `option_id` int(11) NOT NULL,
+  `option_type` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `ORDER_OPTION_2_ITEM_FK` (`order_item_id`),
-  KEY `ORD_OPT_2_SALEI_OPT_FK` (`sale_item_option_id`),
-  CONSTRAINT `ORDER_OPTION_2_ITEM_FK` FOREIGN KEY (`order_item_id`) REFERENCES `order_item` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `ORD_OPT_2_SALEI_OPT_FK` FOREIGN KEY (`sale_item_option_id`) REFERENCES `sale_item_option` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  CONSTRAINT `ORDER_OPTION_2_ITEM_FK` FOREIGN KEY (`order_item_id`) REFERENCES `order_item` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -372,6 +377,7 @@ CREATE TABLE `order_item_option` (
 
 LOCK TABLES `order_item_option` WRITE;
 /*!40000 ALTER TABLE `order_item_option` DISABLE KEYS */;
+INSERT INTO `order_item_option` VALUES (5,1,0,23,0,NULL,NULL,NULL,NULL,'烧烤酱',7,'GLOBAL_OP'),(6,1,0,25,0,NULL,NULL,NULL,NULL,'醋',6,'GLOBAL_OP'),(7,1,0,25,0,NULL,NULL,NULL,NULL,'Global Option 4',4,'GLOBAL_OP'),(8,1,0,25,0,NULL,NULL,NULL,NULL,'fdfsad',1,'CAT_OP');
 /*!40000 ALTER TABLE `order_item_option` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -460,7 +466,7 @@ CREATE TABLE `restaurant_table` (
   PRIMARY KEY (`id`),
   KEY `TABLE_2_AREA_FK` (`area_id`),
   CONSTRAINT `TABLE_2_AREA_FK` FOREIGN KEY (`area_id`) REFERENCES `seating_area` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -469,7 +475,7 @@ CREATE TABLE `restaurant_table` (
 
 LOCK TABLES `restaurant_table` WRITE;
 /*!40000 ALTER TABLE `restaurant_table` DISABLE KEYS */;
-INSERT INTO `restaurant_table` VALUES (2,'Table 1',0,9,NULL,'2012-04-24 00:16:47',NULL,'2012-04-24 00:16:47',0,3),(7,'Table 2',10,12,NULL,'2012-04-24 23:25:50',NULL,'2012-04-24 23:25:50',0,3);
+INSERT INTO `restaurant_table` VALUES (16,'Table A',113,125,NULL,'2012-05-25 22:51:04',NULL,'2012-05-25 22:51:04',0,3),(17,'Table 2',238,173,NULL,'2012-05-25 22:51:04',NULL,'2012-05-25 22:51:04',0,3),(18,'1',10,11,NULL,'2012-05-25 23:03:34',NULL,'2012-05-25 23:08:04',1,4);
 /*!40000 ALTER TABLE `restaurant_table` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -577,7 +583,7 @@ CREATE TABLE `seating_area` (
   `version` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -586,7 +592,7 @@ CREATE TABLE `seating_area` (
 
 LOCK TABLES `seating_area` WRITE;
 /*!40000 ALTER TABLE `seating_area` DISABLE KEYS */;
-INSERT INTO `seating_area` VALUES (2,'A 1','2012-04-24 00:03:09','2012-04-24 00:03:09',NULL,NULL,0),(3,'Area 1','2012-04-24 00:16:46','2012-04-24 00:16:46',NULL,NULL,4);
+INSERT INTO `seating_area` VALUES (3,'Area 1','2012-05-25 22:51:04','2012-05-25 22:51:04',NULL,NULL,9),(4,'Area 2','2012-05-25 23:03:34','2012-05-25 23:03:34',NULL,NULL,5);
 /*!40000 ALTER TABLE `seating_area` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -599,4 +605,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-05-19  0:47:03
+-- Dump completed on 2012-05-26 19:14:04
