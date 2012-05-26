@@ -108,6 +108,89 @@ ul.tabbernav li.tabberactive a:hover
  overflow:auto;
 }
 
+input.groovybutton {
+   font-size:14px;
+   font-weight:bold;
+   color:#000000;//#FFFF00;
+   width:100px;
+   height:80px;
+   background-color:#FFFF00;
+   border-width:2px;
+}
+input.itembutton {
+   font-size:9px;
+   font-weight:bold;
+   color:#000000;//#FFFF00;
+   width:80px;
+   height:40px;
+   background-color:#BDBDBD;
+   border-width:1px;
+}
+input.optionbutton {
+   font-size:9px;
+   font-weight:bold;
+   color:#000000;//#FFFF00;
+   width:70px;
+   height:30px;
+   background-color:#BDBDBD;
+   border-width:1px;
+}
+input.backbutton {
+   color:#000000;//#FFFF00;
+   width:100px;
+   height:80px;
+   background-color:#FFFF00;
+   background-image:url(img/back-icon.jpg);
+   border-width:2px;
+}
+input.nextbutton {
+   color:#000000;//#FFFF00;
+   width:100px;
+   height:80px;
+   background-color:#DDDDDD;
+   background-image:url(img/next-icon.jpg);
+   border-width:2px;
+}
+input.smallbackbutton {
+   color:#000000;//#FFFF00;
+   width:65px;
+   height:65px;
+   background-color:#FFFF00;
+   background-image:url(img/previous-icon-small.jpg);
+   border-width:2px;
+}
+input.smallnextbutton {
+   color:#000000;//#FFFF00;
+   width:65px;
+   height:65px;
+   background-color:#DDDDDD;
+   background-image:url(img/next-icon-small.jpg);
+   border-width:2px;
+}
+input.cancelbutton {
+   color:#000000;//#FFFF00;
+   width:80px;
+   height:60px;
+   background-color:gray;
+   border-width:2px;
+}
+input.plusbutton {
+   color:#000000;//#FFFF00;
+   width:48px;
+   height:48px;
+   background-color:#DDDDDD;
+   background-image:url(img/plus.jpg);
+   border-width:1px;
+}
+input.minusbutton {
+   color:#000000;//#FFFF00;
+   width:48px;
+   height:48px;
+   background-color:#DDDDDD;
+   background-image:url(img/minus.jpg);
+   border-width:1px;
+}
+
 input.navibutton {
    font-size:14px;
    font-weight:bold;
@@ -116,4 +199,59 @@ input.navibutton {
    height:40px;
    background-color:gray;
    border-width:2px;
+}
+
+input.paymentbutton {
+   font-size:14px;
+   font-weight:bold;
+   color:#000000;//#FFFF00;
+   width:80px;
+   height:40px;
+   background-color:#FFFF00;
+   border-width:1px;
+}
+input.creditbutton {
+   font-size:14px;
+   font-weight:bold;
+   color:#000000;//#FFFF00;
+   width:100px;
+   height:40px;
+   background-color:#FFFF00;
+   border-width:1px;
+}
+input.numberbutton {
+   font-size:14px;
+   font-weight:bold;
+   color:#FF8000;//#FFFF00;
+   width:50px;
+   height:50px;
+   background-color:gray;
+   border-width:1px;
+}
+input.dollarbutton {
+   font-size:14px;
+   font-weight:bold;
+   color:#74DF00;//#FF8000;//#FFFF00;
+   width:50px;
+   height:50px;
+   background-color:gray;
+   border-width:1px;
+}
+input.clearbutton {
+   font-size:14px;
+   font-weight:bold;
+   color:#FFFF00;
+   width:100px;
+   height:50px;
+   background-color:gray;
+   border-width:1px;
+}
+input.settlebutton {
+   font-size:14px;
+   font-weight:bold;
+   color:#00BFFF; //#8A0808;
+   width:130px;
+   height:50px;
+   background-color:gray;
+   border-width:1px;
 }
