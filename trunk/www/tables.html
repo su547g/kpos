@@ -12,11 +12,10 @@
 
     <script type="text/javascript" src="xml2json.js"></script>
     <script type="text/javascript" src="kpos.js"></script>
-    <script type="text/javascript" src="popup.js"></script>
     <script type="text/javascript" src="js/dragAndDrop.js"></script>
     <style type="text/css">
         .drag {
-            position: relative;
+            position: absolute;
         }
         
         input.groovybutton {
@@ -34,50 +33,45 @@
 <table>
 	<tr><td><input type="button" class="navibutton" onclick="window.location.href='home.html';" value="<< Back"></td>
 </table>
-<table width="100%">
-	<tr>
-		<td width="100%">
-			<input type="hidden" id='areaId' value=""/>
-			Area: <input type="text" id="areaName"/><input type="button" onclick="addSeatingArea()" value="Create New"/>
-			<input type="button" onclick="saveSeatingArea()" value="Save Area"/>
-			<input type="button" onclick="deleteSeatingArea()" value="Delete Area"/>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<table id="areaList"></table>
-		</td>
-	</tr>
-	<tr>
-		<td width="100%">
-			<div>
-				<div id="pageContainer" style="outline:solid black thin; width: 700px; height: 500px; background-color: #F5DA81; float: left"></div>
-				<div style="width: 5px; float: left;">&nbsp;</div>
+<div id="pageContainer" style="outline:solid black thin; width: 700px; height: 500px; background-color: #F5DA81; float: left"></div>
+<div style="float:left">
+	<table width="100%">
+		<tr>
+			<td>
+				<table id="areaList"></table>
+			</td>
+		</tr>
+		<tr>
+			<td width="100%">
+				<input type="hidden" id='areaId' value=""/>
+				Area: <input type="text" id="areaName"/><br>
+				<button style="padding: 5px" onclick="addSeatingArea()"/>Create New
+				<button style="padding: 5px" onclick="saveSeatingArea()"/>Save Area
+				<button style="padding: 5px" onclick="deleteSeatingArea()"/>Delete Area
+			</td>
+		</tr>
+		<tr><td>&nbsp;</td></tr>
+		<tr>
+			<td>
 				Table Name: <input type="text" id="tableName" value=""/><br>
 				<button onclick="addTable()" id="addTableButton" style="padding: 5px">New Table</button>
 				<button onclick="saveTable()" id="saveTableButton" style="padding: 5px">Save Table</button>
 				<button onclick="deleteTable()" id="deleteTableButton" style="padding: 5px">Delete Table</button>
-				<br/>
-				<textarea id="log" style="outline:solid black thin; width: 200px; height: 50px; background-color: gray; float: left"></textarea>
-			</div>
-		</td>
-	</tr>
-	<tr>
-		<td>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<button onclick="getLocations()" id="getLocationsButton" style="padding: 5px">Locations</button>
-		</td>
-	</tr>
-</table>
+			</td>
+		</tr>
+	</table>
+</div>
+
+
 <script type="text/javascript">
     var tableNum = 0;
     var areas = new Array();
 	var tables = {};
 	var selected = null;
 	var savedTable = null;
+	var container = document.getElementById('pageContainer');
+	var containerX = container.offsetLeft;
+	var containerY = container.offsetTop;
 	
 	function listSeatingAreas() {
 		var soapType = new ListAreasType();
@@ -96,9 +90,8 @@
 		}
 	}
 	function clearTables() {
-		var node = document.getElementById('pageContainer');
-		while (node.hasChildNodes()) {
-		    node.removeChild(node.lastChild);
+		while (container.hasChildNodes()) {
+		    container.removeChild(container.lastChild);
 		}
 	}
 	function listSeatingAreasHandler(jsonObj) {
@@ -153,16 +146,17 @@
 		disableTables(false);
 		clearTables();
 		
-		var container = document.getElementById('pageContainer');
 		document.getElementById('tableName').value = "";
-		var tableDiv;
+		var tableDiv, x, y;
 		for(var t in tables) {
 			if(tables[t].areaId == area.id) {
 		        tableDiv = document.createElement('div');
 				//tableDiv.setAttribute('src', 'img/tan-square.png');
+				x = containerX+tables[t].x;
+				y = containerY+tables[t].y;
 		        tableDiv.setAttribute('class', 'drag');
 		        tableDiv.setAttribute('id', tables[t].name);
-		        tableDiv.setAttribute('style', 'border:solid black 1px; width: 80px; height: 80px; background-color: brown;left: '+tables[t].y+';top: '+tables[t].x+'px;');
+		        tableDiv.setAttribute('style', 'border:solid black 1px;width:'+_tableWidth+'px;height:'+_tableWidth+'px;background-color:brown;left:'+x+'px;top:'+y+'px;');
 		        tableDiv.innerHTML = '<br><center>' + tables[t].name + '</center>';
 		        tableDiv.onclick = function() { clickTable(this); }
 		        container.appendChild(tableDiv);
@@ -178,16 +172,13 @@
 		var areaName = document.getElementById("areaName").value;
 		var areaId = document.getElementById("areaId").value;
 		if(areaName != null && areaName != "") {
-			var container = document.getElementById('pageContainer');
 			var tableDivs = document.getElementsByClassName('drag');
-	        var containerLeft = container.offsetLeft;
-	        var containerTop = container.offsetTop;
 	        var buffer = '';
 	        for(var i = 0; i < tableDivs.length; i++) {
 	            var table = tableDivs[i];
 	            var tId = table.id;
-	            tables[tId].x = table.offsetLeft - containerLeft;
-	            tables[tId].y = table.offsetTop - containerTop;
+	            tables[tId].x = table.offsetLeft - containerX;
+	            tables[tId].y = table.offsetTop - containerY;
 	        }
 			var soapType = new SaveAreaType(areaName, areaId);
 			for(var t in tables) {
@@ -205,9 +196,10 @@
 			jsonObj.saveseatingarearesponsetype != undefined && jsonObj.saveseatingarearesponsetype != null && 
 			jsonObj.saveseatingarearesponsetype.result.successful == "true") {
 			document.getElementById("areaId").value = jsonObj.saveseatingarearesponsetype.areaid;
-			listSeatingAreas();
+			//listSeatingAreas();
+			alert("Saved seating area!");
 		} else {
-			alert("Failed to save - " + jsonObj.saveseatingarearesponsetype.result.failurereason);
+			alert("ERROR! Failed to save - " + jsonObj.saveseatingarearesponsetype.result.failurereason);
 		}
 	}
 	function deleteSeatingArea() {
@@ -218,26 +210,33 @@
 		}
 	}
 	function deleteSeatingAreaHandler(jsonObj) {
-		listSeatingAreas();
+		if(jsonObj != undefined && jsonObj != null &&
+			jsonObj.deleteseatingarearesponsetype != undefined && jsonObj.deleteseatingarearesponsetype != null && 
+			jsonObj.deleteseatingarearesponsetype.result.successful == "true") {
+			listSeatingAreas();
+		} else {
+			alert("ERROR! Failed to delete seating area - " + jsonObj.deleteseatingarearesponsetype.result.failurereason);
+		}
 	}
     function addTable() {
+    	var areaId = document.getElementById('areaId').value;
 		var tableName = document.getElementById('tableName').value;
-		if(tableName != null && tableName != "") {
+		if(areaId != null && parseInt(areaId) > 0 && tableName != null && tableName != "") {
 			if(tables[tableName] != null) {
 				alert("Table name already exists!"); return;
 			}
-			var container = document.getElementById('pageContainer');
 	        var tableDiv = document.createElement('div');
 			//tableDiv.setAttribute('src', 'img/tan-square.png');
 	        tableDiv.setAttribute('class', 'drag');
-			var top = 5 - (tableNum++ * 75);
+			var x = containerX + 5;
+			var top = containerY + 5;
 	        tableDiv.setAttribute('id', tableName);
-	        tableDiv.setAttribute('style', 'border:solid black 1px; width: 80px; height: 80px; background-color: brown;left: 5px;top: ' + top + 'px;');
+	        tableDiv.setAttribute('style', 'outline:solid black 1px; width:'+_tableWidth+'px;height:'+_tableWidth+'px; background-color: brown;left: '+x+'px;top: '+top+'px;');
 	        tableDiv.innerHTML = '<br><center>' + tableName + '</center>';
 	        tableDiv.onclick = function() { clickTable(this); }
 	        container.appendChild(tableDiv);
 	        document.getElementById('tableName').value = "";
-	        tables[tableName] = new Table(null, tableName, 0, 0, null); //aId, aName, aX, aY, aAreaId
+	        tables[tableName] = new Table(null, tableName, 5, 5, areaId); //aId, aName, aX, aY, aAreaId
 	        selected = tableName;
 	        clickTable(tableDiv);
 	   } else {
@@ -245,7 +244,6 @@
 	   }
     }
 	function clickTable(tableDiv) {
-		//var tableDiv = document.getElementById(id);
 		document.getElementById('tableName').value = tableDiv.id;
 		tableDiv.style.backgroundColor = "#2ECCFA";
 		selected = tableDiv.id;
@@ -255,31 +253,13 @@
 			}
 		}
 	}
-    function getLocations() {
-        var container = document.getElementById('pageContainer');
-        var log = document.getElementById('log');
-        var tableDivs = document.getElementsByClassName('drag');
-        var containerLeft = container.offsetLeft;
-        var containerTop = container.offsetTop;
-
-        var buffer = '';
-        for(var i = 0; i < tableDivs.length; i++) {
-            var table = tableDivs[i];
-            console.log("table x: " + (table.offsetLeft - containerLeft) + " table y: " + (table.offsetTop - containerTop));
-            buffer += 'x: ' + (table.offsetLeft - containerLeft) + ' y: ' + (table.offsetTop - containerTop) + '\n';
-        }
-        log.innerHTML = buffer;
-    }
     function saveTable() {
     	var tableDiv = document.getElementById(selected); 
-    	var container = document.getElementById('pageContainer');
-    	var containerLeft = container.offsetLeft;
-        var containerTop = container.offsetTop;
     	if(tableDiv != null) {
     		var table = tables[selected];
     		table.name = document.getElementById("tableName").value;
-    		table.x = tableDiv.offsetLeft - containerLeft;
-    		table.y = tableDiv.offsetTop - containerTop;
+    		table.x = tableDiv.offsetLeft - containerX;
+    		table.y = tableDiv.offsetTop - containerY;
     		document.getElementById("saveTableButton").disabled = true;
     		document.getElementById("deleteTableButton").disabled = true;
     		savedTable = table;
@@ -294,8 +274,9 @@
 			var id = jsonObj.savetableresponsetype.tableid;
 			savedTable.id = id;
 			savedTable = null;
+			alert("SUCCESS! Save table.");
 		} else {
-			alert("Failed to save table: " + jsonObj.savetableresponsetype.result.failurereason);
+			alert("ERROR! Failed to save table: " + jsonObj.savetableresponsetype.result.failurereason);
 		}
 		document.getElementById("saveTableButton").disabled = false;
 		document.getElementById("deleteTableButton").disabled = false;
@@ -323,7 +304,7 @@
 			div.parentNode.removeChild(tableDiv);
 			delete tables[savedTable.name];
 		} else {
-			alert("Failed to delete table!");
+			alert("ERROR! Failed to delete table!");
 		}
     }
 </script>
