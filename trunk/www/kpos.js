@@ -793,12 +793,14 @@ function OrderOption(aDisplayText, aPrice, aQuantity, aId, aType) {
         return xml;
     }
 }
-function Order(aId, aType, aPrice, aStatus, aNumGuests, aCustomer) {
+function Order(aId, aType, aPrice, aTax, aTips, aStatus, aNumGuests, aCustomer) {
     this.id = aId;
     this.type = aType;
     this.tableId = null;
     this.tableName = null;
     this.totalPrice = aPrice;
+    this.tax = aTax;
+    this.tip = aTips;
     this.status = aStatus;
     this.numOfGuests = aNumGuests;
     this.customer = aCustomer;
@@ -816,6 +818,8 @@ function Order(aId, aType, aPrice, aStatus, aNumGuests, aCustomer) {
             xml += "<app:tableName>" + this.tableName + "</app:tableName>";
         }
         xml += "<app:totalPrice>" + this.totalPrice + "</app:totalPrice>";
+        xml += "<app:totalTax>" + this.tax + "</app:totalTax>";
+        xml += "<app:totalTips>" + this.tip + "</app:totalTips>";
         xml += "<app:status>" + this.status + "</app:status>";
         xml += "<app:numOfGuests>" + this.numOfGuests + "</app:numOfGuests>";
         for(var i = 0; i < this.orderItems.length; i++) {
