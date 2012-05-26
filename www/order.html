@@ -13,11 +13,9 @@
     <script type="text/javascript" src="xml2json.js"></script>
     <script type="text/javascript" src="kpos.js"></script>
     <script type="text/javascript" src="popup.js"></script>
-    <script type="text/javascript" src="calculator.js"></script>
     <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.min.js"></script>
     
     <link rel="stylesheet" href="example.css" TYPE="text/css" MEDIA="screen">
-    <link rel="stylesheet" href="calculator.css" TYPE="text/css" MEDIA="screen">
     
 	<style type="text/css">
       body{
@@ -94,90 +92,6 @@
       	text-indent: 15px;
       }
       .orderTabe th { border: 0px }
-   	</style>
-   	<style type="text/css">
-		input.groovybutton {
-		   font-size:14px;
-		   font-weight:bold;
-		   color:#000000;//#FFFF00;
-		   width:100px;
-		   height:80px;
-		   background-color:#FFFF00;
-		   border-width:2px;
-		}
-		input.itembutton {
-		   font-size:9px;
-		   font-weight:bold;
-		   color:#000000;//#FFFF00;
-		   width:80px;
-		   height:40px;
-		   background-color:#BDBDBD;
-		   border-width:1px;
-		}
-		input.optionbutton {
-		   font-size:9px;
-		   font-weight:bold;
-		   color:#000000;//#FFFF00;
-		   width:70px;
-		   height:30px;
-		   background-color:#BDBDBD;
-		   border-width:1px;
-		}
-		input.backbutton {
-		   color:#000000;//#FFFF00;
-		   width:100px;
-		   height:80px;
-		   background-color:#FFFF00;
-		   background-image:url(img/back-icon.jpg);
-		   border-width:2px;
-		}
-		input.nextbutton {
-		   color:#000000;//#FFFF00;
-		   width:100px;
-		   height:80px;
-		   background-color:#DDDDDD;
-		   background-image:url(img/next-icon.jpg);
-		   border-width:2px;
-		}
-		input.smallbackbutton {
-		   color:#000000;//#FFFF00;
-		   width:65px;
-		   height:65px;
-		   background-color:#FFFF00;
-		   background-image:url(img/previous-icon-small.jpg);
-		   border-width:2px;
-		}
-		input.smallnextbutton {
-		   color:#000000;//#FFFF00;
-		   width:65px;
-		   height:65px;
-		   background-color:#DDDDDD;
-		   background-image:url(img/next-icon-small.jpg);
-		   border-width:2px;
-		}
-		input.cancelbutton {
-		   color:#000000;//#FFFF00;
-		   width:80px;
-		   height:60px;
-		   background-color:gray;
-		   border-width:2px;
-		}
-		input.plusbutton {
-		   color:#000000;//#FFFF00;
-		   width:48px;
-		   height:48px;
-		   background-color:#DDDDDD;
-		   background-image:url(img/plus.jpg);
-		   border-width:1px;
-		}
-		input.minusbutton {
-		   color:#000000;//#FFFF00;
-		   width:48px;
-		   height:48px;
-		   background-color:#DDDDDD;
-		   background-image:url(img/minus.jpg);
-		   border-width:1px;
-		}
    	</style>
 
 	<script language="javascript">
@@ -464,10 +378,10 @@
                 	optionsHtml += "</td>";
                 	row.innerHTML = optionsHtml;
                 	document.menuItemForm.btnItemAdd.onclick = function() {addItemFromPopup(hasSizes);}
-                	Popup.show('modal');
+                	Popup.showModal('modal');
                 } else if(hasSizes) {
                 	document.menuItemForm.btnItemAdd.onclick = function() {addItemFromPopup(hasSizes);}
-                	Popup.show('modal');
+                	Popup.showModal('modal');
                 } else {
                 	document.getElementById("itemOptionsRow").style.display = "none";
                 	//TODO: Check order type for price
@@ -584,6 +498,7 @@
                 total += price * quantity;
 	        }
 	        tax = total * taxRate;
+	        document.orderForm.totalTax.value = tax;
 	        var grossTotal = (total+tax).toFixed(2);
             html += "<tr><td colspan='2' valign='top' align='right'><strong>Subtotal:</strong> </td>";
             html += "<td valign='top' align='right'><strong>"+total.toFixed(2)+"</strong></td></tr>";
@@ -592,7 +507,7 @@
             html += "<tr><td colspan='2' valign='top' align='right'><strong>TOTAL:</strong></td>";
             html += "<td valign='top' align='right'><strong>"+grossTotal+"</strong></td></tr>";
             table.innerHTML = html;
-            document.orderForm.totalPrice.value = grossTotal;
+            document.orderForm.totalPrice.value = total;
             
             /*if(selectedItemIndex > -1) {
             	if(selectedOptionIndex > -1 && ) highlightOrderRow(selectedItemIndex + "-" + selectedOptionIndex);
@@ -625,8 +540,9 @@
 	   	function saveOrder() {
 	   		if(orderItems != null && orderItems.length > 0) {
 		   		var total = document.orderForm.totalPrice.value;
+		   		var tax = document.orderForm.totalTax.value;
 		   		var orderId = document.orderForm.orderId.value;
-		   		var orderType = new SaveOrderType(orderId, "OUT", total, "INITIAL", 1, null);//aId, aType, aPrice, aStatus, aNumGuests, aCustomer
+		   		var orderType = new SaveOrderType(orderId, "OUT", total, tax, 0, "INITIAL", 1, null);//aId, aType, aPrice, aStatus, aNumGuests, aCustomer
 		   		orderType.order.orderItems = orderItems;
 				call_web_service(orderType, saveOrderHandler);
 			}
@@ -658,6 +574,59 @@
 				window.location.href = "home.html";
 			}
 	   	}
+	   	
+	   	var selectedField;
+	   	function showPayment() {
+	   		var total = (document.orderForm.totalPrice.value==null||document.orderForm.totalPrice.value=="")?0:parseFloat(document.orderForm.totalPrice.value);
+	   		var tax = (document.orderForm.totalTax.value==null||document.orderForm.totalTax.value=="")?0:parseFloat(document.orderForm.totalTax.value);
+	   		document.payForm.saleAmt.value = total;
+	   		document.payForm.taxAmt.value = tax;
+	   		var tips = (document.payForm.tipsAmt.value==""||document.payForm.tipsAmt.value==null)?0:parseFloat(document.payForm.tipsAmt.value);
+	   		document.payForm.dueAmt.value = (total+tax+tips).toFixed(2);
+	   		Popup.showModal('payment');
+	   	}
+    	function changeBackground(textField) {
+    		resetBackground(document.getElementById('taxAmt'));
+    		resetBackground(document.getElementById('tipsAmt'));
+    		resetBackground(document.getElementById('dueAmt'));
+    		resetBackground(document.getElementById('payAmt'));
+    		resetBackground(document.getElementById('changeAmt'));
+    		
+    		textField.style.backgroundColor = "#72A4D2";
+    		textField.style.color = "#FFFFFF";
+    		selectedField = textField;
+    	}
+    	function resetBackground(textField) {
+    		textField.style.backgroundColor = "white";
+    		textField.style.color = "black";
+    	}
+    	function addValue(value) {
+    		if(selectedField!=null)	{
+    			selectedField.value += value;
+    			updateAmt();
+    		}
+    	}
+    	function updateAmt() {
+    		var saleAmt = parseFloat(document.getElementById('saleAmt').value);
+			var tax = document.getElementById('taxAmt').value==""?0:parseFloat(document.getElementById('taxAmt').value);
+			var tips =  document.getElementById('tipsAmt').value==""?0:parseFloat(document.getElementById('tipsAmt').value);
+			document.getElementById('dueAmt').value = (saleAmt + tax + tips).toFixed(2);
+			if(document.getElementById('payAmt').value != '') {
+				document.getElementById('changeAmt').value = document.getElementById('payAmt').value - document.getElementById('dueAmt').value;
+			}
+    	}
+    	function setValue(value) {
+    		if(selectedField!=null) selectedField.value = value;
+    	}
+    	function calcChange() {
+    		var dueAmt = document.getElementById('dueAmt').value==""?0:parseFloat(document.getElementById('dueAmt').value);
+    		var payAmt = document.getElementById('payAmt').value==""?0:parseFloat(document.getElementById('payAmt').value);
+    		if(payAmt >= dueAmt) {
+    			document.getElementById("changeAmt").value = (payAmt - dueAmt).toFixed(2);
+    		} else {
+    			alert("Payment amount is not enough!");
+    		}
+    	}
 	</script>
 </head>
 
@@ -716,6 +685,7 @@
                <form name="orderForm">
                	<input type="hidden" name="orderId"/>
                	<input type="hidden" name="orderType"/>
+               	<input type="hidden" name="totalTax"/>
                	<input type="hidden" name="totalPrice"/>
                	<table width="100%">
                		<tr>
@@ -731,11 +701,11 @@
                   <tr><td colspan="3"><br></td></tr>
                   <tr>
                      <td colspan="2" valign="top" align="right"><strong>Tax:</strong> </td>
-                     <td valign="top" align="right"><strong>1.5</strong></td>
+                     <td valign="top" align="right"><strong></strong></td>
                   </tr>
                   <tr>
                      <td colspan="2" valign="top" align="right"><strong>Total:</strong> </td>
-                     <td valign="top" align="right"><strong>11.4</strong></td>
+                     <td valign="top" align="right"><strong></strong></td>
                   </tr>
                </table>
                </form>
@@ -748,9 +718,10 @@
                    		</td>
                    </tr>
                    <tr>
-                   		<td>
+                   		<td colspan="2">
                    			<input type="button" name="btnSave" value="Save Order" class="groovybutton" onclick="saveOrder();"/>
                    			<input type="button" name="btnDelete" value="Void Order" class="groovybutton" onclick="deleteOrder();"/>
+                   			<input type="button" name="btnPay" value="Pay" class="groovybutton" onclick="showPayment();"/>
                    		</td>
                    </tr>
                </table>
@@ -812,6 +783,114 @@
 		</tr>
 		</form>
 	</table>
-</div>
+  </div>
+	<div id="payment" style="width:650px; height: 400px; border:2px solid #CC6600; background-color:white; padding:2px; font-size:100%; display:none;">
+		<table width="100%">
+			<tr>
+				<td width="100%" align="left">
+					<table border="0" width="100%">
+						<tr>
+							<td width="20%"><strong>Payment Options:</strong></td>
+							<td>
+								<input type="button" name="btnCash" value="Cash" class="paymentbutton" onclick=""/>
+								<input type="button" name="btnCredit" value="Credit Card" class="creditbutton" onclick=""/>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td width="100%">
+					<div style="float:left">
+						<table style="border:0px" width="100%">
+						<form name="payForm">
+							<tr>
+								<td align="left"><strong>Sale Amount:</strong></td>
+								<td align="left"><input type="text" id="saleAmt" name="saleAmt" style="font-size:14px;font-weight:bold"/></td>
+							</tr>
+							<tr>
+								<td align="left"><strong>Tax:</strong></td>
+								<td align="left"><input type="text" id="taxAmt" name="taxAmt" style="font-size:14px;font-weight:bold" onfocus="changeBackground(this)" onkeyup="updateAmt()"/></td>
+							</tr>
+							<tr>
+								<td align="left"><strong>Tips:</strong></td>
+								<td align="left"><input type="text" id="tipsAmt" name="tipsAmt" style="font-size: 14px;font-weight:bold" onfocus="changeBackground(this)" onkeyup="updateAmt()"/></td>
+							</tr>
+							<tr>
+								<td align="left"><strong>Due Amount:</strong></td>
+								<td align="left"><input type="text" id="dueAmt" name="dueAmt" style="font-size: 14px;font-weight:bold" onfocus="changeBackground(this)"/></td>
+							</tr>
+							<tr>
+								<td align="left"><strong>Pay Amount:</strong></td>
+								<td align="left"><input type="text" id="payAmt" name="payAmt" style="font-size: 14px;font-weight:bold" onfocus="changeBackground(this)" onkeyup="updateAmt()"/></td>
+							</tr>
+							<tr>
+								<td colspan="2"><hr></td>
+							</tr>
+							<tr>
+								<td align="left"><strong>Change:</strong></td>
+								<td align="left"><input type="text" id="changeAmt" name="changeAmt" style="font-size: 14px;font-weight:bold" onfocus="changeBackground(this)"/></td>
+							</tr>
+						</form>
+						</table>
+					</div>
+					<div style="float:left; width:20px">&nbsp;</div>
+					<div style="float:left">
+						<table width="100%">
+							<tr>
+								<td width="33.3%"><input type="button" name="btnSeven" value="7" class="numberbutton" onclick="addValue('7')"/></td>
+								<td width="33.3%"><input type="button" name="btnEight" value="8" class="numberbutton" onclick="addValue('8')"/></td>
+								<td width="33.3%"><input type="button" name="btnNine" value="9" class="numberbutton" onclick="addValue('9')"/></td>
+							</tr>
+							<tr>
+								<td width="33.3%"><input type="button" name="btnFour" value="4" class="numberbutton" onclick="addValue('4')"/></td>
+								<td width="33.3%"><input type="button" name="btnFive" value="5" class="numberbutton" onclick="addValue('5')"/></td>
+								<td width="33.3%"><input type="button" name="btnSix" value="6" class="numberbutton" onclick="addValue('6')"/></td>
+							</tr>
+							<tr>
+								<td width="33.3%"><input type="button" name="btnOne" value="1" class="numberbutton" onclick="addValue('1')"/></td>
+								<td width="33.3%"><input type="button" name="btnTwo" value="2" class="numberbutton" onclick="addValue('2')"/></td>
+								<td width="33.3%"><input type="button" name="btnThree" value="3" class="numberbutton" onclick="addValue('3')"/></td>
+							</tr>
+							<tr>
+								<td><input type="button" name="btnZero" value="0" class="numberbutton" onclick="addValue('0')"/></td>
+								<td colspan="3" align="center"><input type="button" name="btnClear" value="Clear" class="clearbutton" onclick="setValue('0')"/></td>
+							</tr>
+						</table>
+					</div>
+					<div style="float:left">
+						<table width="100%">
+							<tr>
+								<td><input type="button" name="btnFiveDlr" value="$5" class="dollarbutton" onclick="setValue(5)"/></td>
+								<td><input type="button" name="btnHundredDlr" value="$100" class="dollarbutton" onclick="setValue(100)"/></td>
+							</tr>
+							<tr>
+								<td><input type="button" name="btnTenDlr" value="$10" class="dollarbutton" onclick="setValue(10)"/></td>
+							</tr>
+							<tr>
+								<td><input type="button" name="btnTwentyDlr" value="$20" class="dollarbutton" onclick="setValue(20)"/></td>
+							</tr>
+							<tr>
+								<td><input type="button" name="btnFiftyDlr" value="$50" class="dollarbutton" onclick="setValue(50)"/></td>
+							</tr>
+						</table>
+					</div>
+				</td>
+			</tr>
+			<tr><td><hr></td></tr>
+			<tr>
+				<td align="center" width="100%">
+					<table width="100%">
+						<tr>
+							<td align="center" width="100%">
+								<input type="button" name="btnSettle" value="Settle Payment" class="settlebutton" onclick="calcChange()"/>
+								<input type="button" name="btnClose" value="Close" class="settlebutton" onclick="Popup.hide('payment')"/>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</div>
 </body>
 </html>
