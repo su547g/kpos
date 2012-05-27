@@ -6,6 +6,7 @@ import com.kpos.domain.CustomerInfo;
 import com.kpos.domain.Order;
 import com.kpos.domain.OrderItem;
 import com.kpos.domain.OrderItemOption;
+import com.kpos.domain.PaymentRecord;
 import com.kpos.ws.app.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +65,10 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     
     @Autowired
     private IOrderItemOptionDao orderItemOptionDao;
-    
+
+    @Autowired
+    private IPaymentRecordDao paymentRecordDao;
+
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public CreateResult<MenuCategory> createMenuCategory(MenuCategory aCategory, List<Long> printerIds) {
         try {
@@ -818,6 +822,8 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         order.setCreatedOn(new Date());
         order.setLastUpdated(new Date());
         order.setTotalPrice(orderType.getTotalPrice());
+        order.setTax(orderType.getTotalTax());
+        order.setGratuity(orderType.getTotalTips()==null?0:orderType.getTotalTips());
 
         if(orderType.getTableId() != null) {
             RestaurantTable table = tableDao.findById(orderType.getTableId());
@@ -853,10 +859,12 @@ public class ContentManagementServiceImpl implements IContentManagementService {
                     OrderItemOption orderItemOption = new OrderItemOption();
                     orderItemOption.setOrderItem(orderItem);
                     orderItemOption.setDisplayText(optionType.getDisplayText());
-                    orderItemOption.setPrice(optionType.getPrice()==null?0:optionType.getPrice());
+                    orderItemOption.setPrice(optionType.getPrice() == null ? 0 : optionType.getPrice());
                     orderItemOption.setQuantity(optionType.getQuantity());
                     orderItemOption.setOptionId(optionType.getOptionId());
                     orderItemOption.setOptionType(optionType.getOptionType());
+                    orderItemOption.setCreatedOn(new Date());
+                    orderItemOption.setLastUpdated(new Date());
                     orderItem.getOptions().add(orderItemOption);
                 }
                 order.getOrderItems().add(orderItem);
@@ -880,6 +888,8 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             order.setNumOfGuests(orderType.getNumOfGuests()==null?0:orderType.getNumOfGuests());
             order.setLastUpdated(new Date());
             order.setTotalPrice(orderType.getTotalPrice());
+            order.setTax(orderType.getTotalTax());
+            order.setGratuity(orderType.getTotalTips()==null?0:orderType.getTotalTips());
             if(orderType.getTableId() != null) {
                 RestaurantTable table = tableDao.findById(orderType.getTableId());
                 order.setTable(table);
@@ -914,10 +924,11 @@ public class ContentManagementServiceImpl implements IContentManagementService {
                         OrderItemOption orderItemOption = new OrderItemOption();
                         orderItemOption.setOrderItem(orderItem);
                         orderItemOption.setDisplayText(optionType.getDisplayText());
-                        orderItemOption.setPrice(optionType.getPrice()==null?0:optionType.getPrice());
+                        orderItemOption.setPrice(optionType.getPrice() == null ? 0 : optionType.getPrice());
                         orderItemOption.setQuantity(optionType.getQuantity());
                         orderItemOption.setOptionId(optionType.getOptionId());
                         orderItemOption.setOptionType(optionType.getOptionType());
+                        orderItemOption.setLastUpdated(new Date());
                         orderItem.getOptions().add(orderItemOption);
                     }
                     order.getOrderItems().add(orderItem);
@@ -952,5 +963,47 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             fetchResult.setSuccessful(false);
         }
         return fetchResult;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public UpdateResult<Order> settleOrder(long orderId, List<PaymentRecordType> paymentRecordTypes) {
+        UpdateResult<Order> result = new UpdateResult<Order>();
+        Order order = orderDao.findById(orderId);
+        if(order != null) {
+            List<PaymentRecord> paymentRecords = order.getPaymentRecords();
+            double runningTotal = 0;
+            for(PaymentRecordType soapType : paymentRecordTypes) {
+                runningTotal += soapType.getAmount();
+                PaymentRecord record = new PaymentRecord();
+                record.setAmount(soapType.getAmount());
+                record.setOrder(order);
+                record.setPaymentType(soapType.getType());
+                record.setCreatedOn(new Date());
+                record.setLastUpdated(new Date());
+                if(PaymentRecord.PaymentType.CASH.toString().equalsIgnoreCase(record.getPaymentType())) {
+                } else if(PaymentRecord.PaymentType.CREDIT_CARD.toString().equalsIgnoreCase(record.getPaymentType()) ||
+                        PaymentRecord.PaymentType.DEBIT_CARD.toString().equalsIgnoreCase(record.getPaymentType())) {
+                    record.setCardNumber(soapType.getCardNumber());
+                    record.setCardType(soapType.getCardType());
+                } else {
+                    result.setSuccessful(false);
+                    return result;
+                }
+                paymentRecordDao.insert(record);
+                order.getPaymentRecords().add(record);
+            }
+            if(runningTotal == order.getTotalPrice()+order.getTax()+order.getGratuity()) {
+                if(!order.getStatus().equals(OrderStatusEnum.PRINTED)) {
+                    //TODO: Send items to printers
+                }
+                order.setStatus(OrderStatusEnum.PAID);
+                order.setLastUpdated(new Date());
+            }
+            result.setSuccessful(true);
+        } else {
+            result.setSuccessful(false);
+        }
+        return result;
     }
 }

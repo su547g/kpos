@@ -92,4 +92,6 @@ public interface IContentManagementService {
     FetchResult<Order> fetchOrderById(long aId);
 
     DeleteResult deleteOrder(long orderId);
+
+    UpdateResult<Order> settleOrder(long orderId, List<PaymentRecordType> paymentRecordTypes);
 }

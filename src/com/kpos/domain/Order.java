@@ -50,6 +50,12 @@ public class Order extends AbstractDomainObject {
     @Column(name = "total_price")
     private double totalPrice;
 
+    @Column(name = "tax")
+    private double tax = 0;
+
+    @Column(name = "gratuity")
+    private double gratuity = 0;
+
     //owning entity
     @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "table_id")
@@ -116,13 +122,21 @@ public class Order extends AbstractDomainObject {
         this.totalPrice = totalPrice;
     }
 
-    /*public Bill getBill() {
-        return bill;
+    public double getTax() {
+        return tax;
     }
 
-    public void setBill(Bill bill) {
-        this.bill = bill;
-    }*/
+    public void setTax(double tax) {
+        this.tax = tax;
+    }
+
+    public double getGratuity() {
+        return gratuity;
+    }
+
+    public void setGratuity(double gratuity) {
+        this.gratuity = gratuity;
+    }
 
     public RestaurantTable getTable() {
         return table;
@@ -164,6 +178,8 @@ public class Order extends AbstractDomainObject {
         Order order = (Order) o;
 
         if (Double.compare(order.totalPrice, totalPrice) != 0) return false;
+        if (Double.compare(order.tax, tax) != 0) return false;
+        if (Double.compare(order.gratuity, gratuity) != 0) return false;
         if (id != null ? !id.equals(order.id) : order.id != null) return false;
         if (notes != null ? !notes.equals(order.notes) : order.notes != null) return false;
         if (orderType != null ? !orderType.equals(order.orderType) : order.orderType != null) return false;
@@ -181,6 +197,8 @@ public class Order extends AbstractDomainObject {
         result = 31 * result + (orderType != null ? orderType.hashCode() : 0);
         result = 31 * result + (notes != null ? notes.hashCode() : 0);
         temp = totalPrice != +0.0d ? Double.doubleToLongBits(totalPrice) : 0L;
+        temp = tax != +0.0d ? Double.doubleToLongBits(tax) : 0L;
+        temp = gratuity != +0.0d ? Double.doubleToLongBits(gratuity) : 0L;
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }

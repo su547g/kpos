@@ -14,7 +14,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "STAFF_ATTENDANCE")
-public class StaffAttendance {
+public class StaffAttendance extends AbstractDomainObject {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "id")

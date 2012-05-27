@@ -28,7 +28,7 @@ import org.hibernate.annotations.OnDeleteAction;
  */
 @Entity
 @Table(name = "user")
-public class User {
+public class User extends AbstractDomainObject {
 
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id")
@@ -40,12 +40,6 @@ public class User {
 
     @Column(name = "password")
     private String password;
-
-    @Column(name = "CREATED_ON")
-    protected Date createdOn;
-
-    @Column(name = "LAST_UPDATED")
-    protected Date lastUpdated;
 
     public void setId(Long id) {
         this.id = id;
@@ -61,22 +55,6 @@ public class User {
 
     public String getPassword() {
         return password;
-    }
-
-    public Date getCreatedOn() {
-        return createdOn;
-    }
-
-    public void setCreatedOn(Date date) {
-        createdOn = date;
-    }
-
-    public Date getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(Date date) {
-        lastUpdated = date;
     }
 
     public StaffMember getStaff() {

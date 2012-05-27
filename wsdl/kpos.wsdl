@@ -111,6 +111,8 @@
             <xs:element name="SaveOrderResponseType" type="tns:SaveOrderResponseType"/>
             <xs:element name="DeleteOrderType" type="tns:DeleteOrderType"/>
             <xs:element name="DeleteOrderResponseType" type="tns:DeleteOrderResponseType"/>
+            <xs:element name="SettleOrderType" type="tns:SettleOrderType"/>
+            <xs:element name="SettleOrderResponseType" type="tns:SettleOrderResponseType"/>
 
             <xs:element name="ListPrintersHTMLType" type="tns:ListPrintersHTMLType"/>
             <xs:element name="ListPrintersHTMLResponseType" type="tns:ListPrintersHTMLResponseType"/>
@@ -224,14 +226,14 @@
                 </xs:sequence>
             </xs:complexType>
 
-            <xs:complexType name="PaymentRecord">
+            <xs:complexType name="PaymentRecordType">
                 <xs:sequence>
                     <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="type" type="xsd:string" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="amount" type="xsd:double" minOccurs="1" maxOccurs="1" default="0"/>
                     <xs:element name="cardType" type="xsd:string" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="cardNumber" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-                    <xs:element name="transactionTS" type="xsd:dateTime" minOccurs="0" maxOccurs="1"/>
+                    <!--<xs:element name="transactionTS" type="xsd:dateTime" minOccurs="0" maxOccurs="1"/>-->
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="OrderItemType">
@@ -265,11 +267,13 @@
                     <xs:element name="tableId" type="xsd:long" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="tableName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="totalPrice" type="xsd:double" minOccurs="1" maxOccurs="1" default="0"/>
+                    <xs:element name="totalTax" type="xsd:double" minOccurs="1" maxOccurs="1" default="0"/>
+                    <xs:element name="totalTips" type="xsd:double" minOccurs="0" maxOccurs="1" default="0"/>
                     <xs:element name="notes" type="xsd:string" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="status" type="xsd:string" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="createTime" type="xsd:dateTime" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="orderItems" type="tns:OrderItemType" minOccurs="0" maxOccurs="unbounded"/>
-                    <xs:element name="payments" type="tns:PaymentRecord" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="payments" type="tns:PaymentRecordType" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="numOfGuests" type="xsd:int" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="customer" type="tns:CustomerInfoType" minOccurs="0" maxOccurs="1"/>
                 </xs:sequence>
@@ -778,6 +782,17 @@
                     <xs:element name="Result" type="tns:ResultType"/>
                 </xs:sequence>
             </xs:complexType>
+            <xs:complexType name="SettleOrderType">
+                <xs:sequence>
+                    <xs:element name="orderId" type="xsd:long" minOccurs="1"/>
+                    <xs:element name="payments" type="tns:PaymentRecordType" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="SettleOrderResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
 
             <xs:complexType name="ListPrintersHTMLType">
                 <xs:sequence>
@@ -1062,6 +1077,12 @@
     <wsdl:message name="DeleteOrderResponseMessage">
         <wsdl:part name="parameters" element="tns:DeleteOrderResponseType"/>
     </wsdl:message>
+    <wsdl:message name="SettleOrderMessage">
+        <wsdl:part name="parameters" element="tns:SettleOrderType"/>
+    </wsdl:message>
+    <wsdl:message name="SettleOrderResponseMessage">
+        <wsdl:part name="parameters" element="tns:SettleOrderResponseType"/>
+    </wsdl:message>
 
     <wsdl:message name="ListPrintersHTMLMessage">
         <wsdl:part name="parameters" element="tns:ListPrintersHTMLType"/>
@@ -1255,6 +1276,10 @@
         <wsdl:operation name="DeleteOrder">
             <wsdl:input message="tns:DeleteOrderMessage" name="DeleteOrder"/>
             <wsdl:output message="tns:DeleteOrderResponseMessage" name="DeleteOrderResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="SettleOrder">
+            <wsdl:input message="tns:SettleOrderMessage" name="SettleOrder"/>
+            <wsdl:output message="tns:SettleOrderResponseMessage" name="SettleOrderResponse"/>
         </wsdl:operation>
         <wsdl:operation name="ListPrintersHTML">
             <wsdl:input message="tns:ListPrintersHTMLMessage" name="ListPrintersHTML"/>
@@ -1660,6 +1685,15 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="DeleteOrderResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="SettleOrder">
+            <soap:operation soapAction="http://ws.kpos.com/SettleOrder" style="document"/>
+            <wsdl:input name="SettleOrder">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="SettleOrderResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
