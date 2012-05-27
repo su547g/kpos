@@ -15,8 +15,12 @@ public class UserFunctionAssoc extends AbstractDomainObject {
     @Column(name = "id")
     private Long id;
 
+    @ManyToOne(cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne(cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "func_id")
     private FunctionModule functionModule;
 
     public Long getId() {

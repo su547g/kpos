@@ -16,6 +16,24 @@ import java.util.List;
  * Author: kkwang
  * Date: 3/9/12 11:53 PM
  */
+@NamedQueries({
+        @NamedQuery(
+                name = "listOrdersByStatus",
+                query = "from Order where status = :aStatus"
+        ),
+        @NamedQuery(
+                name = "listOrdersForTable",
+                query = "from Order o where o.table.id = :aId and o.status = :aStatus"
+        ),
+        /*@NamedQuery(
+                name = "listOrdersForServer",
+                query = ""
+        ),*/
+        @NamedQuery(
+                name = "listOrdersForDateRange",
+                query = "from Order o where o.createdOn between :aStart and :aEnd"
+        )
+})
 @Entity
 @Table(name = "ORDER_BILL")
 public class Order extends AbstractDomainObject {

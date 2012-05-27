@@ -1,6 +1,12 @@
 package com.kpos.domain;
 
+import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by kpos.
@@ -17,6 +23,11 @@ public class FunctionModule extends AbstractDomainObject {
 
     @Column(name = "name")
     private String name;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "functionModule", orphanRemoval = true, fetch = FetchType.LAZY)
+    @ForeignKey(name = "FUNC_2_USERFUNCASSOC_FK")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<UserFunctionAssoc> userFunctionAssocs = new ArrayList<UserFunctionAssoc>();
 
     public Long getId() {
         return id;
