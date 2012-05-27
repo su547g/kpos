@@ -29,10 +29,10 @@ public class StaffAttendance extends AbstractDomainObject {
     @Column(name = "work_day")
     private Date workDay;
 
-    @Column(name = "start")
+    @Column(name = "start_time")
     private Date startTime;
 
-    @Column(name = "end")
+    @Column(name = "end_time")
     private Date endTime;
 
     public Long getId() {
