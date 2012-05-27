@@ -3,21 +3,10 @@ package com.kpos.domain;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
-import javax.persistence.Entity;
+import javax.persistence.*;
+
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -39,13 +28,17 @@ public class User extends AbstractDomainObject {
     @JoinColumn(name = "staff_id")
     private StaffMember staff;
 
-    @Column(name = "password")
-    private String password;
+    @Column(name = "passcode")
+    private String passcode;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true, fetch = FetchType.LAZY)
-    @ForeignKey(name = "USER_2_USERFUNCASSOC_FK")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<UserFunctionAssoc> userFunctionAssocs = new ArrayList<UserFunctionAssoc>();
+    @ManyToMany
+    @JoinTable(
+            name = "USER_FUNCTION_ASSOC",
+            joinColumns = @JoinColumn(name = "USER_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FUNC_ID")
+    )
+    @ForeignKey(name = "USER_2_FUNC_FK", inverseName = "FUNC_2_USER_FK")
+    private Set<FunctionModule> functions;
 
     public void setId(Long id) {
         this.id = id;
@@ -55,12 +48,12 @@ public class User extends AbstractDomainObject {
         return id;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPasscode(String passcode) {
+        this.passcode = passcode;
     }
 
     public String getPassword() {
-        return password;
+        return passcode;
     }
 
     public StaffMember getStaff() {
@@ -71,12 +64,12 @@ public class User extends AbstractDomainObject {
         this.staff = staff;
     }
 
-    public List<UserFunctionAssoc> getUserFunctionAssocs() {
-        return userFunctionAssocs;
+    public Set<FunctionModule> getFunctions() {
+        return functions;
     }
 
-    public void setUserFunctionAssocs(List<UserFunctionAssoc> userFunctionAssocs) {
-        this.userFunctionAssocs = userFunctionAssocs;
+    public void setFunctions(Set<FunctionModule> functions) {
+        this.functions = functions;
     }
 
     @Override
@@ -86,10 +79,9 @@ public class User extends AbstractDomainObject {
 
         User user = (User) o;
 
-        if (createdOn != null ? !createdOn.equals(user.createdOn) : user.createdOn != null) return false;
         if (id != null ? !id.equals(user.id) : user.id != null) return false;
-        if (lastUpdated != null ? !lastUpdated.equals(user.lastUpdated) : user.lastUpdated != null) return false;
-        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        if (passcode != null ? !passcode.equals(user.passcode) : user.passcode != null) return false;
+        if (staff != null ? !staff.equals(user.staff) : user.staff != null) return false;
 
         return true;
     }
@@ -97,7 +89,7 @@ public class User extends AbstractDomainObject {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (passcode != null ? passcode.hashCode() : 0);
         result = 31 * result + (createdOn != null ? createdOn.hashCode() : 0);
         result = 31 * result + (lastUpdated != null ? lastUpdated.hashCode() : 0);
         return result;
