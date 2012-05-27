@@ -10,7 +10,7 @@ import com.kpos.util.IIntegerMappedEnum;
 public enum OrderStatusEnum implements IIntegerMappedEnum {
     INITIAL(0),
     SUBMITTED(1),
-    COOKING(2),
+    PRINTED(2),
     SERVED(3),
     PAID(4),
     CANCELED(-2);

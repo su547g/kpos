@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Table(name = "PAYMENT_RECORD")
 public class PaymentRecord extends AbstractDomainObject {
     public static enum PaymentType {
-        CASH, CARD;
+        CASH, CREDIT_CARD, DEBIT_CARD;
         @Override public String toString() {
             return super.toString().toUpperCase();
         }

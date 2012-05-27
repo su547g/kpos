@@ -9,7 +9,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "USER_FUNCTION_ASSOC")
-public class UserFunctionAssoc {
+public class UserFunctionAssoc extends AbstractDomainObject {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "id")

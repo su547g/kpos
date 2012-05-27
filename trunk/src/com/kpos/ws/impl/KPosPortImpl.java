@@ -867,7 +867,7 @@ public class KPosPortImpl implements KPosPortType {
             } else {
                 ResultType resultType = new ResultType();
                 contentManagementService.updateOrder(orderType);
-                resultType.setSuccessful(false);
+                resultType.setSuccessful(true);
                 responseType.setResult(resultType);
             }
         } catch(Exception e) {
@@ -888,6 +888,21 @@ public class KPosPortImpl implements KPosPortType {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("deleteOrder failed!", e);
+            responseType.setResult(getSoapFaultResult(e));
+        }
+        return responseType;
+    }
+
+    @Override
+    public SettleOrderResponseType settleOrder(
+            @WebParam(partName = "parameters", name = "SettleOrderType", targetNamespace = NS) SettleOrderType parameters) {
+        SettleOrderResponseType responseType = new SettleOrderResponseType();
+        try {
+            UpdateResult<Order> result = contentManagementService.settleOrder(parameters.getOrderId(), parameters.getPayments());
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("settleOrder failed!", e);
             responseType.setResult(getSoapFaultResult(e));
         }
         return responseType;
