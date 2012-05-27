@@ -1,5 +1,6 @@
 package com.kpos.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -41,6 +42,11 @@ public class User extends AbstractDomainObject {
     @Column(name = "password")
     private String password;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true, fetch = FetchType.LAZY)
+    @ForeignKey(name = "USER_2_USERFUNCASSOC_FK")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<UserFunctionAssoc> userFunctionAssocs = new ArrayList<UserFunctionAssoc>();
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -63,6 +69,14 @@ public class User extends AbstractDomainObject {
 
     public void setStaff(StaffMember staff) {
         this.staff = staff;
+    }
+
+    public List<UserFunctionAssoc> getUserFunctionAssocs() {
+        return userFunctionAssocs;
+    }
+
+    public void setUserFunctionAssocs(List<UserFunctionAssoc> userFunctionAssocs) {
+        this.userFunctionAssocs = userFunctionAssocs;
     }
 
     @Override
