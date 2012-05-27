@@ -24,11 +24,6 @@ public class FunctionModule extends AbstractDomainObject {
     @Column(name = "name")
     private String name;
 
-    /*@OneToMany(cascade = CascadeType.ALL, mappedBy = "functionModule", orphanRemoval = true, fetch = FetchType.LAZY)
-    @ForeignKey(name = "FUNC_2_USERFUNCASSOC_FK")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<UserFunctionAssoc> userFunctionAssocs = new ArrayList<UserFunctionAssoc>();*/
-
     public Long getId() {
         return id;
     }

@@ -289,6 +289,41 @@
                     <xs:element name="zipcode" type="xsd:string" maxOccurs="1" minOccurs="0"/>
                 </xs:sequence>
             </xs:complexType>
+            <xs:complexType name="StaffType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="0"/>
+                    <xs:element name="name" type="xsd:string" minOccurs="1"/>
+                    <xs:element name="age" type="xsd:int" minOccurs="0"/>
+                    <xs:element name="homePhone" type="xsd:string" minOccurs="0"/>
+                    <xs:element name="cellPhone" type="xsd:string" minOccurs="0"/>
+                    <xs:element name="address" type="xsd:string" minOccurs="0"/>
+                    <xs:element name="joinDate" type="xsd:date" minOccurs="1"/>
+                    <xs:element name="hourlyWage" type="xsd:double" minOccurs="0"/>
+                    <xs:element name="user" type="tns:UserType" minOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="UserType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="0"/>
+                    <xs:element name="passcode" type="xsd:string" minOccurs="1"/>
+                    <xs:element name="staffId" type="xsd:long" minOccurs="1"/>
+                    <xs:element name="functions" type="tns:FunctionModuleType" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="FunctionModuleType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="0"/>
+                    <xs:element name="name" type="xsd:string" minOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="StaffAttendanceType">
+                <xs:sequence>
+                    <xs:element name="staffId" minOccurs="1"/>
+                    <xs:element name="id" minOccurs="0"/>
+                    <xs:element name="startTime" type="xsd:dateTime" minOccurs="0"/>
+                    <xs:element name="endTime"  type="xsd:dateTime" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
             <!--End of data structures-->
 
             <!--Define operations below-->
