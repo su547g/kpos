@@ -292,6 +292,8 @@
 	        document.staffForm.city.readOnly = isReadOnly;
 	        document.staffForm.zipcode.value = "";
 	        document.staffForm.zipcode.readOnly = isReadOnly;
+	        document.staffForm.passcode.value = "";
+	        document.staffForm.passcode.readOnly = isReadOnly;
 	        uncheckPrivileges();
 	        operation = ADD;
 	    }
@@ -348,6 +350,7 @@
 				jsonObj.liststaffresponsetype != undefined && jsonObj.liststaffresponsetype != null &&
 				jsonObj.liststaffresponsetype.result.successful == 'true') {
 				document.getElementById("staffList").innerHTML = "";
+				staffMembers.length = 0;
 				var staffList = jsonObj.liststaffresponsetype.staff;
 				var count = jsonObj.liststaffresponsetype.count;
                 if(staffList != undefined && staffList != null) {

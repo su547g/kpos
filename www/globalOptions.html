@@ -12,6 +12,7 @@
 
     <script type="text/javascript" src="xml2json.js"></script>
     <script type="text/javascript" src="kpos.js"></script>
+    <script type="text/javascript" src="popup.js"></script>
     <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.min.js"></script>
     
     <link rel="stylesheet" href="example.css" TYPE="text/css" MEDIA="screen">
@@ -185,71 +186,126 @@
 	       	row.onmouseover = function(){ highlightRow(this, true); };
 	        row.onmouseout = function(){ highlightRow(this, false); };
 	    }
+	    
+	    function addPasscode(aChar) {
+	    	document.loginForm.passcode.value += aChar;
+	    }
+	    function showLogin() {
+	    	Popup.showModal("loginWindow");
+	    }
+	    function cancelLogin() {
+	    	Popup.hide("loginWindow");
+	    	window.location.href="home.html";
+	    }
+	    function userLogin(moduleId) {
+	    	var soapType = new CheckPrivilegeType(document.loginForm.passcode.value, moduleId);
+	    	call_web_service(soapType, loginHandler);
+	    }
+	    function loginHandler(jsonObj) {
+	    	if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.checkprivilegeresponsetype != undefined && jsonObj.checkprivilegeresponsetype != null && 
+				jsonObj.checkprivilegeresponsetype.result.successful == "true") {
+				Popup.hide("loginWindow");
+				listAllOptions();
+			} else {
+				alert("You don't have access to this function!");
+				window.location.href="home.html";
+			}
+	    }
 	</script>
 </head>
 
-<body onload="javascript:listAllOptions();">
-	<table>
-		<tr><td><input type="button" class="navibutton" onclick="window.location.href='home.html';" value="<< Back"></td>
-	</table>
-	<table width="100%">
-	    <tr>
-	        <td width="18%" valign="top" align="left">
-	            <table width="100%" class="tableone" align="left">
-	                <caption>Global Options</caption>
-	                <thead>
-	                <tr>
-	                    <th class="th1" scope="col">Name</th>
-	                    <th class="th2" scope="col"></th>
-	                </tr>
-	                </thead>
-	                <tfoot>
-	                <tr>
-	                    <td colspan="2" align="center"><button onclick="javascript:newGlobalOption();">New Option</button></td>
-	                </tr>
-	                </tfoot>
-	                <tbody>
+<body onload="showLogin()">
+	<div>
+		<table>
+			<tr><td><input type="button" class="navibutton" onclick="window.location.href='home.html';" value="<< Back"></td>
+		</table>
+		<table width="100%">
+		    <tr>
+		        <td width="18%" valign="top" align="left">
+		            <table width="100%" class="tableone" align="left">
+		                <caption>Global Options</caption>
+		                <thead>
 		                <tr>
-		                    <td colspan="5" valign="top" align="left">
-		                        <div class="innerb">
-		                            <table id ="globalOptions" class="tabletwo" width="100%">
-		                            </table>
-		                        </div>
-		                    </td>
+		                    <th class="th1" scope="col">Name</th>
+		                    <th class="th2" scope="col"></th>
 		                </tr>
-	                </tbody>
-	            </table>
-	        </td>
-	        <td valign="top" align="left">
-	        	<form name="optionForm">
-	        		<input type="hidden" name="optionId"/>
-	        	<table id="globalOption" width="70%">
-	        		<tr>
-	        			<td align="left" valign="top">
-	        				Name: <input type="text" id="optionName" disabled="true" value=""/>
-	        			</td>
-	        		</tr>
-	        		<tr>
-	        			<td align="left" valign="top">
-	        				Price: <input type="text" id="price" disabled="true" value=""/>
-	        			</td>
-	        		</tr>
-	        		<tr>
-	        			<td align="left" valign="top">
-	        				Takeout Price: <input type="text" id="outPrice" disabled="true" value=""/>
-	        			</td>
-	        		</tr>
-	        		<tr>
-	        			<td>
-	        			</td>
-	        		</tr>
-					
-	        		<tr><td><button type="button" onclick="javascript:saveGlobalOption();">Save</button></td></tr>
-				</table>
-				</form>
-	        </td>
-	    </tr>
-	</table>
+		                </thead>
+		                <tfoot>
+		                <tr>
+		                    <td colspan="2" align="center"><button onclick="javascript:newGlobalOption();">New Option</button></td>
+		                </tr>
+		                </tfoot>
+		                <tbody>
+			                <tr>
+			                    <td colspan="5" valign="top" align="left">
+			                        <div class="innerb">
+			                            <table id ="globalOptions" class="tabletwo" width="100%">
+			                            </table>
+			                        </div>
+			                    </td>
+			                </tr>
+		                </tbody>
+		            </table>
+		        </td>
+		        <td valign="top" align="left">
+		        	<form name="optionForm">
+		        		<input type="hidden" name="optionId"/>
+		        	<table id="globalOption" width="70%">
+		        		<tr>
+		        			<td align="left" valign="top">
+		        				Name: <input type="text" id="optionName" disabled="true" value=""/>
+		        			</td>
+		        		</tr>
+		        		<tr>
+		        			<td align="left" valign="top">
+		        				Price: <input type="text" id="price" disabled="true" value=""/>
+		        			</td>
+		        		</tr>
+		        		<tr>
+		        			<td align="left" valign="top">
+		        				Takeout Price: <input type="text" id="outPrice" disabled="true" value=""/>
+		        			</td>
+		        		</tr>
+		        		<tr>
+		        			<td>
+		        			</td>
+		        		</tr>
+						
+		        		<tr><td><button type="button" onclick="javascript:saveGlobalOption();">Save</button></td></tr>
+					</table>
+					</form>
+		        </td>
+		    </tr>
+		</table>
+	</div>
+	<div id="loginWindow" style="width:350px; height: 350px; border:2px solid #CC6600; background-color:white; padding:2px; font-size:100%; display:none;">
+		<form name="loginForm">
+			<input type="hidden" name="passcode" value=""/>
+		<table width="100%">
+			<tr>
+				<td width="33.3%"><input type="button" name="btnSeven" value="7" class="numberbutton" onclick="addPasscode('7')"/></td>
+				<td width="33.3%"><input type="button" name="btnEight" value="8" class="numberbutton" onclick="addPasscode('8')"/></td>
+				<td width="33.3%"><input type="button" name="btnNine" value="9" class="numberbutton" onclick="addPasscode('9')"/></td>
+			</tr>
+			<tr>
+				<td width="33.3%"><input type="button" name="btnFour" value="4" class="numberbutton" onclick="addPasscode('4')"/></td>
+				<td width="33.3%"><input type="button" name="btnFive" value="5" class="numberbutton" onclick="addPasscode('5')"/></td>
+				<td width="33.3%"><input type="button" name="btnSix" value="6" class="numberbutton" onclick="addPasscode('6')"/></td>
+			</tr>
+			<tr>
+				<td width="33.3%"><input type="button" name="btnOne" value="1" class="numberbutton" onclick="addPasscode('1')"/></td>
+				<td width="33.3%"><input type="button" name="btnTwo" value="2" class="numberbutton" onclick="addPasscode('2')"/></td>
+				<td width="33.3%"><input type="button" name="btnThree" value="3" class="numberbutton" onclick="addPasscode('3')"/></td>
+			</tr>
+			<tr>
+				<td align="center"><input type="button" name="btnZero" value="0" class="numberbutton" onclick="addPasscode('0')"/></td>
+				<td align="center"><input type="button" name="btnCancel" value="Cancel" class="clearbutton" onclick="cancelLogin()"/></td>
+				<td align="center"><input type="button" name="btnSubmit" value="Submit" class="clearbutton" onclick="userLogin(5)"/></td>
+			</tr>
+		</table>
+		</form>
+	</div>
 </body>
 </html>
 				
