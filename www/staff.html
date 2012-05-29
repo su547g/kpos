@@ -1,0 +1,484 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta id="viewport" name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="apple-touch-fullscreen" content="yes" />
+
+    <script type="text/javascript" src="xml2json.js"></script>
+    <script type="text/javascript" src="kpos.js"></script>
+    <script type="text/javascript" src="popup.js"></script>
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.min.js"></script>
+    
+    <link rel="stylesheet" href="example.css" TYPE="text/css" MEDIA="screen">
+    
+    <style type="text/css">
+        body{
+            font-size:14px;
+            background:#c4f0f1;
+            text-align:center;
+        }
+		.tabberlive .tabbertabhide {
+		 display:none;
+		}
+		
+		.tabber {
+		}
+		.tabberlive {
+		 margin-top:1em;
+		}
+		
+		ul.tabbernav
+		{
+		 margin:0;
+		 padding: 3px 0;
+		 border-bottom: 1px solid #778;
+		 font: bold 12px Verdana, sans-serif;
+		}
+		
+		ul.tabbernav li
+		{
+		 list-style: none;
+		 margin: 0;
+		 display: inline;
+		}
+		
+		ul.tabbernav li a
+		{
+		 padding: 3px 0.5em;
+		 margin-left: 3px;
+		 border: 1px solid #778;
+		 border-bottom: none;
+		 background: #DDE;
+		 text-decoration: none;
+		}
+		
+		ul.tabbernav li a:link { color: #448; }
+		ul.tabbernav li a:visited { color: #667; }
+		
+		ul.tabbernav li a:hover
+		{
+		 color: #000;
+		 background: #AAE;
+		 border-color: #227;
+		}
+		
+		ul.tabbernav li.tabberactive a
+		{
+		 background-color: #fff;
+		 border-bottom: 1px solid #fff;
+		}
+		
+		ul.tabbernav li.tabberactive a:hover
+		{
+		 color: #000;
+		 background: white;
+		 border-bottom: 1px solid white;
+		}
+		
+		.tabberlive .tabbertab {
+		 padding:5px;
+		 border:1px solid #aaa;
+		 border-top:0;
+		 height:220px;
+		 overflow:auto;
+		}
+		
+		.tabberlive .tabbertab h2 {
+		 display:none;
+		}
+		.tabberlive .tabbertab h3 {
+		 display:none;
+		}
+		
+		.tabberlive#tab1 {
+		}
+		.tabberlive#tab2 {
+		}
+		.tabberlive#tab2 .tabbertab {
+		 height:400px;
+		 overflow:auto;
+		}
+		
+        .tableone {width:250px; border-collapse:collapse; margin:0 auto;}
+        .tabletwo {width:220px; margin:2px; border:1px solid #B3B1B1; border-spacing: 1px; border-style:outset}
+
+        .th1 {width:149px;}
+        .th2 {width:99px;}
+        .th3 {width:99px;}
+        .th4 {width:99px;}
+        .th5 {width:200px;}
+
+        .td1 {width:149px;border:1px solid #B3B1B1;}
+        .td2 {width:99px;}
+        .td3 {width:99px;}
+        .td4 {width:99px;}
+        .td5 {width:170px;}
+
+        .tableone {background:#697210; border:1px solid #fff; color:#fff;}
+        .tableone td {border:1px solid #fff; color:#fff;}
+        .tableone tbody {background:#eee; color:#000;}
+        .tableone caption {background:#fff; color:#697210; font-size:1.2em; margin:0 auto;}
+        .tableone th, .tabletwo th {text-align:left;}
+
+        .tabletwo td {background:#eee; color:#000;}
+        .tabletwo tr.dk th {background:#ddd; color:#000;}
+        .tabletwo tr.dk td {background:#ddd; color:#000;}
+
+        .innerb {height:450px; overflow:auto;}
+    </style>
+    <script type="text/javascript">
+		document.write('<style type="text/css">.tabber{display:none;}<\/style>');
+		
+		var tabberOptions = {
+		  'manualStartup':true,
+		  'onLoad': function(argsObj) {
+		    if (argsObj.tabber.id == 'tab2') {
+		      alert('Finished loading tab2!');
+		    }
+		  },
+		  'onClick': function(argsObj) {
+		    var t = argsObj.tabber; /* Tabber object */
+		    var id = t.id; /* ID of the main tabber DIV */
+		    var i = argsObj.index; /* Which tab was clicked (0 is the first tab) */
+		    var e = argsObj.event; /* Event object */
+		
+		    if (id == 'tab2') {
+		      return confirm('Swtich to '+t.tabs[i].headingText+'?\nEvent type: '+e.type);
+		    }
+		  },
+		  'addLinkId': true
+		};
+	</script>
+
+	<!-- Load the tabber code -->
+	<script type="text/javascript" src="tabber.js"></script>
+	<script language="javascript">
+		var staffMembers = new Array();
+		
+		var ADD = "ADD";
+		var UPDATE = "UPDATE";
+		var operation = "";
+		
+	    function selectRow(tableID, selectedIndex) {
+	        var table = document.getElementById(tableID);
+	        var staff = staffMembers[selectedIndex];
+	        var rowCount = table.rows.length;
+	        operation = UPDATE;
+	        for(var i = 0; i < rowCount; i++) {
+	            var row = table.rows[i];
+	            if(i == selectedIndex) {
+	                row.style.background = '#dcfac9';
+	                row.cells[0].style.background = '#dcfac9';
+	                row.cells[1].style.background = '#dcfac9';
+	                
+	                document.staffForm.staffName.value = staff.name;
+	                document.staffForm.staffName.readOnly = false;
+	                document.staffForm.staffAge.value = staff.age;
+	                document.staffForm.staffAge.readOnly = false;
+	                document.staffForm.staffWage.value = staff.wage;
+	                document.staffForm.staffWage.readOnly = false;
+	                if(staff.notes != null) document.staffForm.staffNotes.value = staff.notes;
+	                document.staffForm.staffNotes.readOnly = false;
+	                if(staff.homePhone != null) {
+	                	document.staffForm.homePhone1.value = staff.homePhone.toString().substring(0, 3);
+	                	document.staffForm.homePhone1.readOnly = false;
+	                	document.staffForm.homePhone2.value = staff.homePhone.toString().substring(3, 6);
+	                	document.staffForm.homePhone2.readOnly = false;
+	                	document.staffForm.homePhone3.value = staff.homePhone.toString().substring(6, 10);
+	                	document.staffForm.homePhone3.readOnly = false;
+	                }
+	                if(staff.cellPhone != null) {
+	                	document.staffForm.cellPhone1.value = staff.cellPhone.toString().substring(0, 3);
+	                	document.staffForm.cellPhone1.readOnly = false;
+	                	document.staffForm.cellPhone2.value = staff.cellPhone.toString().substring(3, 6);
+	                	document.staffForm.cellPhone2.readOnly = false;
+	                	document.staffForm.cellPhone3.value = staff.cellPhone.toString().substring(6, 10);
+	                	document.staffForm.cellPhone3.readOnly = false;
+	                }
+	                document.staffForm.street.value = staff.street==null?"":staff.street;
+	                document.staffForm.street.readOnly = false;
+	                document.staffForm.city.value = staff.city==null?"":staff.city;
+	                document.staffForm.city.readOnly = false;
+	                document.staffForm.state.value = staff.state==null?"":staff.state;
+	                document.staffForm.state.readOnly = false;
+	                document.staffForm.zipcode.value = staff.zipcode==null?"":staff.zipcode;
+	                document.staffForm.zipcode.readOnly = false;
+	                document.staffForm.passcode.value = staff.user==null?"":staff.user.passcode;
+	                document.staffForm.passcode.readOnly = false;
+	                
+	                document.staffForm.staffId.value = staff.id;
+	                document.staffForm.userId.value = staff.user==null?"" : staff.user.id;
+	                
+                	var getPrivilegeType = new GetUserFunctionsHTMLType(staff.user==null?-1:staff.user.id);
+                	call_web_service(getPrivilegeType, getUserFunctionsHTMLHandler);
+	            } else {
+	                row.style.background = ''; //'#f0c992';
+	                row.cells[0].style.background = ''; //'#f0c992';
+	                row.cells[1].style.background = ''; //'#f0c992';
+	            }
+	        }
+	    }
+	    function getUserFunctionsHTMLHandler(jsonObj) {
+	    	if(jsonObj != undefined && jsonObj != null &&
+                jsonObj.getuserfunctionshtmlresponsetype != undefined && jsonObj.getuserfunctionshtmlresponsetype != null &&
+                jsonObj.getuserfunctionshtmlresponsetype.result.successful == "true") {
+                var html = jsonObj.getuserfunctionshtmlresponsetype.html;
+                html = html.replace(/&lt;/g, "<");
+				html = html.replace(/&gt;/g, ">");
+                document.getElementById("privilegesTable").innerHTML = html;
+            }
+	    }
+	    function addStaffRow(tableID, staffObj, selectRowFunc, deleteRowFunc, index) {
+	        var table = document.getElementById(tableID);
+	
+	        var rowCount = table.rows.length;
+	        var rowId = tableID + "_r" + rowCount;
+	        
+	        var row = table.insertRow(rowCount);	
+	       	row.id = rowId;
+	        row.name = rowId;
+	       	
+	       	var innerHTML = "<td onclick='"+selectRowFunc+"(\""+tableID+"\", \""+index+"\");'>"+staffObj.name+"</td><td><a href='javascript:"+deleteRowFunc+"(\""+tableID+"\",\""+rowId+"\","+staffObj.id+");'><img src=\"img\\delete-icon-small.jpg\"/></a></td>";
+	       	row.innerHTML = innerHTML;
+	       	row.onmouseover = function(){ highlightRow(this, true); };
+	        row.onmouseout = function(){ highlightRow(this, false); };
+	    }
+	    function deleteStaffRow(tableId, rowID, staffId) {
+	    	var deleteStaffType = new DeleteStaffType(staffId);
+            call_web_service(deleteStaffType, deleteStaffHandler);
+	    }
+	    function deleteStaffHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+                jsonObj.deletestaffresponsetype != undefined && jsonObj.deletestaffresponsetype != null &&
+                jsonObj.deletestaffresponsetype.result.successful == "true") {
+                listAllStaff();
+            } else {
+            	alert("failed to delete staff!");
+            }
+            deletedRowId = "";
+		}
+	    function clearForm(isReadOnly) {
+	    	document.getElementById("staffName").value = "";
+	      	document.getElementById("staffName").readOnly = isReadOnly;
+	      	document.getElementById("staffAge").value = "";
+	      	document.getElementById("staffAge").readOnly = isReadOnly;
+	      	document.staffForm.staffWage.value = "";
+	      	document.staffForm.staffWage.readOnly = isReadOnly;
+	        document.getElementById("staffNotes").value = "";
+	        document.getElementById("staffNotes").readOnly = isReadOnly;
+	        document.getElementById("homePhone1").value = "";
+	        document.getElementById("homePhone1").readOnly = isReadOnly;
+	        document.getElementById("homePhone2").value = "";
+	        document.getElementById("homePhone2").readOnly = isReadOnly;
+	        document.getElementById("homePhone3").value = "";
+	        document.getElementById("homePhone3").readOnly = isReadOnly;
+	        document.getElementById("cellPhone1").value = "";
+	        document.getElementById("cellPhone1").readOnly = isReadOnly;
+	        document.getElementById("cellPhone2").value = "";
+	        document.getElementById("cellPhone2").readOnly = isReadOnly;
+	        document.getElementById("cellPhone3").value = "";
+	        document.getElementById("cellPhone3").readOnly = isReadOnly;
+	        document.staffForm.street.value = "";
+	        document.staffForm.street.readOnly = isReadOnly;
+	        document.staffForm.city.value = "";
+	        document.staffForm.city.readOnly = isReadOnly;
+	        document.staffForm.state.value = "";
+	        document.staffForm.city.readOnly = isReadOnly;
+	        document.staffForm.zipcode.value = "";
+	        document.staffForm.zipcode.readOnly = isReadOnly;
+	        uncheckPrivileges();
+	        operation = ADD;
+	    }
+	    function uncheckPrivileges() {
+	    	for(var i = 0; i < document.staffForm.privileges.length; i++) {
+	    		document.staffForm.privileges[i].checked = false;
+	    	}
+	    }
+	    function convertStaff() {
+	    	var name = document.staffForm.staffName.value;
+	        var age = document.staffForm.staffAge.value==null?0:parseInt(document.staffForm.staffAge.value);
+	        var wage = document.staffForm.staffWage.value==null?0:parseFloat(document.staffForm.staffWage.value);
+	        var cellPhone = document.staffForm.cellPhone1.value + document.staffForm.cellPhone2.value + document.staffForm.cellPhone3.value;
+	        var homePhone = document.staffForm.homePhone1.value + document.staffForm.homePhone2.value + document.staffForm.homePhone3.value;
+	        var street = document.staffForm.street.value;
+	        var city = document.staffForm.city.value;
+	        var state = document.staffForm.state.value;
+	        var zipcode = document.staffForm.zipcode.value;
+	        var notes = document.staffForm.staffNotes.value;
+			var id = document.staffForm.staffId.value;
+			var userId = document.staffForm.userId.value;
+			var passcode = document.staffForm.passcode.value;
+			var userType = new UserType(userId, passcode);
+			for(var i = 0; i < document.staffForm.privileges.length; i++) {
+				if(document.staffForm.privileges[i].checked) {
+					userType.modules.push(new ModuleType(document.staffForm.privileges[i].value, ""));
+				}
+			}
+	        var staffType = new StaffType(id, name, age, wage, homePhone, cellPhone, street, city, state, zipcode, notes, userType);
+	        return staffType;
+	    }
+	    function saveStaffInfo() {
+	        var staffType = convertStaff();
+	        var soapType = new SaveStaffType(staffType);
+	        call_web_service(soapType, saveStaffHandler);
+	    }
+	    function saveStaffHandler(jsonObj) {
+	        if(jsonObj != undefined && jsonObj != null &&
+	            jsonObj.savestaffresponsetype != undefined && jsonObj.savestaffresponsetype != null &&
+	            jsonObj.savestaffresponsetype.result.successful == "true") {
+	            clearForm(true);
+	           	listAllStaff();
+	        } else {
+	            alert("Failed to save staff!");
+	        }
+	        operation = "";
+	    }
+		function listAllStaff(){
+			var soapType = new ListStaffType();
+			call_web_service(soapType, listAllStaffHandler);
+		}
+		function listAllStaffHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.liststaffresponsetype != undefined && jsonObj.liststaffresponsetype != null &&
+				jsonObj.liststaffresponsetype.result.successful == 'true') {
+				document.getElementById("staffList").innerHTML = "";
+				var staffList = jsonObj.liststaffresponsetype.staff;
+				var count = jsonObj.liststaffresponsetype.count;
+                if(staffList != undefined && staffList != null) {
+	                if(count > 1) {
+	                	var s, userType, staffType;
+	                	for(var i = 0; i < staffList.length; i++) {
+	                		s = staffList[i];
+	                		if(s.user != null) {
+	                			userType = new UserType(s.user.id, s.user.passcode);
+	                		} else { userType = null; }
+	                		staffType = new StaffType(s.id, s.name, s.age, s.hourlywage, s.homephone, s.cellphone, s.street, s.city, s.state, s.zipcode, s.notes, userType);
+	                		staffMembers.push(staffType);
+	                		addStaffRow("staffList", s, "selectRow", "deleteStaffRow", i);
+	                	}
+	                } else if(count == 1){
+	                	//Only one staff
+	                	var userType = new UserType(staffList.id, staffList.passcode);
+                		var staffType = new StaffType(staffList.id, staffList.name, staffList.age, staffList.homephone, staffList.cellphone, staffList.street, staffList.city, staffList.state, staffList.zipcode, staffList.notes, userType);
+                		staffMembers.push(staffType);
+	                	addStaffRow("staffList", staffList, "selectRow", "deleteStaffRow", 0);
+	                }
+	            }
+			}
+		}
+	</script>
+</head>
+
+<body onload="javascript:listAllStaff();">
+<table>
+	<tr><td><input type="button" class="navibutton" onclick="window.location.href='home.html';" value="<< Back"></td>
+</table>
+<table width="100%">
+    <tr>
+        <td width="18%" valign="top" align="left">
+            <table width="100%" class="tableone" align="left">
+                <caption>Staff</caption>
+                <thead>
+                <tr>
+                    <th class="th1" scope="col">Name</th>
+                    <th class="th2" scope="col"></th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <td colspan="2" align="center"><button onclick="javascript:clearForm(false);">New Staff</button></td>
+                </tr>
+                </tfoot>
+                <tbody>
+	                <tr>
+	                    <td colspan="5" valign="top" align="left">
+	                        <div class="innerb">
+	                            <table id ="staffList" class="tabletwo" width="100%">
+	                            </table>
+	                        </div>
+	                    </td>
+	                </tr>
+                </tbody>
+            </table>
+        </td>
+        <td valign="top" align="left">
+        	<form name="staffForm">
+        	<table id="staffInfo" width="70%" border="1">
+        		<input type="hidden" id="staffId"/>
+        		<input type="hidden" id="userId"/>
+        		<tr>
+        			<td align="left" valign="center" colspan="3">
+        				Name: <input type="text" id="staffName" name="staffName" readonly="readonly" value=""/>
+        				Age: <input type="text" id="staffAge" name="staffAge" readonly="readonly" value="" size="3"/>
+        				Hourly Wage: <input type="text" id="staffWage" name="staffWage" readonly="readonly" value="" size="3"/>
+        			</td>
+        		</tr>
+        		<tr>
+        			<td align="left">Home Phone: </td>
+        			<td><input type="text" id="homePhone1" name="homePhone1" readonly="true" size="3"/>-<input type="text" id="homePhone2" name="homePhone2" readonly="true" size="3"/>-<input type="text" id="homePhone3" name="homePhone3" readonly="true" size="4"/>
+        			</td>
+        		</tr>
+        		<tr>
+        			<td>Cell Phone: </td>
+        			<td><input type="text" id="cellPhone1" name="cellPhone1" readonly="true" size="3"/>-<input type="text" id="cellPhone2" name="cellPhone2" readonly="true" size="3"/>-<input type="text" id="cellPhone3" name="cellPhone3" readonly="true" size="4"/>
+					</td>
+        		</tr>
+        		<tr>
+        			<td align="left">Address: </td>
+        			<td align="left">
+        				<table>
+        					<tr><td>Street</td><td><input type="text" id="street" name="street" readonly="true" size="50"/></td></tr>
+        					<tr><td>City</td><td><input type="text" id="city" name="city" size="10"/> State <input type="text" id="state" name="state" value="NY" size="10"/></td></tr>
+        					<tr><td>Zipcode</td><td><input type="text" id="zipcode" name="zipcode" size="6"/></td></tr>
+        				</table>
+        			</td>
+        		</tr>
+        		<tr>
+        			<td align="left" valign="top">Notes:</td> 
+        			<td><textarea id="staffNotes" rows="2" cols="50" readonly="readonly" value=""></textarea></td>
+        		</tr>
+        		<tr>
+        			<td width="100%" colspan="2">
+        				<div class="tabber" id="tab1">
+							<div id="mainTab" class="tabbertab">
+							    <h2 style="font-size: 20px"><a name="tab1">Privileges</a></h2>
+							    Passcode: <input type="text" name="passcode" readonly="true"/>
+							    <table width="100%" id="privilegesTable">
+							    </table>
+							</div>
+							
+							<div id="adminTab" class="tabbertab">
+							    <h2 style="font-size: 20px">Staff Attendance</h2>
+							    <table width="100%">
+							    	<tr>
+							    		<td valign="top">
+
+							    		</td>
+							    	</tr>
+							    </table>
+							</div>
+						</div>
+					</td>
+		    	</tr>
+		    	<tr>
+		    		<Td>
+		    			<input type="button" value="Save" onclick="saveStaffInfo()"/>
+		    		</Td>
+		    	</tr>
+            </table>
+            </form>
+        </td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+   tabberAutomatic(tabberOptions);
+</script>
+</body>
+</html>
