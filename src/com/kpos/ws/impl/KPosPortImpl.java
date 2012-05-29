@@ -1,5 +1,8 @@
 package com.kpos.ws.impl;
 
+import com.kpos.dao.IFunctionModuleDao;
+import com.kpos.dao.IStaffMemberDao;
+import com.kpos.dao.IUserDao;
 import com.kpos.domain.*;
 import com.kpos.domain.Order;
 import com.kpos.service.*;
@@ -11,10 +14,8 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import javax.jws.WebParam;
 import javax.xml.ws.Holder;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by kpos.
@@ -30,6 +31,15 @@ public class KPosPortImpl implements KPosPortType {
     @Autowired
     private IContentManagementService contentManagementService;
 
+    @Autowired
+    private IStaffMemberDao staffMemberDao;
+    
+    @Autowired
+    private IUserDao userDao;
+    
+    @Autowired
+    private IFunctionModuleDao functionModuleDao;
+    
     /**
      * returns the soap ResultType for a BaseResult
      *
@@ -1073,6 +1083,147 @@ public class KPosPortImpl implements KPosPortType {
             e.printStackTrace();
             log.error("Error in listSaleItemsForCategoryHTML", e);
         }
+        return responseType;
+    }
+
+    @Override
+    public ListStaffResponseType listStaff(
+            @WebParam(partName = "parameters", name = "ListStaffType", targetNamespace = NS) ListStaffType parameters) {
+        ListStaffResponseType responseType = new ListStaffResponseType();
+        try {
+            List<StaffMember> staffMembers = staffMemberDao.findAll();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+            for(StaffMember member : staffMembers) {
+                StaffType soapType = new StaffType();
+                soapType.setState(member.getState());
+                soapType.setStreet(member.getStreet());
+                soapType.setCity(member.getCity());
+                soapType.setZipcode(member.getZipcode());
+                soapType.setAge(member.getAge());
+                soapType.setCellPhone(member.getCellPhone());
+                soapType.setHomePhone(member.getHomePhone());
+                soapType.setHourlyWage(member.getHourlyWage());
+                soapType.setId(member.getId());
+                soapType.setJoinDate(format.format(member.getJoinDate()));
+                soapType.setName(member.getName());
+                User user = member.getUser();
+                if(user != null) {
+                    UserType userType = new UserType();
+                    userType.setId(user.getId());
+                    userType.setPasscode(user.getPasscode());
+                    soapType.setUser(userType);
+                    for(FunctionModule functionModule : user.getFunctions()) {
+                        FunctionModuleType functionType = new FunctionModuleType();
+                        functionType.setId(functionModule.getId());
+                        functionType.setName(functionModule.getName());
+                        userType.getFunctions().add(functionType);
+                    }
+                }
+                responseType.getStaff().add(soapType);
+            }
+            responseType.setCount(staffMembers.size());
+            ResultType result = new ResultType();
+            result.setSuccessful(true);
+            responseType.setResult(result);
+        } catch(Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in deleteStaff", e);
+        }
+        return responseType;
+    }
+
+    @Override
+    public SaveStaffResponseType saveStaff(
+            @WebParam(partName = "parameters", name = "SaveStaffType", targetNamespace = NS) SaveStaffType parameters) {
+        SaveStaffResponseType responseType = new SaveStaffResponseType();
+        try {
+            if(parameters.getStaff().getId() != null && parameters.getStaff().getId() > 0) {
+                UpdateResult<StaffMember> result = contentManagementService.updateStaffMember(parameters.getStaff());
+                responseType.setResult(getSoapResult(result));
+            } else {
+                CreateResult<StaffMember> result = contentManagementService.createStaff(parameters.getStaff());
+                responseType.setResult(getSoapResult(result));
+            }
+        } catch(Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in deleteStaff", e);
+        }
+        return responseType;
+    }
+
+    @Override
+    public DeleteStaffResponseType deleteStaff(
+            @WebParam(partName = "parameters", name = "DeleteStaffType", targetNamespace = NS) DeleteStaffType parameters) {
+        DeleteStaffResponseType responseType = new DeleteStaffResponseType();
+        try {
+            DeleteResult result = contentManagementService.deleteStaff(parameters.getStaffId());
+            responseType.setResult(getSoapResult(result));
+        } catch(Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in deleteStaff", e);
+        }
+        return responseType;
+    }
+
+    @Override
+    public CheckPrivilegeResponseType checkPrivilege(
+            @WebParam(partName = "parameters", name = "CheckPrivilegeType", targetNamespace = NS) CheckPrivilegeType parameters) {
+        CheckPrivilegeResponseType responseType = new CheckPrivilegeResponseType();
+        try {
+            ResultType result = new ResultType();
+            result.setSuccessful(false);
+            User user = userDao.findByPasscode(parameters.getPasscode());
+            if(user != null) {
+                for(FunctionModule functionModule : user.getFunctions()) {
+                    if(functionModule.getId() == parameters.getFunctionId()) {
+                        result.setSuccessful(true);
+                    }
+                }
+            }
+            responseType.setResult(result);
+        } catch(Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in checkPrivilege", e);
+        }
+        return responseType;
+    }
+
+    @Override
+    public GetUserFunctionsHTMLResponseType getUserFunctionsHTML(
+            @WebParam(partName = "parameters", name = "GetUserFunctionsHTMLType", targetNamespace = NS) GetUserFunctionsHTMLType parameters) {
+        GetUserFunctionsHTMLResponseType responseType = new GetUserFunctionsHTMLResponseType();
+        ResultType result = new ResultType();
+        try {
+            List<FunctionModule> functionModules = functionModuleDao.findAll();
+            User user = userDao.findById(parameters.getUserId());
+            Set<FunctionModule> functionSet = new HashSet<FunctionModule>();
+            if(user != null) {
+                functionSet = user.getFunctions();
+            }
+            StringBuilder html = new StringBuilder("");
+            for(int i = 0; i < functionModules.size(); i++) {
+                FunctionModule function = functionModules.get(i);
+                if(i % 4 == 0) html.append("<tr>");
+                html.append("<td><input type='checkbox' name='privileges' id='privileges' value=").append(function.getId());
+                if(functionSet.contains(function)) html.append(" checked");
+                html.append(">").append(function.getName());
+                html.append("</td>");
+                if(i % 4 == 3) html.append("</tr>");
+            }
+            responseType.setHtml(html.toString());
+
+            result.setSuccessful(true);
+            responseType.setResult(result);
+        } catch(Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in getUserFunctionsHTML", e);
+        }
+        
         return responseType;
     }
 }

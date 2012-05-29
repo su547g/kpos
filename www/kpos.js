@@ -936,3 +936,109 @@ function DeleteAreaType(aId) {
         return xml;
     }
 }
+function ListStaffType() {
+    this.getXML = function() {
+        var xml = soapXMLBegin + "<app:ListStaffType/>" + soapXMLEnd;
+        return xml;
+    }
+}
+function StaffType(aId, aName, aAge, aWage, aHomePhone, aCellPhone, aStreet, aCity, aState, aZipcode, aNotes, aUser) {
+    this.id = aId;
+    this.name = aName;
+    this.age = aAge;
+    this.wage = aWage;
+    this.homePhone = aHomePhone;
+    this.cellPhone = aCellPhone;
+    this.street = aStreet;
+    this.city = aCity;
+    this.state = aState;
+    this.zipcode = aZipcode;
+    this.notes = aNotes;
+    this.user = aUser;
+    this.getXML = function() {
+        var xml = "<app:name>" + this.name + "</app:name>";
+        if(this.id != null && this.id != "") {
+            xml += "<app:id>" + this.id + "</app:id>";
+        }
+        if(this.age != null && this.age != "")
+            xml += "<app:age>" + this.age + "</app:age>";
+        if(this.wage != null && this.wage != "")
+            xml += "<app:hourlyWage>" + this.wage + "</app:hourlyWage>";            
+        if(this.homePhone != null && this.homePhone != "")
+            xml +="<app:homePhone>" + this.homePhone + "</app:homePhone>"; 
+        if(this.cellPhone != null && this.cellPhone != "")
+            xml +="<app:cellPhone>" + this.cellPhone + "</app:cellPhone>";
+        if(this.street != null && this.street != "")
+            xml += "<app:street>" + this.street + "</app:street>";
+        if(this.city != null && this.city != "")
+            xml += "<app:city>" + this.city + "</app:city>";
+        if(this.state != null && this.state != "")
+            xml += "<app:state>" + this.state + "</app:state>";
+        if(this.zipcode != null && this.zipcode != "")
+            xml += "<app:zipcode>" + this.zipcode + "</app:zipcode>";
+        if(this.notes != null && this.notes != "")
+            xml += "<app:notes>" + this.notes + "</app:notes>";
+        if(this.user != null) {
+            xml += "<app:user>" + this.user.getXML() + "</app:user>";
+        }
+        return xml;
+    }
+}
+function ModuleType(aId, aName) {
+    this.id = aId;
+    this.name = aName;
+}
+function UserType(aId, aPasscode) {
+    this.id = aId;
+    this.passcode = aPasscode;
+    this.modules = new Array();
+    this.getXML = function() {
+        var xml = "<app:passcode>" + this.passcode + "</app:passcode>";
+        if(this.id != null && this.id != "") {
+            xml += "<app:id>" + this.id + "</app:id>";
+        }
+        for(var i = 0; i < this.modules.length; i++) {
+            xml += "<app:functions><app:id>" + this.modules[i].id + "</app:id>";
+            xml += "<app:name>" + this.modules[i].name + "</app:name></app:functions>";
+        }
+        return xml;
+    }
+}
+function DeleteStaffType(aId) {
+    this.id = aId;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:DeleteStaffType>" + this.id + "</app:DeleteStaffType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function SaveStaffType(aStaff) {
+    this.staff = aStaff;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:SaveStaffType><app:staff>" + this.staff.getXML() + "</app:staff></app:SaveStaffType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function GetUserFunctionsHTMLType(aId) {
+    this.id = aId;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:GetUserFunctionsHTMLType><app:userId>" + this.id + "</app:userId></app:GetUserFunctionsHTMLType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function CheckPrivilegeType(aPasscode, aFunctionId) {
+    this.passcode = aPasscode;
+    this.functionId = aFunctionId;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:passcode>" + this.passcode + "</app:passcode>";
+        xml += "<app:functionId>" + this.functionId + "</app:functionId>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}

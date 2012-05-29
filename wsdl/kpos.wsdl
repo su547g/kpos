@@ -117,6 +117,17 @@
             <xs:element name="ListPrintersHTMLType" type="tns:ListPrintersHTMLType"/>
             <xs:element name="ListPrintersHTMLResponseType" type="tns:ListPrintersHTMLResponseType"/>
 
+            <xs:element name="SaveStaffType" type="tns:SaveStaffType"/>
+            <xs:element name="SaveStaffResponseType" type="tns:SaveStaffResponseType"/>
+            <xs:element name="DeleteStaffType" type="tns:DeleteStaffType"/>
+            <xs:element name="DeleteStaffResponseType" type="tns:DeleteStaffResponseType"/>
+            <xs:element name="ListStaffType" type="tns:ListStaffType"/>
+            <xs:element name="ListStaffResponseType" type="tns:ListStaffResponseType"/>
+            <xs:element name="CheckPrivilegeType" type="tns:CheckPrivilegeType"/>
+            <xs:element name="CheckPrivilegeResponseType" type="tns:CheckPrivilegeResponseType"/>
+            <xs:element name="GetUserFunctionsHTMLType" type="tns:GetUserFunctionsHTMLType"/>
+            <xs:element name="GetUserFunctionsHTMLResponseType" type="tns:GetUserFunctionsHTMLResponseType"/>
+
             <!--Result object-->
             <xs:complexType name="ResultType">
                 <xs:sequence>
@@ -296,9 +307,13 @@
                     <xs:element name="age" type="xsd:int" minOccurs="0"/>
                     <xs:element name="homePhone" type="xsd:string" minOccurs="0"/>
                     <xs:element name="cellPhone" type="xsd:string" minOccurs="0"/>
-                    <xs:element name="address" type="xsd:string" minOccurs="0"/>
-                    <xs:element name="joinDate" type="xsd:date" minOccurs="1"/>
+                    <xs:element name="street" type="xsd:string" minOccurs="0"/>
+                    <xs:element name="city" type="xsd:string" minOccurs="0"/>
+                    <xs:element name="state" type="xsd:string" minOccurs="0"/>
+                    <xs:element name="zipcode" type="xsd:string" minOccurs="0"/>
+                    <xs:element name="joinDate" type="xsd:string" minOccurs="1"/>
                     <xs:element name="hourlyWage" type="xsd:double" minOccurs="0"/>
+                    <xs:element name="notes" type="xsd:string" minOccurs="0"/>
                     <xs:element name="user" type="tns:UserType" minOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
@@ -306,7 +321,7 @@
                 <xs:sequence>
                     <xs:element name="id" type="xsd:long" minOccurs="0"/>
                     <xs:element name="passcode" type="xsd:string" minOccurs="1"/>
-                    <xs:element name="staffId" type="xsd:long" minOccurs="1"/>
+                    <xs:element name="staffId" type="xsd:long" minOccurs="0"/>
                     <xs:element name="functions" type="tns:FunctionModuleType" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:complexType>
@@ -840,6 +855,61 @@
                     <xs:element name="html" type="xsd:string" minOccurs="1" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
+
+            <xs:complexType name="SaveStaffType">
+                <xs:sequence>
+                    <xs:element name="staff" type="tns:StaffType" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="SaveStaffResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeleteStaffType">
+                <xs:sequence>
+                    <xs:element name="staffId" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeleteStaffResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListStaffType">
+                <xs:sequence>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListStaffResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="staff" type="tns:StaffType" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="count" type="xsd:int"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="CheckPrivilegeType">
+                <xs:sequence>
+                    <xs:element name="passcode" type="xsd:string" minOccurs="1"/>
+                    <xs:element name="functionId" type="xsd:long" minOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="CheckPrivilegeResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="GetUserFunctionsHTMLType">
+                <xs:sequence>
+                    <xs:element name="userId" type="xsd:long" minOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="GetUserFunctionsHTMLResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="html" type="xsd:string"/>
+                </xs:sequence>
+            </xs:complexType>
             <!--End of operations-->
         </xs:schema>
     </wsdl:types>
@@ -869,7 +939,6 @@
     <wsdl:message name="ListAreasResponseMessage">
         <wsdl:part name="parameters" element="tns:ListAreasResponseType"/>
     </wsdl:message>
-
     <wsdl:message name="SaveTableMessage">
         <wsdl:part name="parameters" element="tns:SaveTableType"/>
     </wsdl:message>
@@ -894,28 +963,24 @@
     <wsdl:message name="ListTablesResponseMessage">
         <wsdl:part name="parameters" element="tns:ListTablesResponseType"/>
     </wsdl:message>
-
     <wsdl:message name="CreateCategoryMessage">
         <wsdl:part name="parameters" element="tns:CreateCategoryType"/>
     </wsdl:message>
     <wsdl:message name="CreateCategoryResponseMessage">
         <wsdl:part name="parameters" element="tns:CreateCategoryResponseType"/>
     </wsdl:message>
-
     <wsdl:message name="UpdateCategoryMessage">
         <wsdl:part name="parameters" element="tns:UpdateCategoryType"/>
     </wsdl:message>
     <wsdl:message name="UpdateCategoryResponseMessage">
         <wsdl:part name="parameters" element="tns:UpdateCategoryResponseType"/>
     </wsdl:message>
-
     <wsdl:message name="DeleteCategoryMessage">
         <wsdl:part name="parameters" element="tns:DeleteCategoryType"/>
     </wsdl:message>
     <wsdl:message name="DeleteCategoryResponseMessage">
         <wsdl:part name="parameters" element="tns:DeleteCategoryResponseType"/>
     </wsdl:message>
-
     <wsdl:message name="ListCategoryMessage">
         <wsdl:part name="parameters" element="tns:ListCategoryType"/>
     </wsdl:message>
@@ -928,7 +993,6 @@
     <wsdl:message name="ListCategoryHTMLResponseMessage">
         <wsdl:part name="parameters" element="tns:ListCategoryHTMLResponseType"/>
     </wsdl:message>
-
     <wsdl:message name="CreateCategoryOptionMessage">
         <wsdl:part name="parameters" element="tns:CreateCategoryOptionType"/>
     </wsdl:message>
@@ -965,7 +1029,6 @@
     <wsdl:message name="ListCategoryOptionHTMLResponseMessage">
         <wsdl:part name="parameters" element="tns:ListCategoryOptionHTMLResponseType"/>
     </wsdl:message>
-
     <wsdl:message name="ListSaleItemsForCategoryMessage">
         <wsdl:part name="parameters" element="tns:ListSaleItemsForCategoryType"/>
     </wsdl:message>
@@ -978,14 +1041,12 @@
     <wsdl:message name="ListSaleItemsForCategoryHTMLResponseMessage">
         <wsdl:part name="parameters" element="tns:ListSaleItemsForCategoryHTMLResponseType"/>
     </wsdl:message>
-
     <wsdl:message name="CreateSaleItemMessage">
         <wsdl:part name="parameters" element="tns:CreateSaleItemType"/>
     </wsdl:message>
     <wsdl:message name="CreateSaleItemResponseMessage">
         <wsdl:part name="parameters" element="tns:CreateSaleItemResponseType"/>
     </wsdl:message>
-
     <wsdl:message name="UpdateSaleItemMessage">
         <wsdl:part name="parameters" element="tns:UpdateSaleItemType"/>
     </wsdl:message>
@@ -1124,6 +1185,37 @@
     </wsdl:message>
     <wsdl:message name="ListPrintersHTMLResponseMessage">
         <wsdl:part name="parameters" element="tns:ListPrintersHTMLResponseType"/>
+    </wsdl:message>
+
+    <wsdl:message name="SaveStaffMessage">
+        <wsdl:part name="parameters" element="tns:SaveStaffType"/>
+    </wsdl:message>
+    <wsdl:message name="SaveStaffResponseMessage">
+        <wsdl:part name="parameters" element="tns:SaveStaffResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="DeleteStaffMessage">
+        <wsdl:part name="parameters" element="tns:DeleteStaffType"/>
+    </wsdl:message>
+    <wsdl:message name="DeleteStaffResponseMessage">
+        <wsdl:part name="parameters" element="tns:DeleteStaffResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="ListStaffMessage">
+        <wsdl:part name="parameters" element="tns:ListStaffType"/>
+    </wsdl:message>
+    <wsdl:message name="ListStaffResponseMessage">
+        <wsdl:part name="parameters" element="tns:ListStaffResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="CheckPrivilegeMessage">
+        <wsdl:part name="parameters" element="tns:CheckPrivilegeType"/>
+    </wsdl:message>
+    <wsdl:message name="CheckPrivilegeResponseMessage">
+        <wsdl:part name="parameters" element="tns:CheckPrivilegeResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="GetUserFunctionsHTMLMessage">
+        <wsdl:part name="parameters" element="tns:GetUserFunctionsHTMLType"/>
+    </wsdl:message>
+    <wsdl:message name="GetUserFunctionsHTMLResponseMessage">
+        <wsdl:part name="parameters" element="tns:GetUserFunctionsHTMLResponseType"/>
     </wsdl:message>
     <!--End of messages-->
 
@@ -1319,6 +1411,27 @@
         <wsdl:operation name="ListPrintersHTML">
             <wsdl:input message="tns:ListPrintersHTMLMessage" name="ListPrintersHTML"/>
             <wsdl:output message="tns:ListPrintersHTMLResponseMessage" name="ListPrintersHTMLResponse"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="SaveStaff">
+            <wsdl:input message="tns:SaveStaffMessage" name="SaveStaff"/>
+            <wsdl:output message="tns:SaveStaffResponseMessage" name="SaveStaffResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="DeleteStaff">
+            <wsdl:input message="tns:DeleteStaffMessage" name="DeleteStaff"/>
+            <wsdl:output message="tns:DeleteStaffResponseMessage" name="DeleteStaffResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="ListStaff">
+            <wsdl:input message="tns:ListStaffMessage" name="ListStaff"/>
+            <wsdl:output message="tns:ListStaffResponseMessage" name="ListStaffResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="CheckPrivilege">
+            <wsdl:input message="tns:CheckPrivilegeMessage" name="CheckPrivilege"/>
+            <wsdl:output message="tns:CheckPrivilegeResponseMessage" name="CheckPrivilegeResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetUserFunctionsHTML">
+            <wsdl:input message="tns:GetUserFunctionsHTMLMessage" name="GetUserFunctionsHTML"/>
+            <wsdl:output message="tns:GetUserFunctionsHTMLResponseMessage" name="GetUserFunctionsHTMLResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -1738,6 +1851,51 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="ListPrintersHTMLResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="SaveStaff">
+            <soap:operation soapAction="http://ws.kpos.com/SaveStaff" style="document"/>
+            <wsdl:input name="SaveStaff">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="SaveStaffResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="DeleteStaff">
+            <soap:operation soapAction="http://ws.kpos.com/DeleteStaff" style="document"/>
+            <wsdl:input name="DeleteStaff">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DeleteStaffResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="ListStaff">
+            <soap:operation soapAction="http://ws.kpos.com/ListStaff" style="document"/>
+            <wsdl:input name="ListStaff">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="ListStaffResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="CheckPrivilege">
+            <soap:operation soapAction="http://ws.kpos.com/CheckPrivilege" style="document"/>
+            <wsdl:input name="CheckPrivilege">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="CheckPrivilegeResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetUserFunctionsHTML">
+            <soap:operation soapAction="http://ws.kpos.com/GetUserFunctionsHTML" style="document"/>
+            <wsdl:input name="GetUserFunctionsHTML">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="GetUserFunctionsHTMLResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
