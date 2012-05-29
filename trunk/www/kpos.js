@@ -1036,8 +1036,8 @@ function CheckPrivilegeType(aPasscode, aFunctionId) {
     this.functionId = aFunctionId;
     this.getXML = function() {
         var xml = soapXMLBegin;
-        xml += "<app:passcode>" + this.passcode + "</app:passcode>";
-        xml += "<app:functionId>" + this.functionId + "</app:functionId>";
+        xml += "<app:CheckPrivilegeType><app:passcode>" + this.passcode + "</app:passcode>";
+        xml += "<app:functionId>" + this.functionId + "</app:functionId></app:CheckPrivilegeType>";
         xml += soapXMLEnd;
         return xml;
     }
