@@ -1,9 +1,6 @@
 package com.kpos.domain;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.persistence.*;
 
@@ -16,6 +13,12 @@ import org.hibernate.annotations.OnDeleteAction;
  * Author: kkwang
  * Date: 3/9/12 9:56 PM
  */
+@NamedQueries({
+        @NamedQuery(
+                name = "findUserByPasscode",
+                query = "from User u where u.passcode = :aPasscode"
+        )
+})
 @Entity
 @Table(name = "user")
 public class User extends AbstractDomainObject {
@@ -38,7 +41,7 @@ public class User extends AbstractDomainObject {
             inverseJoinColumns = @JoinColumn(name = "FUNC_ID")
     )
     @ForeignKey(name = "USER_2_FUNC_FK", inverseName = "FUNC_2_USER_FK")
-    private Set<FunctionModule> functions;
+    private Set<FunctionModule> functions = new HashSet<FunctionModule>();
 
     public void setId(Long id) {
         this.id = id;
@@ -52,7 +55,7 @@ public class User extends AbstractDomainObject {
         this.passcode = passcode;
     }
 
-    public String getPassword() {
+    public String getPasscode() {
         return passcode;
     }
 

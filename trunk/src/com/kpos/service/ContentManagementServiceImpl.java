@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -68,6 +69,15 @@ public class ContentManagementServiceImpl implements IContentManagementService {
 
     @Autowired
     private IPaymentRecordDao paymentRecordDao;
+
+    @Autowired
+    private IStaffMemberDao staffMemberDao;
+
+    @Autowired
+    private IUserDao userDao;
+
+    @Autowired
+    private IFunctionModuleDao functionModuleDao;
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public CreateResult<MenuCategory> createMenuCategory(MenuCategory aCategory, List<Long> printerIds) {
@@ -1003,6 +1013,118 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             result.setSuccessful(true);
         } else {
             result.setSuccessful(false);
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public DeleteResult deleteStaff(long id) {
+        DeleteResult result = new DeleteResult();
+        StaffMember staff = staffMemberDao.findById(id);
+        if(staff != null) {
+            boolean success = staffMemberDao.delete(id);
+            result.setSuccessful(success);
+        } else {
+            result.setException(new Exception("Staff ["+id+"] doesn't exist!"));
+        }
+        return result;
+    }
+
+    @Override
+    public CreateResult<StaffMember> createStaff(StaffType soapStaff) throws Exception {
+        CreateResult<StaffMember> result = new CreateResult<StaffMember>();
+        StaffMember member = insertNewStaff(soapStaff);
+        User user = insertNewUser(soapStaff.getUser(), member);
+        result.setSuccessful(true);
+        result.setCreated(member);
+        return result;
+    }
+
+    private void convertStaffMember(StaffMember member, StaffType soapStaff) throws Exception {
+        member.setStreet(soapStaff.getStreet());
+        member.setCity(soapStaff.getCity());
+        member.setState(soapStaff.getState());
+        member.setZipcode(soapStaff.getZipcode());
+        member.setAge(soapStaff.getAge()==null?0:soapStaff.getAge());
+        member.setCellPhone(soapStaff.getCellPhone());
+        member.setHomePhone(soapStaff.getHomePhone());
+        member.setHourlyWage(soapStaff.getHourlyWage());
+        member.setNotes(soapStaff.getNotes());
+        if(soapStaff.getJoinDate() != null) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+            member.setJoinDate(format.parse(soapStaff.getJoinDate()));
+        }
+        member.setName(soapStaff.getName());
+    }
+    
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    private StaffMember insertNewStaff(StaffType soapStaff) throws Exception {
+        StaffMember member = new StaffMember();
+        convertStaffMember(member, soapStaff);
+        staffMemberDao.insert(member);
+        return member;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    private User insertNewUser(UserType soapUser, StaffMember member) {
+        if(member.getUser() == null) {
+            User user = new User();
+            user.setStaff(member);
+            user.setPasscode(soapUser.getPasscode());
+            user.setCreatedOn(new Date());
+            user.setLastUpdated(new Date());
+            List<FunctionModuleType> soapFunctions = soapUser.getFunctions();
+            for(FunctionModuleType functionType : soapFunctions) {
+                FunctionModule function = functionModuleDao.findById(functionType.getId());
+                user.getFunctions().add(function);
+            }
+            userDao.insert(user);
+            member.setUser(user);
+            return user;
+        }
+        return null;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public UpdateResult<StaffMember> updateStaffMember(StaffType soapStaff) throws Exception {
+        UpdateResult<StaffMember> result = new UpdateResult<StaffMember>();
+        StaffMember member = staffMemberDao.findById(soapStaff.getId());
+        if(member != null) {
+            convertStaffMember(member, soapStaff);
+            UserType soapUser = soapStaff.getUser();
+            User user = member.getUser();
+            if(user == null) { //Create a new user
+                if(soapUser.getPasscode() != null && !soapUser.getPasscode().isEmpty()) {
+                    user = new User();
+                    user.setStaff(member);
+                    user.setCreatedOn(new Date());
+                    user.setPasscode(soapUser.getPasscode());
+                    userDao.insert(user);
+                    member.setUser(user);
+                } else {
+                    result.setSuccessful(false);
+                    result.setException(new Exception("No passcode was entered!"));
+                    log.debug("No passcode was entered for new user object.");
+                    return result;
+                }
+            } else { //Update an existing user
+                user.setLastUpdated(new Date());
+                if(soapUser != null) user.setPasscode(soapUser.getPasscode());
+                user.getFunctions().clear();
+            }
+            if(soapUser != null) {
+                for(FunctionModuleType functionType : soapUser.getFunctions()) {
+                    FunctionModule function = functionModuleDao.findById(functionType.getId());
+                    if(function != null) user.getFunctions().add(function);
+                }
+            }
+            result.setSuccessful(true);
+            result.setManagedObject(member);
+        } else {
+            log.debug("Staff [" + soapStaff.getId()+"] doesn't exist!");
+            throw new Exception("Staff [" + soapStaff.getId()+"] doesn't exist!");
         }
         return result;
     }

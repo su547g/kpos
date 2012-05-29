@@ -94,4 +94,8 @@ public interface IContentManagementService {
     DeleteResult deleteOrder(long orderId);
 
     UpdateResult<Order> settleOrder(long orderId, List<PaymentRecordType> paymentRecordTypes);
+
+    DeleteResult deleteStaff(long id);
+    CreateResult<StaffMember> createStaff(StaffType soapStaff) throws Exception;
+    UpdateResult<StaffMember> updateStaffMember(StaffType soapStaff) throws Exception;
 }

@@ -341,10 +341,13 @@
                 	//TODO: check order type for price
                 	hasSizes = true;
                 	document.menuItemForm.btnItemSmall.value = "Small $" + item.pricesmall;
+                	document.menuItemForm.btnItemSmall.style.backgroundColor = "#FFFF00";
                 	document.menuItemForm.btnItemSmall.onclick = function() {document.menuItemForm.itemPrice.value = item.pricesmall;setSizeButtonColor(1);}
                 	document.menuItemForm.btnItemMed.value = "Medium $" + item.pricemed;
+                	document.menuItemForm.btnItemMed.style.backgroundColor = "#FFFF00";
                 	document.menuItemForm.btnItemMed.onclick = function() {document.menuItemForm.itemPrice.value = item.pricemed;setSizeButtonColor(2);}
                 	document.menuItemForm.btnItemLarge.value = "Large $" + item.pricelarge;
+                	document.menuItemForm.btnItemLarge.style.backgroundColor = "#FFFF00";
                 	document.menuItemForm.btnItemLarge.onclick = function() {document.menuItemForm.itemPrice.value = item.pricelarge;setSizeButtonColor(3);}
                 	document.getElementById('singlePrice').style.display = "none";
                 	document.getElementById('itemSizes').style.display = "block";

@@ -179,6 +179,43 @@ LOCK TABLES `combo_section` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `company_profile`
+--
+
+DROP TABLE IF EXISTS `company_profile`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `company_profile` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `address1` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `address2` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `city` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `state` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `zipcode` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `telephone1` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `telephone2` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_on` datetime DEFAULT NULL,
+  `last_updated` datetime DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `last_updated_by` int(11) DEFAULT NULL,
+  `email` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `website` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `company_profile`
+--
+
+LOCK TABLES `company_profile` WRITE;
+/*!40000 ALTER TABLE `company_profile` DISABLE KEYS */;
+/*!40000 ALTER TABLE `company_profile` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `customer_info`
 --
 
@@ -208,6 +245,36 @@ CREATE TABLE `customer_info` (
 LOCK TABLES `customer_info` WRITE;
 /*!40000 ALTER TABLE `customer_info` DISABLE KEYS */;
 /*!40000 ALTER TABLE `customer_info` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `function_module`
+--
+
+DROP TABLE IF EXISTS `function_module`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `function_module` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_on` datetime DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `last_updated` datetime DEFAULT NULL,
+  `last_updated_by` int(11) DEFAULT NULL,
+  `version` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `function_module`
+--
+
+LOCK TABLES `function_module` WRITE;
+/*!40000 ALTER TABLE `function_module` DISABLE KEYS */;
+INSERT INTO `function_module` VALUES (1,'order','2012-05-27 23:07:02',NULL,'2012-05-27 23:07:02',NULL,NULL),(2,'menu management','2012-05-27 23:07:05',NULL,'2012-05-27 23:07:05',NULL,NULL),(3,'staff management','2012-05-27 23:07:14',NULL,'2012-05-27 23:07:14',NULL,NULL),(4,'view orders','2012-05-27 23:08:21',NULL,'2012-05-27 23:08:21',NULL,NULL);
+/*!40000 ALTER TABLE `function_module` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -306,7 +373,7 @@ CREATE TABLE `order_bill` (
 
 LOCK TABLES `order_bill` WRITE;
 /*!40000 ALTER TABLE `order_bill` DISABLE KEYS */;
-INSERT INTO `order_bill` VALUES (4,'0','OUT',NULL,17.28,NULL,NULL,'2012-05-20 23:53:05','2012-05-20 23:53:05',NULL,NULL,0,1,0,0),(5,'0','OUT',NULL,17.28,NULL,NULL,'2012-05-20 23:56:12','2012-05-20 23:56:12',NULL,NULL,0,1,0,0),(6,'0','OUT',NULL,23.76,NULL,NULL,'2012-05-21 00:00:55','2012-05-21 00:00:55',NULL,NULL,0,1,0,0),(7,'0','OUT',NULL,17.28,NULL,NULL,'2012-05-21 20:53:32','2012-05-21 20:53:32',NULL,NULL,0,1,0,0),(8,'0','OUT',NULL,10.8,NULL,NULL,'2012-05-21 20:53:59','2012-05-21 20:53:59',NULL,NULL,0,1,0,0),(9,'0','OUT',NULL,21.6,NULL,NULL,'2012-05-21 21:04:36','2012-05-21 21:04:36',NULL,NULL,0,1,0,0),(10,'0','OUT',NULL,6.48,NULL,NULL,'2012-05-21 21:04:56','2012-05-21 21:04:56',NULL,NULL,0,1,0,0),(11,'0','OUT',NULL,12.96,NULL,NULL,'2012-05-21 21:05:27','2012-05-21 21:05:27',NULL,NULL,0,1,0,0),(12,'0','OUT',NULL,10.8,NULL,NULL,'2012-05-21 21:06:54','2012-05-21 21:06:54',NULL,NULL,0,1,0,0),(13,'0','OUT',NULL,7.56,NULL,NULL,'2012-05-21 21:12:25','2012-05-21 21:30:24',NULL,NULL,1,1,0,0),(14,'0','OUT',NULL,27,NULL,NULL,'2012-05-26 17:11:21','2012-05-26 17:14:48',NULL,NULL,1,1,0,0);
+INSERT INTO `order_bill` VALUES (4,'0','OUT',NULL,17.28,NULL,NULL,'2012-05-20 23:53:05','2012-05-20 23:53:05',NULL,NULL,0,1,0,0),(5,'0','OUT',NULL,17.28,NULL,NULL,'2012-05-20 23:56:12','2012-05-20 23:56:12',NULL,NULL,0,1,0,0),(6,'0','OUT',NULL,23.76,NULL,NULL,'2012-05-21 00:00:55','2012-05-21 00:00:55',NULL,NULL,0,1,0,0),(7,'0','OUT',NULL,17.28,NULL,NULL,'2012-05-21 20:53:32','2012-05-21 20:53:32',NULL,NULL,0,1,0,0),(8,'0','OUT',NULL,10.8,NULL,NULL,'2012-05-21 20:53:59','2012-05-21 20:53:59',NULL,NULL,0,1,0,0),(9,'0','OUT',NULL,21.6,NULL,NULL,'2012-05-21 21:04:36','2012-05-21 21:04:36',NULL,NULL,0,1,0,0),(10,'4','OUT',NULL,6.48,NULL,NULL,'2012-05-21 21:04:56','2012-05-26 23:24:00',NULL,NULL,1,1,0,0),(11,'0','OUT',NULL,12.96,NULL,NULL,'2012-05-21 21:05:27','2012-05-21 21:05:27',NULL,NULL,0,1,0,0),(12,'0','OUT',NULL,10.8,NULL,NULL,'2012-05-21 21:06:54','2012-05-21 21:06:54',NULL,NULL,0,1,0,0),(13,'0','OUT',NULL,7.56,NULL,NULL,'2012-05-21 21:12:25','2012-05-21 21:30:24',NULL,NULL,1,1,0,0),(14,'0','OUT',NULL,27,NULL,NULL,'2012-05-26 17:11:21','2012-05-26 17:14:48',NULL,NULL,1,1,0,0);
 /*!40000 ALTER TABLE `order_bill` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -403,7 +470,7 @@ CREATE TABLE `payment_record` (
   PRIMARY KEY (`id`),
   KEY `PAYMENT_2_ORDER_FK` (`order_id`),
   CONSTRAINT `PAYMENT_2_ORDER_FK` FOREIGN KEY (`order_id`) REFERENCES `order_bill` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -412,6 +479,7 @@ CREATE TABLE `payment_record` (
 
 LOCK TABLES `payment_record` WRITE;
 /*!40000 ALTER TABLE `payment_record` DISABLE KEYS */;
+INSERT INTO `payment_record` VALUES (1,6.48,10,'CASH',NULL,NULL,'2012-05-26 23:24:00','2012-05-26 23:24:00',NULL,NULL,0);
 /*!40000 ALTER TABLE `payment_record` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -595,6 +663,144 @@ LOCK TABLES `seating_area` WRITE;
 INSERT INTO `seating_area` VALUES (3,'Area 1','2012-05-25 22:51:04','2012-05-25 22:51:04',NULL,NULL,9),(4,'Area 2','2012-05-25 23:03:34','2012-05-25 23:03:34',NULL,NULL,5);
 /*!40000 ALTER TABLE `seating_area` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `staff_attendance`
+--
+
+DROP TABLE IF EXISTS `staff_attendance`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `staff_attendance` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `staff_id` int(11) NOT NULL,
+  `work_day` date NOT NULL,
+  `start_time` datetime NOT NULL,
+  `end_time` datetime NOT NULL,
+  `created_on` datetime DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `last_updated` datetime DEFAULT NULL,
+  `last_updated_by` int(11) DEFAULT NULL,
+  `version` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `ATTN_2_STAFF_FK` (`staff_id`),
+  CONSTRAINT `ATTN_2_STAFF_FK` FOREIGN KEY (`staff_id`) REFERENCES `staff_member` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `staff_attendance`
+--
+
+LOCK TABLES `staff_attendance` WRITE;
+/*!40000 ALTER TABLE `staff_attendance` DISABLE KEYS */;
+/*!40000 ALTER TABLE `staff_attendance` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `staff_member`
+--
+
+DROP TABLE IF EXISTS `staff_member`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `staff_member` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `age` int(11) DEFAULT NULL,
+  `home_phone` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `cell_phone` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `street` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `join_date` datetime DEFAULT NULL,
+  `hourly_wage` double DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `notes` varchar(240) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_on` datetime DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `last_updated` datetime DEFAULT NULL,
+  `last_updated_by` int(11) DEFAULT NULL,
+  `version` int(11) DEFAULT NULL,
+  `city` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `state` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `zipcode` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `user_id_UNIQUE` (`user_id`),
+  KEY `STAFF_2_USER_FK` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `staff_member`
+--
+
+LOCK TABLES `staff_member` WRITE;
+/*!40000 ALTER TABLE `staff_member` DISABLE KEYS */;
+INSERT INTO `staff_member` VALUES (2,'Wei',28,'9173928156','9173928156','4254 Judge St','2012-01-28 00:05:00',20,7,'blah',NULL,NULL,NULL,NULL,3,'Elmhurst','NY','11373'),(3,'Kang',30,'2069106910','2069106911','4254 Judge St, Apt 4D, Elmhurst, NY 11351','2012-01-27 00:05:00',100,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL),(4,'Kang',30,'2069106910','2069106911','4254 Judge St, Apt 4D, Elmhurst, NY 11351','2012-01-27 00:05:00',100,NULL,NULL,NULL,NULL,NULL,NULL,1,'Elmhurst',NULL,NULL);
+/*!40000 ALTER TABLE `staff_member` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `staff_id` int(11) NOT NULL,
+  `passcode` int(11) NOT NULL,
+  `created_on` datetime NOT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `last_updated` datetime DEFAULT NULL,
+  `last_updated_by` int(11) DEFAULT NULL,
+  `version` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `USER_2_STAFF_FK` (`staff_id`),
+  CONSTRAINT `USER_2_STAFF_FK` FOREIGN KEY (`staff_id`) REFERENCES `staff_member` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,4,717,'2012-05-27 23:37:17',NULL,'2012-05-28 22:44:04',NULL,1),(7,2,11,'2012-05-28 00:28:17',NULL,'2012-05-28 22:27:27',NULL,4);
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_function_assoc`
+--
+
+DROP TABLE IF EXISTS `user_function_assoc`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_function_assoc` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `func_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `USER_2_FUNC_FK` (`user_id`),
+  KEY `FUNC_2_USER_FK` (`func_id`),
+  CONSTRAINT `FUNC_2_USER_FK` FOREIGN KEY (`func_id`) REFERENCES `function_module` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `USER_2_FUNC_FK` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_function_assoc`
+--
+
+LOCK TABLES `user_function_assoc` WRITE;
+/*!40000 ALTER TABLE `user_function_assoc` DISABLE KEYS */;
+INSERT INTO `user_function_assoc` VALUES (1,1,1),(12,7,1),(13,7,2),(14,7,3),(15,7,4);
+/*!40000 ALTER TABLE `user_function_assoc` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -605,4 +811,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-05-26 19:14:04
+-- Dump completed on 2012-05-28 22:46:23
