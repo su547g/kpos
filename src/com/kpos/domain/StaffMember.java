@@ -15,6 +15,11 @@ import java.util.Date;
 @Entity
 @Table(name = "STAFF_MEMBER")
 public class StaffMember extends AbstractDomainObject {
+    public static final int HOURLY = 1;
+    public static final int WEEKLY = 2;
+    public static final int BI_WEEKLY = 3;
+    public static final int MONTHLY = 4;
+    
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "id")
@@ -47,9 +52,12 @@ public class StaffMember extends AbstractDomainObject {
     @Column(name = "join_date")
     private Date joinDate;
 
-    @Column(name = "hourly_wage")
-    private double hourlyWage;
+    @Column(name = "wage")
+    private double wage;
 
+    @Column(name = "wage_type")
+    private int wageType;
+    
     @Column(name = "notes")
     private String notes;
 
@@ -139,12 +147,20 @@ public class StaffMember extends AbstractDomainObject {
         this.joinDate = joinDate;
     }
 
-    public double getHourlyWage() {
-        return hourlyWage;
+    public double getWage() {
+        return wage;
     }
 
-    public void setHourlyWage(double hourlyWage) {
-        this.hourlyWage = hourlyWage;
+    public void setWage(double wage) {
+        this.wage = wage;
+    }
+
+    public int getWageType() {
+        return wageType;
+    }
+
+    public void setWageType(int wageType) {
+        this.wageType = wageType;
     }
 
     public String getNotes() {
@@ -171,7 +187,8 @@ public class StaffMember extends AbstractDomainObject {
         StaffMember member = (StaffMember) o;
 
         if (age != member.age) return false;
-        if (Double.compare(member.hourlyWage, hourlyWage) != 0) return false;
+        if (Double.compare(member.wage, wage) != 0) return false;
+        if (member.wageType != wageType) return false;
         if (cellPhone != null ? !cellPhone.equals(member.cellPhone) : member.cellPhone != null) return false;
         if (city != null ? !city.equals(member.city) : member.city != null) return false;
         if (homePhone != null ? !homePhone.equals(member.homePhone) : member.homePhone != null) return false;
@@ -192,6 +209,7 @@ public class StaffMember extends AbstractDomainObject {
         result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + age;
+        result = 31 * result + wageType;
         result = 31 * result + (homePhone != null ? homePhone.hashCode() : 0);
         result = 31 * result + (cellPhone != null ? cellPhone.hashCode() : 0);
         result = 31 * result + (street != null ? street.hashCode() : 0);
@@ -200,7 +218,7 @@ public class StaffMember extends AbstractDomainObject {
         result = 31 * result + (notes != null ? notes.hashCode() : 0);
         result = 31 * result + (zipcode != null ? zipcode.hashCode() : 0);
         result = 31 * result + (joinDate != null ? joinDate.hashCode() : 0);
-        temp = hourlyWage != +0.0d ? Double.doubleToLongBits(hourlyWage) : 0L;
+        temp = wage != +0.0d ? Double.doubleToLongBits(wage) : 0L;
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }

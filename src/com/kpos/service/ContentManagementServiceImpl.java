@@ -1046,15 +1046,18 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         member.setCity(soapStaff.getCity());
         member.setState(soapStaff.getState());
         member.setZipcode(soapStaff.getZipcode());
-        member.setAge(soapStaff.getAge()==null?0:soapStaff.getAge());
+        member.setAge(soapStaff.getAge() == null ? 0 : soapStaff.getAge());
         member.setCellPhone(soapStaff.getCellPhone());
         member.setHomePhone(soapStaff.getHomePhone());
-        member.setHourlyWage(soapStaff.getHourlyWage());
+        member.setWage(soapStaff.getWage());
+        member.setWageType(soapStaff.getWageType());
         member.setNotes(soapStaff.getNotes());
         if(soapStaff.getJoinDate() != null) {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
             member.setJoinDate(format.parse(soapStaff.getJoinDate()));
         }
+        member.setCreatedOn(new Date());
+        member.setLastUpdated(new Date());
         member.setName(soapStaff.getName());
     }
     
@@ -1100,6 +1103,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
                     user = new User();
                     user.setStaff(member);
                     user.setCreatedOn(new Date());
+                    user.setLastUpdated(new Date());
                     user.setPasscode(soapUser.getPasscode());
                     userDao.insert(user);
                     member.setUser(user);

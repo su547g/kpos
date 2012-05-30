@@ -942,11 +942,12 @@ function ListStaffType() {
         return xml;
     }
 }
-function StaffType(aId, aName, aAge, aWage, aHomePhone, aCellPhone, aStreet, aCity, aState, aZipcode, aNotes, aUser) {
+function StaffType(aId, aName, aAge, aWage, aWageType, aHomePhone, aCellPhone, aStreet, aCity, aState, aZipcode, aNotes, aUser) {
     this.id = aId;
     this.name = aName;
     this.age = aAge;
     this.wage = aWage;
+    this.wageType = aWageType;
     this.homePhone = aHomePhone;
     this.cellPhone = aCellPhone;
     this.street = aStreet;
@@ -963,7 +964,9 @@ function StaffType(aId, aName, aAge, aWage, aHomePhone, aCellPhone, aStreet, aCi
         if(this.age != null && this.age != "")
             xml += "<app:age>" + this.age + "</app:age>";
         if(this.wage != null && this.wage != "")
-            xml += "<app:hourlyWage>" + this.wage + "</app:hourlyWage>";            
+            xml += "<app:wage>" + this.wage + "</app:wage>";
+        if(this.wageType != null && this.wageType != "")
+            xml += "<app:wageType>" + this.wageType + "</app:wageType>";
         if(this.homePhone != null && this.homePhone != "")
             xml +="<app:homePhone>" + this.homePhone + "</app:homePhone>"; 
         if(this.cellPhone != null && this.cellPhone != "")
@@ -1008,7 +1011,7 @@ function DeleteStaffType(aId) {
     this.id = aId;
     this.getXML = function() {
         var xml = soapXMLBegin;
-        xml += "<app:DeleteStaffType>" + this.id + "</app:DeleteStaffType>";
+        xml += "<app:DeleteStaffType><app:staffId>" + this.id + "</app:staffId></app:DeleteStaffType>";
         xml += soapXMLEnd;
         return xml;
     }

@@ -312,7 +312,8 @@
                     <xs:element name="state" type="xsd:string" minOccurs="0"/>
                     <xs:element name="zipcode" type="xsd:string" minOccurs="0"/>
                     <xs:element name="joinDate" type="xsd:string" minOccurs="1"/>
-                    <xs:element name="hourlyWage" type="xsd:double" minOccurs="0"/>
+                    <xs:element name="wage" type="xsd:double" minOccurs="0"/>
+                    <xs:element name="wageType" type="xsd:int" minOccurs="0"/>
                     <xs:element name="notes" type="xsd:string" minOccurs="0"/>
                     <xs:element name="user" type="tns:UserType" minOccurs="1"/>
                 </xs:sequence>
