@@ -18,12 +18,24 @@ import java.util.List;
  */
 @NamedQueries({
         @NamedQuery(
-                name = "listOrdersByStatus",
-                query = "from Order where status = :aStatus"
+                name = "listOrdersByTimeASC",
+                query = "from Order order by createdOn ASC"
+        ),
+        @NamedQuery(
+                name = "listOrdersByTimeDESC",
+                query = "from Order order by createdOn DESC"
+        ),
+        @NamedQuery(
+                name = "listOrdersForStatusByTimeASC",
+                query = "from Order where status = :aStatus order by createdOn ASC"
+        ),
+        @NamedQuery(
+                name = "listOrdersForStatusByTimeDESC",
+                query = "from Order where status = :aStatus order by createdOn DESC"
         ),
         @NamedQuery(
                 name = "listOrdersForTable",
-                query = "from Order o where o.table.id = :aId and o.status = :aStatus"
+                query = "from Order o where o.table.id = :aId and o.status = :aStatus order by createdOn ASC"
         ),
         /*@NamedQuery(
                 name = "listOrdersForServer",
@@ -31,7 +43,11 @@ import java.util.List;
         ),*/
         @NamedQuery(
                 name = "listOrdersForDateRange",
-                query = "from Order o where o.createdOn between :aStart and :aEnd"
+                query = "from Order o where o.createdOn between :aStart and :aEnd order by createdOn ASC"
+        ),
+        @NamedQuery(
+                name = "listOrdersForDateRangeAndStatus",
+                query = "from Order o where o.createdOn between :aStart and :aEnd and status = :aStatus order by createdOn ASC"
         )
 })
 @Entity
