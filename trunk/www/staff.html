@@ -183,6 +183,8 @@
 	                document.staffForm.staffAge.readOnly = false;
 	                document.staffForm.staffWage.value = staff.wage;
 	                document.staffForm.staffWage.readOnly = false;
+	                document.staffForm.staffWageType.value = staff.wageType;
+	                document.staffForm.staffWageType.disabled = false;
 	                if(staff.notes != null) document.staffForm.staffNotes.value = staff.notes;
 	                document.staffForm.staffNotes.readOnly = false;
 	                if(staff.homePhone != null) {
@@ -264,12 +266,16 @@
             deletedRowId = "";
 		}
 	    function clearForm(isReadOnly) {
+	    	document.staffForm.staffId.value = "";
+	    	document.staffForm.userId.value = "";
 	    	document.getElementById("staffName").value = "";
 	      	document.getElementById("staffName").readOnly = isReadOnly;
 	      	document.getElementById("staffAge").value = "";
 	      	document.getElementById("staffAge").readOnly = isReadOnly;
 	      	document.staffForm.staffWage.value = "";
 	      	document.staffForm.staffWage.readOnly = isReadOnly;
+	      	document.staffForm.staffWageType.value = "1";
+	      	document.staffForm.staffWageType.disabled = isReadOnly;
 	        document.getElementById("staffNotes").value = "";
 	        document.getElementById("staffNotes").readOnly = isReadOnly;
 	        document.getElementById("homePhone1").value = "";
@@ -306,6 +312,7 @@
 	    	var name = document.staffForm.staffName.value;
 	        var age = document.staffForm.staffAge.value==null?0:parseInt(document.staffForm.staffAge.value);
 	        var wage = document.staffForm.staffWage.value==null?0:parseFloat(document.staffForm.staffWage.value);
+	        var wageType = document.staffForm.staffWageType.value;
 	        var cellPhone = document.staffForm.cellPhone1.value + document.staffForm.cellPhone2.value + document.staffForm.cellPhone3.value;
 	        var homePhone = document.staffForm.homePhone1.value + document.staffForm.homePhone2.value + document.staffForm.homePhone3.value;
 	        var street = document.staffForm.street.value;
@@ -322,7 +329,7 @@
 					userType.modules.push(new ModuleType(document.staffForm.privileges[i].value, ""));
 				}
 			}
-	        var staffType = new StaffType(id, name, age, wage, homePhone, cellPhone, street, city, state, zipcode, notes, userType);
+	        var staffType = new StaffType(id, name, age, wage, wageType, homePhone, cellPhone, street, city, state, zipcode, notes, userType);
 	        return staffType;
 	    }
 	    function saveStaffInfo() {
@@ -361,7 +368,7 @@
 	                		if(s.user != null) {
 	                			userType = new UserType(s.user.id, s.user.passcode);
 	                		} else { userType = null; }
-	                		staffType = new StaffType(s.id, s.name, s.age, s.hourlywage, s.homephone, s.cellphone, s.street, s.city, s.state, s.zipcode, s.notes, userType);
+	                		staffType = new StaffType(s.id, s.name, s.age, s.wage, s.wagetype, s.homephone, s.cellphone, s.street, s.city, s.state, s.zipcode, s.notes, userType);
 	                		staffMembers.push(staffType);
 	                		addStaffRow("staffList", s, "selectRow", "deleteStaffRow", i);
 	                	}
@@ -419,7 +426,13 @@
         			<td align="left" valign="center" colspan="3">
         				Name: <input type="text" id="staffName" name="staffName" readonly="readonly" value=""/>
         				Age: <input type="text" id="staffAge" name="staffAge" readonly="readonly" value="" size="3"/>
-        				Hourly Wage: <input type="text" id="staffWage" name="staffWage" readonly="readonly" value="" size="3"/>
+        				Wage: <input type="text" id="staffWage" name="staffWage" readonly="readonly" value="" size="3"/>
+        				Wage Type: <select id="staffWageType" name="staffWageType" disabled="true">
+        								<option value="1">Hourly</option>
+        								<option value="2">Weekly</option>
+        								<option value="3">Bi-Weekly</option>
+        								<option value="4">Monthly</option>
+        							</select>
         			</td>
         		</tr>
         		<tr>

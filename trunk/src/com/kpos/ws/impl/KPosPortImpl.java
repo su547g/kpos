@@ -1102,9 +1102,14 @@ public class KPosPortImpl implements KPosPortType {
                 soapType.setAge(member.getAge());
                 soapType.setCellPhone(member.getCellPhone());
                 soapType.setHomePhone(member.getHomePhone());
-                soapType.setHourlyWage(member.getHourlyWage());
+                soapType.setWage(member.getWage());
+                soapType.setWageType(member.getWageType());
                 soapType.setId(member.getId());
-                soapType.setJoinDate(format.format(member.getJoinDate()));
+                try {
+                    soapType.setJoinDate(member.getJoinDate()==null?"":format.format(member.getJoinDate()));
+                }catch(Exception ex) {
+                    log.error("Error formatting join date: ", ex);
+                }
                 soapType.setName(member.getName());
                 User user = member.getUser();
                 if(user != null) {
@@ -1128,7 +1133,7 @@ public class KPosPortImpl implements KPosPortType {
         } catch(Exception e) {
             responseType.setResult(getSoapFaultResult(e));
             e.printStackTrace();
-            log.error("Error in deleteStaff", e);
+            log.error("Error in listStaff", e);
         }
         return responseType;
     }
