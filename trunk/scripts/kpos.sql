@@ -264,7 +264,7 @@ CREATE TABLE `function_module` (
   `version` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -273,7 +273,7 @@ CREATE TABLE `function_module` (
 
 LOCK TABLES `function_module` WRITE;
 /*!40000 ALTER TABLE `function_module` DISABLE KEYS */;
-INSERT INTO `function_module` VALUES (1,'order','2012-05-27 23:07:02',NULL,'2012-05-27 23:07:02',NULL,NULL),(2,'menu management','2012-05-27 23:07:05',NULL,'2012-05-27 23:07:05',NULL,NULL),(3,'staff management','2012-05-27 23:07:14',NULL,'2012-05-27 23:07:14',NULL,NULL),(4,'view orders','2012-05-27 23:08:21',NULL,'2012-05-27 23:08:21',NULL,NULL);
+INSERT INTO `function_module` VALUES (1,'order','2012-05-27 23:07:02',NULL,'2012-05-27 23:07:02',NULL,NULL),(2,'menu management','2012-05-27 23:07:05',NULL,'2012-05-27 23:07:05',NULL,NULL),(3,'staff management','2012-05-27 23:07:14',NULL,'2012-05-27 23:07:14',NULL,NULL),(4,'view orders','2012-05-27 23:08:21',NULL,'2012-05-27 23:08:21',NULL,NULL),(5,'global options','2012-05-28 23:14:06',NULL,'2012-05-28 23:14:06',NULL,NULL),(6,'printer setup','2012-05-28 23:14:24',NULL,'2012-05-28 23:14:24',NULL,NULL);
 /*!40000 ALTER TABLE `function_module` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -295,6 +295,7 @@ CREATE TABLE `global_option` (
   `created_by` int(11) DEFAULT NULL,
   `last_updated_by` int(11) DEFAULT NULL,
   `version` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `visible` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -305,7 +306,7 @@ CREATE TABLE `global_option` (
 
 LOCK TABLES `global_option` WRITE;
 /*!40000 ALTER TABLE `global_option` DISABLE KEYS */;
-INSERT INTO `global_option` VALUES (1,'Global Option 1',1,1,0,'2012-05-14 23:41:35','2012-05-14 23:41:35',NULL,NULL,'0'),(2,'Global Option 2',0,0,0,'2012-05-14 23:45:22','2012-05-14 23:45:22',NULL,NULL,'0'),(3,'Global Option 3',0,0,0,'2012-05-14 23:45:34','2012-05-14 23:45:34',NULL,NULL,'0'),(4,'Global Option 4',0,0,0,'2012-05-14 23:45:39','2012-05-14 23:45:39',NULL,NULL,'0'),(5,'酱油',0,0,0,'2012-05-14 23:45:50','2012-05-14 23:45:50',NULL,NULL,'0'),(6,'醋',0,0,0,'2012-05-14 23:46:05','2012-05-14 23:46:05',NULL,NULL,'0'),(7,'烧烤酱',0,0,0,'2012-05-14 23:46:17','2012-05-14 23:46:17',NULL,NULL,'0');
+INSERT INTO `global_option` VALUES (1,'Global Option 1',1,1,0,'2012-05-14 23:41:35','2012-05-14 23:41:35',NULL,NULL,'0',1),(2,'Global Option 2',0,0,0,'2012-05-14 23:45:22','2012-05-14 23:45:22',NULL,NULL,'0',1),(3,'Global Option 3',0,0,0,'2012-05-14 23:45:34','2012-05-14 23:45:34',NULL,NULL,'0',1),(4,'Global Option 4',0,0,0,'2012-05-14 23:45:39','2012-05-14 23:45:39',NULL,NULL,'0',1),(5,'酱油',0,0,0,'2012-05-14 23:45:50','2012-05-14 23:45:50',NULL,NULL,'0',1),(6,'醋',0,0,0,'2012-05-14 23:46:05','2012-05-14 23:46:05',NULL,NULL,'0',1),(7,'烧烤酱',0,0,0,'2012-05-14 23:46:17','2012-05-14 23:46:17',NULL,NULL,'0',1);
 /*!40000 ALTER TABLE `global_option` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -580,6 +581,7 @@ CREATE TABLE `sale_item` (
   `out_small` double DEFAULT '0',
   `out_medium` double DEFAULT '0',
   `out_large` double DEFAULT '0',
+  `visible` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `SALEITEM_2_CAT_FK` (`category_id`),
   CONSTRAINT `SALEITEM_2_CAT_FK` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -592,7 +594,7 @@ CREATE TABLE `sale_item` (
 
 LOCK TABLES `sale_item` WRITE;
 /*!40000 ALTER TABLE `sale_item` DISABLE KEYS */;
-INSERT INTO `sale_item` VALUES (4,'item7','fhalsfjha',8,0,1,5,3,8,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-04-21 20:54:11','2012-05-17 23:16:15',NULL,NULL,NULL,4,10,0,7,8,9,8,7,9),(8,'item1','hello!',6,0,1,0,13,6,1,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-09 00:00:22','2012-05-17 23:25:45',NULL,NULL,NULL,2,0,1,1,2,3,5,4,6),(9,'item1','hello world!',10,0,1,0,3,0,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-16 23:54:17','2012-05-18 00:05:11',NULL,NULL,NULL,3,0,1,0,0,0,0,0,0),(10,'item2','aadafd',6,0,1,0,3,6,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-16 23:57:39','2012-05-16 23:57:39',NULL,NULL,NULL,0,0,0,0,0,0,0,0,0),(11,'item3','fadfasff',10,0,1,0,3,10,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-17 22:40:12','2012-05-17 22:40:12',NULL,NULL,NULL,0,0,1,6,7,10,7,6,9),(12,'item4','fasfsa',6,0,1,0,3,5,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-17 22:43:28','2012-05-17 22:43:28',NULL,NULL,NULL,0,0,1,6,6,6,0,0,0),(13,'item6','fadasfs',6,0,1,0,3,5,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-17 22:46:31','2012-05-17 23:08:39',NULL,NULL,NULL,1,0,1,6,6,6,5,5,5),(14,'item5','fadsf',7,0,1,0,3,6,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-17 22:54:15','2012-05-17 22:54:15',NULL,NULL,NULL,0,0,1,7,7,7,6,6,6);
+INSERT INTO `sale_item` VALUES (4,'item7','fhalsfjha',8,0,1,5,3,8,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-04-21 20:54:11','2012-05-17 23:16:15',NULL,NULL,NULL,4,10,0,7,8,9,8,7,9,1),(8,'item1','hello!',6,0,1,0,13,6,1,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-09 00:00:22','2012-05-17 23:25:45',NULL,NULL,NULL,2,0,1,1,2,3,5,4,6,1),(9,'item1','hello world!',10,0,1,0,3,0,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-16 23:54:17','2012-05-18 00:05:11',NULL,NULL,NULL,3,0,1,0,0,0,0,0,0,1),(10,'item2','aadafd',6,0,1,0,3,6,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-16 23:57:39','2012-05-16 23:57:39',NULL,NULL,NULL,0,0,0,0,0,0,0,0,0,1),(11,'item3','fadfasff',10,0,1,0,3,10,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-17 22:40:12','2012-05-17 22:40:12',NULL,NULL,NULL,0,0,1,6,7,10,7,6,9,1),(12,'item4','fasfsa',6,0,1,0,3,5,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-17 22:43:28','2012-05-17 22:43:28',NULL,NULL,NULL,0,0,1,6,6,6,0,0,0,1),(13,'item6','fadasfs',6,0,1,0,3,5,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-17 22:46:31','2012-05-17 23:08:39',NULL,NULL,NULL,1,0,1,6,6,6,5,5,5,1),(14,'item5','fadsf',7,0,1,0,3,6,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-17 22:54:15','2012-05-17 22:54:15',NULL,NULL,NULL,0,0,1,7,7,7,6,6,6,1);
 /*!40000 ALTER TABLE `sale_item` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -618,6 +620,7 @@ CREATE TABLE `sale_item_option` (
   `last_updated_by` int(11) DEFAULT NULL,
   `version` int(11) DEFAULT NULL,
   `taxable` tinyint(1) DEFAULT NULL,
+  `visible` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `OPTION_2_ITEM_FK` (`sale_item_id`),
   CONSTRAINT `OPTION_2_ITEM_FK` FOREIGN KEY (`sale_item_id`) REFERENCES `sale_item` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -630,7 +633,7 @@ CREATE TABLE `sale_item_option` (
 
 LOCK TABLES `sale_item_option` WRITE;
 /*!40000 ALTER TABLE `sale_item_option` DISABLE KEYS */;
-INSERT INTO `sale_item_option` VALUES (4,'option 1','hfladfh',0.5,0.5,4,0,'fhalfdsjhll','2012-04-21 20:54:29','2012-04-21 20:54:29',NULL,NULL,0,NULL),(6,'aaa','bbb',1,1,8,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-13 17:59:00','2012-05-13 17:59:00',NULL,NULL,0,0),(7,'bbb','bbb',1,1,8,1,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-13 18:01:53','2012-05-13 18:01:53',NULL,NULL,0,1),(8,'ccc','fsdaf',1,1,8,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-13 18:11:21','2012-05-13 18:11:21',NULL,NULL,0,0),(9,'d','d',11,1,8,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-13 20:18:42','2012-05-13 20:18:42',NULL,NULL,0,0),(10,'eeee','eee',0,0,8,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-13 20:19:16','2012-05-13 20:19:16',NULL,NULL,0,0),(11,'fffff','fff',0,0,8,0,NULL,'2012-05-13 20:32:26','2012-05-13 20:32:26',NULL,NULL,0,0),(12,'fdasfsaga2','fdasfs2',0,0,8,0,NULL,'2012-05-13 22:54:58','2012-05-13 22:55:10',NULL,NULL,1,0);
+INSERT INTO `sale_item_option` VALUES (4,'option 1','hfladfh',0.5,0.5,4,0,'fhalfdsjhll','2012-04-21 20:54:29','2012-04-21 20:54:29',NULL,NULL,0,NULL,1),(6,'aaa','bbb',1,1,8,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-13 17:59:00','2012-05-13 17:59:00',NULL,NULL,0,0,1),(7,'bbb','bbb',1,1,8,1,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-13 18:01:53','2012-05-13 18:01:53',NULL,NULL,0,1,1),(8,'ccc','fsdaf',1,1,8,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-13 18:11:21','2012-05-13 18:11:21',NULL,NULL,0,0,1),(9,'d','d',11,1,8,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-13 20:18:42','2012-05-13 20:18:42',NULL,NULL,0,0,1),(10,'eeee','eee',0,0,8,0,'file:///C:/Projects/kpos/www/adminCategory.html','2012-05-13 20:19:16','2012-05-13 20:19:16',NULL,NULL,0,0,1),(11,'fffff','fff',0,0,8,0,NULL,'2012-05-13 20:32:26','2012-05-13 20:32:26',NULL,NULL,0,0,1),(12,'fdasfsaga2','fdasfs2',0,0,8,0,NULL,'2012-05-13 22:54:58','2012-05-13 22:55:10',NULL,NULL,1,0,1);
 /*!40000 ALTER TABLE `sale_item_option` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -707,23 +710,24 @@ DROP TABLE IF EXISTS `staff_member`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `staff_member` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
   `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `age` int(11) DEFAULT NULL,
   `home_phone` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
   `cell_phone` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `street` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `join_date` datetime DEFAULT NULL,
-  `hourly_wage` double DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
+  `wage` double DEFAULT NULL,
+  `wage_type` int(11) DEFAULT NULL,
   `notes` varchar(240) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `street` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `city` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `state` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `zipcode` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_on` datetime DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
   `last_updated` datetime DEFAULT NULL,
   `last_updated_by` int(11) DEFAULT NULL,
   `version` int(11) DEFAULT NULL,
-  `city` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `state` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `zipcode` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `user_id_UNIQUE` (`user_id`),
@@ -737,7 +741,7 @@ CREATE TABLE `staff_member` (
 
 LOCK TABLES `staff_member` WRITE;
 /*!40000 ALTER TABLE `staff_member` DISABLE KEYS */;
-INSERT INTO `staff_member` VALUES (2,'Wei',28,'9173928156','9173928156','4254 Judge St','2012-01-28 00:05:00',20,7,'blah',NULL,NULL,NULL,NULL,3,'Elmhurst','NY','11373'),(3,'Kang',30,'2069106910','2069106911','4254 Judge St, Apt 4D, Elmhurst, NY 11351','2012-01-27 00:05:00',100,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL),(4,'Kang',30,'2069106910','2069106911','4254 Judge St, Apt 4D, Elmhurst, NY 11351','2012-01-27 00:05:00',100,NULL,NULL,NULL,NULL,NULL,NULL,1,'Elmhurst',NULL,NULL);
+INSERT INTO `staff_member` VALUES (2,7,'Wei',28,'9173928156','9173928156','2012-01-28 00:05:00',20,1,'blah','4254 Judge St','Elmhurst','NY','11373',NULL,NULL,NULL,NULL,3),(3,NULL,'王强',30,'6462556295',NULL,'2012-01-27 00:05:00',15,1,'fhasdlh','21 Broadway',NULL,NULL,NULL,'2012-05-29 21:12:13',NULL,'2012-05-29 21:12:13',NULL,7),(4,NULL,'Kang',30,'2069106910','2069106911','2012-01-27 00:05:00',100,1,NULL,'4254 Judge St, Apt 4D, Elmhurst, NY 11351','Elmhurst',NULL,NULL,NULL,NULL,NULL,NULL,1);
 /*!40000 ALTER TABLE `staff_member` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -760,7 +764,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`),
   KEY `USER_2_STAFF_FK` (`staff_id`),
   CONSTRAINT `USER_2_STAFF_FK` FOREIGN KEY (`staff_id`) REFERENCES `staff_member` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -769,7 +773,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,4,717,'2012-05-27 23:37:17',NULL,'2012-05-28 22:44:04',NULL,1),(7,2,11,'2012-05-28 00:28:17',NULL,'2012-05-28 22:27:27',NULL,4);
+INSERT INTO `user` VALUES (1,4,717,'2012-05-27 23:37:17',NULL,'2012-05-28 22:44:04',NULL,1),(7,2,11,'2012-05-28 00:28:17',NULL,'2012-05-28 22:27:27',NULL,4),(8,3,1,'2012-05-28 23:16:09',NULL,'2012-05-29 21:12:13',NULL,7);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -789,7 +793,7 @@ CREATE TABLE `user_function_assoc` (
   KEY `FUNC_2_USER_FK` (`func_id`),
   CONSTRAINT `FUNC_2_USER_FK` FOREIGN KEY (`func_id`) REFERENCES `function_module` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `USER_2_FUNC_FK` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -798,7 +802,7 @@ CREATE TABLE `user_function_assoc` (
 
 LOCK TABLES `user_function_assoc` WRITE;
 /*!40000 ALTER TABLE `user_function_assoc` DISABLE KEYS */;
-INSERT INTO `user_function_assoc` VALUES (1,1,1),(12,7,1),(13,7,2),(14,7,3),(15,7,4);
+INSERT INTO `user_function_assoc` VALUES (1,1,1),(12,7,1),(13,7,2),(14,7,3),(15,7,4),(18,8,1);
 /*!40000 ALTER TABLE `user_function_assoc` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -811,4 +815,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-05-28 22:46:23
+-- Dump completed on 2012-05-29 22:59:36
