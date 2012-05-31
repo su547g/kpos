@@ -898,6 +898,7 @@
             <xs:complexType name="CheckPrivilegeResponseType">
                 <xs:sequence>
                     <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="userId" type="xsd:long" minOccurs="0"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="GetUserFunctionsHTMLType">

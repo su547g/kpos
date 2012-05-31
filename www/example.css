@@ -111,7 +111,7 @@ ul.tabbernav li.tabberactive a:hover
 input.groovybutton {
    font-size:14px;
    font-weight:bold;
-   color:#000000;//#FFFF00;
+   color:#000000;
    width:100px;
    height:80px;
    background-color:#FFFF00;
@@ -120,7 +120,7 @@ input.groovybutton {
 input.itembutton {
    font-size:9px;
    font-weight:bold;
-   color:#000000;//#FFFF00;
+   color:#000000;
    width:80px;
    height:40px;
    background-color:#BDBDBD;
@@ -129,14 +129,14 @@ input.itembutton {
 input.optionbutton {
    font-size:9px;
    font-weight:bold;
-   color:#000000;//#FFFF00;
+   color:#000000;
    width:70px;
    height:30px;
    background-color:#BDBDBD;
    border-width:1px;
 }
 input.backbutton {
-   color:#000000;//#FFFF00;
+   color:#000000;
    width:100px;
    height:80px;
    background-color:#FFFF00;
@@ -144,7 +144,7 @@ input.backbutton {
    border-width:2px;
 }
 input.nextbutton {
-   color:#000000;//#FFFF00;
+   color:#000000;
    width:100px;
    height:80px;
    background-color:#DDDDDD;
@@ -152,7 +152,7 @@ input.nextbutton {
    border-width:2px;
 }
 input.smallbackbutton {
-   color:#000000;//#FFFF00;
+   color:#000000;
    width:65px;
    height:65px;
    background-color:#FFFF00;
@@ -160,7 +160,7 @@ input.smallbackbutton {
    border-width:2px;
 }
 input.smallnextbutton {
-   color:#000000;//#FFFF00;
+   color:#000000;
    width:65px;
    height:65px;
    background-color:#DDDDDD;
@@ -168,14 +168,14 @@ input.smallnextbutton {
    border-width:2px;
 }
 input.cancelbutton {
-   color:#000000;//#FFFF00;
+   color:#000000;
    width:80px;
    height:60px;
    background-color:gray;
    border-width:2px;
 }
 input.plusbutton {
-   color:#000000;//#FFFF00;
+   color:#000000;
    width:48px;
    height:48px;
    background-color:#DDDDDD;
@@ -183,7 +183,7 @@ input.plusbutton {
    border-width:1px;
 }
 input.minusbutton {
-   color:#000000;//#FFFF00;
+   color:#000000;
    width:48px;
    height:48px;
    background-color:#DDDDDD;
@@ -194,7 +194,7 @@ input.minusbutton {
 input.navibutton {
    font-size:14px;
    font-weight:bold;
-   color:#000000;//#FFFF00;
+   color:#000000;
    width:80px;
    height:40px;
    background-color:gray;
@@ -204,7 +204,7 @@ input.navibutton {
 input.paymentbutton {
    font-size:14px;
    font-weight:bold;
-   color:#000000;//#FFFF00;
+   color:#000000;
    width:80px;
    height:40px;
    background-color:#FFFF00;
@@ -213,7 +213,7 @@ input.paymentbutton {
 input.creditbutton {
    font-size:14px;
    font-weight:bold;
-   color:#000000;//#FFFF00;
+   color:#000000;
    width:100px;
    height:40px;
    background-color:#FFFF00;
@@ -222,7 +222,7 @@ input.creditbutton {
 input.numberbutton {
    font-size:14px;
    font-weight:bold;
-   color:#FF8000;//#FFFF00;
+   color:#FF8000;
    width:50px;
    height:50px;
    background-color:gray;
@@ -231,7 +231,16 @@ input.numberbutton {
 input.dollarbutton {
    font-size:14px;
    font-weight:bold;
-   color:#74DF00;//#FF8000;//#FFFF00;
+   color:#74DF00;
+   width:50px;
+   height:50px;
+   background-color:gray;
+   border-width:1px;
+}
+input.tipsbutton {
+   font-size:14px;
+   font-weight:bold;
+   color:#FFFFCC;
    width:50px;
    height:50px;
    background-color:gray;
@@ -249,9 +258,18 @@ input.clearbutton {
 input.settlebutton {
    font-size:14px;
    font-weight:bold;
-   color:#00BFFF; //#8A0808;
+   color:#00BFFF;
    width:130px;
    height:50px;
    background-color:gray;
+   border-width:1px;
+}
+input.homenavibutton {
+   font-size:13px;
+   font-weight:bold;
+   color:#FFFFCC;
+   width:110px;
+   height:55px;
+   background-color: #3399FF;
    border-width:1px;
 }

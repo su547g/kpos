@@ -630,6 +630,14 @@
     			alert("Payment amount is not enough!");
     		}
     	}
+    	function addTips(tips) {
+    		if(document.getElementById('saleAmt').value != null && document.getElementById('saleAmt').value != "") {
+    			var saleAmt = parseFloat(document.getElementById('saleAmt').value);
+    			var tipsAmt = saleAmt * tips;
+    			document.getElementById('tipsAmt').value = tipsAmt.toFixed(2);
+    			updateAmt();
+    		}
+    	}
 	</script>
 </head>
 
@@ -816,7 +824,7 @@
 								<td align="left"><input type="text" id="taxAmt" name="taxAmt" style="font-size:14px;font-weight:bold" onfocus="changeBackground(this)" onkeyup="updateAmt()"/></td>
 							</tr>
 							<tr>
-								<td align="left"><strong>Tips:</strong></td>
+								<td align="left"><strong><font color="#6600FF">Tips:</font></strong></td>
 								<td align="left"><input type="text" id="tipsAmt" name="tipsAmt" style="font-size: 14px;font-weight:bold" onfocus="changeBackground(this)" onkeyup="updateAmt()"/></td>
 							</tr>
 							<tr>
@@ -841,21 +849,25 @@
 					<div style="float:left">
 						<table width="100%">
 							<tr>
+								<td><input type="button" name="btnTip10" value="10%" class="tipsbutton" onclick="addTips(0.1)"/></td>
 								<td width="33.3%"><input type="button" name="btnSeven" value="7" class="numberbutton" onclick="addValue('7')"/></td>
 								<td width="33.3%"><input type="button" name="btnEight" value="8" class="numberbutton" onclick="addValue('8')"/></td>
 								<td width="33.3%"><input type="button" name="btnNine" value="9" class="numberbutton" onclick="addValue('9')"/></td>
 							</tr>
 							<tr>
+								<td><input type="button" name="btnTip15" value="15%" class="tipsbutton" onclick="addTips(0.15)"/></td>
 								<td width="33.3%"><input type="button" name="btnFour" value="4" class="numberbutton" onclick="addValue('4')"/></td>
 								<td width="33.3%"><input type="button" name="btnFive" value="5" class="numberbutton" onclick="addValue('5')"/></td>
 								<td width="33.3%"><input type="button" name="btnSix" value="6" class="numberbutton" onclick="addValue('6')"/></td>
 							</tr>
 							<tr>
+								<td><input type="button" name="btnTip20" value="20%" class="tipsbutton" onclick="addTips(0.2)"/></td>
 								<td width="33.3%"><input type="button" name="btnOne" value="1" class="numberbutton" onclick="addValue('1')"/></td>
 								<td width="33.3%"><input type="button" name="btnTwo" value="2" class="numberbutton" onclick="addValue('2')"/></td>
 								<td width="33.3%"><input type="button" name="btnThree" value="3" class="numberbutton" onclick="addValue('3')"/></td>
 							</tr>
 							<tr>
+								<td></td>
 								<td><input type="button" name="btnZero" value="0" class="numberbutton" onclick="addValue('0')"/></td>
 								<td><input type="button" name="btnDot" value="0" class="numberbutton" onclick="addValue('.')"/></td>
 								<td align="center"><input type="button" name="btnClear" value="Clear" class="clearbutton" onclick="setValue('0')"/></td>

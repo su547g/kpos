@@ -12,19 +12,116 @@
 
     <script type="text/javascript" src="xml2json.js"></script>
     <script type="text/javascript" src="kpos.js"></script>
-    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.min.js"></script>
-    
+	<script type="text/javascript" src="popup.js"></script>
+	    
     <link rel="stylesheet" href="example.css" TYPE="text/css" MEDIA="screen">
+    
+    <script>
+    	var targetURL = "home.html";
+    	var moduleId = 0;
+    	var MODULE_MAP = {
+    		"order.html" : 1,
+    		"adminCategory.html" : 2,
+    		"staff.html" : 3,
+    		"viewOrders.html" : 4,
+    		"globalOptions.html" : 5,
+    		"tables.html" : 6,
+    		"printers.html" : 7
+    	};
+    	
+    	function goToPage(url) {
+    		targetURL = url;
+    		moduleId = MODULE_MAP[url];
+    		alert(moduleId);
+    		showLogin();
+    	}
+    	function placeOrder() {
+    		Popup.showModal("pickTable");
+    	}
+    	function addPasscode(aChar) {
+	    	document.loginForm.passcode.value += aChar;
+	    }
+	    function showLogin() {
+	    	Popup.showModal("loginWindow");
+	    }
+	    function cancelLogin() {
+	    	Popup.hide("loginWindow");
+	    }
+	    function userLogin() {
+	    	var soapType = new CheckPrivilegeType(document.loginForm.passcode.value, moduleId);
+	    	call_web_service(soapType, loginHandler);
+	    }
+	    function loginHandler(jsonObj) {
+	    	Popup.hide("loginWindow");
+	    	if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.checkprivilegeresponsetype != undefined && jsonObj.checkprivilegeresponsetype != null && 
+				jsonObj.checkprivilegeresponsetype.result.successful == "true") {
+				localStorage.setItem('userId', jsonObj.checkprivilegeresponsetype.userid);
+				window.location.href = targetURL;
+			} else {
+				alert("You don't have access to this function!");
+			}
+	    }
+    </script>
 </head>
 <body>
 	<h2>Welcome to KPOS!</h2>
-	<table border="1">
+	<table style="border-style:groove; border-width:1px; padding: 3px">
 		<tr>
-			<td><a href="adminCategory.html">Category Management</a></td>
-			<td><a href="globalOptions.html">Global Options</a></td>
-			<td><a href="tables.html">Table Management</a></td>
-			<td><a href="order.html">Place Order</a></td>
+			<td><input type="button" name="btnOrder" value="Dine-in Order" class="homenavibutton" onclick="placeOrder()"/></td>
+			<td><input type="button" name="btnOrder" value="Take-out Order" class="homenavibutton" onclick="placeOrder()"/></td>
+			<td><input type="button" name="btnOrder" value="Delivery Order" class="homenavibutton" onclick="placeOrder()"/></td>
+			<td></td>
+		</tr>
+		<tr><td colspan="4">&nbsp;</td></tr>
+		<tr>
+			<td><input type="button" name="btnCatMgmt" value="Categories" class="homenavibutton" onclick="goToPage('adminCategory.html')"/></td>
+			<td><input type="button" name="btnGlobalOptions" value="Global Options" class="homenavibutton" onclick="goToPage('globalOptions.html')"/></td>
+			<td><input type="button" name="btnTables" value="Tables" class="homenavibutton" onclick="goToPage('tables.html')"/></td>
+			<td><input type="button" name="btnStaffMgmt" value="Printers" class="homenavibutton" onclick="goToPage('printers.html')"/></td>
+			<td><input type="button" name="btnStaffMgmt" value="Staff" class="homenavibutton" onclick="goToPage('staff.html')"/></td>
+		</tr>
+		<tr><td colspan="4">&nbsp;</td></tr>
+		<tr>
+			<td><input type="button" name="btnOrder" value="View Orders" class="homenavibutton" onclick=""/></td>
 		</tr>
 	</table>
+	
+	<div id="pickTable" style="width:700px; height: 450px; border:1px solid #CC6600; background-color:#99997A; padding:0px; font-size:100%; display:none;">
+		<table width="100%">
+			<tr>
+				<td width="100%" align="left">
+					
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="loginWindow" style="width:350px; height: 280px; border:2px solid #CC6600; background-color:white; padding:2px; font-size:100%; display:none;">
+		<form name="loginForm">
+			<input type="hidden" name="passcode" value=""/>
+		<table width="100%">
+			<tr>
+				<td width="33.3%" align="center"><input type="button" name="btnSeven" value="7" class="numberbutton" onclick="addPasscode('7')"/></td>
+				<td width="33.3%" align="center"><input type="button" name="btnEight" value="8" class="numberbutton" onclick="addPasscode('8')"/></td>
+				<td width="33.3%" align="center"><input type="button" name="btnNine" value="9" class="numberbutton" onclick="addPasscode('9')"/></td>
+			</tr>
+			<tr>
+				<td width="33.3%" align="center"><input type="button" name="btnFour" value="4" class="numberbutton" onclick="addPasscode('4')"/></td>
+				<td width="33.3%" align="center"><input type="button" name="btnFive" value="5" class="numberbutton" onclick="addPasscode('5')"/></td>
+				<td width="33.3%" align="center"><input type="button" name="btnSix" value="6" class="numberbutton" onclick="addPasscode('6')"/></td>
+			</tr>
+			<tr>
+				<td width="33.3%" align="center"><input type="button" name="btnOne" value="1" class="numberbutton" onclick="addPasscode('1')"/></td>
+				<td width="33.3%" align="center"><input type="button" name="btnTwo" value="2" class="numberbutton" onclick="addPasscode('2')"/></td>
+				<td width="33.3%" align="center"><input type="button" name="btnThree" value="3" class="numberbutton" onclick="addPasscode('3')"/></td>
+			</tr>
+			<tr>
+				<td align="center"><input type="button" name="btnZero" value="0" class="numberbutton" onclick="addPasscode('0')"/></td>
+				<td align="center"><input type="button" name="btnCancel" value="Cancel" class="clearbutton" onclick="cancelLogin()"/></td>
+				<td align="center"><input type="button" name="btnSubmit" value="Submit" class="clearbutton" onclick="userLogin()"/></td>
+			</tr>
+		</table>
+		</form>
+	</div>
 </body>
 </html>
