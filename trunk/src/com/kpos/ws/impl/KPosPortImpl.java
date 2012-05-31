@@ -1187,6 +1187,7 @@ public class KPosPortImpl implements KPosPortType {
                         result.setSuccessful(true);
                     }
                 }
+                responseType.setUserId(user.getId());
             }
             responseType.setResult(result);
         } catch(Exception e) {
