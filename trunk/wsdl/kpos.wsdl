@@ -287,6 +287,7 @@
                     <xs:element name="payments" type="tns:PaymentRecordType" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="numOfGuests" type="xsd:int" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="customer" type="tns:CustomerInfoType" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="userId" type="xsd:long" minOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="CustomerInfoType">

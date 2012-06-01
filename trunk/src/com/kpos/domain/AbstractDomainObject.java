@@ -26,11 +26,11 @@ public abstract class AbstractDomainObject implements IAbstractEntity, Serializa
     @Column(name = "LAST_UPDATED")
     protected Date lastUpdated;
 
-    @OneToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "CREATED_BY")
     protected User createdBy;
 
-    @OneToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "LAST_UPDATED_BY")
     protected User lastUpdatedBy;
 
