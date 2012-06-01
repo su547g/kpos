@@ -793,8 +793,9 @@ function OrderOption(aDisplayText, aPrice, aQuantity, aId, aType) {
         return xml;
     }
 }
-function Order(aId, aType, aPrice, aTax, aTips, aStatus, aNumGuests, aCustomer) {
+function Order(aId, aType, aPrice, aTax, aTips, aStatus, aNumGuests, aCustomer, aUserId) {
     this.id = aId;
+    this.userId = aUserId;
     this.type = aType;
     this.tableId = null;
     this.tableName = null;

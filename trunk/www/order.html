@@ -2,7 +2,7 @@
         "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-   <title></title>
+   <title>KPOS - Place An Order</title>
    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta id="viewport" name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
 
@@ -20,7 +20,7 @@
 	<style type="text/css">
       body{
          font-size:14px;
-         background:white; //#F2F2F2; //c4f0f1;
+         background:white;
          text-align:center;
       }
 
@@ -55,8 +55,7 @@
       .categoryTable td {
          border:0px;
          padding: 1px;
-         //background-color:#F07800; //FF742E; //3399FF;
-         color: #FFF; //003366;
+         color: #FFF;
          border-radius:3px;
          -moz-border-radius: 3px;
       }
@@ -74,12 +73,12 @@
       .optionsTable td {
          border:1px solid black;
          padding:1px;
-         background-color:gray;//#3399FF;
+         background-color:gray;
          color:#FFF;
          border-radius:3px;
          -moz-border-radius: 3px;
       }
-      .orderTable {border:1px solid black; border-spacing:1px border-radius:3px; -moz-border-radius: 3px;}
+      .orderTable {border:1px solid black; border-spacing:1px; border-radius:3px; -moz-border-radius: 3px;}
       .orderTable td {
       	 font-size:14px;
       	 color: blue;
@@ -118,6 +117,10 @@
 		var GLOBAL_OP = "GLOBAL_OP", CAT_OP = "CAT_OP", ITEM_OP = "ITEM_OP";
 		
 		var smallClicked = 0, medClicked = 0, largeClicked = 0;
+		
+		var OUT = "OUT", DINE_IN = "DINE_IN", DELIVERY = "DELIVERY";
+		var UserId = localStorage.getItem('userId');
+		var OrderType = localStorage.getItem('orderType');
 		
 		function initializeCategories(){
 			ws_list_categories(listAllCategoriesHandler);
@@ -334,28 +337,52 @@
                 	document.menuItemForm.itemPrice.value = item.seasonprice;
                 	document.getElementById('singlePrice').style.display = "block";
                 	document.getElementById('itemSizes').style.display = "none";                	
-                } 
-                //TODO: This comparison needs to consider order type!
-                else if((item.pricesmall!=null && item.pricesmall!=0) && 
-                			(item.pricemed!=null && item.pricemed!=0) && (item.pricelarge!=null && item.pricelarge!=0)) {
-                	//TODO: check order type for price
-                	hasSizes = true;
-                	document.menuItemForm.btnItemSmall.value = "Small $" + item.pricesmall;
-                	document.menuItemForm.btnItemSmall.style.backgroundColor = "#FFFF00";
-                	document.menuItemForm.btnItemSmall.onclick = function() {document.menuItemForm.itemPrice.value = item.pricesmall;setSizeButtonColor(1);}
-                	document.menuItemForm.btnItemMed.value = "Medium $" + item.pricemed;
-                	document.menuItemForm.btnItemMed.style.backgroundColor = "#FFFF00";
-                	document.menuItemForm.btnItemMed.onclick = function() {document.menuItemForm.itemPrice.value = item.pricemed;setSizeButtonColor(2);}
-                	document.menuItemForm.btnItemLarge.value = "Large $" + item.pricelarge;
-                	document.menuItemForm.btnItemLarge.style.backgroundColor = "#FFFF00";
-                	document.menuItemForm.btnItemLarge.onclick = function() {document.menuItemForm.itemPrice.value = item.pricelarge;setSizeButtonColor(3);}
-                	document.getElementById('singlePrice').style.display = "none";
-                	document.getElementById('itemSizes').style.display = "block";
-                } else { //
-                	//TODO: check order type for price
-                	document.getElementById('menuItemPrice').innerText = "Price: $" + item.normalprice;
-                	document.getElementById('singlePrice').style.display = "block";
-                	document.getElementById('itemSizes').style.display = "none";
+                } else if(OrderType == DINE_IN) { 
+	                if((item.pricesmall!=null && item.pricesmall!=0) || 
+	                			(item.pricemed!=null && item.pricemed!=0) || (item.pricelarge!=null && item.pricelarge!=0)) {
+	                	hasSizes = true;
+	            		document.menuItemForm.btnItemSmall.value = "Small $" + item.pricesmall;
+	            		document.menuItemForm.btnItemSmall.style.backgroundColor = "#FFFF00";
+	            		document.menuItemForm.btnItemSmall.onclick = function() {document.menuItemForm.itemPrice.value = item.pricesmall;setSizeButtonColor(1);}
+	            		document.menuItemForm.btnItemSmall.style.display = (item.pricesmall !=null && item.pricesmall !="")?"block":"none";
+	                	document.menuItemForm.btnItemMed.value = "Medium $" + item.pricemed;
+	                	document.menuItemForm.btnItemMed.style.backgroundColor = "#FFFF00";
+	                	document.menuItemForm.btnItemMed.onclick = function() {document.menuItemForm.itemPrice.value = item.pricemed;setSizeButtonColor(2);}
+	                	document.menuItemForm.btnItemMed.style.display = (item.pricemed !=null && item.pricemed !="")?"block":"none";
+	                	document.menuItemForm.btnItemLarge.value = "Large $" + item.pricelarge;
+	                	document.menuItemForm.btnItemLarge.style.backgroundColor = "#FFFF00";
+	                	document.menuItemForm.btnItemLarge.onclick = function() {document.menuItemForm.itemPrice.value = item.pricelarge;setSizeButtonColor(3);}
+	                	document.menuItemForm.btnItemLarge.style.display = (item.pricelarge !=null && item.pricelarge !="")?"block":"none";
+	                	document.getElementById('singlePrice').style.display = "none";
+	                	document.getElementById('itemSizes').style.display = "block";
+	                } else {
+	                	document.getElementById('menuItemPrice').innerText = "Price: $" + item.normalprice;
+	                	document.getElementById('singlePrice').style.display = "block";
+	                	document.getElementById('itemSizes').style.display = "none";
+	                }
+                } else if(OrderType == OUT || OrderType == DELIVERY) { 
+	                if((item.outpricesmall!=null && item.pricesmall!=0) || 
+	                			(item.outpricemed!=null && item.outpricemed!=0) || (item.outpricelarge!=null && item.outpricelarge!=0)) {
+	                	hasSizes = true;
+	            		document.menuItemForm.btnItemSmall.value = "Small $" + item.outpricesmall;
+	            		document.menuItemForm.btnItemSmall.style.backgroundColor = "#FFFF00";
+	            		document.menuItemForm.btnItemSmall.onclick = function() {document.menuItemForm.itemPrice.value = item.outpricesmall;setSizeButtonColor(1);}
+	            		document.menuItemForm.btnItemSmall.style.display = (item.pricesmall !=null && item.pricesmall !="")?"block":"none";
+	                	document.menuItemForm.btnItemMed.value = "Medium $" + item.outpricemedium;
+	                	document.menuItemForm.btnItemMed.style.backgroundColor = "#FFFF00";
+	                	document.menuItemForm.btnItemMed.onclick = function() {document.menuItemForm.itemPrice.value = item.outpricemedium;setSizeButtonColor(2);}
+	                	document.menuItemForm.btnItemMed.style.display = (item.outpricemedium !=null && item.outpricemedium !="")?"block":"none";
+	                	document.menuItemForm.btnItemLarge.value = "Large $" + item.outpricelarge;
+	                	document.menuItemForm.btnItemLarge.style.backgroundColor = "#FFFF00";
+	                	document.menuItemForm.btnItemLarge.onclick = function() {document.menuItemForm.itemPrice.value = item.outpricelarge;setSizeButtonColor(3);}
+	                	document.menuItemForm.btnItemLarge.style.display = (item.outpricelarge !=null && item.outpricelarge !="")?"block":"none";
+	                	document.getElementById('singlePrice').style.display = "none";
+	                	document.getElementById('itemSizes').style.display = "block";
+	                } else {
+	                	document.getElementById('menuItemPrice').innerText = "Price: $" + item.takeoutprice;
+	                	document.getElementById('singlePrice').style.display = "block";
+	                	document.getElementById('itemSizes').style.display = "none";
+	                }
                 }
                 var itemOptions = item.options;
                 if(itemOptions!=null) {
@@ -387,8 +414,7 @@
                 	Popup.showModal('modal');
                 } else {
                 	document.getElementById("itemOptionsRow").style.display = "none";
-                	//TODO: Check order type for price
-                	addItem(item.name, item.normalprice, 1, item.id);
+                	addItem(item.name, OrderType==DINE_IN?item.normalprice:item.takeoutprice, 1, item.id);
                 }
 	        }
 	   	}
@@ -545,7 +571,7 @@
 		   		var total = document.orderForm.totalPrice.value;
 		   		var tax = document.orderForm.totalTax.value;
 		   		var orderId = document.orderForm.orderId.value;
-		   		var orderType = new SaveOrderType(orderId, "OUT", total, tax, 0, "INITIAL", 1, null);//aId, aType, aPrice, aStatus, aNumGuests, aCustomer
+		   		var orderType = new SaveOrderType(orderId, OrderType, total, tax, 0, "INITIAL", 1, null, UserId);//aId, aType, aPrice, aStatus, aNumGuests, aCustomer
 		   		orderType.order.orderItems = orderItems;
 				call_web_service(orderType, saveOrderHandler);
 			}
@@ -594,7 +620,8 @@
     		resetBackground(document.getElementById('dueAmt'));
     		resetBackground(document.getElementById('payAmt'));
     		resetBackground(document.getElementById('changeAmt'));
-    		
+    		resetBackground(document.getElementById('discAmt'));
+    		resetBackground(document.getElementById('discPercent'));
     		textField.style.backgroundColor = "#72A4D2";
     		textField.style.color = "#FFFFFF";
     		selectedField = textField;
@@ -605,21 +632,43 @@
     	}
     	function addValue(value) {
     		if(selectedField!=null)	{
-    			selectedField.value += value;
+    			if(selectedField.value=="0") selectedField.value = "";
+    			selectedField.value = selectedField.value + value;
+    			if(selectedField.id=='discAmt' || selectedField.id=='discPercent') {
+    				calcDiscount(selectedField.id);
+    			}
     			updateAmt();
+    		}
+    	}
+    	function calcDiscount(id) {
+    		var focusField = document.getElementById(id);
+    		if(focusField.value != '' && focusField.value > 0) {
+    			if(id == "discAmt") {
+	    			document.getElementById('discPercent').value='';
+	    		} else {
+	    			document.getElementById('discAmt').value='';
+	    		}
     		}
     	}
     	function updateAmt() {
     		var saleAmt = parseFloat(document.getElementById('saleAmt').value);
 			var tax = document.getElementById('taxAmt').value==""?0:parseFloat(document.getElementById('taxAmt').value);
 			var tips =  document.getElementById('tipsAmt').value==""?0:parseFloat(document.getElementById('tipsAmt').value);
+			if(document.getElementById('discPercent').value!='' && document.getElementById('discPercent').value!=null) {
+				saleAmt = saleAmt*(1-document.getElementById('discPercent').value/100);
+			} else if(document.getElementById('discAmt').value!='' && document.getElementById('discAmt').value!=null) {
+				saleAmt = saleAmt - document.getElementById('discAmt').value;
+			}
 			document.getElementById('dueAmt').value = (saleAmt + tax + tips).toFixed(2);
 			if(document.getElementById('payAmt').value != '') {
 				document.getElementById('changeAmt').value = document.getElementById('payAmt').value - document.getElementById('dueAmt').value;
 			}
     	}
     	function setValue(value) {
-    		if(selectedField!=null) selectedField.value = value;
+    		if(selectedField!=null) {
+    			selectedField.value = value;
+    			updateAmt();
+    		}
     	}
     	function calcChange() {
     		var dueAmt = document.getElementById('dueAmt').value==""?0:parseFloat(document.getElementById('dueAmt').value);
@@ -631,12 +680,18 @@
     		}
     	}
     	function addTips(tips) {
-    		if(document.getElementById('saleAmt').value != null && document.getElementById('saleAmt').value != "") {
-    			var saleAmt = parseFloat(document.getElementById('saleAmt').value);
-    			var tipsAmt = saleAmt * tips;
-    			document.getElementById('tipsAmt').value = tipsAmt.toFixed(2);
-    			updateAmt();
-    		}
+    		if(selectedField.id == 'tipsAmt') {
+	    		if(document.getElementById('saleAmt').value != null && document.getElementById('saleAmt').value != "") {
+	    			var saleAmt = parseFloat(document.getElementById('saleAmt').value);
+	    			var tipsAmt = saleAmt * tips;
+	    			document.getElementById('tipsAmt').value = tipsAmt.toFixed(2);
+	    			updateAmt();
+	    		}
+	    	} else if(selectedField.id == 'discPercent') {
+	    		selectedField.value = tips * 100;
+	    		document.getElementById('discAmt').value = "";
+	    		updateAmt();
+	    	}
     	}
 	</script>
 </head>
@@ -817,7 +872,13 @@
 						<form name="payForm">
 							<tr>
 								<td align="left"><strong>Sale Amount:</strong></td>
-								<td align="left"><input type="text" id="saleAmt" name="saleAmt" style="font-size:14px;font-weight:bold"/></td>
+								<td align="left"><input type="text" id="saleAmt" name="saleAmt" style="font-size:14px;font-weight:bold" onfocus="changeBackground(this)"/></td>
+							</tr>
+							<tr>
+								<td align="left"><strong><font color="#6600FF">Discount:</font></strong></td>
+								<td align="left">
+									$<input type="text" id="discAmt" value='' size="3" style="font-size:14px;font-weight:bold" onfocus="changeBackground(this)" onkeyup="calcDiscount('discAmt')"/> or 
+									<input type="text" id="discPercent" value='' size="3" style="font-size:14px;font-weight:bold" onfocus="changeBackground(this)" onkeyup="calcDiscount('discPercent')"/>%</td>
 							</tr>
 							<tr>
 								<td align="left"><strong>Tax:</strong></td>
@@ -869,8 +930,8 @@
 							<tr>
 								<td></td>
 								<td><input type="button" name="btnZero" value="0" class="numberbutton" onclick="addValue('0')"/></td>
-								<td><input type="button" name="btnDot" value="0" class="numberbutton" onclick="addValue('.')"/></td>
-								<td align="center"><input type="button" name="btnClear" value="Clear" class="clearbutton" onclick="setValue('0')"/></td>
+								<td><input type="button" name="btnDot" value="." class="numberbutton" onclick="addValue('.')"/></td>
+								<td align="center"><input type="button" name="btnClear" value="C" class="numberbutton" onclick="setValue(0)"/></td>
 							</tr>
 						</table>
 					</div>

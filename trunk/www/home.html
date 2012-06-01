@@ -2,7 +2,7 @@
         "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <title></title>
+    <title>KPOS</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta id="viewport" name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
 
@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="example.css" TYPE="text/css" MEDIA="screen">
     
     <script>
+    	var OUT = "OUT", DINE_IN = "DINE_IN", DELIVERY = "DELIVERY";
+    
     	var targetURL = "home.html";
     	var moduleId = 0;
     	var MODULE_MAP = {
@@ -28,6 +30,7 @@
     		"tables.html" : 6,
     		"printers.html" : 7
     	};
+    	var orderType;
     	
     	function goToPage(url) {
     		targetURL = url;
@@ -35,16 +38,43 @@
     		alert(moduleId);
     		showLogin();
     	}
-    	function placeOrder() {
-    		Popup.showModal("pickTable");
+    	function placeOrder(type) {
+    		orderType = type;
+    		moduleId = MODULE_MAP["order.html"];
+    		document.loginForm.btnSubmit.onclick = function() {
+    			var soapType = new CheckPrivilegeType(document.loginForm.passcode.value, moduleId);
+	    		call_web_service(soapType, loginOrderHandler);
+    		};
+    		Popup.showModal("loginWindow");
+    	}
+    	function loginOrderHandler(jsonObj) {
+    		Popup.hide("loginWindow");
+	    	if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.checkprivilegeresponsetype != undefined && jsonObj.checkprivilegeresponsetype != null && 
+				jsonObj.checkprivilegeresponsetype.result.successful == "true") {
+				localStorage.setItem('userId', jsonObj.checkprivilegeresponsetype.userid);
+				localStorage.setItem('orderType', orderType);
+				if(orderType == DINE_IN) {
+					Popup.showModal("pickTable");
+				} else {
+					window.location.href = "order.html";
+				}
+			} else {
+				alert("You don't have access to this function!");
+			}
     	}
     	function addPasscode(aChar) {
 	    	document.loginForm.passcode.value += aChar;
+	    	document.loginForm.passcodeField.value = document.loginForm.passcode.value;
 	    }
 	    function showLogin() {
+	    	document.loginForm.passcode.value = "";
+	    	document.loginForm.passcodeField.value = "";
 	    	Popup.showModal("loginWindow");
 	    }
 	    function cancelLogin() {
+	    	document.loginForm.passcode.value = "";
+	    	document.loginForm.passcodeField.value = "";
 	    	Popup.hide("loginWindow");
 	    }
 	    function userLogin() {
@@ -62,15 +92,19 @@
 				alert("You don't have access to this function!");
 			}
 	    }
+	    function clearCache() {
+	    	localStorage.setItem("userId", "");
+	    	localStorage.setItem("orderType", "");
+	    }
     </script>
 </head>
-<body>
+<body onload="clearCache()">
 	<h2>Welcome to KPOS!</h2>
 	<table style="border-style:groove; border-width:1px; padding: 3px">
 		<tr>
-			<td><input type="button" name="btnOrder" value="Dine-in Order" class="homenavibutton" onclick="placeOrder()"/></td>
-			<td><input type="button" name="btnOrder" value="Take-out Order" class="homenavibutton" onclick="placeOrder()"/></td>
-			<td><input type="button" name="btnOrder" value="Delivery Order" class="homenavibutton" onclick="placeOrder()"/></td>
+			<td><input type="button" name="btnOrder" value="Dine-in Order" class="homenavibutton" onclick="placeOrder(DINE_IN)"/></td>
+			<td><input type="button" name="btnOrder" value="Take-out Order" class="homenavibutton" onclick="placeOrder(OUT)"/></td>
+			<td><input type="button" name="btnOrder" value="Delivery Order" class="homenavibutton" onclick="placeOrder(DELIVERY)"/></td>
 			<td></td>
 		</tr>
 		<tr><td colspan="4">&nbsp;</td></tr>
@@ -91,7 +125,8 @@
 		<table width="100%">
 			<tr>
 				<td width="100%" align="left">
-					
+					<input type="button" value="OK" onclick="window.location.href = 'order.html'"/>
+					<input type="button" value="OK" onclick="Popup.hide('pickTable')"/>
 				</td>
 			</tr>
 		</table>
@@ -100,6 +135,7 @@
 		<form name="loginForm">
 			<input type="hidden" name="passcode" value=""/>
 		<table width="100%">
+			<tr><td colspan="3" align="center"><input type="password" name="passcodeField" style="font-size:16px;font-weight:bold"/></td></tr>
 			<tr>
 				<td width="33.3%" align="center"><input type="button" name="btnSeven" value="7" class="numberbutton" onclick="addPasscode('7')"/></td>
 				<td width="33.3%" align="center"><input type="button" name="btnEight" value="8" class="numberbutton" onclick="addPasscode('8')"/></td>
