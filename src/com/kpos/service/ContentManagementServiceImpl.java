@@ -834,7 +834,14 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         order.setTotalPrice(orderType.getTotalPrice());
         order.setTax(orderType.getTotalTax());
         order.setGratuity(orderType.getTotalTips()==null?0:orderType.getTotalTips());
-
+        User user = userDao.findById(orderType.getUserId());
+        if(user == null) {
+            log.error("Can't find User ["+orderType.getUserId()+"]");
+            result.setSuccessful(false);
+            return result;
+        }
+        order.setCreatedBy(user);
+        order.setLastUpdatedBy(user);
         if(orderType.getTableId() != null) {
             RestaurantTable table = tableDao.findById(orderType.getTableId());
             order.setTable(table);
@@ -904,6 +911,13 @@ public class ContentManagementServiceImpl implements IContentManagementService {
                 RestaurantTable table = tableDao.findById(orderType.getTableId());
                 order.setTable(table);
             }
+            User user = userDao.findById(orderType.getUserId());
+            if(user == null) {
+                log.error("Can't find User ["+orderType.getUserId()+"]");
+                result.setSuccessful(false);
+                return result;
+            }
+            order.setLastUpdatedBy(user);
             if(orderType.getCustomer() != null){
                 CustomerInfo customer = customerInfoDao.findByPhoneNumber(String.valueOf(orderType.getCustomer().getPhoneNumber()));
                 if(null == customer) {

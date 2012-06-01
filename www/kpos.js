@@ -811,6 +811,7 @@ function Order(aId, aType, aPrice, aTax, aTips, aStatus, aNumGuests, aCustomer, 
         if(this.id != null && this.id != "") {
             xml += "<app:id>" + this.id + "</app:id>";
         }
+        xml += "<app:userId>" + this.userId + "</app:userId>";
         xml += "<app:type>" + this.type + "</app:type>";
         if(this.tableId != null && this.tableId != "") {
             xml += "<app:tableId>" + this.tableId + "</app:tableId>";
