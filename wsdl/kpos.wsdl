@@ -127,6 +127,8 @@
             <xs:element name="CheckPrivilegeResponseType" type="tns:CheckPrivilegeResponseType"/>
             <xs:element name="GetUserFunctionsHTMLType" type="tns:GetUserFunctionsHTMLType"/>
             <xs:element name="GetUserFunctionsHTMLResponseType" type="tns:GetUserFunctionsHTMLResponseType"/>
+            <xs:element name="AddAttendanceType" type="tns:AddAttendanceType"/>
+            <xs:element name="AddAttendanceResponseType" type="tns:AddAttendanceResponseType"/>
 
             <!--Result object-->
             <xs:complexType name="ResultType">
@@ -337,8 +339,8 @@
                 <xs:sequence>
                     <xs:element name="staffId" minOccurs="1"/>
                     <xs:element name="id" minOccurs="0"/>
-                    <xs:element name="startTime" type="xsd:dateTime" minOccurs="0"/>
-                    <xs:element name="endTime"  type="xsd:dateTime" minOccurs="0"/>
+                    <xs:element name="startTime" type="xsd:string" minOccurs="0"/>
+                    <xs:element name="endTime"  type="xsd:string" minOccurs="0"/>
                 </xs:sequence>
             </xs:complexType>
             <!--End of data structures-->
@@ -826,6 +828,7 @@
             </xs:complexType>
             <xs:complexType name="DeleteOrderType">
                 <xs:sequence>
+                    <xs:element name="userId" type="xsd:long" minOccurs="1"/>
                     <xs:element name="orderId" type="xsd:long" minOccurs="1" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
@@ -836,7 +839,11 @@
             </xs:complexType>
             <xs:complexType name="SettleOrderType">
                 <xs:sequence>
+                    <xs:element name="userId" type="xsd:long" minOccurs="1"/>
                     <xs:element name="orderId" type="xsd:long" minOccurs="1"/>
+                    <xs:element name="saleAmt" type="xsd:double" minOccurs="1"/>
+                    <xs:element name="tax" type="xsd:double" minOccurs="1"/>
+                    <xs:element name="tips" type="xsd:double" minOccurs="1"/>
                     <xs:element name="payments" type="tns:PaymentRecordType" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:complexType>
@@ -911,6 +918,17 @@
                 <xs:sequence>
                     <xs:element name="Result" type="tns:ResultType"/>
                     <xs:element name="html" type="xsd:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="AddAttendanceType">
+                <xs:sequence>
+                    <xs:element name="userId" type="xsd:long" minOccurs="1"/>
+                    <xs:element name="attendance" type="tns:StaffAttendanceType" minOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="AddAttendanceResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
                 </xs:sequence>
             </xs:complexType>
             <!--End of operations-->
@@ -1220,6 +1238,12 @@
     <wsdl:message name="GetUserFunctionsHTMLResponseMessage">
         <wsdl:part name="parameters" element="tns:GetUserFunctionsHTMLResponseType"/>
     </wsdl:message>
+    <wsdl:message name="AddAttendanceMessage">
+        <wsdl:part name="parameters" element="tns:AddAttendanceType"/>
+    </wsdl:message>
+    <wsdl:message name="AddAttendanceResponseMessage">
+        <wsdl:part name="parameters" element="tns:AddAttendanceResponseType"/>
+    </wsdl:message>
     <!--End of messages-->
 
     <wsdl:portType name="KPosPortType">
@@ -1435,6 +1459,10 @@
         <wsdl:operation name="GetUserFunctionsHTML">
             <wsdl:input message="tns:GetUserFunctionsHTMLMessage" name="GetUserFunctionsHTML"/>
             <wsdl:output message="tns:GetUserFunctionsHTMLResponseMessage" name="GetUserFunctionsHTMLResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="AddAttendance">
+            <wsdl:input message="tns:AddAttendanceMessage" name="AddAttendance"/>
+            <wsdl:output message="tns:AddAttendanceResponseMessage" name="AddAttendanceResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -1899,6 +1927,15 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="GetUserFunctionsHTMLResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="AddAttendance">
+            <soap:operation soapAction="http://ws.kpos.com/AddAttendance" style="document"/>
+            <wsdl:input name="AddAttendance">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="AddAttendanceResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>

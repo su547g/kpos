@@ -14,8 +14,10 @@
     <script type="text/javascript" src="kpos.js"></script>
     <script type="text/javascript" src="popup.js"></script>
     <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="jsDatePick.min.1.3.js"></script>
     
-    <link rel="stylesheet" href="example.css" TYPE="text/css" MEDIA="screen">
+    <link rel="stylesheet" type="text/css" media="all" href="jsDatePick_ltr.min.css" />
+    <link rel="stylesheet" href="example.css" type="text/css" media="screen">
     
     <style type="text/css">
         body{
@@ -473,8 +475,17 @@
 							    <h2 style="font-size: 20px">Staff Attendance</h2>
 							    <table width="100%">
 							    	<tr>
-							    		<td valign="top">
-
+							    		<td valign="top" width="30%">
+											<div id="div4_example" style="margin:0px 0 0px 0; border:0px; width:220px; height:200px;"></div>
+							    		</td>
+							    		<td align="left" valign="top">
+							    			<table border="0">
+							    				<tr><td><input id="date_result" style="font-size:14px; border:solid 1px #666;" disabled='true'/></td></tr>
+							    				<tr>
+							    					<td>Start Time:</td>
+							    					<td>End Time:</td>
+							    				</tr>
+							    			</table>
 							    		</td>
 							    	</tr>
 							    </table>
@@ -495,6 +506,18 @@
 
 <script type="text/javascript">
    tabberAutomatic(tabberOptions);
+   
+   g_globalObject = new JsDatePick({
+			useMode:1,
+			isStripped:true,
+			target:"div4_example",
+			cellColorScheme:"beige"
+		});
+
+	g_globalObject.setOnSelectedDelegate(function(){
+		var obj = g_globalObject.getSelectedDay();
+		document.getElementById("date_result").value = obj.day + "/" + obj.month + "/" + obj.year;
+	});
 </script>
 </body>
 </html>

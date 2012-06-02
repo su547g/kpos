@@ -893,7 +893,7 @@ public class KPosPortImpl implements KPosPortType {
             @WebParam(partName = "parameters", name = "DeleteOrderType", targetNamespace = NS) DeleteOrderType parameters) {
         DeleteOrderResponseType responseType = new DeleteOrderResponseType();
         try {
-            DeleteResult result = contentManagementService.deleteOrder(parameters.getOrderId());
+            DeleteResult result = contentManagementService.deleteOrder(parameters.getUserId(), parameters.getOrderId());
             responseType.setResult(getSoapResult(result));
         } catch (Exception e) {
             e.printStackTrace();
@@ -908,7 +908,8 @@ public class KPosPortImpl implements KPosPortType {
             @WebParam(partName = "parameters", name = "SettleOrderType", targetNamespace = NS) SettleOrderType parameters) {
         SettleOrderResponseType responseType = new SettleOrderResponseType();
         try {
-            UpdateResult<Order> result = contentManagementService.settleOrder(parameters.getOrderId(), parameters.getPayments());
+            UpdateResult<Order> result = contentManagementService.settleOrder(parameters.getUserId(), parameters.getOrderId(), parameters.getSaleAmt(),
+                    parameters.getTax(), parameters.getTips(), parameters.getPayments());
             responseType.setResult(getSoapResult(result));
         } catch (Exception e) {
             e.printStackTrace();
@@ -1230,6 +1231,14 @@ public class KPosPortImpl implements KPosPortType {
             log.error("Error in getUserFunctionsHTML", e);
         }
         
+        return responseType;
+    }
+
+    @Override
+    public AddAttendanceResponseType addAttendance(
+            @WebParam(partName = "parameters", name = "AddAttendanceType", targetNamespace = NS) AddAttendanceType parameters) {
+        AddAttendanceResponseType responseType = new AddAttendanceResponseType();
+
         return responseType;
     }
 }

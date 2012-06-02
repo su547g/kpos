@@ -825,6 +825,12 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public CreateResult<Order> createNewOrder(OrderType orderType) {
         CreateResult<Order> result = new CreateResult<Order>();
+        User user = userDao.findById(orderType.getUserId());
+        if(user == null) {
+            log.error("Can't find User ["+orderType.getUserId()+"]");
+            result.setSuccessful(false);
+            return result;
+        }
         Order order = new Order();
         order.setNotes(orderType.getNotes());
         order.setOrderType(orderType.getType());
@@ -834,14 +840,10 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         order.setTotalPrice(orderType.getTotalPrice());
         order.setTax(orderType.getTotalTax());
         order.setGratuity(orderType.getTotalTips()==null?0:orderType.getTotalTips());
-        User user = userDao.findById(orderType.getUserId());
-        if(user == null) {
-            log.error("Can't find User ["+orderType.getUserId()+"]");
-            result.setSuccessful(false);
-            return result;
-        }
+
         order.setCreatedBy(user);
         order.setLastUpdatedBy(user);
+
         if(orderType.getTableId() != null) {
             RestaurantTable table = tableDao.findById(orderType.getTableId());
             order.setTable(table);
@@ -898,6 +900,12 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public UpdateResult<Order> updateOrder(OrderType orderType) {
         UpdateResult<Order> result = new UpdateResult<Order>();
+        User user = userDao.findById(orderType.getUserId());
+        if(user == null) {
+            result.setSuccessful(false);
+            result.setException(new Exception("Can't find user [" + orderType.getUserId() + "]"));
+            return result;
+        }
         Order order = orderDao.findById(orderType.getId());
         if(order != null) {
             order.setNotes(orderType.getNotes());
@@ -907,17 +915,11 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             order.setTotalPrice(orderType.getTotalPrice());
             order.setTax(orderType.getTotalTax());
             order.setGratuity(orderType.getTotalTips()==null?0:orderType.getTotalTips());
+            order.setLastUpdatedBy(user);
             if(orderType.getTableId() != null) {
                 RestaurantTable table = tableDao.findById(orderType.getTableId());
                 order.setTable(table);
             }
-            User user = userDao.findById(orderType.getUserId());
-            if(user == null) {
-                log.error("Can't find User ["+orderType.getUserId()+"]");
-                result.setSuccessful(false);
-                return result;
-            }
-            order.setLastUpdatedBy(user);
             if(orderType.getCustomer() != null){
                 CustomerInfo customer = customerInfoDao.findByPhoneNumber(String.valueOf(orderType.getCustomer().getPhoneNumber()));
                 if(null == customer) {
@@ -968,8 +970,14 @@ public class ContentManagementServiceImpl implements IContentManagementService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
-    public DeleteResult deleteOrder(long orderId) {
+    public DeleteResult deleteOrder(long userId, long orderId) {
         DeleteResult result = new DeleteResult();
+        User user = userDao.findById(userId);
+        if(user == null) {
+            result.setSuccessful(false);
+            result.setException(new Exception("Can't find user [" + userId + "]"));
+            return result;
+        }
         boolean isDeleted = orderDao.delete(orderId);
         result.setSuccessful(isDeleted);
         result.setId(orderId);
@@ -991,10 +999,20 @@ public class ContentManagementServiceImpl implements IContentManagementService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
-    public UpdateResult<Order> settleOrder(long orderId, List<PaymentRecordType> paymentRecordTypes) {
+    public UpdateResult<Order> settleOrder(long userId, long orderId, double saleAmt, double tax, double tips, List<PaymentRecordType> paymentRecordTypes) {
         UpdateResult<Order> result = new UpdateResult<Order>();
+        User user = userDao.findById(userId);
+        if(user == null) {
+            result.setSuccessful(false);
+            result.setException(new Exception("Can't find user [" + userId + "]"));
+            return result;
+        }
         Order order = orderDao.findById(orderId);
         if(order != null) {
+            order.setTotalPrice(saleAmt);
+            order.setTax(tax);
+            order.setGratuity(tips);
+            order.setLastUpdatedBy(user);
             List<PaymentRecord> paymentRecords = order.getPaymentRecords();
             double runningTotal = 0;
             for(PaymentRecordType soapType : paymentRecordTypes) {
