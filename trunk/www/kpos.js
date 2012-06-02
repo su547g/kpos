@@ -834,8 +834,8 @@ function Order(aId, aType, aPrice, aTax, aTips, aStatus, aNumGuests, aCustomer, 
         return xml;
     }
 }
-function SaveOrderType(aId, aType, aPrice, aStatus, aNumGuests, aCustomer) {
-    this.order = new Order(aId, aType, aPrice, aStatus, aNumGuests);
+function SaveOrderType(aId, aType, aPrice, aTax, aTips, aStatus, aNumGuests, aCustomer, aUserId) {
+    this.order = new Order(aId, aType, aPrice, aTax, aTips, aStatus, aNumGuests, aCustomer, aUserId);
     this.getXML = function() {
         var xml = soapXMLBegin;
         xml += "<app:SaveOrderType>";
@@ -845,11 +845,13 @@ function SaveOrderType(aId, aType, aPrice, aStatus, aNumGuests, aCustomer) {
         return xml;
     }
 }
-function DeleteOrderType(aId) {
+function DeleteOrderType(aId, aUserId) {
     this.id = aId;
+    this.userId = aUserId;
     this.getXML = function() {
         var xml = soapXMLBegin;
         xml += "<app:DeleteOrderType>";
+        xml += "<app:userId>" + this.userId + "</app:userId>"
         xml += "<app:orderId>" + this.id + "</app:orderId>";
         xml += "</app:DeleteOrderType>";
         xml += soapXMLEnd;

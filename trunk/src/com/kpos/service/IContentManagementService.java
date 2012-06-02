@@ -91,9 +91,9 @@ public interface IContentManagementService {
 
     FetchResult<Order> fetchOrderById(long aId);
 
-    DeleteResult deleteOrder(long orderId);
+    DeleteResult deleteOrder(long userId, long orderId);
 
-    UpdateResult<Order> settleOrder(long orderId, List<PaymentRecordType> paymentRecordTypes);
+    UpdateResult<Order> settleOrder(long userId, long orderId, double saleAmt, double tax, double tips, List<PaymentRecordType> paymentRecordTypes);
 
     DeleteResult deleteStaff(long id);
     CreateResult<StaffMember> createStaff(StaffType soapStaff) throws Exception;
