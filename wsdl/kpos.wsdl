@@ -109,6 +109,8 @@
 
             <xs:element name="SaveOrderType" type="tns:SaveOrderType"/>
             <xs:element name="SaveOrderResponseType" type="tns:SaveOrderResponseType"/>
+            <xs:element name="FetchOrderType" type="tns:FetchOrderType"/>
+            <xs:element name="FetchOrderResponseType" type="tns:FetchOrderResponseType"/>
             <xs:element name="DeleteOrderType" type="tns:DeleteOrderType"/>
             <xs:element name="DeleteOrderResponseType" type="tns:DeleteOrderResponseType"/>
             <xs:element name="SettleOrderType" type="tns:SettleOrderType"/>
@@ -129,6 +131,12 @@
             <xs:element name="GetUserFunctionsHTMLResponseType" type="tns:GetUserFunctionsHTMLResponseType"/>
             <xs:element name="AddAttendanceType" type="tns:AddAttendanceType"/>
             <xs:element name="AddAttendanceResponseType" type="tns:AddAttendanceResponseType"/>
+            <xs:element name="DeleteAttendanceType" type="tns:DeleteAttendanceType"/>
+            <xs:element name="DeleteAttendanceResponseType" type="tns:DeleteAttendanceResponseType"/>
+            <xs:element name="UpdateAttendanceType" type="tns:UpdateAttendanceType"/>
+            <xs:element name="UpdateAttendanceResponseType" type="tns:UpdateAttendanceResponseType"/>
+            <xs:element name="CalculateStaffPayType" type="tns:CalculateStaffPayType"/>
+            <xs:element name="CalculateStaffPayResponseType" type="tns:CalculateStaffPayResponseType"/>
 
             <!--Result object-->
             <xs:complexType name="ResultType">
@@ -284,7 +292,7 @@
                     <xs:element name="totalTips" type="xsd:double" minOccurs="0" maxOccurs="1" default="0"/>
                     <xs:element name="notes" type="xsd:string" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="status" type="xsd:string" minOccurs="1" maxOccurs="1"/>
-                    <xs:element name="createTime" type="xsd:dateTime" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="createTime" type="xsd:string" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="orderItems" type="tns:OrderItemType" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="payments" type="tns:PaymentRecordType" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="numOfGuests" type="xsd:int" minOccurs="0" maxOccurs="1"/>
@@ -826,6 +834,17 @@
                     <xs:element name="id" type="xsd:long" minOccurs="1" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
+            <xs:complexType name="FetchOrderType">
+                <xs:sequence>
+                    <xs:element name="orderId" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="FetchOrderResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="order" type="tns:OrderType" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
             <xs:complexType name="DeleteOrderType">
                 <xs:sequence>
                     <xs:element name="userId" type="xsd:long" minOccurs="1"/>
@@ -929,6 +948,42 @@
             <xs:complexType name="AddAttendanceResponseType">
                 <xs:sequence>
                     <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeleteAttendanceType">
+                <xs:sequence>
+                    <xs:element name="userId" type="xsd:long" minOccurs="1"/>
+                    <xs:element name="attendanceId" type="xsd:long" minOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeleteAttendanceResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="UpdateAttendanceType">
+                <xs:sequence>
+                    <xs:element name="userId" type="xsd:long" minOccurs="1"/>
+                    <xs:element name="attendance" type="tns:StaffAttendanceType" minOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="UpdateAttendanceResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="CalculateStaffPayType">
+                <xs:sequence>
+                    <xs:element name="userId" type="xsd:long" minOccurs="1"/>
+                    <xs:element name="staffId" type="xsd:long" minOccurs="1"/>
+                    <xs:element name="from" type="xsd:string" minOccurs="1"/>
+                    <xs:element name="to" type="xsd:string" minOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="CalculateStaffPayResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="payAmount" type="xsd:double"/>
                 </xs:sequence>
             </xs:complexType>
             <!--End of operations-->
@@ -1188,6 +1243,12 @@
     <wsdl:message name="SaveOrderResponseMessage">
         <wsdl:part name="parameters" element="tns:SaveOrderResponseType"/>
     </wsdl:message>
+    <wsdl:message name="FetchOrderMessage">
+        <wsdl:part name="parameters" element="tns:FetchOrderType"/>
+    </wsdl:message>
+    <wsdl:message name="FetchOrderResponseMessage">
+        <wsdl:part name="parameters" element="tns:FetchOrderResponseType"/>
+    </wsdl:message>
     <wsdl:message name="DeleteOrderMessage">
         <wsdl:part name="parameters" element="tns:DeleteOrderType"/>
     </wsdl:message>
@@ -1243,6 +1304,24 @@
     </wsdl:message>
     <wsdl:message name="AddAttendanceResponseMessage">
         <wsdl:part name="parameters" element="tns:AddAttendanceResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="DeleteAttendanceMessage">
+        <wsdl:part name="parameters" element="tns:DeleteAttendanceType"/>
+    </wsdl:message>
+    <wsdl:message name="DeleteAttendanceResponseMessage">
+        <wsdl:part name="parameters" element="tns:DeleteAttendanceResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="UpdateAttendanceMessage">
+        <wsdl:part name="parameters" element="tns:UpdateAttendanceType"/>
+    </wsdl:message>
+    <wsdl:message name="UpdateAttendanceResponseMessage">
+        <wsdl:part name="parameters" element="tns:UpdateAttendanceResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="CalculateStaffPayMessage">
+        <wsdl:part name="parameters" element="tns:CalculateStaffPayType"/>
+    </wsdl:message>
+    <wsdl:message name="CalculateStaffPayResponseMessage">
+        <wsdl:part name="parameters" element="tns:CalculateStaffPayResponseType"/>
     </wsdl:message>
     <!--End of messages-->
 
@@ -1427,6 +1506,10 @@
             <wsdl:input message="tns:SaveOrderMessage" name="SaveOrder"/>
             <wsdl:output message="tns:SaveOrderResponseMessage" name="SaveOrderResponse"/>
         </wsdl:operation>
+        <wsdl:operation name="FetchOrder">
+            <wsdl:input message="tns:FetchOrderMessage" name="FetchOrder"/>
+            <wsdl:output message="tns:FetchOrderResponseMessage" name="FetchOrderResponse"/>
+        </wsdl:operation>
         <wsdl:operation name="DeleteOrder">
             <wsdl:input message="tns:DeleteOrderMessage" name="DeleteOrder"/>
             <wsdl:output message="tns:DeleteOrderResponseMessage" name="DeleteOrderResponse"/>
@@ -1463,6 +1546,18 @@
         <wsdl:operation name="AddAttendance">
             <wsdl:input message="tns:AddAttendanceMessage" name="AddAttendance"/>
             <wsdl:output message="tns:AddAttendanceResponseMessage" name="AddAttendanceResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="DeleteAttendance">
+            <wsdl:input message="tns:DeleteAttendanceMessage" name="DeleteAttendance"/>
+            <wsdl:output message="tns:DeleteAttendanceResponseMessage" name="DeleteAttendanceResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="UpdateAttendance">
+            <wsdl:input message="tns:UpdateAttendanceMessage" name="UpdateAttendance"/>
+            <wsdl:output message="tns:UpdateAttendanceResponseMessage" name="UpdateAttendanceResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="CalculateStaffPay">
+            <wsdl:input message="tns:CalculateStaffPayMessage" name="CalculateStaffPay"/>
+            <wsdl:output message="tns:CalculateStaffPayResponseMessage" name="CalculateStaffPayResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -1858,6 +1953,15 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="FetchOrder">
+            <soap:operation soapAction="http://ws.kpos.com/FetchOrder" style="document"/>
+            <wsdl:input name="FetchOrder">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="FetchOrderResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="DeleteOrder">
             <soap:operation soapAction="http://ws.kpos.com/DeleteOrder" style="document"/>
             <wsdl:input name="DeleteOrder">
@@ -1936,6 +2040,33 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="AddAttendanceResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="DeleteAttendance">
+            <soap:operation soapAction="http://ws.kpos.com/DeleteAttendance" style="document"/>
+            <wsdl:input name="DeleteAttendance">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DeleteAttendanceResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="UpdateAttendance">
+            <soap:operation soapAction="http://ws.kpos.com/UpdateAttendance" style="document"/>
+            <wsdl:input name="UpdateAttendance">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="UpdateAttendanceResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="CalculateStaffPay">
+            <soap:operation soapAction="http://ws.kpos.com/CalculateStaffPay" style="document"/>
+            <wsdl:input name="CalculateStaffPay">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="CalculateStaffPayResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>

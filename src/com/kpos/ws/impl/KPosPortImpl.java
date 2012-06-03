@@ -1,12 +1,14 @@
 package com.kpos.ws.impl;
 
 import com.kpos.dao.IFunctionModuleDao;
+import com.kpos.dao.IOrderDao;
 import com.kpos.dao.IStaffMemberDao;
 import com.kpos.dao.IUserDao;
 import com.kpos.domain.*;
 import com.kpos.domain.Order;
 import com.kpos.service.*;
 import com.kpos.ws.app.*;
+import com.kpos.ws.app.OrderItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,9 @@ public class KPosPortImpl implements KPosPortType {
     
     @Autowired
     private IFunctionModuleDao functionModuleDao;
+    
+    @Autowired
+    private IOrderDao orderDao;
     
     /**
      * returns the soap ResultType for a BaseResult
@@ -889,6 +894,63 @@ public class KPosPortImpl implements KPosPortType {
     }
 
     @Override
+    public FetchOrderResponseType fetchOrder(
+            @WebParam(partName = "parameters", name = "FetchOrderType", targetNamespace = NS) FetchOrderType parameters) {
+        FetchOrderResponseType responseType = new FetchOrderResponseType();
+        try {
+            ResultType result = new ResultType();
+            Order order = orderDao.findById(parameters.getOrderId());
+            if(order != null) {
+                OrderType soapType = new OrderType();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:MM:ss yyyy-mm-dd");
+                soapType.setCreateTime(dateFormat.format(order.getCreatedOn()));
+                soapType.setId(order.getId());
+                soapType.setNotes(order.getNotes());
+                soapType.setNumOfGuests(order.getNumOfGuests());
+                soapType.setStatus(order.getStatus().toString());
+                if(order.getTable() != null) {
+                    soapType.setTableId(order.getTable().getId());
+                    soapType.setTableName(order.getTable().getName());
+                }
+                soapType.setTotalPrice(order.getTotalPrice());
+                soapType.setTotalTax(order.getTax());
+                soapType.setTotalTips(order.getGratuity());
+                soapType.setType(order.getOrderType());
+                soapType.setUserId(order.getCreatedBy().getId());
+                for(com.kpos.domain.OrderItem item : order.getOrderItems()) {
+                    OrderItemType soapItem = new OrderItemType();
+                    soapItem.setId(item.getId());
+                    soapItem.setSaleItemId(item.getSaleItem().getId());
+                    soapItem.setOrderId(order.getId());
+                    soapItem.setPrice(item.getSalePrice());
+                    soapItem.setQuantity(item.getQuantity());
+                    for(OrderItemOption option : item.getOptions()) {
+                        OrderItemOptionType optionType = new OrderItemOptionType();
+                        optionType.setDisplayText(option.getDisplayText());
+                        optionType.setId(option.getId());
+                        optionType.setOptionId(option.getOptionId());
+                        optionType.setPrice(option.getPrice());
+                        optionType.setOptionType(option.getOptionType());
+                        optionType.setQuantity(option.getQuantity());
+                        soapItem.getOptions().add(optionType);
+                    }
+                    soapType.getOrderItems().add(soapItem);
+                }
+                responseType.setOrder(soapType);
+                result.setSuccessful(true);
+            } else {
+                result.setSuccessful(false);
+            }
+            responseType.setResult(result);
+        } catch(Exception e) {
+            e.printStackTrace();
+            log.error("Error in saveOrder", e);
+            responseType.setResult(getSoapFaultResult(e));
+        }
+        return responseType;
+    }
+
+    @Override
     public DeleteOrderResponseType deleteOrder(
             @WebParam(partName = "parameters", name = "DeleteOrderType", targetNamespace = NS) DeleteOrderType parameters) {
         DeleteOrderResponseType responseType = new DeleteOrderResponseType();
@@ -1238,6 +1300,30 @@ public class KPosPortImpl implements KPosPortType {
     public AddAttendanceResponseType addAttendance(
             @WebParam(partName = "parameters", name = "AddAttendanceType", targetNamespace = NS) AddAttendanceType parameters) {
         AddAttendanceResponseType responseType = new AddAttendanceResponseType();
+
+        return responseType;
+    }
+
+    @Override
+    public DeleteAttendanceResponseType deleteAttendance(
+            @WebParam(partName = "parameters", name = "DeleteAttendanceType", targetNamespace = NS) DeleteAttendanceType parameters) {
+        DeleteAttendanceResponseType responseType = new DeleteAttendanceResponseType();
+
+        return responseType;
+    }
+
+    @Override
+    public UpdateAttendanceResponseType updateAttendance(
+            @WebParam(partName = "parameters", name = "UpdateAttendanceType", targetNamespace = NS) UpdateAttendanceType parameters) {
+        UpdateAttendanceResponseType responseType = new UpdateAttendanceResponseType();
+
+        return responseType;
+    }
+
+    @Override
+    public CalculateStaffPayResponseType calculateStaffPay(
+            @WebParam(partName = "parameters", name = "CalculateStaffPayType", targetNamespace = NS) CalculateStaffPayType parameters) {
+        CalculateStaffPayResponseType responseType = new CalculateStaffPayResponseType();
 
         return responseType;
     }
