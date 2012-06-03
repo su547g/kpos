@@ -66,7 +66,7 @@ public class OrderItem extends AbstractDomainObject {
         this.saleItem = saleItem;
     }
     
-    public float getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
