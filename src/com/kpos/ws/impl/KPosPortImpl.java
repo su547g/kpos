@@ -6,6 +6,7 @@ import com.kpos.dao.IStaffMemberDao;
 import com.kpos.dao.IUserDao;
 import com.kpos.domain.*;
 import com.kpos.domain.Order;
+import com.kpos.domain.OrderItemOption;
 import com.kpos.service.*;
 import com.kpos.ws.app.*;
 import com.kpos.ws.app.OrderItem;
@@ -1300,7 +1301,20 @@ public class KPosPortImpl implements KPosPortType {
     public AddAttendanceResponseType addAttendance(
             @WebParam(partName = "parameters", name = "AddAttendanceType", targetNamespace = NS) AddAttendanceType parameters) {
         AddAttendanceResponseType responseType = new AddAttendanceResponseType();
-
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:MM:ss");
+            SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-mm-dd");
+            Date workDay = dateFormat2.parse(parameters.getAttendance().getStartTime());
+            Date startTime = dateFormat.parse(parameters.getAttendance().getStartTime());
+            Date endTime = dateFormat.parse(parameters.getAttendance().getEndTime());
+            CreateResult<StaffAttendance> result = contentManagementService.addAttendance(parameters.getUserId(), parameters.getAttendance().getStaffId(), workDay, startTime, endTime);
+            responseType.setResult(getSoapResult(result));
+            responseType.setId(result.getCreated().getId());
+        } catch(Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in addAttendance", e);
+        }
         return responseType;
     }
 

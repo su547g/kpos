@@ -117,7 +117,7 @@
 				}
 				var html = "<tr>";
 				for(var i = 0; i < areas.length; i++) {
-					html += "<td><input type='button' onclick='clickSeatingArea("+i+")' value='" + areas[i].name + "' id='"+i+"' class='groovybutton'/></td>";
+					html += "<td><input type='button' onclick='clickSeatingArea(\"area_"+i+"\","+i+")' value='" + areas[i].name + "' id='area_"+i+"' class='groovybutton'/></td>";
 				}
 				html += "</tr>"
 				document.getElementById("areaList").innerHTML = html;
@@ -134,11 +134,11 @@
 		document.getElementById("deleteTableButton").disabled = isDisabled;
 		document.getElementById("tableName").readOnly = isDisabled;
 	}
-	function clickSeatingArea(i) {
-		var button = document.getElementById(i);
+	function clickSeatingArea(id, i) {
+		var button = document.getElementById(id);
 		button.style.backgroundColor = "#2ECCFA";
 		for(var k = 0; k < areas.length; k++) {
-			if(k!=i) document.getElementById(k).style.backgroundColor = "#FFFF00";
+			if(k!=i) document.getElementById("area_"+k).style.backgroundColor = "#FFFF00";
 		} 
 		var area = areas[i];
 		document.getElementById("areaName").value = area.name;

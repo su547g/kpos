@@ -345,8 +345,8 @@
             </xs:complexType>
             <xs:complexType name="StaffAttendanceType">
                 <xs:sequence>
-                    <xs:element name="staffId" minOccurs="1"/>
-                    <xs:element name="id" minOccurs="0"/>
+                    <xs:element name="staffId" type="xsd:long" minOccurs="1"/>
+                    <xs:element name="id" type="xsd:long" minOccurs="0"/>
                     <xs:element name="startTime" type="xsd:string" minOccurs="0"/>
                     <xs:element name="endTime"  type="xsd:string" minOccurs="0"/>
                 </xs:sequence>
@@ -948,6 +948,7 @@
             <xs:complexType name="AddAttendanceResponseType">
                 <xs:sequence>
                     <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="id" type="xsd:long"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="DeleteAttendanceType">

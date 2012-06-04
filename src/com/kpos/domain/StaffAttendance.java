@@ -12,6 +12,12 @@ import java.util.Date;
  * Author: kkwang
  * Date: 5/22/12 11:30 PM
  */
+@NamedQueries({
+        @NamedQuery(
+                name = "findAttendanceForDay",
+                query = "from StaffAttendance where workDay = :aDay"
+        )
+})
 @Entity
 @Table(name = "STAFF_ATTENDANCE")
 public class StaffAttendance extends AbstractDomainObject {
