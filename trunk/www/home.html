@@ -55,6 +55,7 @@
 				localStorage.setItem('userId', jsonObj.checkprivilegeresponsetype.userid);
 				localStorage.setItem('orderType', orderType);
 				if(orderType == DINE_IN) {
+					listSeatingAreas();
 					Popup.showModal("pickTable");
 				} else {
 					window.location.href = "order.html";
@@ -121,12 +122,23 @@
 		</tr>
 	</table>
 	
-	<div id="pickTable" style="width:700px; height: 450px; border:1px solid #CC6600; background-color:#99997A; padding:0px; font-size:100%; display:none;">
+	<div id="pickTable" style="width:700px; height: 530px; border:1px solid #CC6600; background-color:#99997A; padding:0px; font-size:100%; display:none;">
 		<table width="100%">
 			<tr>
 				<td width="100%" align="left">
-					<input type="button" value="OK" onclick="window.location.href = 'order.html'"/>
-					<input type="button" value="OK" onclick="Popup.hide('pickTable')"/>
+					<input type="button" value="OK" onclick="confirmTable()"/>
+					<input type="button" value="Cancel" onclick="Popup.hide('pickTable')"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<table id="areaList"></table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input type="hidden" id="tableId"/>
+					<div id="pageContainer" style="outline:solid black thin; width: 680px; height: 400px; background-color: #F5DA81; float: left"></div>
 				</td>
 			</tr>
 		</table>
@@ -159,5 +171,133 @@
 		</table>
 		</form>
 	</div>
+	
+	<script>
+		var tableNum = 0;
+	    var areas = new Array();
+		var tables = {};
+		var container = document.getElementById('pageContainer');
+		var containerX = container.offsetLeft;
+		var containerY = container.offsetTop;
+		var _tableWidth = 50;
+		
+		function listSeatingAreas() {
+			var soapType = new ListAreasType();
+			call_web_service(soapType, listSeatingAreasHandler);
+		}
+		function loadTables(soapTables) {
+			if(soapTables != null) {
+				if(soapTables.length != undefined) {
+					for(var k = 0; k < soapTables.length; k++) {
+						var domainTable = soapTables[k];
+						tables[domainTable.name] = new Table(domainTable.id, domainTable.name, domainTable.x, domainTable.y, domainTable.areaid);
+					}
+				} else {
+					tables[soapTables.name] = new Table(soapTables.id, soapTables.name, soapTables.x, soapTables.y, soapTables.areaid);
+				}
+			}
+		}
+		function clearTables() {
+			while (container.hasChildNodes()) {
+			    container.removeChild(container.lastChild);
+			}
+		}
+		function listSeatingAreasHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.listareasresponsetype != undefined && jsonObj.listareasresponsetype != null && 
+				jsonObj.listareasresponsetype.result.successful == "true") {
+				if(jsonObj.listareasresponsetype.areas != null) {
+					areas = new Array();
+					tables = {};
+					if(jsonObj.listareasresponsetype.areas.length != undefined) {
+						for(var i = 0; i < jsonObj.listareasresponsetype.areas.length; i++) {
+							var name = jsonObj.listareasresponsetype.areas[i].name;
+							var id = jsonObj.listareasresponsetype.areas[i].id;
+							areas.push(new SaveAreaType(name, id));
+							var soapTables = jsonObj.listareasresponsetype.areas[i].tables;
+							if(soapTables != null) {
+								loadTables(soapTables);
+							}
+						}
+					} else {
+						areas.push(new SaveAreaType(jsonObj.listareasresponsetype.areas.name, jsonObj.listareasresponsetype.areas.id));
+						loadTables(jsonObj.listareasresponsetype.areas.tables);
+					}
+					var html = "<tr>";
+					for(var i = 0; i < areas.length; i++) {
+						html += "<td><input type='button' onclick='clickSeatingArea(\"area_"+i+"\","+i+")' value='" + areas[i].name + "' id='area_"+i+"' class='mediumbutton'/></td>";
+					}
+					html += "</tr>"
+					document.getElementById("areaList").innerHTML = html;
+					clearTables();
+				}
+			} else {
+				alert("Failed to load seating areas!");
+			}
+		}
+		function clickSeatingArea(id, i) {
+			var button = document.getElementById(id);
+			button.style.backgroundColor = "#2ECCFA";
+			for(var k = 0; k < areas.length; k++) {
+				if(k!=i) document.getElementById("area_"+k).style.backgroundColor = "#FFFF00";
+			} 
+			var area = areas[i];
+			clearTables();
+
+			var tableDiv, x, y;
+			for(var t in tables) {
+				if(tables[t].areaId == area.id) {
+			        tableDiv = document.createElement('div');
+					//tableDiv.setAttribute('src', 'img/tan-square.png');
+					x = containerX+tables[t].x;
+					y = containerY+tables[t].y;
+			        tableDiv.setAttribute('class', 'drag');
+			        tableDiv.setAttribute('id', tables[t].name);
+			        tableDiv.setAttribute('style', 'border:solid black 1px;width:'+_tableWidth+'px;height:'+_tableWidth+'px;background-color:brown;left:'+x+'px;top:'+y+'px;');
+			        tableDiv.innerHTML = '<br><center>' + tables[t].name + '</center>';
+			        tableDiv.onclick = function() { clickTable(this); }
+			        container.appendChild(tableDiv);
+				}
+			}
+		}
+		function addTable() {
+	    	var areaId = document.getElementById('areaId').value;
+			var tableName = document.getElementById('tableName').value;
+			if(areaId != null && parseInt(areaId) > 0 && tableName != null && tableName != "") {
+				if(tables[tableName] != null) {
+					alert("Table name already exists!"); return;
+				}
+		        var tableDiv = document.createElement('div');
+				//tableDiv.setAttribute('src', 'img/tan-square.png');
+		        tableDiv.setAttribute('class', 'drag');
+				var x = containerX + 5;
+				var top = containerY + 5;
+		        tableDiv.setAttribute('id', tableName);
+		        tableDiv.setAttribute('style', 'outline:solid black 1px; width:'+_tableWidth+'px;height:'+_tableWidth+'px; background-color: brown;left: '+x+'px;top: '+top+'px;');
+		        tableDiv.innerHTML = '<br><center>' + tableName + '</center>';
+		        tableDiv.onclick = function() { clickTable(this); }
+		        container.appendChild(tableDiv);
+		        document.getElementById('tableName').value = "";
+		        tables[tableName] = new Table(null, tableName, 5, 5, areaId); //aId, aName, aX, aY, aAreaId
+		        selected = tableName;
+		   } else {
+		   		alert("Please enter a table name");
+		   }
+	    }
+		function clickTable(tableDiv) {
+			tableDiv.style.backgroundColor = "#2ECCFA";
+			selected = tableDiv.id;
+			document.getElementById("tableId").value = tables[selected].id;
+			for(var t in tables) {
+				if(tables[t].name != tableDiv.id && document.getElementById(t)!=null) {
+					document.getElementById(t).style.backgroundColor = "brown";
+				}
+			}
+		}
+		function confirmTable() {
+			localStorage.setItem("tableId", document.getElementById("tableId").value);
+			window.location.href = 'order.html';
+		}
+	</script>
 </body>
 </html>

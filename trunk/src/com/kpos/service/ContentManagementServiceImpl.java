@@ -78,6 +78,9 @@ public class ContentManagementServiceImpl implements IContentManagementService {
 
     @Autowired
     private IFunctionModuleDao functionModuleDao;
+    
+    @Autowired
+    private IAttendanceDao staffAttendanceDao;
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public CreateResult<MenuCategory> createMenuCategory(MenuCategory aCategory, List<Long> printerIds) {
@@ -1161,6 +1164,33 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         } else {
             log.debug("Staff [" + soapStaff.getId()+"] doesn't exist!");
             throw new Exception("Staff [" + soapStaff.getId()+"] doesn't exist!");
+        }
+        return result;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public CreateResult<StaffAttendance> addAttendance(long userId, long staffId, Date date, Date startTime, Date endTime) {
+        CreateResult<StaffAttendance> result = new CreateResult<StaffAttendance>();
+        User user = userDao.findById(userId);
+        if(user != null) {
+            StaffMember staffMember = staffMemberDao.findById(staffId);
+            if(staffMember != null) {
+                StaffAttendance attendance = new StaffAttendance();
+                attendance.setEndTime(endTime);
+                attendance.setStartTime(startTime);
+                attendance.setCreatedBy(user);
+                attendance.setCreatedOn(new Date());
+                attendance.setStaffMember(staffMember);
+                attendance.setWorkDay(date);
+                result.setCreated(attendance);
+                result.setSuccessful(true);
+            } else {
+                log.debug("StaffMember [" + staffId + "] not found!");
+                result.setSuccessful(false);
+            }
+        } else {
+            log.debug("User [" + userId + "] not found!");
+            result.setSuccessful(false);
         }
         return result;
     }

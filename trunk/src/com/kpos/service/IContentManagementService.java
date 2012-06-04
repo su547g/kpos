@@ -4,6 +4,7 @@ import com.kpos.domain.*;
 import com.kpos.domain.Order;
 import com.kpos.ws.app.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -98,4 +99,6 @@ public interface IContentManagementService {
     DeleteResult deleteStaff(long id);
     CreateResult<StaffMember> createStaff(StaffType soapStaff) throws Exception;
     UpdateResult<StaffMember> updateStaffMember(StaffType soapStaff) throws Exception;
+
+    CreateResult<StaffAttendance> addAttendance(long userId, long staffId, Date date, Date startTime, Date endTime);
 }
