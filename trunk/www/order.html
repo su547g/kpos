@@ -121,6 +121,8 @@
 		var OUT = "OUT", DINE_IN = "DINE_IN", DELIVERY = "DELIVERY";
 		var UserId = localStorage.getItem('userId');
 		var OrderType = localStorage.getItem('orderType');
+		var TableId = localStorage.getItem('tableId');
+		var TableName = localStorage.getItem('tableName');
 		
 		function initializeCategories(){
 			ws_list_categories(listAllCategoriesHandler);
@@ -313,14 +315,14 @@
 		function setSizeButtonColor(size) {
 			if(size == 1) {
 				smallClicked = 1 - smallClicked; medClicked = 0; largeClicked = 0;
-				document.menuItemForm.btnItemSmall.style.backgroundColor = smallClicked==1?"white":"#FFFF00";
 			} else if(size == 2) {
 				medClicked = 1 - medClicked; smallClicked = 0; largeClicked = 0;
-				document.menuItemForm.btnItemMed.style.backgroundColor = medClicked==1?"white":"#FFFF00";
 			} else {
 				largeClicked = 1 - largeClicked; smallClicked = 0; medClicked = 0;
-				document.menuItemForm.btnItemLarge.style.backgroundColor = largeClicked==1?"white":"#FFFF00";
 			}
+			document.menuItemForm.btnItemSmall.style.backgroundColor = smallClicked==1?"white":"#FFFF00";
+			document.menuItemForm.btnItemMed.style.backgroundColor = medClicked==1?"white":"#FFFF00";
+			document.menuItemForm.btnItemLarge.style.backgroundColor = largeClicked==1?"white":"#FFFF00";
 		}
 		function fetchSaleItemHandler(jsonObj) {
 			if(jsonObj != undefined && jsonObj != null &&
@@ -512,17 +514,19 @@
             for(var i = 0; i < orderItems.length; i++) {
             	var price = parseFloat(orderItems[i].price);
             	var quantity = parseInt(orderItems[i].quantity);
+            	var itemPrice = price * quantity;
 	            html += "<tr id='"+i+"'><td valign='top' align='left' onclick='clickOrderItem("+i+");'><strong>"+orderItems[i].displayText+"</strong></td>";
 	            html += "<td valign='top' align='right''>"+orderItems[i].quantity+"</td>";
-				html += "<td valign='top' align='right'><strong>"+(price==0?"":price.toFixed(2))+"</strong></td></tr>";
+				html += "<td valign='top' align='right'><strong>"+(itemPrice==0?"":itemPrice.toFixed(2))+"</strong></td></tr>";
 				for(var k = 0; k < orderItems[i].childItems.length; k++) {
 					var optionItem = orderItems[i].childItems[k];
 					var optionPrice = parseFloat(optionItem.price);
 					var optionQuantity = parseInt(optionItem.quantity);
+					var optionPrice = optionPrice * optionQuantity;
 					html += "<tr id='"+i+"-"+k+"'><td valign='top' align='left' onclick='clickOptionItem("+i+","+k+")'>&nbsp;&nbsp;&nbsp;-&nbsp;"+optionItem.displayText+"</td>";
 	            	html += "<td valign='top' align='right''>"+optionItem.quantity+"</td>";
 					html += "<td valign='top' align='right'><strong>"+(optionPrice==0?"":optionPrice.toFixed(2))+"</strong></td></tr>";
-					total += optionPrice * optionQuantity;
+					total += itemPrice;
 				}
                 total += price * quantity;
 	        }
@@ -571,7 +575,8 @@
 		   		var total = document.orderForm.totalPrice.value;
 		   		var tax = document.orderForm.totalTax.value;
 		   		var orderId = document.orderForm.orderId.value;
-		   		var orderType = new SaveOrderType(orderId, OrderType, total, tax, 0, "INITIAL", 1, null, UserId);//aId, aType, aPrice, aStatus, aNumGuests, aCustomer
+		   		//aId, aType, aPrice, tax, tips, aStatus, aNumGuests, aCustomer, userId, tableId
+		   		var orderType = new SaveOrderType(orderId, OrderType, total, tax, 0, "INITIAL", 1, null, UserId, TableId);
 		   		orderType.order.orderItems = orderItems;
 				call_web_service(orderType, saveOrderHandler);
 			}
@@ -582,7 +587,10 @@
 				jsonObj.saveorderresponsetype.result.successful == "true") {
 				alert("Order saved!");
 				document.orderForm.orderId.value = jsonObj.saveorderresponsetype.id;
-				document.getElementById("orderHeader").innerText = "Order " + jsonObj.saveorderresponsetype.result.id;
+				document.getElementById("orderHeader").innerText = "Order " + jsonObj.saveorderresponsetype.result.id
+				if(TableName!=null && TableName!="") {
+					document.getElementById("orderHeader").innerText += " for Table "+TableName;
+				}
 			} else {
 				alert("Failed to save order!");
 			}
@@ -592,6 +600,8 @@
 	   		if(orderId != null && parseInt(orderId) > 0) {
 	   			var soapType = new DeleteOrderType(orderId);
 	   			call_web_service(soapType, deleteOrderHandler);
+	   		} else {
+	   			window.location.href = "home.html";
 	   		}
 	   	}
 	   	function deleteOrderHandler(jsonObj) {
@@ -756,6 +766,11 @@
                	<table width="100%">
                		<tr>
                			<th width="100%" valign="center" align="center" id="orderHeader">Order</th>
+               			<script>
+               				if(TableName!=null&&TableName!="") {
+								document.getElementById("orderHeader").innerText += " for Table "+TableName;
+							}
+               			</script>
                 	</tr>
                	</table>
                <table width="100%" border="0" id="orderTable" class="orderTable">
