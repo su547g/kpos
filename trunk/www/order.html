@@ -206,6 +206,7 @@
 				var optionItem = new OrderOption(name, price, 1, id, GLOBAL_OP);
 				orderItem.childItems.push(optionItem);
 				refreshOrderTable();
+				Popup.hide('globalOptionsPopup');
 			}
 		}
 		function listCatOptions(catId) {
@@ -738,15 +739,9 @@
                </table>
             </td>
             <td valign="top" align="left" width="22.5%" style="border:0px solid black; padding:2px">
-               <strong>Global Options</strong>
-               <table id="globalOptionsTable" class="optionsTable" width="100%">
-               </table>
-               <table width="100%">
-               		<tr>
-               			<td width="100%"><input type="button" class="smallbackbutton" onclick="pageGlobalOptions(globalOptionPage - 1);">
-               			<input type="button" class="smallnextbutton" onclick="pageGlobalOptions(globalOptionPage + 1);"></td>
-               		</tr>
-               </table>
+               <input type="button" class="mediumbutton" value="Global Options" onclick="Popup.showModal('globalOptionsPopup');"/>
+               <br>
+               <br>
                <strong>Category Options</strong>
                <table id="catOptionsTable" class="optionsTable" width="100%">
                </table>
@@ -810,7 +805,20 @@
          </tr>
       </table>
    </div>
-   
+   <div id="globalOptionsPopup" style="width:450px; height: 400px; border:1px solid #CC6600; background-color:white; padding:5px; font-size:100%; display:none;">
+   	   <strong>Global Options</strong>
+	   <table id="globalOptionsTable" class="optionsTable" width="100%">
+	   </table>
+       <table width="100%">
+		<tr>
+			<td width="100%">
+				<input type="button" class="smallbackbutton" onclick="pageGlobalOptions(globalOptionPage - 1);">
+				<input type="button" class="smallnextbutton" onclick="pageGlobalOptions(globalOptionPage + 1);">
+			</td>
+	    </tr>
+       </table>
+       <input type="button" class="mediumbutton" value="Close" onclick="Popup.hide('globalOptionsPopup')"/>
+   </div>
    <div id="modal" style="width:450px; height: 400px; border:2px solid #CC6600; background-color:white; padding:5px; font-size:100%; display:none;">
 	<table border="0" width="100%">
 		<form name="menuItemForm" id="menuItemForm">
