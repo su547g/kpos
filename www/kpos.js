@@ -793,11 +793,11 @@ function OrderOption(aDisplayText, aPrice, aQuantity, aId, aType) {
         return xml;
     }
 }
-function Order(aId, aType, aPrice, aTax, aTips, aStatus, aNumGuests, aCustomer, aUserId) {
+function Order(aId, aType, aPrice, aTax, aTips, aStatus, aNumGuests, aCustomer, aUserId, aTableId) {
     this.id = aId;
     this.userId = aUserId;
     this.type = aType;
-    this.tableId = null;
+    this.tableId = aTableId;
     this.tableName = null;
     this.totalPrice = aPrice;
     this.tax = aTax;
@@ -834,8 +834,8 @@ function Order(aId, aType, aPrice, aTax, aTips, aStatus, aNumGuests, aCustomer, 
         return xml;
     }
 }
-function SaveOrderType(aId, aType, aPrice, aTax, aTips, aStatus, aNumGuests, aCustomer, aUserId) {
-    this.order = new Order(aId, aType, aPrice, aTax, aTips, aStatus, aNumGuests, aCustomer, aUserId);
+function SaveOrderType(aId, aType, aPrice, aTax, aTips, aStatus, aNumGuests, aCustomer, aUserId, aTableId) {
+    this.order = new Order(aId, aType, aPrice, aTax, aTips, aStatus, aNumGuests, aCustomer, aUserId, aTableId);
     this.getXML = function() {
         var xml = soapXMLBegin;
         xml += "<app:SaveOrderType>";

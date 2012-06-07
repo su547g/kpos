@@ -96,6 +96,9 @@
 	    function clearCache() {
 	    	localStorage.setItem("userId", "");
 	    	localStorage.setItem("orderType", "");
+	    	localStorage.setItem("tableId", "");
+	    	document.getElementById("passcodeField").value = "";
+	    	document.getElementById("passcode").value = "";
 	    }
     </script>
 </head>
@@ -138,6 +141,7 @@
 			<tr>
 				<td>
 					<input type="hidden" id="tableId"/>
+					<input type="hidden" id="tableName"/>
 					<div id="pageContainer" style="outline:solid black thin; width: 680px; height: 400px; background-color: #F5DA81; float: left"></div>
 				</td>
 			</tr>
@@ -288,6 +292,7 @@
 			tableDiv.style.backgroundColor = "#2ECCFA";
 			selected = tableDiv.id;
 			document.getElementById("tableId").value = tables[selected].id;
+			document.getElementById("tableName").value = tableDiv.id;
 			for(var t in tables) {
 				if(tables[t].name != tableDiv.id && document.getElementById(t)!=null) {
 					document.getElementById(t).style.backgroundColor = "brown";
@@ -296,6 +301,7 @@
 		}
 		function confirmTable() {
 			localStorage.setItem("tableId", document.getElementById("tableId").value);
+			localStorage.setItem("tableName", document.getElementById("tableName").value);
 			window.location.href = 'order.html';
 		}
 	</script>
