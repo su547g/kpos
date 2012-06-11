@@ -26,6 +26,14 @@ import java.util.List;
                 query = "from Order order by createdOn DESC"
         ),
         @NamedQuery(
+                name = "listUnservedOrdersByTimeASC",
+                query = "from Order where status != 4 and status != -1 order by createdOn ASC"
+        ),
+        @NamedQuery(
+                name = "listUnservedOrdersByTimeDESC",
+                query = "from Order where status != 4 and status != -1 order by createdOn DESC"
+        ),
+        @NamedQuery(
                 name = "listOrdersForStatusByTimeASC",
                 query = "from Order where status = :aStatus order by createdOn ASC"
         ),
@@ -37,10 +45,10 @@ import java.util.List;
                 name = "listOrdersForTable",
                 query = "from Order o where o.table.id = :aId and o.status = :aStatus order by createdOn ASC"
         ),
-        /*@NamedQuery(
+        @NamedQuery(
                 name = "listOrdersForServer",
-                query = ""
-        ),*/
+                query = "from Order o where o.createdBy = :aUserId order by createdOn ASC"
+        ),
         @NamedQuery(
                 name = "listOrdersForDateRange",
                 query = "from Order o where o.createdOn between :aStart and :aEnd order by createdOn ASC"

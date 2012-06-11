@@ -101,4 +101,6 @@ public interface IContentManagementService {
     UpdateResult<StaffMember> updateStaffMember(StaffType soapStaff) throws Exception;
 
     CreateResult<StaffAttendance> addAttendance(long userId, long staffId, Date date, Date startTime, Date endTime);
+
+    FetchResult<List<Order>> fetchUnservedOrders(boolean isAsc);
 }

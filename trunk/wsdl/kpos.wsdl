@@ -115,6 +115,8 @@
             <xs:element name="DeleteOrderResponseType" type="tns:DeleteOrderResponseType"/>
             <xs:element name="SettleOrderType" type="tns:SettleOrderType"/>
             <xs:element name="SettleOrderResponseType" type="tns:SettleOrderResponseType"/>
+            <xs:element name="FetchUnservedOrdersType" type="tns:FetchUnservedOrdersType"/>
+            <xs:element name="FetchUnservedOrdersResponseType" type="tns:FetchUnservedOrdersResponseType"/>
 
             <xs:element name="ListPrintersHTMLType" type="tns:ListPrintersHTMLType"/>
             <xs:element name="ListPrintersHTMLResponseType" type="tns:ListPrintersHTMLResponseType"/>
@@ -349,6 +351,20 @@
                     <xs:element name="id" type="xsd:long" minOccurs="0"/>
                     <xs:element name="startTime" type="xsd:string" minOccurs="0"/>
                     <xs:element name="endTime"  type="xsd:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="CompanyTaxType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="0"/>
+                    <xs:element name="name" type="xsd:string"/>
+                    <xs:element name="rate" type="xsd:double" minOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="CompanyDiscountType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="0"/>
+                    <xs:element name="rate" type="xsd:double" minOccurs="0"/>
+                    <xs:element name="amount" type="xsd:double" minOccurs="0"/>
                 </xs:sequence>
             </xs:complexType>
             <!--End of data structures-->
@@ -871,6 +887,18 @@
                     <xs:element name="Result" type="tns:ResultType"/>
                 </xs:sequence>
             </xs:complexType>
+            <xs:complexType name="FetchUnservedOrdersType">
+                <xs:sequence>
+                    <xs:element name="isAsc" type="xsd:boolean" default="false"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="FetchUnservedOrdersResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="orders" type="tns:OrderType" maxOccurs="unbounded"/>
+                    <xs:element name="count" type="xsd:int"/>
+                </xs:sequence>
+            </xs:complexType>
 
             <xs:complexType name="ListPrintersHTMLType">
                 <xs:sequence>
@@ -987,6 +1015,7 @@
                     <xs:element name="payAmount" type="xsd:double"/>
                 </xs:sequence>
             </xs:complexType>
+
             <!--End of operations-->
         </xs:schema>
     </wsdl:types>
@@ -1262,6 +1291,12 @@
     <wsdl:message name="SettleOrderResponseMessage">
         <wsdl:part name="parameters" element="tns:SettleOrderResponseType"/>
     </wsdl:message>
+    <wsdl:message name="FetchUnservedOrdersMessage">
+        <wsdl:part name="parameters" element="tns:FetchUnservedOrdersType"/>
+    </wsdl:message>
+    <wsdl:message name="FetchUnservedOrdersResponseMessage">
+        <wsdl:part name="parameters" element="tns:FetchUnservedOrdersResponseType"/>
+    </wsdl:message>
 
     <wsdl:message name="ListPrintersHTMLMessage">
         <wsdl:part name="parameters" element="tns:ListPrintersHTMLType"/>
@@ -1518,6 +1553,10 @@
         <wsdl:operation name="SettleOrder">
             <wsdl:input message="tns:SettleOrderMessage" name="SettleOrder"/>
             <wsdl:output message="tns:SettleOrderResponseMessage" name="SettleOrderResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="FetchUnservedOrders">
+            <wsdl:input message="tns:FetchUnservedOrdersMessage" name="FetchUnservedOrders"/>
+            <wsdl:output message="tns:FetchUnservedOrdersResponseMessage" name="FetchUnservedOrdersResponse"/>
         </wsdl:operation>
         <wsdl:operation name="ListPrintersHTML">
             <wsdl:input message="tns:ListPrintersHTMLMessage" name="ListPrintersHTML"/>
@@ -1981,6 +2020,16 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="FetchUnservedOrders">
+            <soap:operation soapAction="http://ws.kpos.com/FetchUnservedOrders" style="document"/>
+            <wsdl:input name="FetchUnservedOrders">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="FetchUnservedOrdersResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
         <wsdl:operation name="ListPrintersHTML">
             <soap:operation soapAction="http://ws.kpos.com/ListPrinters" style="document"/>
             <wsdl:input name="ListPrintersHTML">

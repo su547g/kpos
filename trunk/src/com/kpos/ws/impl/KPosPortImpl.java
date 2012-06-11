@@ -894,6 +894,45 @@ public class KPosPortImpl implements KPosPortType {
         return responseType;
     }
 
+    private OrderType convertToOrderType(Order order) {
+        OrderType soapType = new OrderType();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:MM:ss yyyy-mm-dd");
+        soapType.setCreateTime(dateFormat.format(order.getCreatedOn()));
+        soapType.setId(order.getId());
+        soapType.setNotes(order.getNotes());
+        soapType.setNumOfGuests(order.getNumOfGuests());
+        soapType.setStatus(order.getStatus().toString());
+        if(order.getTable() != null) {
+            soapType.setTableId(order.getTable().getId());
+            soapType.setTableName(order.getTable().getName());
+        }
+        soapType.setTotalPrice(order.getTotalPrice());
+        soapType.setTotalTax(order.getTax());
+        soapType.setTotalTips(order.getGratuity());
+        soapType.setType(order.getOrderType());
+        soapType.setUserId(order.getCreatedBy().getId());
+        for(com.kpos.domain.OrderItem item : order.getOrderItems()) {
+            OrderItemType soapItem = new OrderItemType();
+            soapItem.setId(item.getId());
+            soapItem.setSaleItemId(item.getSaleItem().getId());
+            soapItem.setOrderId(order.getId());
+            soapItem.setPrice(item.getSalePrice());
+            soapItem.setQuantity(item.getQuantity());
+            for(OrderItemOption option : item.getOptions()) {
+                OrderItemOptionType optionType = new OrderItemOptionType();
+                optionType.setDisplayText(option.getDisplayText());
+                optionType.setId(option.getId());
+                optionType.setOptionId(option.getOptionId());
+                optionType.setPrice(option.getPrice());
+                optionType.setOptionType(option.getOptionType());
+                optionType.setQuantity(option.getQuantity());
+                soapItem.getOptions().add(optionType);
+            }
+            soapType.getOrderItems().add(soapItem);
+        }
+        return soapType;
+    }
+    
     @Override
     public FetchOrderResponseType fetchOrder(
             @WebParam(partName = "parameters", name = "FetchOrderType", targetNamespace = NS) FetchOrderType parameters) {
@@ -902,41 +941,7 @@ public class KPosPortImpl implements KPosPortType {
             ResultType result = new ResultType();
             Order order = orderDao.findById(parameters.getOrderId());
             if(order != null) {
-                OrderType soapType = new OrderType();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:MM:ss yyyy-mm-dd");
-                soapType.setCreateTime(dateFormat.format(order.getCreatedOn()));
-                soapType.setId(order.getId());
-                soapType.setNotes(order.getNotes());
-                soapType.setNumOfGuests(order.getNumOfGuests());
-                soapType.setStatus(order.getStatus().toString());
-                if(order.getTable() != null) {
-                    soapType.setTableId(order.getTable().getId());
-                    soapType.setTableName(order.getTable().getName());
-                }
-                soapType.setTotalPrice(order.getTotalPrice());
-                soapType.setTotalTax(order.getTax());
-                soapType.setTotalTips(order.getGratuity());
-                soapType.setType(order.getOrderType());
-                soapType.setUserId(order.getCreatedBy().getId());
-                for(com.kpos.domain.OrderItem item : order.getOrderItems()) {
-                    OrderItemType soapItem = new OrderItemType();
-                    soapItem.setId(item.getId());
-                    soapItem.setSaleItemId(item.getSaleItem().getId());
-                    soapItem.setOrderId(order.getId());
-                    soapItem.setPrice(item.getSalePrice());
-                    soapItem.setQuantity(item.getQuantity());
-                    for(OrderItemOption option : item.getOptions()) {
-                        OrderItemOptionType optionType = new OrderItemOptionType();
-                        optionType.setDisplayText(option.getDisplayText());
-                        optionType.setId(option.getId());
-                        optionType.setOptionId(option.getOptionId());
-                        optionType.setPrice(option.getPrice());
-                        optionType.setOptionType(option.getOptionType());
-                        optionType.setQuantity(option.getQuantity());
-                        soapItem.getOptions().add(optionType);
-                    }
-                    soapType.getOrderItems().add(soapItem);
-                }
+                OrderType soapType = convertToOrderType(order);
                 responseType.setOrder(soapType);
                 result.setSuccessful(true);
             } else {
@@ -1339,6 +1344,30 @@ public class KPosPortImpl implements KPosPortType {
             @WebParam(partName = "parameters", name = "CalculateStaffPayType", targetNamespace = NS) CalculateStaffPayType parameters) {
         CalculateStaffPayResponseType responseType = new CalculateStaffPayResponseType();
 
+        return responseType;
+    }
+
+    @Override
+    public FetchUnservedOrdersResponseType fetchUnservedOrders(
+            @WebParam(partName = "parameters", name = "FetchUnservedOrdersType", targetNamespace = NS) FetchUnservedOrdersType parameters) {
+        FetchUnservedOrdersResponseType responseType = new FetchUnservedOrdersResponseType();
+        try {
+            FetchResult<List<Order>> fetchResult = contentManagementService.fetchUnservedOrders(parameters.isIsAsc());
+            if(fetchResult.isSuccessful()) {
+                for(Order order : fetchResult.getTarget()) {
+                    OrderType soapType = convertToOrderType(order);
+                    responseType.getOrders().add(soapType);
+                }
+                responseType.setCount(fetchResult.getTarget().size());
+            } else {
+                responseType.setCount(0);
+            }
+            responseType.setResult(getSoapResult(fetchResult));
+        } catch(Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in fetchUnservedOrders", e);
+        }
         return responseType;
     }
 }
