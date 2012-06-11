@@ -11,9 +11,9 @@ public enum OrderStatusEnum implements IIntegerMappedEnum {
     INITIAL(0),
     SUBMITTED(1),
     PRINTED(2),
-    SERVED(3),
-    PAID(4),
-    CANCELED(-2);
+    PAID(3),
+    SERVED(4),
+    CANCELED(-1);
 
     private int statusCode;
 

@@ -62,4 +62,14 @@ public class OrderDao extends AbstractJpaDao<Order> implements IOrderDao {
         namedQuery.setParameter("aStatus", aStatus);
         return (List<Order>)namedQuery.getResultList();
     }
+    
+    public List<Order> fetchUnservedOrders(boolean isAsc) {
+        Query namedQuery;
+        if(isAsc) {
+            namedQuery = entityManager.createNamedQuery("listUnservedOrdersByTimeASC");
+        } else {
+            namedQuery = entityManager.createNamedQuery("listUnservedOrdersByTimeDESC");
+        }
+        return (List<Order>)namedQuery.getResultList();
+    }
 }

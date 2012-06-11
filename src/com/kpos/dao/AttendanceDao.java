@@ -1,6 +1,7 @@
 package com.kpos.dao;
 
 import com.kpos.domain.StaffAttendance;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -11,6 +12,7 @@ import java.util.Date;
  * Author: kkwang
  * Date: 6/3/12 12:14 AM
  */
+@Repository
 public class AttendanceDao extends AbstractJpaDao<StaffAttendance> implements IAttendanceDao {
     @Override
     protected Class getEntityClass() {

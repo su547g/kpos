@@ -1194,4 +1194,12 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         }
         return result;
     }
+    
+    public FetchResult<List<Order>> fetchUnservedOrders(boolean isAsc) {
+        FetchResult<List<Order>> result = new FetchResult<List<Order>>();
+        List<Order> orders = orderDao.fetchUnservedOrders(isAsc);
+        result.setTarget(orders);
+        result.setSuccessful(true);
+        return result;
+    }
 }
