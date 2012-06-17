@@ -103,4 +103,9 @@ public interface IContentManagementService {
     CreateResult<StaffAttendance> addAttendance(long userId, long staffId, Date date, Date startTime, Date endTime);
 
     FetchResult<List<Order>> fetchUnservedOrders(boolean isAsc);
+
+    CreateResult<Roles> createNewRole(RoleType soapType);
+    UpdateResult<Roles> updateRole(RoleType soapType);
+    DeleteResult deleteRole(long roleId);
+    FetchResult<List<Roles>> fetchAllRoles();
 }
