@@ -82,6 +82,9 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     @Autowired
     private IAttendanceDao staffAttendanceDao;
 
+    @Autowired
+    private IRoleDao roleDao;
+
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public CreateResult<MenuCategory> createMenuCategory(MenuCategory aCategory, List<Long> printerIds) {
         try {
@@ -1200,6 +1203,61 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         List<Order> orders = orderDao.fetchUnservedOrders(isAsc);
         result.setTarget(orders);
         result.setSuccessful(true);
+        return result;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public CreateResult<Roles> createNewRole(RoleType soapType) {
+        CreateResult<Roles> result = new CreateResult<Roles>();
+        Roles roles = new Roles();
+        roles.setName(soapType.getName());
+        for(FunctionModuleType functionModuleType : soapType.getFunction()) {
+            long functionId = functionModuleType.getId();
+            FunctionModule function = functionModuleDao.findById(functionId);
+            if(function != null) {
+                roles.getFunctions().add(function);
+            }
+        }
+        roleDao.insert(roles);
+        result.setSuccessful(true);
+        result.setCreated(roles);
+        return result;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public UpdateResult<Roles> updateRole(RoleType soapType) {
+        UpdateResult<Roles> result = new UpdateResult<Roles>();
+        Roles roles = roleDao.findById(soapType.getId());
+        if(roles != null) {
+            roles.setName(soapType.getName());
+            roles.getFunctions().clear();
+            for(FunctionModuleType functionModuleType : soapType.getFunction()) {
+                long functionId = functionModuleType.getId();
+                FunctionModule function = functionModuleDao.findById(functionId);
+                if(function != null) {
+                    roles.getFunctions().add(function);
+                }
+            }
+            result.setManagedObject(roles);
+            result.setSuccessful(true);
+        } else {
+            result.setSuccessful(false);
+        }
+        return result;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public DeleteResult deleteRole(long roleId) {
+        DeleteResult result = new DeleteResult();
+        boolean isSuccessful = roleDao.delete(roleId);
+        result.setSuccessful(isSuccessful);
+        return result;
+    }
+    
+    public FetchResult<List<Roles>> fetchAllRoles() {
+        FetchResult<List<Roles>> result = new FetchResult<List<Roles>>();
+        List<Roles> rolesList = roleDao.findAll();
+        result.setTarget(rolesList);
         return result;
     }
 }

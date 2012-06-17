@@ -858,6 +858,17 @@ function DeleteOrderType(aId, aUserId) {
         return xml;
     }
 }
+function FetchOrderType(aId) {
+    this.id = aId;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:FetchOrderType>"
+        xml += "<app:orderId>" + this.id + "</app:orderId>"
+        xml += "</app:FetchOrderType>"
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
 function Table(aId, aName, aX, aY, aAreaId) {
     this.id = aId;
     this.name = aName;
@@ -1045,6 +1056,18 @@ function CheckPrivilegeType(aPasscode, aFunctionId) {
         var xml = soapXMLBegin;
         xml += "<app:CheckPrivilegeType><app:passcode>" + this.passcode + "</app:passcode>";
         xml += "<app:functionId>" + this.functionId + "</app:functionId></app:CheckPrivilegeType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function ListAllUnservedOrdersType(isAsc) {
+    this.asc = isAsc;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:FetchUnservedOrdersType><app:isAsc>";
+        xml += this.asc?"true":"false";
+        xml += "</app:isAsc>";
+        xml += "</app:FetchUnservedOrdersType>";
         xml += soapXMLEnd;
         return xml;
     }

@@ -121,9 +121,64 @@
 		var OUT = "OUT", DINE_IN = "DINE_IN", DELIVERY = "DELIVERY";
 		var UserId = localStorage.getItem('userId');
 		var OrderType = localStorage.getItem('orderType');
+		var OrderId = localStorage.getItem('orderId');
 		var TableId = localStorage.getItem('tableId');
 		var TableName = localStorage.getItem('tableName');
 		
+		function addItemOptions(soapItem, jsItem) {
+			if(soapItem.options) {
+    			var options = soapItem.options;
+    			if(options.length != undefined && options.length) {
+    				for(var k = 0; k < options.length; k++) {
+    					var itemOption = new OrderOption(options[k].displaytext, options[k].price, options[k].quantity, options[k].id, options[k].optiontype);
+    					itemOption.id = options[k].id;
+    					itemOption.optionId = options[k].optionid;
+        				jsItem.childItems.push(itemOption);
+    				}
+    			} else {
+    				var itemOption = new OrderOption(options.displaytext, options.price, options.quantity, options.id, options.optiontype);
+    				itemOption.id = options.id;
+    				itemOption.optionId = options.optionid;
+        			jsItem.childItems.push(itemOption);
+    			}
+    		}
+		}
+		function fetchOrder(orderId) {
+			var soapType = new FetchOrderType(orderId);
+			call_web_service(soapType, fetchOrderHandler);
+		}
+		function fetchOrderHandler(response) {
+			if(response != undefined && response != null &&
+				response.fetchorderresponsetype != undefined && response.fetchorderresponsetype != null &&
+				response.fetchorderresponsetype.result.successful == 'true') {
+                var order = response.fetchorderresponsetype.order;
+                document.orderForm.orderId.value = order.id;
+                document.getElementById("orderHeader").innerText = "Order " + order.id;
+                document.orderForm.orderType = order.type;
+                var items = order.orderitems;
+                if(items.length != undefined && items.length != null) {
+                	for(var i = 0; i < items.length; i++) {
+                		var item = new OrderItem(items[i].displaytext, items[i].price, items[i].quantity, items[i].saleitemid);
+                		item.id = items[i].id;
+                		item.orderId = items[i].orderid;
+                		addItemOptions(items[i], item);
+                		orderItems.push(item);
+                	}
+                } else {
+                	var item = new OrderItem(items.displaytext, items.price, items.quantity, items.id);
+                	item.id = items.id;
+                	item.orderId = items.orderid;
+                	addItemOptions(items, item);
+                	orderItems.push(item);
+                }
+                refreshOrderTable();
+			}
+		}
+		function initializeOrder() {
+			if(OrderId != null && OrderId > 0 && (OrderType == OUT || OrderType == DINE_IN || OrderType == DELIVERY)) {
+				fetchOrder(OrderId);
+			}
+		}
 		function initializeCategories(){
 			ws_list_categories(listAllCategoriesHandler);
 			listGlobalOptions();
@@ -527,9 +582,9 @@
 					html += "<tr id='"+i+"-"+k+"'><td valign='top' align='left' onclick='clickOptionItem("+i+","+k+")'>&nbsp;&nbsp;&nbsp;-&nbsp;"+optionItem.displayText+"</td>";
 	            	html += "<td valign='top' align='right''>"+optionItem.quantity+"</td>";
 					html += "<td valign='top' align='right'><strong>"+(optionPrice==0?"":optionPrice.toFixed(2))+"</strong></td></tr>";
-					total += itemPrice;
+					total += optionPrice;
 				}
-                total += price * quantity;
+                total += itemPrice;
 	        }
 	        tax = total * taxRate;
 	        document.orderForm.totalTax.value = tax;
@@ -587,8 +642,8 @@
 				jsonObj.saveorderresponsetype != undefined && jsonObj.saveorderresponsetype != null && 
 				jsonObj.saveorderresponsetype.result.successful == "true") {
 				alert("Order saved!");
-				document.orderForm.orderId.value = jsonObj.saveorderresponsetype.id;
-				document.getElementById("orderHeader").innerText = "Order " + jsonObj.saveorderresponsetype.result.id
+				document.orderForm.orderId.value = jsonObj.saveorderresponsetype.result.id;
+				document.getElementById("orderHeader").innerText = "Order " + jsonObj.saveorderresponsetype.result.id;
 				if(TableName!=null && TableName!="") {
 					document.getElementById("orderHeader").innerText += " for Table "+TableName;
 				}
@@ -599,7 +654,7 @@
 	   	function deleteOrder() {
 	   		var orderId = document.orderForm.orderId.value;
 	   		if(orderId != null && parseInt(orderId) > 0) {
-	   			var soapType = new DeleteOrderType(orderId);
+	   			var soapType = new DeleteOrderType(orderId, UserId);
 	   			call_web_service(soapType, deleteOrderHandler);
 	   		} else {
 	   			window.location.href = "home.html";
@@ -707,7 +762,7 @@
 	</script>
 </head>
 
-<body onload="javascript:initializeCategories();">
+<body onload="initializeCategories();initializeOrder();">
    <div style="position:absolute; left:10px; top:10px; width:95%">
    	<table>
 		<tr><td><input type="button" class="navibutton" onclick="window.location.href='home.html';" value="<< Back"></td>

@@ -140,6 +140,13 @@
             <xs:element name="CalculateStaffPayType" type="tns:CalculateStaffPayType"/>
             <xs:element name="CalculateStaffPayResponseType" type="tns:CalculateStaffPayResponseType"/>
 
+            <xs:element name="SaveRoleType" type="tns:SaveRoleType"/>
+            <xs:element name="SaveRoleResponseType" type="tns:SaveRoleResponseType"/>
+            <xs:element name="DeleteRoleType" type="tns:DeleteRoleType"/>
+            <xs:element name="DeleteRoleResponseType" type="tns:DeleteRoleResponseType"/>
+            <xs:element name="ListRolesType" type="tns:ListRolesType"/>
+            <xs:element name="ListRolesResponseType" type="tns:ListRolesResponseType"/>
+
             <!--Result object-->
             <xs:complexType name="ResultType">
                 <xs:sequence>
@@ -365,6 +372,13 @@
                     <xs:element name="id" type="xsd:long" minOccurs="0"/>
                     <xs:element name="rate" type="xsd:double" minOccurs="0"/>
                     <xs:element name="amount" type="xsd:double" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="RoleType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="0"/>
+                    <xs:element name="name" type="xsd:string" minOccurs="1"/>
+                    <xs:element name="function" type="tns:FunctionModuleType" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:complexType>
             <!--End of data structures-->
@@ -1015,7 +1029,36 @@
                     <xs:element name="payAmount" type="xsd:double"/>
                 </xs:sequence>
             </xs:complexType>
-
+            <xs:complexType name="SaveRoleType">
+                <xs:sequence>
+                    <xs:element name="role" type="tns:RoleType" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="SaveRoleResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeleteRoleType">
+                <xs:sequence>
+                    <xs:element name="roleId" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeleteRoleResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListRolesType">
+                <xs:sequence></xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListRolesResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="roles" type="tns:RoleType" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:complexType>
             <!--End of operations-->
         </xs:schema>
     </wsdl:types>
@@ -1359,6 +1402,24 @@
     <wsdl:message name="CalculateStaffPayResponseMessage">
         <wsdl:part name="parameters" element="tns:CalculateStaffPayResponseType"/>
     </wsdl:message>
+    <wsdl:message name="SaveRoleMessage">
+        <wsdl:part name="parameters" element="tns:SaveRoleType"/>
+    </wsdl:message>
+    <wsdl:message name="SaveRoleResponseMessage">
+        <wsdl:part name="parameters" element="tns:SaveRoleResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="DeleteRoleMessage">
+        <wsdl:part name="parameters" element="tns:DeleteRoleType"/>
+    </wsdl:message>
+    <wsdl:message name="DeleteRoleResponseMessage">
+        <wsdl:part name="parameters" element="tns:DeleteRoleResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="ListRolesMessage">
+        <wsdl:part name="parameters" element="tns:ListRolesType"/>
+    </wsdl:message>
+    <wsdl:message name="ListRolesResponseMessage">
+        <wsdl:part name="parameters" element="tns:ListRolesResponseType"/>
+    </wsdl:message>
     <!--End of messages-->
 
     <wsdl:portType name="KPosPortType">
@@ -1598,6 +1659,18 @@
         <wsdl:operation name="CalculateStaffPay">
             <wsdl:input message="tns:CalculateStaffPayMessage" name="CalculateStaffPay"/>
             <wsdl:output message="tns:CalculateStaffPayResponseMessage" name="CalculateStaffPayResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="SaveRole">
+            <wsdl:input message="tns:SaveRoleMessage" name="SaveRole"/>
+            <wsdl:output message="tns:SaveRoleResponseMessage" name="SaveRoleResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="DeleteRole">
+            <wsdl:input message="tns:DeleteRoleMessage" name="DeleteRole"/>
+            <wsdl:output message="tns:DeleteRoleResponseMessage" name="DeleteRoleResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="ListRoles">
+            <wsdl:input message="tns:ListRolesMessage" name="ListRoles"/>
+            <wsdl:output message="tns:ListRolesResponseMessage" name="ListRolesResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -2117,6 +2190,33 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="CalculateStaffPayResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="SaveRole">
+            <soap:operation soapAction="http://ws.kpos.com/SaveRole" style="document"/>
+            <wsdl:input name="SaveRole">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="SaveRoleResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="DeleteRole">
+            <soap:operation soapAction="http://ws.kpos.com/DeleteRole" style="document"/>
+            <wsdl:input name="DeleteRole">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DeleteRoleResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="ListRoles">
+            <soap:operation soapAction="http://ws.kpos.com/ListRoles" style="document"/>
+            <wsdl:input name="ListRoles">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="ListRolesResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>

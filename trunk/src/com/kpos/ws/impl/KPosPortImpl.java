@@ -896,7 +896,7 @@ public class KPosPortImpl implements KPosPortType {
 
     private OrderType convertToOrderType(Order order) {
         OrderType soapType = new OrderType();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:MM:ss yyyy-mm-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss yyyy-MM-dd");
         soapType.setCreateTime(dateFormat.format(order.getCreatedOn()));
         soapType.setId(order.getId());
         soapType.setNotes(order.getNotes());
@@ -918,12 +918,14 @@ public class KPosPortImpl implements KPosPortType {
             soapItem.setOrderId(order.getId());
             soapItem.setPrice(item.getSalePrice());
             soapItem.setQuantity(item.getQuantity());
+            soapItem.setDisplayText(item.getDisplayText());
             for(OrderItemOption option : item.getOptions()) {
                 OrderItemOptionType optionType = new OrderItemOptionType();
                 optionType.setDisplayText(option.getDisplayText());
                 optionType.setId(option.getId());
                 optionType.setOptionId(option.getOptionId());
                 optionType.setPrice(option.getPrice());
+                optionType.setDisplayText(option.getDisplayText());
                 optionType.setOptionType(option.getOptionType());
                 optionType.setQuantity(option.getQuantity());
                 soapItem.getOptions().add(optionType);
@@ -1367,6 +1369,72 @@ public class KPosPortImpl implements KPosPortType {
             responseType.setResult(getSoapFaultResult(e));
             e.printStackTrace();
             log.error("Error in fetchUnservedOrders", e);
+        }
+        return responseType;
+    }
+
+    @Override
+    public DeleteRoleResponseType deleteRole(
+            @WebParam(partName = "parameters", name = "DeleteRoleType", targetNamespace = NS) DeleteRoleType parameters) {
+        DeleteRoleResponseType responseType = new DeleteRoleResponseType();
+        try {
+            DeleteResult result = contentManagementService.deleteRole(parameters.getRoleId());
+            responseType.setResult(getSoapResult(result));
+        } catch(Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in deleteRole", e);
+        }
+        return responseType;
+    }
+
+    @Override
+    public SaveRoleResponseType saveRole(
+            @WebParam(partName = "parameters", name = "SaveRoleType", targetNamespace = NS) SaveRoleType parameters) {
+        SaveRoleResponseType responseType = new SaveRoleResponseType();
+        try {
+            if(parameters.getRole().getId() == null || parameters.getRole().getId()==0) {
+                CreateResult<Roles> result = contentManagementService.createNewRole(parameters.getRole());
+                responseType.setId(result.getCreated().getId());
+                responseType.setResult(getSoapResult(result));
+            } else {
+                UpdateResult<Roles> result = contentManagementService.updateRole(parameters.getRole());
+                responseType.setId(result.getManagedObject().getId());
+                responseType.setResult(getSoapResult(result));
+            }
+        } catch(Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in saveRole", e);
+        }
+        return responseType;
+    }
+
+    @Override
+    public ListRolesResponseType listRoles(
+            @WebParam(partName = "parameters", name = "ListRolesType", targetNamespace = NS) ListRolesType parameters) {
+        ListRolesResponseType responseType = new ListRolesResponseType();
+        try {
+            FetchResult<List<Roles>> result = contentManagementService.fetchAllRoles();
+            List<Roles> rolesList = result.getTarget();
+            for(Roles role : rolesList) {
+                RoleType soapType = new RoleType();
+                soapType.setName(role.getName());
+                soapType.setId(role.getId());
+                Set<FunctionModule> functions = role.getFunctions();
+                for(FunctionModule functionModule : functions) {
+                    FunctionModuleType functionType = new FunctionModuleType();
+                    functionType.setId(functionModule.getId());
+                    functionType.setName(functionModule.getName());
+                    soapType.getFunction().add(functionType);
+                }
+                responseType.getRoles().add(soapType);
+            }
+            responseType.setResult(getSoapResult(result));
+        } catch(Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in listRoles", e);
         }
         return responseType;
     }
