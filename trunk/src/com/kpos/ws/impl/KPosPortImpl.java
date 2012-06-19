@@ -1,9 +1,6 @@
 package com.kpos.ws.impl;
 
-import com.kpos.dao.IFunctionModuleDao;
-import com.kpos.dao.IOrderDao;
-import com.kpos.dao.IStaffMemberDao;
-import com.kpos.dao.IUserDao;
+import com.kpos.dao.*;
 import com.kpos.domain.*;
 import com.kpos.domain.Order;
 import com.kpos.domain.OrderItemOption;
@@ -45,6 +42,9 @@ public class KPosPortImpl implements KPosPortType {
     
     @Autowired
     private IOrderDao orderDao;
+    
+    @Autowired
+    private IRoleDao roleDao;
     
     /**
      * returns the soap ResultType for a BaseResult
@@ -1281,16 +1281,7 @@ public class KPosPortImpl implements KPosPortType {
             if(user != null) {
                 functionSet = user.getFunctions();
             }
-            StringBuilder html = new StringBuilder("");
-            for(int i = 0; i < functionModules.size(); i++) {
-                FunctionModule function = functionModules.get(i);
-                if(i % 4 == 0) html.append("<tr>");
-                html.append("<td><input type='checkbox' name='privileges' id='privileges' value=").append(function.getId());
-                if(functionSet.contains(function)) html.append(" checked");
-                html.append(">").append(function.getName());
-                html.append("</td>");
-                if(i % 4 == 3) html.append("</tr>");
-            }
+            StringBuilder html = genereatePrivilegeHTML(functionModules, functionSet);
             responseType.setHtml(html.toString());
 
             result.setSuccessful(true);
@@ -1304,6 +1295,20 @@ public class KPosPortImpl implements KPosPortType {
         return responseType;
     }
 
+    private StringBuilder genereatePrivilegeHTML(List<FunctionModule> functionModules, Set<FunctionModule> functionSet) {
+        StringBuilder html = new StringBuilder("");
+        for(int i = 0; i < functionModules.size(); i++) {
+            FunctionModule function = functionModules.get(i);
+            if(i % 4 == 0) html.append("<tr>");
+            html.append("<td><input type='checkbox' name='privileges' id='privileges' value=").append(function.getId());
+            if(functionSet.contains(function)) html.append(" checked");
+            html.append(">").append(function.getName());
+            html.append("</td>");
+            if(i % 4 == 3) html.append("</tr>");
+        }
+        return html;
+    }
+    
     @Override
     public AddAttendanceResponseType addAttendance(
             @WebParam(partName = "parameters", name = "AddAttendanceType", targetNamespace = NS) AddAttendanceType parameters) {
@@ -1430,11 +1435,37 @@ public class KPosPortImpl implements KPosPortType {
                 }
                 responseType.getRoles().add(soapType);
             }
+            responseType.setCount(rolesList.size());
             responseType.setResult(getSoapResult(result));
         } catch(Exception e) {
             responseType.setResult(getSoapFaultResult(e));
             e.printStackTrace();
             log.error("Error in listRoles", e);
+        }
+        return responseType;
+    }
+
+    @Override
+    public GetRoleFunctionsHTMLResponseType getRoleFunctionsHTML(
+            @WebParam(partName = "parameters", name = "GetRoleFunctionsHTMLType", targetNamespace = NS) GetRoleFunctionsHTMLType parameters) {
+        GetRoleFunctionsHTMLResponseType responseType = new GetRoleFunctionsHTMLResponseType();
+        ResultType result = new ResultType();
+        try {
+            List<FunctionModule> functionModules = functionModuleDao.findAll();
+            Roles role = roleDao.findById(parameters.getRoleId());
+            Set<FunctionModule> functionSet = new HashSet<FunctionModule>();
+            if(role != null) {
+                functionSet = role.getFunctions();
+            }
+            StringBuilder html = genereatePrivilegeHTML(functionModules, functionSet);
+            responseType.setHtml(html.toString());
+
+            result.setSuccessful(true);
+            responseType.setResult(result);
+        } catch(Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in getRoleFunctionsHTML", e);
         }
         return responseType;
     }

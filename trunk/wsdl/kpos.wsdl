@@ -146,6 +146,8 @@
             <xs:element name="DeleteRoleResponseType" type="tns:DeleteRoleResponseType"/>
             <xs:element name="ListRolesType" type="tns:ListRolesType"/>
             <xs:element name="ListRolesResponseType" type="tns:ListRolesResponseType"/>
+            <xs:element name="GetRoleFunctionsHTMLType" type="tns:GetRoleFunctionsHTMLType"/>
+            <xs:element name="GetRoleFunctionsHTMLResponseType" type="tns:GetRoleFunctionsHTMLResponseType"/>
 
             <!--Result object-->
             <xs:complexType name="ResultType">
@@ -1057,6 +1059,18 @@
                 <xs:sequence>
                     <xs:element name="Result" type="tns:ResultType"/>
                     <xs:element name="roles" type="tns:RoleType" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="count" type="xsd:int" default="0"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="GetRoleFunctionsHTMLType">
+                <xs:sequence>
+                    <xs:element name="roleId" type="xsd:long" minOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="GetRoleFunctionsHTMLResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="html" type="xsd:string"/>
                 </xs:sequence>
             </xs:complexType>
             <!--End of operations-->
@@ -1420,6 +1434,12 @@
     <wsdl:message name="ListRolesResponseMessage">
         <wsdl:part name="parameters" element="tns:ListRolesResponseType"/>
     </wsdl:message>
+    <wsdl:message name="GetRoleFunctionsHTMLMessage">
+        <wsdl:part name="parameters" element="tns:GetRoleFunctionsHTMLType"/>
+    </wsdl:message>
+    <wsdl:message name="GetRoleFunctionsHTMLResponseMessage">
+        <wsdl:part name="parameters" element="tns:GetRoleFunctionsHTMLResponseType"/>
+    </wsdl:message>
     <!--End of messages-->
 
     <wsdl:portType name="KPosPortType">
@@ -1671,6 +1691,10 @@
         <wsdl:operation name="ListRoles">
             <wsdl:input message="tns:ListRolesMessage" name="ListRoles"/>
             <wsdl:output message="tns:ListRolesResponseMessage" name="ListRolesResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetRoleFunctionsHTML">
+            <wsdl:input message="tns:GetRoleFunctionsHTMLMessage" name="GetRoleFunctionsHTML"/>
+            <wsdl:output message="tns:GetRoleFunctionsHTMLResponseMessage" name="GetRoleFunctionsHTMLResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -2217,6 +2241,15 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="ListRolesResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetRoleFunctionsHTML">
+            <soap:operation soapAction="http://ws.kpos.com/GetRoleFunctionsHTML" style="document"/>
+            <wsdl:input name="GetRoleFunctionsHTML">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="GetRoleFunctionsHTMLResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>

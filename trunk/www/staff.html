@@ -162,6 +162,7 @@
 	<script type="text/javascript" src="tabber.js"></script>
 	<script language="javascript">
 		var staffMembers = new Array();
+		var roles = new Array();
 		
 		var ADD = "ADD";
 		var UPDATE = "UPDATE";
@@ -306,9 +307,11 @@
 	        operation = ADD;
 	    }
 	    function uncheckPrivileges() {
-	    	for(var i = 0; i < document.staffForm.privileges.length; i++) {
-	    		document.staffForm.privileges[i].checked = false;
-	    	}
+	    	if(document.staffForm.privileges != null) {
+		    	for(var i = 0; i < document.staffForm.privileges.length; i++) {
+		    		document.staffForm.privileges[i].checked = false;
+		    	}
+		    }
 	    }
 	    function convertStaff() {
 	    	var name = document.staffForm.staffName.value;
@@ -384,10 +387,70 @@
 	            }
 			}
 		}
+		function listAllRoles(){
+			var soapType = new ListRolesType();
+			call_web_service(soapType, listAllRolesHandler);
+		}
+		function listAllRolesHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.listrolesresponsetype != undefined && jsonObj.listrolesresponsetype != null &&
+				jsonObj.listrolesresponsetype.result.successful == 'true') {
+				var rolesList = jsonObj.listrolesresponsetype.roles;
+				var count = jsonObj.listrolesresponsetype.count;
+				var rolesElement = document.getElementById("roles");
+                if(rolesList != undefined && rolesList != null) {
+	                if(count > 1) {
+	                	var s;
+	                	for(var i = 0; i < rolesList.length; i++) {
+	                		s = rolesList[i];
+	                		rolesElement.add(new Option(s.name, s.id));
+	                		var roleType = new RoleType(s.id, s.name);
+	                		if(s.function.length != null && s.function.length != undefined) {
+	                			for(var k = 0; k < s.function.length; k++) {
+	                				roleType.functionIds.push(s.function[k].id);
+	                			}
+	                		} else {
+	                			roleType.functionIds.push(s.function.id);
+	                		}
+	                		roles.push(roleType);
+	                	}
+	                } else if(count == 1){
+                		rolesElement.add(new Option(rolesList.name, rolesList.id));
+                		var roleType = new RoleType(rolesList.id, rolesList.name);
+                		if(rolesList.function.length != null && rolesList.function.length != undefined) {
+                			for(var k = 0; k < rolesList.function.length; k++) {
+                				roleType.functionIds.push(rolesList.function[k].id);
+                			}
+                		} else {
+                			roleType.functionIds.push(rolesList.function.id);
+                		}
+                		roles.push(roleType);
+	                }
+	            }
+			}
+		}
+		function applyRole(roleList) {
+			var chosenoption = roleList.options[roleList.selectedIndex];
+ 			if (chosenoption.value != "" && chosenoption.value != null){
+ 				uncheckPrivileges();
+ 				if(roleList.selectedIndex > 0) {
+ 					var roleType = roles[roleList.selectedIndex-1];
+ 					var functionIds = roleType.functionIds;
+ 					for(var k = 0; k < document.staffForm.privileges.length; k++) {
+ 						for(var i = 0; i < functionIds.length; i++) {
+				    		if(document.staffForm.privileges[k].value == functionIds[i]) {
+				    			document.staffForm.privileges[k].checked = true;
+				    			break;
+				    		}
+				    	}
+ 					}
+ 				}
+ 			}
+		}
 	</script>
 </head>
 
-<body onload="javascript:listAllStaff();">
+<body onload="javascript:listAllStaff();listAllRoles();">
 <table>
 	<tr><td><input type="button" class="navibutton" onclick="window.location.href='home.html';" value="<< Back"></td>
 </table>
@@ -467,6 +530,10 @@
 							<div id="mainTab" class="tabbertab">
 							    <h2 style="font-size: 20px"><a name="tab1">Privileges</a></h2>
 							    Passcode: <input type="text" name="passcode" readonly="true"/>
+							    <br>
+							    Apply Role: <select id="roles" onchange="applyRole(this)">
+							    	<option value=0>No Role</option>
+							    </select>
 							    <table width="100%" id="privilegesTable">
 							    </table>
 							</div>
