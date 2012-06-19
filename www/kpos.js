@@ -1072,3 +1072,57 @@ function ListAllUnservedOrdersType(isAsc) {
         return xml;
     }
 }
+function RoleType(aId, aName) {
+    this.id = aId;
+    this.name = aName;
+    this.functionIds = new Array();
+    this.getXML = function() {
+        var xml = "<app:name>" + this.name + "</app:name>";
+        if(this.id != null && this.id != "") {
+            xml += "<app:id>" + this.id + "</app:id>";
+        }
+        for(var i = 0; i < this.functionIds.length; i++) {
+            xml += "<app:function><app:id>" + this.functionIds[i] + "</app:id>";
+            xml += "<app:name></app:name></app:function>";
+        }
+        return xml;
+    }
+}
+function ListRolesType() {
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:ListRolesType/>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function SaveRoleType(aRoleType) {
+    this.roleType = aRoleType;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:SaveRoleType><app:role>";
+        xml += this.roleType.getXML();
+        xml += "</app:role></app:SaveRoleType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function DeleteRoleType(aId) {
+    this.id = aId;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:DeleteRoleType>"
+        xml += "<app:roleId>" + this.id + "</app:roleId>";
+        xml += "</app:DeleteRoleType>";
+        return xml;
+    }
+}
+function GetRoleFunctionsHTMLType(aId) {
+    this.id = aId;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:GetRoleFunctionsHTMLType><app:roleId>" + this.id + "</app:roleId></app:GetRoleFunctionsHTMLType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
