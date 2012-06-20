@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE JposEntries PUBLIC "-//JavaPOS//DTD//EN"
+                             "jpos/res/jcl.dtd">
+<JposEntries>
+<!--Saved by JavaPOS jpos.config/loader (JCL) version 2.2.0 on 07-1-27 上午9:32-->
+    
+    <JposEntry logicalName="POSPrinter">
+        <creation factoryClass="jp.co.epson.uposcommon.util.EpsonJposServiceInstanceFactory" serviceClass="jp.co.epson.upos.pntr.T88IIService"/>
+        <vendor name="SEIKO EPSON" url="http://www.epson.co.jp"/>
+        <jpos category="POSPrinter" version="1.9.2"/>
+        <product description="EPSON TM-T88II Printer Device Service" name="EPSON Services for JavaPOS(TM) Standard" url="http://www.epson.co.jp"/>
+
+        <!--Other non JavaPOS required property (mostly vendor properties and bus specific properties i.e. RS232 )-->
+        <prop name="Halftone" type="String" value="0"/>
+        <prop name="FlowType" type="String" value="1"/>
+        <prop name="PhysicalPrinterName" type="String" value="TM-T88II"/>
+        <prop name="NVRAMControlLevel" type="String" value="1"/>
+        <prop name="Stamp" type="String" value="0"/>
+        <prop name="OutputCompleteType" type="String" value="2"/>
+        <prop name="StatusThreadInterval" type="String" value="100"/>
+        <prop name="OutputTimeout" type="String" value="500"/>
+        <prop name="PortType" type="String" value="0"/>
+        <prop name="OutputBufferSize" type="String" value="10"/>
+        <prop name="FirmRecordLog" type="String" value="1"/>
+        <prop name="UsedNVRAM" type="String" value="0"/>
+        <prop name="ReceiveTimeout" type="String" value="1000"/>
+        <prop name="SlpReverseEject" type="String" value="0"/>
+        <prop name="PortName" type="String" value="/dev/ttyS0"/>
+        <prop name="OfflineRetryIntervalTime" type="String" value="25"/>
+        <prop name="DefaultSlpClampTime" type="String" value="0"/>
+        <prop name="epson.trace.file" type="String" value="trace.log"/>
+        <prop name="StopBits" type="String" value="0"/>
+        <prop name="AsyncProcessingSize" type="String" value="2"/>
+        <prop name="KanjiTwoWaysPrint" type="String" value="0"/>
+        <prop name="PortInterfaceName" type="String" value="Serial"/>
+        <prop name="U375Compatible" type="String" value="0"/>
+        <prop name="BitLength" type="String" value="8"/>
+        <prop name="Parity" type="String" value="0"/>
+        <prop name="epson.tracing" type="String" value="false"/>
+        <prop name="epson.trace.max.size" type="String" value="1000"/>
+        <prop name="RecPaperSize" type="String" value="80"/>
+        <prop name="DeviceDesc" type="String" value="EPSON TM-T88II POSPrinter"/>
+        <prop name="PageModeExt" type="String" value="0"/>
+        <prop name="SupportStatistics" type="String" value="1"/>
+        <prop name="OutputErrorOption" type="String" value="0"/>
+        <prop name="FirmProgressRange" type="String" value="10"/>
+        <prop name="SupportFirmware" type="String" value="0"/>
+        <prop name="InputTimeout" type="String" value="100"/>
+        <prop name="AutoPowerOff" type="String" value="0"/>
+        <prop name="SlpMoreColumns" type="String" value="0"/>
+        <prop name="RecPaperType" type="String" value="0"/>
+        <prop name="MemorySwitch" type="String" value="0"/>
+        <prop name="ReadThreadInterval" type="String" value="-1"/>
+        <prop name="QueuingOfflineTimeout" type="String" value="1000"/>
+        <prop name="TwoColor" type="String" value="0"/>
+        <prop name="InitializeThreadTime" type="String" value="1000"/>
+        <prop name="BaudRate" type="String" value="19200"/>
+        <prop name="TwoByteCharacter" type="String" value="0"/>
+        <prop name="FirmLogFileSize" type="String" value="1000"/>
+        <prop name="Peeler" type="String" value="0"/>
+        <prop name="ConfigurationFile" type="String" value="epson/xml/Setting/TM-T88IISetting.xml"/>
+        <prop name="Custom1Color" type="String" value="0"/>
+        <prop name="FirmNotifyAllProgressEvents" type="String" value="0"/>
+        <prop name="ReceiveRetryTime" type="String" value="25"/>
+        <prop name="InitializeResponseTimeout" type="String" value="1000"/>
+        <prop name="UsedInterCharacterSet" type="String" value="0"/>
+        <prop name="RecMoreColumns" type="String" value="0"/>
+        <prop name="PrinterTransmitTimeout" type="String" value="30000"/>
+        <prop name="WriteThreadInterval" type="String" value="-1"/>
+        <prop name="RecNearEndSensor" type="String" value="1"/>
+        <prop name="LogObject" type="String" value=""/>
+        <prop name="Cutter" type="String" value="1"/>
+        <prop name="PhysicalDevice" type="String" value="TM-T88II"/>
+        <prop name="FirmLogFileName" type="String" value="Firmware.log"/>
+        <prop name="UsedPeeler" type="String" value="0"/>
+        <prop name="InputBufferSize" type="String" value="84"/>
+        <prop name="TransmitTimeout" type="String" value="5000"/>
+        <prop name="OfflineCount" type="String" value="2"/>
+        <prop name="TransmitRetryTime" type="String" value="100"/>
+        <prop name="DirectIOEventTimeout" type="String" value="5000"/>
+</JposEntry>
+
+      <JposEntry logicalName="ptr1">
+        <creation factoryClass="com.beiyang.jpos192.ByJposServiceInstanceFactory" serviceClass="com.beiyang.jpos192.BasePrinterService"/>
+        <vendor name="SNBC Co., Ltd." url="http://www.newbeiyang.com"/>
+        <jpos category="POSPrinter" version="1.9a"/>
+        <product description="POS Printer " name="By2002cp" url="http://www.newbeiyang.com"/>
+
+        <!--Other non JavaPOS required property (mostly vendor properties and bus specific properties i.e. RS232 )-->
+        <prop name="portName" type="String" value="/dev/ttyS0"/>
+        <prop name="errorResponseTimeout" type="Long" value="5000"/>
+        <prop name="statusTimeout" type="Long" value="500"/>
+        <prop name="timeout" type="Long" value="10000"/>
+        <prop name="deviceClassName" type="String" value="By2002NP"/>
+        <prop name="portSettings" type="String" value="19200,1,0"/>
+        <prop name="statusTimeDelay" type="Long" value="500"/>
+        <prop name="cashDrawer1" type="Boolean" value="false"/>
+        <prop name="drawerClosedOnSignalLow" type="Boolean" value="false"/>
+    </JposEntry>
+
+    <JposEntry logicalName="byprnlpt">
+        <creation factoryClass="com.beiyang.jpos192.ByJposServiceInstanceFactory" serviceClass="com.beiyang.jpos192.BasePrinterService"/>
+        <vendor name="SNBC Co., Ltd." url="http://www.newbeiyang.com"/>
+        <jpos category="POSPrinter" version="1.9a"/>
+        <product description="POS Printer " name="By2002cp" url="http://www.newbeiyang.com"/>
+
+        <!--Other non JavaPOS required property (mostly vendor properties and bus specific properties i.e. RS232 )-->
+        <prop name="portName" type="String" value="/dev/lp0"/>
+        <prop name="errorResponseTimeout" type="Long" value="5000"/>
+        <prop name="statusTimeout" type="Long" value="500"/>
+        <prop name="timeout" type="Long" value="10000"/>
+        <prop name="deviceClassName" type="String" value="By2002NP"/>
+        <prop name="portSettings" type="String" value="888"/>
+        <prop name="statusTimeDelay" type="Long" value="500"/>
+        <prop name="cashDrawer1" type="Boolean" value="false"/>
+        <prop name="drawerClosedOnSignalLow" type="Boolean" value="false"/>
+    </JposEntry>
+    
+       <JposEntry logicalName="byprnusb">
+        <creation factoryClass="com.beiyang.jpos192.ByJposServiceInstanceFactory" serviceClass="com.beiyang.jpos192.BasePrinterService"/>
+        <vendor name="SNBC Co., Ltd." url="http://www.newbeiyang.com"/>
+        <jpos category="POSPrinter" version="1.9a"/>
+        <product description="POS Printer " name="By2002NP" url="http://www.newbeiyang.com"/>
+
+        <!--Other non JavaPOS required property (mostly vendor properties and bus specific properties i.e. RS232 )-->
+        <prop name="portName" type="String" value="USB1"/>
+        <prop name="errorResponseTimeout" type="Long" value="5000"/>
+        <prop name="statusTimeout" type="Long" value="500"/>
+        <prop name="timeout" type="Long" value="10000"/>
+        <prop name="deviceClassName" type="String" value="By2002NP"/>
+        <prop name="portSettings" type="String" value="By2002NP"/>
+        <prop name="statusTimeDelay" type="Long" value="500"/>
+        <prop name="cashDrawer1" type="Boolean" value="false"/>
+        <prop name="drawerClosedOnSignalLow" type="Boolean" value="false"/>
+    </JposEntry>
+</JposEntries>
