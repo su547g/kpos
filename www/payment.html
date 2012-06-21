@@ -1,0 +1,284 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta id="viewport" name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="apple-touch-fullscreen" content="yes" />
+
+    <script type="text/javascript" src="xml2json.js"></script>
+    <script type="text/javascript" src="kpos.js"></script>
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.min.js"></script>
+    
+    <link rel="stylesheet" href="example.css" TYPE="text/css" MEDIA="screen">
+	<style type="text/css">
+        input.paymentbutton {
+		   font-size:14px;
+		   font-weight:bold;
+		   color:#000000;//#FFFF00;
+		   width:80px;
+		   height:40px;
+		   background-color:#FFFF00;
+		   border-width:1px;
+		}
+		input.creditbutton {
+		   font-size:14px;
+		   font-weight:bold;
+		   color:#000000;//#FFFF00;
+		   width:100px;
+		   height:40px;
+		   background-color:#FFFF00;
+		   border-width:1px;
+		}
+		input.numberbutton {
+		   font-size:14px;
+		   font-weight:bold;
+		   color:#FF8000;//#FFFF00;
+		   width:50px;
+		   height:50px;
+		   background-color:gray;
+		   border-width:1px;
+		}
+		input.dollarbutton {
+		   font-size:14px;
+		   font-weight:bold;
+		   color:#74DF00;//#FF8000;//#FFFF00;
+		   width:50px;
+		   height:50px;
+		   background-color:gray;
+		   border-width:1px;
+		}
+		input.tipsbutton {
+		   font-size:14px;
+		   font-weight:bold;
+		   color:#FFFFCC;//#FF8000;//#FFFF00;
+		   width:50px;
+		   height:50px;
+		   background-color:gray;
+		   border-width:1px;
+		}
+		input.clearbutton {
+		   font-size:14px;
+		   font-weight:bold;
+		   color:#FFFF00;
+		   width:100px;
+		   height:50px;
+		   background-color:gray;
+		   border-width:1px;
+		}
+		input.settlebutton {
+		   font-size:14px;
+		   font-weight:bold;
+		   color:#00BFFF; //#8A0808;
+		   width:130px;
+		   height:50px;
+		   background-color:gray;
+		   border-width:1px;
+		}
+    </style>
+    <script>
+    	var selectedField;
+    	function changeBackground(textField) {
+    		resetBackground(document.getElementById('taxAmt'));
+    		resetBackground(document.getElementById('tipsAmt'));
+    		resetBackground(document.getElementById('dueAmt'));
+    		resetBackground(document.getElementById('payAmt'));
+    		resetBackground(document.getElementById('changeAmt'));
+    		resetBackground(document.getElementById('discAmt'));
+    		resetBackground(document.getElementById('discPercent'));
+    		
+    		textField.style.backgroundColor = "#72A4D2";
+    		textField.style.color = "#FFFFFF";
+    		selectedField = textField;
+    	}
+    	function resetBackground(textField) {
+    		textField.style.backgroundColor = "white";
+    		textField.style.color = "black";
+    	}
+    	function addValue(value) {
+    		if(selectedField!=null)	{
+    			selectedField.value = parseInt(selectedField.value) + value;
+    			if(selectedField.id=='discAmt' || selectedField.id=='discPercent') {
+    				calcDiscount(selectedField.id);
+    			}
+    			updateAmt();
+    		}
+    	}
+
+    	function calcDiscount(id) {
+    		var focusField = document.getElementById(id);
+    		if(focusField.value != '' && focusField.value > 0) {
+    			if(id == "discAmt") {
+	    			document.getElementById('discPercent').value='';
+	    		} else {
+	    			document.getElementById('discAmt').value='';
+	    		}
+    		}
+    	}
+    	function updateAmt() {
+    		var saleAmt = parseFloat(document.getElementById('saleAmt').value);
+			var tax = document.getElementById('taxAmt').value==""?0:parseFloat(document.getElementById('taxAmt').value);
+			var tips =  document.getElementById('tipsAmt').value==""?0:parseFloat(document.getElementById('tipsAmt').value);
+			if(document.getElementById('discPercent').value!='' && document.getElementById('discPercent').value!=null) {
+				saleAmt = saleAmt*(1-document.getElementById('discPercent').value/100);
+			} else if(document.getElementById('discAmt').value!='' && document.getElementById('discAmt').value!=null) {
+				saleAmt = saleAmt - document.getElementById('discAmt').value;
+			}
+			document.getElementById('dueAmt').value = (saleAmt + tax + tips).toFixed(2);
+			if(document.getElementById('payAmt').value != '') {
+				document.getElementById('changeAmt').value = document.getElementById('payAmt').value - document.getElementById('dueAmt').value;
+			}
+    	}
+    	function setValue(value) {
+    		if(selectedField!=null) {
+    			selectedField.value = value;
+    			updateAmt();
+    		}
+    	}
+    	function calcChange() {
+    		var dueAmt = document.getElementById('dueAmt').value==""?0:parseFloat(document.getElementById('dueAmt').value);
+    		var payAmt = document.getElementById('payAmt').value==""?0:parseFloat(document.getElementById('payAmt').value);
+    		if(payAmt >= dueAmt) {
+    			document.getElementById("changeAmt").value = (payAmt - dueAmt).toFixed(2);
+    		} else {
+    			alert("Payment amount is not enough!");
+    		}
+    	}
+    	function addTips(tips) {
+    		if(selectedField.id == 'tipsAmt') {
+	    		if(document.getElementById('saleAmt').value != null && document.getElementById('saleAmt').value != "") {
+	    			var saleAmt = parseFloat(document.getElementById('saleAmt').value);
+	    			var tipsAmt = saleAmt * tips;
+	    			document.getElementById('tipsAmt').value = tipsAmt.toFixed(2);
+	    			updateAmt();
+	    		}
+	    	} else if(selectedField.id == 'discPercent') {
+	    		selectedField.value = tips * 100;
+	    		updateAmt();
+	    	}
+    	}
+    </script>
+</head>
+<body>
+	<table width="100%">
+		<tr>
+			<td width="100%" align="left">
+				<table border="0" width="100%">
+					<tr>
+						<td width="20%"><strong>Payment Options:</strong></td>
+						<td>
+							<input type="button" name="btnCash" value="Cash" class="paymentbutton" onclick=""/>
+							<input type="button" name="btnCredit" value="Credit Card" class="creditbutton" onclick=""/>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td width="100%">
+				<div style="float:left">
+					<table style="border:0px" width="100%">
+						<tr>
+							<td align="left"><strong>Sale Amount:</strong></td>
+							<td align="left"><input type="text" id="saleAmt" value='0' style="font-size:14px;font-weight:bold" onfocus="changeBackground(this)"/></td>
+						</tr>
+						<tr>
+							<td align="left"><strong><font color="#6600FF">Discount:</font></strong></td>
+							<td align="left">
+								$<input type="text" id="discAmt" value='' size="3" style="font-size:14px;font-weight:bold" onfocus="changeBackground(this)" onkeyup="calcDiscount('discAmt')"/> or 
+								<input type="text" id="discPercent" value='' size="3" style="font-size:14px;font-weight:bold" onfocus="changeBackground(this)" onkeyup="calcDiscount('discPercent')"/>%</td>
+						</tr>
+						<tr>
+							<td align="left"><strong>Tax:</strong></td>
+							<td align="left"><input type="text" id="taxAmt" value='' style="font-size:14px;font-weight:bold" onfocus="changeBackground(this)" onkeyup="updateAmt()"/></td>
+						</tr>
+						<tr>
+							<td align="left" valign="top"><strong><font color="#6600FF">Tips:</font></strong></td>
+							<td align="left"><input type="text" id="tipsAmt" value='' style="font-size: 14px;font-weight:bold" onfocus="changeBackground(this)" onkeyup="updateAmt()"/>
+								
+							</td>
+						</tr>
+						<tr>
+							<td align="left"><strong>Due Amount:</strong></td>
+							<td align="left"><input type="text" id="dueAmt" value=0 style="font-size: 14px;font-weight:bold" onfocus="changeBackground(this)"/></td>
+						</tr>
+						<tr>
+							<td align="left"><strong>Pay Amount:</strong></td>
+							<td align="left"><input type="text" id="payAmt" value='' style="font-size: 14px;font-weight:bold" onfocus="changeBackground(this)" onkeyup="updateAmt()"/></td>
+						</tr>
+						<tr>
+							<td colspan="2"><hr></td>
+						</tr>
+						<tr>
+							<td align="left"><strong>Change:</strong></td>
+							<td align="left"><input type="text" id="changeAmt" value=0 style="font-size: 14px;font-weight:bold" onfocus="changeBackground(this)"/></td>
+						</tr>
+					</table>
+				</div>
+				<div style="float:left; width:20px">&nbsp;</div>
+				<div style="float:left">
+					<table width="100%">
+						<tr>
+							<td><input type="button" name="btnSeven" value="10%" class="tipsbutton" onclick="addTips(0.1)"/></td>
+							<td width="33.3%"><input type="button" name="btnSeven" value="7" class="numberbutton" onclick="addValue('7')"/></td>
+							<td width="33.3%"><input type="button" name="btnEight" value="8" class="numberbutton" onclick="addValue('8')"/></td>
+							<td width="33.3%"><input type="button" name="btnNine" value="9" class="numberbutton" onclick="addValue('9')"/></td>
+						</tr>
+						<tr>
+							<td><input type="button" name="btnSeven" value="15%" class="tipsbutton" onclick="addTips(0.15)"/></td>
+							<td width="33.3%"><input type="button" name="btnFour" value="4" class="numberbutton" onclick="addValue('4')"/></td>
+							<td width="33.3%"><input type="button" name="btnFive" value="5" class="numberbutton" onclick="addValue('5')"/></td>
+							<td width="33.3%"><input type="button" name="btnSix" value="6" class="numberbutton" onclick="addValue('6')"/></td>
+						</tr>
+						<tr>
+							<td><input type="button" name="btnSeven" value="20%" class="tipsbutton" onclick="addTips(0.2)"/></td>
+							<td width="33.3%"><input type="button" name="btnOne" value="1" class="numberbutton" onclick="addValue('1')"/></td>
+							<td width="33.3%"><input type="button" name="btnTwo" value="2" class="numberbutton" onclick="addValue('2')"/></td>
+							<td width="33.3%"><input type="button" name="btnThree" value="3" class="numberbutton" onclick="addValue('3')"/></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><input type="button" name="btnZero" value="0" class="numberbutton" onclick="addValue('0')"/></td>
+							<td colspan="3" align="center"><input type="button" name="btnClear" value="Clear" class="clearbutton" onclick="setValue(0)"/></td>
+						</tr>
+					</table>
+				</div>
+				<div style="float:left">
+					<table width="100%">
+						<tr>
+							<td><input type="button" name="btnFiveDlr" value="$5" class="dollarbutton" onclick="setValue(5)"/></td>
+							<td><input type="button" name="btnHundredDlr" value="$100" class="dollarbutton" onclick="setValue(100)"/></td>
+						</tr>
+						<tr>
+							<td><input type="button" name="btnTenDlr" value="$10" class="dollarbutton" onclick="setValue(10)"/></td>
+						</tr>
+						<tr>
+							<td><input type="button" name="btnTwentyDlr" value="$20" class="dollarbutton" onclick="setValue(20)"/></td>
+						</tr>
+						<tr>
+							<td><input type="button" name="btnFiftyDlr" value="$50" class="dollarbutton" onclick="setValue(50)"/></td>
+						</tr>
+					</table>
+				</div>
+			</td>
+		</tr>
+		<tr><td><hr></td></tr>
+		<tr>
+			<td align="center" width="100%">
+				<table width="100%">
+					<tr>
+						<td align="center" width="100%">
+							<input type="button" name="btnSettle" value="Settle Payment" class="settlebutton" onclick="calcChange()"/>
+							<input type="button" name="btnClose" value="Close" class="settlebutton" onclick="Popup.hide('payment')"/>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

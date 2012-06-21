@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>KPOS</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta id="viewport" name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="apple-touch-fullscreen" content="yes" />
+
+    <script type="text/javascript" src="xml2json.js"></script>
+    <script type="text/javascript" src="kpos.js"></script>
+	<script type="text/javascript" src="popup.js"></script>
+	    
+    <link rel="stylesheet" href="example.css" TYPE="text/css" MEDIA="screen">
+    
+    <script>
+    	var statusMap = {
+    		"INITIAL": "Initial",
+    		"SUBMITTED": "Submitted",
+    		"PRINTED": "Printed",
+    		"PAID": "Paid",
+    		"SERVED": "Served",
+    		"CANCELED": "Canceled"
+    	};
+    	var typeMap = {
+    		"OUT": "Take-out",
+    		"DINE_IN": "Dine-in"
+    	}
+    	function listAllUnservedOrders(isAsc) {
+    		var soapType = new ListAllUnservedOrdersType(isAsc);
+    		call_web_service(soapType, listAllUnservedOrdersHandler);
+    	}	
+    	
+    	function listAllUnservedOrdersHandler(response) {
+    		if(response != undefined && response != null &&
+				response.fetchunservedordersresponsetype != undefined && response.fetchunservedordersresponsetype != null && 
+				response.fetchunservedordersresponsetype.result.successful == "true") {
+				var count = response.fetchunservedordersresponsetype.count;
+				var orders = response.fetchunservedordersresponsetype.orders;
+				var html = "<tr><th style='border: 1px solid gray; padding:5px;'>Order Id</th><th style='border: 1px solid gray;padding:5px;'>Type</td><th style='border: 1px solid gray;padding:5px'>Table</th>";
+				html += "<th style='border: 1px solid gray;padding:5px'>Total Price</th><th style='border: 1px solid gray;padding:5px'>Time</th><th style='border: 1px solid gray;padding:5px'>Status</th></tr>";
+				if(count > 1) {
+					for(var i = 0; i < count; i++) {
+						var order = orders[i];
+						var orderPrice = parseFloat(order.totalprice) + order.totaltax + order.totaltips;
+						var status = statusMap[order.status];
+						html += "<tr>";
+						html += "<td align='right' style='border: 1px solid gray;padding:5px'>"+order.id+"</td><td align='center' style='border: 1px solid gray;padding:5px'>"+typeMap[order.type]+"</td><td align='center' style='border: 1px solid gray;padding:5px'>"
+						html += order.tablename==null?"":order.tablename;
+						html += "</td><td align='right' style='border: 1px solid gray;padding:5px'>"+orderPrice.toFixed(2)+"</td>";
+						html += "<td align='right' style='border: 1px solid gray;padding:5px'>" + order.createtime+"</td><td align='center' style='border: 1px solid gray;padding:5px'>" + status + "</td>";
+						html += "<td align='center' style='border: 1px solid gray;padding:1px'><input type='button' class='clearbutton' value='View' onclick='viewOrder(" + order.id+",\""+order.type + "\")'/>";
+						html += "</tr>";
+					}
+				} else {
+					var orderPrice = parseFloat(orders.totalprice) + orders.totaltax + orders.totaltips;
+					var status = statusMap[orders.status];
+					html += "<tr>";
+					html += "<td align='right' style='border: 1px solid gray;padding:5px'>"+orders.id+"</td><td>"+orders.type+"</td><td style='border: 1px solid gray;padding:5px'>"+orders.tablename+"</td><td align='right' style='border: 1px solid gray;padding:5px'>"+orderPrice.toFixed(2)+"</td>";
+					html += "<td align='right' style='border: 1px solid gray;padding:5px'>" + orders.createtime+"</td><td align='center' style='border: 1px solid gray;padding:5px'>" + status + "</td>";
+					html += "</tr>";
+				}
+				var table = document.getElementById("ordersTable");
+				table.innerHTML = html;
+			}
+    	}
+    	function viewOrder(orderId, orderType) {
+    		alert(orderId + " " + orderType);
+    		localStorage.setItem("orderId", orderId);
+    		localStorage.setItem("orderType", orderType);
+    		window.location.href = "order.html";
+    	}
+    </script>
+</head>
+
+<body onload="listAllUnservedOrders(false)">
+	<table>
+		<tr><td><input type="button" class="navibutton" onclick="window.location.href='home.html';" value="<< Back"></td>
+	</table>
+	<hr/>
+	<table>
+		<tr>
+			<td><input type="button" value="Unserved Orders" class="largebutton"/></td>
+			<td><input type="button" value="Orders By Table" class="largebutton"/></td>
+		</tr>
+	</table>
+	<table id="ordersTable" width="80%" style="border: 1px solid black;border-spacing: 0px;">
+		
+	</table>
+</body>
+
+</html>
