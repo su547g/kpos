@@ -229,6 +229,10 @@
 	            }
 	        }
 	    }
+	    function listAllFunctionModulesHTML() {
+	    	var getPrivilegeType = new GetUserFunctionsHTMLType(-1);
+            call_web_service(getPrivilegeType, getUserFunctionsHTMLHandler);
+	    }
 	    function getUserFunctionsHTMLHandler(jsonObj) {
 	    	if(jsonObj != undefined && jsonObj != null &&
                 jsonObj.getuserfunctionshtmlresponsetype != undefined && jsonObj.getuserfunctionshtmlresponsetype != null &&
@@ -450,7 +454,7 @@
 	</script>
 </head>
 
-<body onload="javascript:listAllStaff();listAllRoles();">
+<body onload="javascript:listAllStaff();listAllRoles();listAllFunctionModulesHTML();">
 <table>
 	<tr><td><input type="button" class="navibutton" onclick="window.location.href='home.html';" value="<< Back"></td>
 </table>

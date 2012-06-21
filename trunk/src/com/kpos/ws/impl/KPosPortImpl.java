@@ -1452,8 +1452,9 @@ public class KPosPortImpl implements KPosPortType {
         ResultType result = new ResultType();
         try {
             List<FunctionModule> functionModules = functionModuleDao.findAll();
-            Roles role = roleDao.findById(parameters.getRoleId());
             Set<FunctionModule> functionSet = new HashSet<FunctionModule>();
+
+            Roles role = roleDao.findById(parameters.getRoleId());
             if(role != null) {
                 functionSet = role.getFunctions();
             }

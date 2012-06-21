@@ -1,0 +1,393 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta id="viewport" name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="apple-touch-fullscreen" content="yes" />
+
+    <script type="text/javascript" src="xml2json.js"></script>
+    <script type="text/javascript" src="kpos.js"></script>
+    <script type="text/javascript" src="popup.js"></script>
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="jsDatePick.min.1.3.js"></script>
+    
+    <link rel="stylesheet" type="text/css" media="all" href="jsDatePick_ltr.min.css" />
+    <link rel="stylesheet" href="example.css" type="text/css" media="screen">
+    
+    <style type="text/css">
+        body{
+            font-size:14px;
+            background:#c4f0f1;
+            text-align:center;
+        }
+		.tabberlive .tabbertabhide {
+		 display:none;
+		}
+		
+		.tabber {
+		}
+		.tabberlive {
+		 margin-top:1em;
+		}
+		
+		ul.tabbernav
+		{
+		 margin:0;
+		 padding: 3px 0;
+		 border-bottom: 1px solid #778;
+		 font: bold 12px Verdana, sans-serif;
+		}
+		
+		ul.tabbernav li
+		{
+		 list-style: none;
+		 margin: 0;
+		 display: inline;
+		}
+		
+		ul.tabbernav li a
+		{
+		 padding: 3px 0.5em;
+		 margin-left: 3px;
+		 border: 1px solid #778;
+		 border-bottom: none;
+		 background: #DDE;
+		 text-decoration: none;
+		}
+		
+		ul.tabbernav li a:link { color: #448; }
+		ul.tabbernav li a:visited { color: #667; }
+		
+		ul.tabbernav li a:hover
+		{
+		 color: #000;
+		 background: #AAE;
+		 border-color: #227;
+		}
+		
+		ul.tabbernav li.tabberactive a
+		{
+		 background-color: #fff;
+		 border-bottom: 1px solid #fff;
+		}
+		
+		ul.tabbernav li.tabberactive a:hover
+		{
+		 color: #000;
+		 background: white;
+		 border-bottom: 1px solid white;
+		}
+		
+		.tabberlive .tabbertab {
+		 padding:5px;
+		 border:1px solid #aaa;
+		 border-top:0;
+		 height:220px;
+		 overflow:auto;
+		}
+		
+		.tabberlive .tabbertab h2 {
+		 display:none;
+		}
+		.tabberlive .tabbertab h3 {
+		 display:none;
+		}
+		
+		.tabberlive#tab1 {
+		}
+		.tabberlive#tab2 {
+		}
+		.tabberlive#tab2 .tabbertab {
+		 height:400px;
+		 overflow:auto;
+		}
+		
+        .tableone {width:250px; border-collapse:collapse; margin:0 auto;}
+        .tabletwo {width:220px; margin:2px; border:1px solid #B3B1B1; border-spacing: 1px; border-style:outset}
+
+        .th1 {width:149px;}
+        .th2 {width:99px;}
+        .th3 {width:99px;}
+        .th4 {width:99px;}
+        .th5 {width:200px;}
+
+        .td1 {width:149px;border:1px solid #B3B1B1;}
+        .td2 {width:99px;}
+        .td3 {width:99px;}
+        .td4 {width:99px;}
+        .td5 {width:170px;}
+
+        .tableone {background:#697210; border:1px solid #fff; color:#fff;}
+        .tableone td {border:1px solid #fff; color:#fff;}
+        .tableone tbody {background:#eee; color:#000;}
+        .tableone caption {background:#fff; color:#697210; font-size:1.2em; margin:0 auto;}
+        .tableone th, .tabletwo th {text-align:left;}
+
+        .tabletwo td {background:#eee; color:#000;}
+        .tabletwo tr.dk th {background:#ddd; color:#000;}
+        .tabletwo tr.dk td {background:#ddd; color:#000;}
+
+        .innerb {height:450px; overflow:auto;}
+    </style>
+    <script type="text/javascript">
+		document.write('<style type="text/css">.tabber{display:none;}<\/style>');
+		
+		var tabberOptions = {
+		  'manualStartup':true,
+		  'onLoad': function(argsObj) {
+		    if (argsObj.tabber.id == 'tab2') {
+		      alert('Finished loading tab2!');
+		    }
+		  },
+		  'onClick': function(argsObj) {
+		    var t = argsObj.tabber; /* Tabber object */
+		    var id = t.id; /* ID of the main tabber DIV */
+		    var i = argsObj.index; /* Which tab was clicked (0 is the first tab) */
+		    var e = argsObj.event; /* Event object */
+		
+		    if (id == 'tab2') {
+		      return confirm('Swtich to '+t.tabs[i].headingText+'?\nEvent type: '+e.type);
+		    }
+		  },
+		  'addLinkId': true
+		};
+	</script>
+
+	<!-- Load the tabber code -->
+	<script type="text/javascript" src="tabber.js"></script>
+	<script language="javascript">
+		var roles = new Array();
+		
+		var ADD = "ADD";
+		var UPDATE = "UPDATE";
+		var operation = "";
+		
+	    function selectRow(tableID, selectedIndex) {
+	        var table = document.getElementById(tableID);
+	        var role = roles[selectedIndex];
+	        var rowCount = table.rows.length;
+	        operation = UPDATE;
+	        for(var i = 0; i < rowCount; i++) {
+	            var row = table.rows[i];
+	            if(i == selectedIndex) {
+	                row.style.background = '#dcfac9';
+	                row.cells[0].style.background = '#dcfac9';
+	                row.cells[1].style.background = '#dcfac9';
+	                
+	                document.roleForm.roleName.value = role.name;
+	                document.roleForm.roleName.readOnly = false;
+	                
+	                document.roleForm.roleId.value = role.id;
+	                //document.roleForm.userId.value = role.user==null?"" : role.user.id;
+	                
+	                var getPrivilegeType = new GetRoleFunctionsHTMLType(role.id);
+                	call_web_service(getPrivilegeType, getRoleFunctionsHTMLHandler);
+	            } else {
+	                row.style.background = ''; //'#f0c992';
+	                row.cells[0].style.background = ''; //'#f0c992';
+	                row.cells[1].style.background = ''; //'#f0c992';
+	            }
+	        }
+	    }
+	    function listAllFunctionModules() {
+	    	var getPrivilegeType = new GetRoleFunctionsHTMLType(-1);
+            call_web_service(getPrivilegeType, getRoleFunctionsHTMLHandler);
+	    }
+	    function getRoleFunctionsHTMLHandler(jsonObj) {
+	    	if(jsonObj != undefined && jsonObj != null &&
+                jsonObj.getrolefunctionshtmlresponsetype != undefined && jsonObj.getrolefunctionshtmlresponsetype != null &&
+                jsonObj.getrolefunctionshtmlresponsetype.result.successful == "true") {
+                var html = jsonObj.getrolefunctionshtmlresponsetype.html;
+                html = html.replace(/&lt;/g, "<");
+				html = html.replace(/&gt;/g, ">");
+                document.getElementById("privilegesTable").innerHTML = html;
+            }
+	    }
+	    function addStaffRow(tableID, staffObj, selectRowFunc, deleteRowFunc, index) {
+	        var table = document.getElementById(tableID);
+	
+	        var rowCount = table.rows.length;
+	        var rowId = tableID + "_r" + rowCount;
+	        
+	        var row = table.insertRow(rowCount);	
+	       	row.id = rowId;
+	        row.name = rowId;
+	       	
+	       	var innerHTML = "<td onclick='"+selectRowFunc+"(\""+tableID+"\", \""+index+"\");'>"+staffObj.name+"</td><td><a href='javascript:"+deleteRowFunc+"(\""+tableID+"\",\""+rowId+"\","+staffObj.id+");'><img src=\"img\\delete-icon-small.jpg\"/></a></td>";
+	       	row.innerHTML = innerHTML;
+	       	row.onmouseover = function(){ highlightRow(this, true); };
+	        row.onmouseout = function(){ highlightRow(this, false); };
+	    }
+	    function addRoleRow(tableID, roleObj, selectRowFunc, deleteRowFunc, index) {
+	        var table = document.getElementById(tableID);
+	
+	        var rowCount = table.rows.length;
+	        var rowId = tableID + "_r" + rowCount;
+	        
+	        var row = table.insertRow(rowCount);	
+	       	row.id = rowId;
+	        row.name = rowId;
+	       	
+	       	var innerHTML = "<td onclick='"+selectRowFunc+"(\""+tableID+"\", \""+index+"\");'>"+roleObj.name+"</td><td><a href='javascript:"+deleteRowFunc+"(\""+tableID+"\",\""+rowId+"\","+roleObj.id+");'><img src=\"img\\delete-icon-small.jpg\"/></a></td>";
+	       	row.innerHTML = innerHTML;
+	       	row.onmouseover = function(){ highlightRow(this, true); };
+	        row.onmouseout = function(){ highlightRow(this, false); };
+	    }
+	    function deleteRoleRow(tableId, rowID, roleId) {
+	    	var deleteRoleType = new DeleteRoleType(roleId);
+            call_web_service(deleteRoleType, deleteRoleHandler);
+	    }
+	    function deleteRoleHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+                jsonObj.deleteroleresponsetype != undefined && jsonObj.deleteroleresponsetype != null &&
+                jsonObj.deleteroleresponsetype.result.successful == "true") {
+                listAllRoles();
+            } else {
+            	alert("failed to delete role!");
+            }
+            deletedRowId = "";
+		}
+	    function clearForm(isReadOnly) {
+	    	document.roleForm.roleId.value = "";
+	    	//document.roleForm.userId.value = "";
+	    	document.roleForm.roleName.value = "";
+	      	document.roleForm.roleName.readOnly = isReadOnly;
+	      	uncheckPrivileges();
+	        operation = ADD;
+	    }
+	    function uncheckPrivileges() {
+	    	if(document.roleForm.privileges != null) {
+		    	for(var i = 0; i < document.roleForm.privileges.length; i++) {
+		    		document.roleForm.privileges[i].checked = false;
+		    	}
+		    }
+	    }
+	    function saveRole() {
+	        var roleType = new RoleType(document.roleForm.roleId.value, document.roleForm.roleName.value);
+	        for(var i = 0; i < document.roleForm.privileges.length; i++) {
+				if(document.roleForm.privileges[i].checked) {
+					roleType.functionIds.push(document.roleForm.privileges[i].value);
+				}
+			}
+	        var soapType = new SaveRoleType(roleType);
+	        call_web_service(soapType, saveRoleHandler);
+	    }
+	    function saveRoleHandler(jsonObj) {
+	        if(jsonObj != undefined && jsonObj != null &&
+	            jsonObj.saveroleresponsetype != undefined && jsonObj.saveroleresponsetype != null &&
+	            jsonObj.saveroleresponsetype.result.successful == "true") {
+	            alert("Successfully saved role!");
+	            clearForm(true);
+	           	listAllRoles();
+	        } else {
+	            alert("Failed to save role!");
+	        }
+	        operation = "";
+	    }
+		function listAllRoles(){
+			var soapType = new ListRolesType();
+			call_web_service(soapType, listAllRolesHandler);
+		}
+		function listAllRolesHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.listrolesresponsetype != undefined && jsonObj.listrolesresponsetype != null &&
+				jsonObj.listrolesresponsetype.result.successful == 'true') {
+				document.getElementById("rolesList").innerHTML = "";
+				roles.length = 0;
+				var rolesList = jsonObj.listrolesresponsetype.roles;
+				var count = jsonObj.listrolesresponsetype.count;
+                if(rolesList != undefined && rolesList != null) {
+	                if(count > 1) {
+	                	var s, userType, roleType;
+	                	for(var i = 0; i < rolesList.length; i++) {
+	                		s = rolesList[i];
+	                		roleType = new RoleType(s.id, s.name);
+	                		roles.push(roleType);
+	                		addStaffRow("rolesList", s, "selectRow", "deleteStaffRow", i);
+	                	}
+	                } else if(count == 1){
+	                	//Only one role
+                		var roleType = new RoleType(rolesList.id, rolesList.name);
+                		roles.push(roleType);
+	                	addStaffRow("rolesList", rolesList, "selectRow", "deleteStaffRow", 0);
+	                }
+	            }
+			}
+		}
+	</script>
+</head>
+
+<body onload="javascript:listAllRoles();listAllFunctionModules();">
+<table>
+	<tr><td><input type="button" class="navibutton" onclick="window.location.href='home.html';" value="<< Back"></td>
+</table>
+<table width="100%">
+    <tr>
+        <td width="18%" valign="top" align="left">
+            <table width="100%" class="tableone" align="left">
+                <caption>Role</caption>
+                <thead>
+                <tr>
+                    <th class="th1" scope="col">Name</th>
+                    <th class="th2" scope="col"></th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <td colspan="2" align="center"><button onclick="javascript:clearForm(false);">New Role</button></td>
+                </tr>
+                </tfoot>
+                <tbody>
+	                <tr>
+	                    <td colspan="5" valign="top" align="left">
+	                        <div class="innerb">
+	                            <table id ="rolesList" class="tabletwo" width="100%">
+	                            </table>
+	                        </div>
+	                    </td>
+	                </tr>
+                </tbody>
+            </table>
+        </td>
+        <td valign="top" align="left">
+        	<form name="roleForm">
+        	<table id="roleInfo" width="70%" border="1">
+        		<input type="hidden" id="roleId"/>
+        		<input type="hidden" id="userId"/>
+        		<tr>
+        			<td align="left" valign="center" colspan="3">
+        				Name: <input type="text" id="roleName" name="roleName" readonly="readonly" value=""/>
+        			</td>
+        		</tr>
+        		<tr>
+        			<td width="100%" colspan="2">
+        				<div class="tabber" id="tab1">
+							<div id="mainTab" class="tabbertab">
+							    <h2 style="font-size: 20px"><a name="tab1">Privileges</a></h2>
+							    <table width="100%" id="privilegesTable">
+							    </table>
+							</div>
+						</div>
+					</td>
+		    	</tr>
+		    	<tr>
+		    		<Td>
+		    			<input type="button" value="Save" onclick="saveRole()"/>
+		    		</Td>
+		    	</tr>
+            </table>
+            </form>
+        </td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+   tabberAutomatic(tabberOptions);
+</script>
+</body>
+</html>
