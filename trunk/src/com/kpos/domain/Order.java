@@ -57,6 +57,10 @@ import java.util.List;
                 name = "listOrdersForDateRangeAndStatus",
                 query = "from Order o where o.createdOn between :aStart and :aEnd and status = :aStatus order by createdOn ASC"
         )
+        /*@NamedQuery(
+                name = "findTodayOrderByNum",
+                query = "from order_bill where id % :aBase = :aId and createdOn between curdate() and ADDDATE(curdate(), INTERVAL 1 DAY) order by createdOn ASC"
+        )*/
 })
 @Entity
 @Table(name = "ORDER_BILL")
@@ -97,6 +101,9 @@ public class Order extends AbstractDomainObject {
 
     @Column(name = "gratuity")
     private double gratuity = 0;
+
+    @Column(name = "charge")
+    private double charge = 0;
 
     //owning entity
     @ManyToOne(cascade = CascadeType.REFRESH)
@@ -212,6 +219,14 @@ public class Order extends AbstractDomainObject {
         this.numOfGuests = numOfGuests;
     }
 
+    public double getCharge() {
+        return charge;
+    }
+
+    public void setCharge(double charge) {
+        this.charge = charge;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -222,6 +237,7 @@ public class Order extends AbstractDomainObject {
         if (Double.compare(order.totalPrice, totalPrice) != 0) return false;
         if (Double.compare(order.tax, tax) != 0) return false;
         if (Double.compare(order.gratuity, gratuity) != 0) return false;
+        if (Double.compare(order.charge, charge) != 0) return false;
         if (id != null ? !id.equals(order.id) : order.id != null) return false;
         if (notes != null ? !notes.equals(order.notes) : order.notes != null) return false;
         if (orderType != null ? !orderType.equals(order.orderType) : order.orderType != null) return false;
@@ -241,6 +257,7 @@ public class Order extends AbstractDomainObject {
         temp = totalPrice != +0.0d ? Double.doubleToLongBits(totalPrice) : 0L;
         temp = tax != +0.0d ? Double.doubleToLongBits(tax) : 0L;
         temp = gratuity != +0.0d ? Double.doubleToLongBits(gratuity) : 0L;
+        temp = charge != +0.0d ? Double.doubleToLongBits(charge) : 0L;
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }

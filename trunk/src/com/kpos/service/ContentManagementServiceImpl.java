@@ -84,7 +84,13 @@ public class ContentManagementServiceImpl implements IContentManagementService {
 
     @Autowired
     private IRoleDao roleDao;
+    
+    @Autowired
+    private ICompanyDao companyDao;
 
+    @Autowired
+    private IDiscountDao discountDao;
+    
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public CreateResult<MenuCategory> createMenuCategory(MenuCategory aCategory, List<Long> printerIds) {
         try {
@@ -846,6 +852,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         order.setTotalPrice(orderType.getTotalPrice());
         order.setTax(orderType.getTotalTax());
         order.setGratuity(orderType.getTotalTips()==null?0:orderType.getTotalTips());
+        order.setCharge(orderType.getCharge()==null?0:orderType.getCharge());
 
         order.setCreatedBy(user);
         order.setLastUpdatedBy(user);
@@ -921,6 +928,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             order.setTotalPrice(orderType.getTotalPrice());
             order.setTax(orderType.getTotalTax());
             order.setGratuity(orderType.getTotalTips()==null?0:orderType.getTotalTips());
+            order.setCharge(orderType.getCharge()==null?0:orderType.getCharge());
             order.setLastUpdatedBy(user);
             if(orderType.getTableId() != null) {
                 RestaurantTable table = tableDao.findById(orderType.getTableId());
@@ -1260,4 +1268,28 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         result.setTarget(rolesList);
         return result;
     }
+    
+    public FetchResult<CompanyProfile> fetchCompanyProfile() {
+        FetchResult<CompanyProfile> result = new FetchResult<CompanyProfile>();
+        List<CompanyProfile> companyProfileList = companyDao.findAll();
+        if(!companyProfileList.isEmpty()) {
+            result.setTarget(companyProfileList.get(0));
+        }
+        result.setSuccessful(true);
+        return result;
+    }
+    
+    public FetchResult<List<CompanyDiscount>> fetchDiscountRates() {
+        FetchResult<List<CompanyDiscount>> fetchResult = new FetchResult<List<CompanyDiscount>>();
+        List<CompanyDiscount> discounts = discountDao.findAll();
+        fetchResult.setTarget(discounts);
+        return fetchResult;
+    }
+    /*
+    public FetchResult<Order> findTodayOrderByNumber(long aId, long aBase) {
+        FetchResult<Order> fetchResult = new FetchResult<Order>();
+        List<Order> orders = orderDao.findTodayOrderByNumber(aId, aBase);
+        fetchResult.setTarget(orders.get(0));
+        return fetchResult;
+    } */
 }

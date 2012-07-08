@@ -108,4 +108,9 @@ public interface IContentManagementService {
     UpdateResult<Roles> updateRole(RoleType soapType);
     DeleteResult deleteRole(long roleId);
     FetchResult<List<Roles>> fetchAllRoles();
+
+    FetchResult<CompanyProfile> fetchCompanyProfile();
+    FetchResult<List<CompanyDiscount>> fetchDiscountRates();
+
+    //FetchResult<Order> findTodayOrderByNumber(long aId, long aBase);
 }

@@ -72,4 +72,12 @@ public class OrderDao extends AbstractJpaDao<Order> implements IOrderDao {
         }
         return (List<Order>)namedQuery.getResultList();
     }
+    
+    public List<Order> findTodayOrderByNumber(long aNum, long aBase) {
+
+        Query namedQuery = entityManager.createNamedQuery("findTodayOrderByNum");
+        namedQuery.setParameter("aId", aNum);
+        namedQuery.setParameter("aBase", aBase);
+        return (List<Order>)namedQuery.getResultList();
+    }
 }

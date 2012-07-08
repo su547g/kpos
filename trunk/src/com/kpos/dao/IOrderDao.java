@@ -23,4 +23,6 @@ public interface IOrderDao extends IDao<Order> {
     List<Order> fetchOrdersForDateRangeStatus(Date aStart, Date aEnd, int aStatus);
 
     List<Order> fetchUnservedOrders(boolean isAsc);
+
+    List<Order> findTodayOrderByNumber(long aId, long aBase);
 }

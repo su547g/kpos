@@ -793,7 +793,7 @@ function OrderOption(aDisplayText, aPrice, aQuantity, aId, aType) {
         return xml;
     }
 }
-function Order(aId, aType, aPrice, aTax, aTips, aStatus, aNumGuests, aCustomer, aUserId, aTableId) {
+function Order(aId, aType, aPrice, aTax, aTips, aStatus, aNumGuests, aCustomer, aUserId, aTableId, aCharge) {
     this.id = aId;
     this.userId = aUserId;
     this.type = aType;
@@ -802,6 +802,7 @@ function Order(aId, aType, aPrice, aTax, aTips, aStatus, aNumGuests, aCustomer, 
     this.totalPrice = aPrice;
     this.tax = aTax;
     this.tip = aTips;
+    this.charge = aCharge;
     this.status = aStatus;
     this.numOfGuests = aNumGuests;
     this.customer = aCustomer;
@@ -821,7 +822,12 @@ function Order(aId, aType, aPrice, aTax, aTips, aStatus, aNumGuests, aCustomer, 
         }
         xml += "<app:totalPrice>" + this.totalPrice + "</app:totalPrice>";
         xml += "<app:totalTax>" + this.tax + "</app:totalTax>";
-        xml += "<app:totalTips>" + this.tip + "</app:totalTips>";
+        if(this.tip != null) {
+            xml += "<app:totalTips>" + this.tip + "</app:totalTips>";
+        }
+        if(this.charge != null) {
+            xml += "<app:charge>" + this.charge + "</app:charge>";
+        }
         xml += "<app:status>" + this.status + "</app:status>";
         xml += "<app:numOfGuests>" + this.numOfGuests + "</app:numOfGuests>";
         for(var i = 0; i < this.orderItems.length; i++) {
@@ -834,8 +840,8 @@ function Order(aId, aType, aPrice, aTax, aTips, aStatus, aNumGuests, aCustomer, 
         return xml;
     }
 }
-function SaveOrderType(aId, aType, aPrice, aTax, aTips, aStatus, aNumGuests, aCustomer, aUserId, aTableId) {
-    this.order = new Order(aId, aType, aPrice, aTax, aTips, aStatus, aNumGuests, aCustomer, aUserId, aTableId);
+function SaveOrderType(aId, aType, aPrice, aTax, aTips, aStatus, aNumGuests, aCustomer, aUserId, aTableId, aCharge) {
+    this.order = new Order(aId, aType, aPrice, aTax, aTips, aStatus, aNumGuests, aCustomer, aUserId, aTableId, aCharge);
     this.getXML = function() {
         var xml = soapXMLBegin;
         xml += "<app:SaveOrderType>";
@@ -1122,6 +1128,14 @@ function GetRoleFunctionsHTMLType(aId) {
     this.getXML = function() {
         var xml = soapXMLBegin;
         xml += "<app:GetRoleFunctionsHTMLType><app:roleId>" + this.id + "</app:roleId></app:GetRoleFunctionsHTMLType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function ListDiscountsType() {
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:ListRatesType><app:type>DISCOUNT</app:type></app:ListRatesType>";
         xml += soapXMLEnd;
         return xml;
     }

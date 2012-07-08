@@ -111,6 +111,8 @@
             <xs:element name="SaveOrderResponseType" type="tns:SaveOrderResponseType"/>
             <xs:element name="FetchOrderType" type="tns:FetchOrderType"/>
             <xs:element name="FetchOrderResponseType" type="tns:FetchOrderResponseType"/>
+            <xs:element name="FetchOrderByNumberType" type="tns:FetchOrderByNumberType"/>
+            <xs:element name="FetchOrderByNumberResponseType" type="tns:FetchOrderByNumberResponseType"/>
             <xs:element name="DeleteOrderType" type="tns:DeleteOrderType"/>
             <xs:element name="DeleteOrderResponseType" type="tns:DeleteOrderResponseType"/>
             <xs:element name="SettleOrderType" type="tns:SettleOrderType"/>
@@ -148,6 +150,9 @@
             <xs:element name="ListRolesResponseType" type="tns:ListRolesResponseType"/>
             <xs:element name="GetRoleFunctionsHTMLType" type="tns:GetRoleFunctionsHTMLType"/>
             <xs:element name="GetRoleFunctionsHTMLResponseType" type="tns:GetRoleFunctionsHTMLResponseType"/>
+
+            <xs:element name="ListRatesType" type="tns:ListRatesType"/>
+            <xs:element name="ListRatesResponseType" type="tns:ListRatesResponseType"/>
 
             <!--Result object-->
             <xs:complexType name="ResultType">
@@ -301,6 +306,7 @@
                     <xs:element name="totalPrice" type="xsd:double" minOccurs="1" maxOccurs="1" default="0"/>
                     <xs:element name="totalTax" type="xsd:double" minOccurs="1" maxOccurs="1" default="0"/>
                     <xs:element name="totalTips" type="xsd:double" minOccurs="0" maxOccurs="1" default="0"/>
+                    <xs:element name="charge" type="xsd:double" minOccurs="0" maxOccurs="1" default="0"/>
                     <xs:element name="notes" type="xsd:string" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="status" type="xsd:string" minOccurs="1" maxOccurs="1"/>
                     <xs:element name="createTime" type="xsd:string" minOccurs="0" maxOccurs="1"/>
@@ -360,6 +366,23 @@
                     <xs:element name="id" type="xsd:long" minOccurs="0"/>
                     <xs:element name="startTime" type="xsd:string" minOccurs="0"/>
                     <xs:element name="endTime"  type="xsd:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="CompanyProfileType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="0"/>
+                    <xs:element name="name" type="xsd:string" minOccurs="1"/>
+                    <xs:element name="address1" type="xsd:string" minOccurs="0"/>
+                    <xs:element name="address2" type="xsd:string" minOccurs="0"/>
+                    <xs:element name="city" type="xsd:string" minOccurs="0"/>
+                    <xs:element name="state" type="xsd:string" minOccurs="0"/>
+                    <xs:element name="zipcode" type="xsd:string" minOccurs="0"/>
+                    <xs:element name="telephone1" type="xsd:string" minOccurs="0"/>
+                    <xs:element name="telephone2" type="xsd:string" minOccurs="0"/>
+                    <xs:element name="email" type="xsd:string" minOccurs="0"/>
+                    <xs:element name="website" type="xsd:string" minOccurs="0"/>
+                    <xs:element name="discounts" type="tns:CompanyDiscountType" maxOccurs="unbounded"/>
+                    <xs:element name="taxes" type="tns:CompanyTaxType" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="CompanyTaxType">
@@ -877,6 +900,17 @@
                     <xs:element name="order" type="tns:OrderType" minOccurs="1" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
+            <xs:complexType name="FetchOrderByNumberType">
+                <xs:sequence>
+                    <xs:element name="orderNum" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="FetchOrderByNumberResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="order" type="tns:OrderType" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
             <xs:complexType name="DeleteOrderType">
                 <xs:sequence>
                     <xs:element name="userId" type="xsd:long" minOccurs="1"/>
@@ -1071,6 +1105,18 @@
                 <xs:sequence>
                     <xs:element name="Result" type="tns:ResultType"/>
                     <xs:element name="html" type="xsd:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListRatesType">
+                <xs:sequence>
+                    <xs:element name="type" type="xsd:string" minOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListRatesResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="rate" type="xsd:double" maxOccurs="unbounded"/>
+                    <xs:element name="count" type="xsd:int"/>
                 </xs:sequence>
             </xs:complexType>
             <!--End of operations-->
@@ -1336,6 +1382,12 @@
     <wsdl:message name="FetchOrderResponseMessage">
         <wsdl:part name="parameters" element="tns:FetchOrderResponseType"/>
     </wsdl:message>
+    <wsdl:message name="FetchOrderByNumberMessage">
+        <wsdl:part name="parameters" element="tns:FetchOrderByNumberType"/>
+    </wsdl:message>
+    <wsdl:message name="FetchOrderByNumberResponseMessage">
+        <wsdl:part name="parameters" element="tns:FetchOrderByNumberResponseType"/>
+    </wsdl:message>
     <wsdl:message name="DeleteOrderMessage">
         <wsdl:part name="parameters" element="tns:DeleteOrderType"/>
     </wsdl:message>
@@ -1439,6 +1491,12 @@
     </wsdl:message>
     <wsdl:message name="GetRoleFunctionsHTMLResponseMessage">
         <wsdl:part name="parameters" element="tns:GetRoleFunctionsHTMLResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="ListRatesMessage">
+        <wsdl:part name="parameters" element="tns:ListRatesType"/>
+    </wsdl:message>
+    <wsdl:message name="ListRatesResponseMessage">
+        <wsdl:part name="parameters" element="tns:ListRatesResponseType"/>
     </wsdl:message>
     <!--End of messages-->
 
@@ -1627,6 +1685,10 @@
             <wsdl:input message="tns:FetchOrderMessage" name="FetchOrder"/>
             <wsdl:output message="tns:FetchOrderResponseMessage" name="FetchOrderResponse"/>
         </wsdl:operation>
+        <wsdl:operation name="FetchOrderByNumber">
+            <wsdl:input message="tns:FetchOrderByNumberMessage" name="FetchOrderByNumber"/>
+            <wsdl:output message="tns:FetchOrderByNumberResponseMessage" name="FetchOrderByNumberResponse"/>
+        </wsdl:operation>
         <wsdl:operation name="DeleteOrder">
             <wsdl:input message="tns:DeleteOrderMessage" name="DeleteOrder"/>
             <wsdl:output message="tns:DeleteOrderResponseMessage" name="DeleteOrderResponse"/>
@@ -1695,6 +1757,10 @@
         <wsdl:operation name="GetRoleFunctionsHTML">
             <wsdl:input message="tns:GetRoleFunctionsHTMLMessage" name="GetRoleFunctionsHTML"/>
             <wsdl:output message="tns:GetRoleFunctionsHTMLResponseMessage" name="GetRoleFunctionsHTMLResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="ListRates">
+            <wsdl:input message="tns:ListRatesMessage" name="ListRates"/>
+            <wsdl:output message="tns:ListRatesResponseMessage" name="ListRatesResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -2099,6 +2165,15 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="FetchOrderByNumber">
+            <soap:operation soapAction="http://ws.kpos.com/FetchOrderByNumber" style="document"/>
+            <wsdl:input name="FetchOrderByNumber">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="FetchOrderByNumberResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="DeleteOrder">
             <soap:operation soapAction="http://ws.kpos.com/DeleteOrder" style="document"/>
             <wsdl:input name="DeleteOrder">
@@ -2250,6 +2325,15 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="GetRoleFunctionsHTMLResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="ListRates">
+            <soap:operation soapAction="http://ws.kpos.com/ListRates" style="document"/>
+            <wsdl:input name="ListRates">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="ListRatesResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
