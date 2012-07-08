@@ -155,6 +155,7 @@
                 document.orderForm.orderId.value = order.id;
                 document.getElementById("orderHeader").innerText = "Order " + order.id;
                 document.orderForm.orderType = order.type;
+                document.orderForm.totalCharge = order.charge;
                 var items = order.orderitems;
                 if(items.length != undefined && items.length != null) {
                 	for(var i = 0; i < items.length; i++) {
@@ -178,6 +179,12 @@
 			if(OrderId != null && OrderId > 0 && (OrderType == OUT || OrderType == DINE_IN || OrderType == DELIVERY)) {
 				fetchOrder(OrderId);
 			}
+		}
+		function clearOrder() {
+			//localStorage.setItem('orderType', '');
+			localStorage.setItem('orderId', '');
+			localStorage.setItem('tableId', '');
+			localStorage.setItem('tableName', '');
 		}
 		function initializeCategories(){
 			ws_list_categories(listAllCategoriesHandler);
@@ -586,22 +593,38 @@
 				}
                 total += itemPrice;
 	        }
-	        tax = total * taxRate;
-	        document.orderForm.totalTax.value = tax;
-	        var grossTotal = (total+tax).toFixed(2);
+	        var discount = parseFloat(document.orderForm.totalDiscount.value);
+	        
             html += "<tr><td colspan='2' valign='top' align='right'><strong>Subtotal:</strong> </td>";
             html += "<td valign='top' align='right'><strong>"+total.toFixed(2)+"</strong></td></tr>";
+            
+            if(discount > 0) {
+            	html += "<tr><td colspan='2' valign='top' align='right'><strong>Discount:</strong> </td>";
+            	html += "<td valign='top' align='right' id='orderDiscount'><strong>"+document.orderForm.totalDiscount.value+"</strong></td></tr>";
+            
+            	total -= discount;
+            
+            	html += "<tr><td colspan='2' valign='top' align='right'><strong>Subtotal:</strong> </td>";
+            	html += "<td valign='top' align='right'><strong>"+total.toFixed(2)+"</strong></td></tr>";
+            }
+            tax = total * taxRate;
+	        document.orderForm.totalTax.value = tax;
+	        var grossTotal = (total+tax).toFixed(2);
+	        
             html += "<tr><td colspan='3'><br></td></tr><tr><td colspan='2' valign='top' align='right'><strong>Tax:</strong> </td>";
             html += "<td valign='top' align='right'><strong>" + tax.toFixed(2) + "</strong></td></tr>";
-            html += "<tr><td colspan='2' valign='top' align='right'><strong>TOTAL:</strong></td>";
-            html += "<td valign='top' align='right'><strong>"+grossTotal+"</strong></td></tr>";
-            table.innerHTML = html;
-            document.orderForm.totalPrice.value = total;
             
-            /*if(selectedItemIndex > -1) {
-            	if(selectedOptionIndex > -1 && ) highlightOrderRow(selectedItemIndex + "-" + selectedOptionIndex);
-            	else highlightOrderRow(selectedItemIndex);
-            }*/
+            var charge = parseFloat(document.orderForm.totalCharge.value);
+            if(charge > 0) {
+            	html += "<tr><td colspan='3'><br></td></tr><tr><td colspan='2' valign='top' align='right'><strong>Charge:</strong> </td>";
+            	html += "<td valign='top' align='right'><strong>" + charge + "</strong></td></tr>";
+            }
+            grossTotal = parseFloat(grossTotal) + charge;
+            html += "<tr><td colspan='2' valign='top' align='right'><strong>TOTAL:</strong></td>";
+            html += "<td valign='top' align='right'><strong>"+grossTotal.toFixed(2)+"</strong></td></tr>";
+            table.innerHTML = html;
+            
+            document.orderForm.totalPrice.value = total;
 	   	}
 	   	function updateQuantity(increment) {
 	   		if(selectedItemIndex >= 0) {
@@ -630,9 +653,10 @@
 	   		if(orderItems != null && orderItems.length > 0) {
 		   		var total = document.orderForm.totalPrice.value;
 		   		var tax = document.orderForm.totalTax.value;
+		   		var charge = document.orderForm.totalCharge.value;
 		   		var orderId = document.orderForm.orderId.value;
-		   		//aId, aType, aPrice, tax, tips, aStatus, aNumGuests, aCustomer, userId, tableId
-		   		var orderType = new SaveOrderType(orderId, OrderType, total, tax, 0, "INITIAL", 1, null, UserId, TableId);
+		   		//aId, aType, aPrice, tax, tips, aStatus, aNumGuests, aCustomer, userId, tableId, aCharge
+		   		var orderType = new SaveOrderType(orderId, OrderType, total, tax, 0, "INITIAL", 1, null, UserId, TableId, charge);
 		   		orderType.order.orderItems = orderItems;
 				call_web_service(orderType, saveOrderHandler);
 			}
@@ -645,7 +669,7 @@
 				document.orderForm.orderId.value = jsonObj.saveorderresponsetype.result.id;
 				document.getElementById("orderHeader").innerText = "Order " + jsonObj.saveorderresponsetype.result.id;
 				if(TableName!=null && TableName!="") {
-					document.getElementById("orderHeader").innerText += " for Table "+TableName;
+					document.getElementById("tableNameCell").innerText = TableName;
 				}
 			} else {
 				alert("Failed to save order!");
@@ -673,21 +697,24 @@
 	   	var selectedField;
 	   	function showPayment() {
 	   		var total = (document.orderForm.totalPrice.value==null||document.orderForm.totalPrice.value=="")?0:parseFloat(document.orderForm.totalPrice.value);
+	   		var charge = document.orderForm.totalCharge.value==null||document.orderForm.totalCharge.value==""?0:parseFloat(document.orderForm.totalCharge.value);
+	   		total += charge;
 	   		var tax = (document.orderForm.totalTax.value==null||document.orderForm.totalTax.value=="")?0:parseFloat(document.orderForm.totalTax.value);
+	   		total += tax;
 	   		document.payForm.saleAmt.value = total;
-	   		document.payForm.taxAmt.value = tax;
+	   		//document.payForm.taxAmt.value = tax;
 	   		var tips = (document.payForm.tipsAmt.value==""||document.payForm.tipsAmt.value==null)?0:parseFloat(document.payForm.tipsAmt.value);
-	   		document.payForm.dueAmt.value = (total+tax+tips).toFixed(2);
+	   		document.payForm.dueAmt.value = (total + tips).toFixed(2);
 	   		Popup.showModal('payment');
 	   	}
     	function changeBackground(textField) {
-    		resetBackground(document.getElementById('taxAmt'));
+    		/*resetBackground(document.getElementById('taxAmt'));
     		resetBackground(document.getElementById('tipsAmt'));
     		resetBackground(document.getElementById('dueAmt'));
     		resetBackground(document.getElementById('payAmt'));
     		resetBackground(document.getElementById('changeAmt'));
     		resetBackground(document.getElementById('discAmt'));
-    		resetBackground(document.getElementById('discPercent'));
+    		resetBackground(document.getElementById('discPercent'));*/
     		textField.style.backgroundColor = "#72A4D2";
     		textField.style.color = "#FFFFFF";
     		selectedField = textField;
@@ -759,10 +786,60 @@
 	    		updateAmt();
 	    	}
     	}
+    	function changeDiscBackground(textField) {
+    		resetBackground(document.getElementById('discAmt2'));
+    		resetBackground(document.getElementById('discPercent2'));
+    		textField.style.backgroundColor = "#72A4D2";
+    		textField.style.color = "#FFFFFF";
+    		selectedField = textField;
+    	}
+    	function calcCharge() {
+    		var charge = document.getElementById("chargeAmt2").value;
+    		document.orderForm.totalCharge.value = charge;
+    		Popup.hide("chargePopup");
+    		refreshOrderTable();
+    	}
+    	function clearCharge() {
+    		document.getElementById('chargeAmt2').value = '';
+    		changeBackground(document.getElementById('chargeAmt2'));
+    	}
+    	function calcDiscount(rate) {
+    		var dueAmt = document.orderForm.totalPrice.value==""?0:parseFloat(document.orderForm.totalPrice.value);
+    		document.orderForm.totalDiscount.value = dueAmt * rate / 100;
+    		refreshOrderTable();
+    		Popup.hide("discountPopup");
+    	}
+    	function flipCharge() {
+    		var charge = document.getElementById("chargeAmt2").value * -1;
+    		document.getElementById("chargeAmt2").value = charge;
+    	}
+    	function listDiscounts() {
+    		var soapType = new ListDiscountsType();
+    		call_web_service(soapType, listDiscountsHandler);
+    	}
+    	function listDiscountsHandler(response) {
+    		if(response != undefined && response != null &&
+				response.listratesresponsetype != undefined && response.listratesresponsetype != null && 
+				response.listratesresponsetype.result.successful == "true") {
+				var count = response.listratesresponsetype.count;
+				var html = "";
+				if(count == 1) {
+					var rate = response.listratesresponsetype.rate;
+					html += "<input type='button' value='"+rate+"' class='numberbutton' onclick='calcDiscount("+rate+")'/>";
+				} else if(count > 1) {
+					for(var i = 0; i < count; i++) {
+						var rate = response.listratesresponsetype.rate[i];
+						html += "<input type='button' value='"+rate+"' class='numberbutton' onclick='calcDiscount("+rate+")'/>";
+					}
+				}
+				document.getElementById("discPercentRow").innerHTML = html;
+				Popup.showModal('discountPopup');
+			}
+    	}
 	</script>
 </head>
 
-<body onload="initializeCategories();initializeOrder();">
+<body onload="initializeCategories();initializeOrder();" onunload="clearOrder()">
    <div style="position:absolute; left:10px; top:10px; width:95%">
    	<table>
 		<tr><td><input type="button" class="navibutton" onclick="window.location.href='home.html';" value="<< Back"></td>
@@ -811,17 +888,25 @@
                <form name="orderForm">
                	<input type="hidden" name="orderId"/>
                	<input type="hidden" name="orderType"/>
+               	<input type="hidden" name="totalDiscount" value="0"/>
                	<input type="hidden" name="totalTax"/>
                	<input type="hidden" name="totalPrice"/>
+               	<input type="hidden" name="totalCharge" value="0"/>
                	<table width="100%">
                		<tr>
-               			<th width="100%" valign="center" align="center" id="orderHeader">Order</th>
-               			<script>
-               				if(TableName!=null&&TableName!="") {
-								document.getElementById("orderHeader").innerText += " for Table "+TableName;
-							}
-               			</script>
+               			<th colspan="2" width="100%" valign="center" align="center" id="orderHeader">Order</th>
                 	</tr>
+                	<tr>
+                		<td>Table: </td><td id="tableNameCell"></td>
+                	</tr>
+                	<tr>
+                		<td>Server: </td><td id="serverNameCell"></td>
+                	</tr>
+                	<script>
+           				if(TableName!=null && TableName!="") {
+							document.getElementById("tableNameCell").innerText = TableName;
+						}
+           			</script>
                	</table>
                <table width="100%" border="0" id="orderTable" class="orderTable">
                   <tr>
@@ -846,6 +931,18 @@
                    		<td>
                    			<input type="button" name="btnPlus" value="" class="plusbutton" onclick="updateQuantity(1);"/>
                    			<input type="button" name="btnMinus" value="" class="minusbutton" onclick="updateQuantity(-1);"/>
+                   		</td>
+                   </tr>
+                   <tr>
+                   		<td colspan="2">
+                   			<input type="button" name="btnDiscount" value="Discount" class="groovybutton" onclick="listDiscounts();"/>
+                   			<input type="button" name="btnCharge" value="Charge" class="groovybutton" onclick="clearCharge(); Popup.showModal('chargePopup');"/>
+                   			<input type="button" id="btnTable" value="Change Table" class="groovybutton" onclick="showTablePopup();" disabled="true"/>
+                   			<script>
+                   				if(OrderType == DINE_IN) {
+                   					document.getElementById("btnTable").disabled = false;
+                   				}
+                   			</script>
                    		</td>
                    </tr>
                    <tr>
@@ -928,6 +1025,90 @@
 		</form>
 	</table>
   </div>
+  <div id="discountPopup" style="width:550px; height: 350px; border:2px solid #CC6600; background-color:white; padding:2px; font-size:100%; display:none;">
+  	<table width="100%">
+  		<tr>
+  			<td>
+				<div style="float:left">
+					<table width="100%">
+						<tr><td>Discount Rates</td></tr>
+						<tr id="discPercentRow"></tr>
+					</table>
+				</div>
+  			</td>
+		</tr>
+		<tr>
+			<td align="center" width="100%">
+				<table width="100%">
+					<tr>
+						<td align="center" width="100%">
+							<!--<input type="button" name="btnSettle" value="Apply Discount" class="settlebutton" onclick="calcChange2()"/>-->
+							<input type="button" name="btnClose" value="Close" class="settlebutton" onclick="Popup.hide('discountPopup')"/>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+  	</table>
+  </div>
+  <div id="chargePopup" style="width:550px; height: 350px; border:2px solid #CC6600; background-color:white; padding:2px; font-size:100%; display:none;">
+  	<table width="100%">
+  		<tr>
+  			<td>
+  				<div style="float:left">
+					<table style="border:0px" width="100%">
+						<tr>
+							<td align="left"><strong><font color="#6600FF">Charge:</font></strong></td>
+							<td align="left">
+								$<input type="text" id="chargeAmt2" value='' size="6" style="font-size:14px;font-weight:bold" onkeyup="calcCharge('chargeAmt2')"/> 
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div style="float:left; width:20px">&nbsp;</div>
+				<div style="float:left">
+					<table width="100%">
+						<tr>
+							<td><input type="button" name="btnFlip" value="-" class="numberbutton" onclick="flipCharge()"/></td>
+							<td colspan="2" align="center"><input type="button" name="btnClear" value="Clear" class="numberbutton2" onclick="setValue(0)"/></td>
+						</tr>
+						<tr>
+							<td width="33.3%"><input type="button" name="btnSeven" value="7" class="numberbutton" onclick="addValue('7')"/></td>
+							<td width="33.3%"><input type="button" name="btnEight" value="8" class="numberbutton" onclick="addValue('8')"/></td>
+							<td width="33.3%"><input type="button" name="btnNine" value="9" class="numberbutton" onclick="addValue('9')"/></td>
+						</tr>
+						<tr>
+							<td width="33.3%"><input type="button" name="btnFour" value="4" class="numberbutton" onclick="addValue('4')"/></td>
+							<td width="33.3%"><input type="button" name="btnFive" value="5" class="numberbutton" onclick="addValue('5')"/></td>
+							<td width="33.3%"><input type="button" name="btnSix" value="6" class="numberbutton" onclick="addValue('6')"/></td>
+						</tr>
+						<tr>
+							<td width="33.3%"><input type="button" name="btnOne" value="1" class="numberbutton" onclick="addValue('1')"/></td>
+							<td width="33.3%"><input type="button" name="btnTwo" value="2" class="numberbutton" onclick="addValue('2')"/></td>
+							<td width="33.3%"><input type="button" name="btnThree" value="3" class="numberbutton" onclick="addValue('3')"/></td>
+						</tr>
+						<tr>
+							<td colspan="2"><input type="button" name="btnZero" value="0" class="numberbutton2" onclick="addValue('0')"/></td>
+							<td><input type="button" name="btnDot" value="." class="numberbutton" onclick="addValue('.')"/></td>
+						</tr>
+					</table>
+				</div>
+  			</td>
+		</tr>
+		<tr>
+			<td align="center" width="100%">
+				<table width="100%">
+					<tr>
+						<td align="center" width="100%">
+							<input type="button" name="btnSettle" value="Apply" class="settlebutton" onclick="calcCharge()"/>
+							<input type="button" name="btnClose" value="Close" class="settlebutton" onclick="clearCharge();Popup.hide('chargePopup')"/>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+  	</table>
+  </div>
 	<div id="payment" style="width:650px; height: 400px; border:2px solid #CC6600; background-color:white; padding:2px; font-size:100%; display:none;">
 		<table width="100%">
 			<tr>
@@ -949,9 +1130,10 @@
 						<table style="border:0px" width="100%">
 						<form name="payForm">
 							<tr>
-								<td align="left"><strong>Sale Amount:</strong></td>
+								<td align="left"><strong>Sale:</strong></td>
 								<td align="left"><input type="text" id="saleAmt" name="saleAmt" style="font-size:14px;font-weight:bold" onfocus="changeBackground(this)"/></td>
 							</tr>
+							<!--
 							<tr>
 								<td align="left"><strong><font color="#6600FF">Discount:</font></strong></td>
 								<td align="left">
@@ -962,6 +1144,7 @@
 								<td align="left"><strong>Tax:</strong></td>
 								<td align="left"><input type="text" id="taxAmt" name="taxAmt" style="font-size:14px;font-weight:bold" onfocus="changeBackground(this)" onkeyup="updateAmt()"/></td>
 							</tr>
+							-->
 							<tr>
 								<td align="left"><strong><font color="#6600FF">Tips:</font></strong></td>
 								<td align="left"><input type="text" id="tipsAmt" name="tipsAmt" style="font-size: 14px;font-weight:bold" onfocus="changeBackground(this)" onkeyup="updateAmt()"/></td>
@@ -1047,5 +1230,139 @@
 			</tr>
 		</table>
 	</div>
+	<div id="pickTable" style="width:700px; height: 530px; border:1px solid #CC6600; background-color:#99997A; padding:0px; font-size:100%; display:none;">
+		<table width="100%">
+			<tr>
+				<td width="100%" align="left">
+					<input type="button" value="OK" onclick="confirmTable()"/>
+					<input type="button" value="Cancel" onclick="Popup.hide('pickTable')"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<table id="areaList"></table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input type="hidden" id="tableId"/>
+					<input type="hidden" id="tableName"/>
+					<div id="pageContainer" style="outline:solid black thin; width: 680px; height: 400px; background-color: #F5DA81; float: left"></div>
+				</td>
+			</tr>
+		</table>
+	</div>
 </body>
+	<script>
+		var tableNum = 0;
+	    var areas = new Array();
+		var tables = {};
+		var container = document.getElementById('pageContainer');
+		var containerX = container.offsetLeft;
+		var containerY = container.offsetTop;
+		var _tableWidth = 50;
+		
+		function showTablePopup() {
+			listSeatingAreas();
+			Popup.showModal('pickTable');
+		}
+		function clearTables() {
+			while (container.hasChildNodes()) {
+			    container.removeChild(container.lastChild);
+			}
+		}
+		function listSeatingAreas() {
+			var soapType = new ListAreasType();
+			call_web_service(soapType, listSeatingAreasHandler);
+		}
+		function loadTables(soapTables) {
+			if(soapTables != null) {
+				if(soapTables.length != undefined) {
+					for(var k = 0; k < soapTables.length; k++) {
+						var domainTable = soapTables[k];
+						tables[domainTable.name] = new Table(domainTable.id, domainTable.name, domainTable.x, domainTable.y, domainTable.areaid);
+					}
+				} else {
+					tables[soapTables.name] = new Table(soapTables.id, soapTables.name, soapTables.x, soapTables.y, soapTables.areaid);
+				}
+			}
+		}
+		function listSeatingAreasHandler(jsonObj) {
+			if(jsonObj != undefined && jsonObj != null &&
+				jsonObj.listareasresponsetype != undefined && jsonObj.listareasresponsetype != null && 
+				jsonObj.listareasresponsetype.result.successful == "true") {
+				if(jsonObj.listareasresponsetype.areas != null) {
+					areas = new Array();
+					tables = {};
+					if(jsonObj.listareasresponsetype.areas.length != undefined) {
+						for(var i = 0; i < jsonObj.listareasresponsetype.areas.length; i++) {
+							var name = jsonObj.listareasresponsetype.areas[i].name;
+							var id = jsonObj.listareasresponsetype.areas[i].id;
+							areas.push(new SaveAreaType(name, id));
+							var soapTables = jsonObj.listareasresponsetype.areas[i].tables;
+							if(soapTables != null) {
+								loadTables(soapTables);
+							}
+						}
+					} else {
+						areas.push(new SaveAreaType(jsonObj.listareasresponsetype.areas.name, jsonObj.listareasresponsetype.areas.id));
+						loadTables(jsonObj.listareasresponsetype.areas.tables);
+					}
+					var html = "<tr>";
+					for(var i = 0; i < areas.length; i++) {
+						html += "<td><input type='button' onclick='clickSeatingArea(\"area_"+i+"\","+i+")' value='" + areas[i].name + "' id='area_"+i+"' class='mediumbutton'/></td>";
+					}
+					html += "</tr>"
+					document.getElementById("areaList").innerHTML = html;
+					clearTables();
+				}
+			} else {
+				alert("Failed to load seating areas!");
+			}
+		}
+		function clickSeatingArea(id, i) {
+			var button = document.getElementById(id);
+			button.style.backgroundColor = "#2ECCFA";
+			for(var k = 0; k < areas.length; k++) {
+				if(k!=i) document.getElementById("area_"+k).style.backgroundColor = "#FFFF00";
+			} 
+			var area = areas[i];
+			clearTables();
+
+			var tableDiv, x, y;
+			for(var t in tables) {
+				if(tables[t].areaId == area.id) {
+			        tableDiv = document.createElement('div');
+					//tableDiv.setAttribute('src', 'img/tan-square.png');
+					x = containerX+tables[t].x;
+					y = containerY+tables[t].y;
+			        tableDiv.setAttribute('class', 'drag');
+			        tableDiv.setAttribute('id', tables[t].name);
+			        tableDiv.setAttribute('style', 'border:solid black 1px;width:'+_tableWidth+'px;height:'+_tableWidth+'px;background-color:brown;left:'+x+'px;top:'+y+'px;');
+			        tableDiv.innerHTML = '<br><center>' + tables[t].name + '</center>';
+			        tableDiv.onclick = function() { clickTable(this); }
+			        container.appendChild(tableDiv);
+				}
+			}
+		}
+		function clickTable(tableDiv) {
+			tableDiv.style.backgroundColor = "#2ECCFA";
+			selected = tableDiv.id;
+			document.getElementById("tableId").value = tables[selected].id;
+			document.getElementById("tableName").value = tableDiv.id;
+			for(var t in tables) {
+				if(tables[t].name != tableDiv.id && document.getElementById(t)!=null) {
+					document.getElementById(t).style.backgroundColor = "brown";
+				}
+			}
+		}
+		function confirmTable() {
+			localStorage.setItem("tableId", document.getElementById("tableId").value);
+			localStorage.setItem("tableName", document.getElementById("tableName").value);
+			var TableId = document.getElementById("tableId").value;
+			var TableName = document.getElementById("tableName").value;
+			document.getElementById("tableNameCell").innerText = TableName;
+			Popup.hide("pickTable");
+		}
+	</script>
 </html>

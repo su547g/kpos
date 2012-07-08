@@ -1470,4 +1470,46 @@ public class KPosPortImpl implements KPosPortType {
         }
         return responseType;
     }
+
+    @Override
+    public ListRatesResponseType listRates(
+            @WebParam(partName = "parameters", name = "ListRatesType", targetNamespace = NS) ListRatesType parameters) {
+        ListRatesResponseType responseType = new ListRatesResponseType();
+        if(parameters.getType().equalsIgnoreCase("DISCOUNT")) {
+            FetchResult<List<CompanyDiscount>> result = contentManagementService.fetchDiscountRates();
+            if(result.isSuccessful()) {
+                List<CompanyDiscount> discounts = result.getTarget();
+                for(CompanyDiscount discount : discounts) {
+                    responseType.getRate().add(discount.getRate());
+                }
+                responseType.setCount(discounts.size());
+            }
+            responseType.setResult(getSoapResult(result));
+        } else if(parameters.getType().equalsIgnoreCase("TAX")) {
+            
+        }
+        return responseType;
+    }
+
+    @Override
+    public FetchOrderByNumberResponseType fetchOrderByNumber(
+            @WebParam(partName = "parameters", name = "FetchOrderByNumberType", targetNamespace = NS) FetchOrderByNumberType parameters) {
+        FetchOrderByNumberResponseType responseType = new FetchOrderByNumberResponseType();
+        ResultType result = new ResultType();
+        try {
+            /*FetchResult<Order> fetchResult = contentManagementService.findTodayOrderByNumber(parameters.getOrderNum(), 500);
+            Order order = fetchResult.getTarget();
+            if(order != null) {
+                OrderType soapType = convertToOrderType(order);
+                responseType.setOrder(soapType);
+            }
+            result.setSuccessful(true);
+            responseType.setResult(result);*/
+        } catch(Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in fetchOrderByNumber", e);
+        }    
+        return responseType;
+    }
 }

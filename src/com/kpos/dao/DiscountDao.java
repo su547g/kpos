@@ -1,17 +1,17 @@
 package com.kpos.dao;
 
-import com.kpos.domain.CompanyProfile;
+import com.kpos.domain.CompanyDiscount;
 import org.springframework.stereotype.Repository;
 
 /**
  * Created by kpos.
  * Author: kkwang
- * Date: 5/27/12 5:20 PM
+ * Date: 6/21/12 11:37 PM
  */
 @Repository
-public class CompanyProfileDao extends AbstractJpaDao<CompanyProfile> implements ICompanyDao {
+public class DiscountDao extends AbstractJpaDao<CompanyDiscount> implements IDiscountDao {
     @Override
     protected Class getEntityClass() {
-        return CompanyProfile.class;
+        return CompanyDiscount.class;
     }
 }
