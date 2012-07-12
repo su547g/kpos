@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE JposEntries PUBLIC "-//JavaPOS//DTD//EN"
+                             "jpos/res/jcl.dtd">
+<JposEntries>
+<!--Saved by JavaPOS jpos.config/loader (JCL) version 2.0.1 on 2/5/03 2:24 PM-->
+   
+       <JposEntry logicalName="byprn">
+        <creation factoryClass="com.beiyang.jpos192.ByJposServiceInstanceFactory" serviceClass="com.beiyang.jpos192.BasePrinterService"/>
+        <vendor name="SNBC Co., Ltd." url="http://www.newbeiyang.com"/>
+        <jpos category="POSPrinter" version="1.9a"/>
+        <product description="POS Printer " name="By2002cp" url="http://www.newbeiyang.com"/>
+
+        <!--Other non JavaPOS required property (mostly vendor properties and bus specific properties i.e. RS232 )-->
+        <prop name="portName" type="String" value="COM1"/>
+        <prop name="errorResponseTimeout" type="Long" value="5000"/>
+        <prop name="statusTimeout" type="Long" value="500"/>
+        <prop name="timeout" type="Long" value="10000"/>
+        <prop name="starModel" type="String" value="By2002N"/>
+        <prop name="deviceClassName" type="String" value="By2002NP"/>
+        <prop name="portSettings" type="String" value="19200,1,0"/>
+        <prop name="statusTimeDelay" type="Long" value="500"/>
+        <prop name="cashDrawer1" type="Boolean" value="true"/>
+        <prop name="drawerClosedOnSignalLow" type="Boolean" value="false"/>
+    </JposEntry>
+       <JposEntry logicalName="byprnlpt">
+        <creation factoryClass="com.beiyang.jpos192.ByJposServiceInstanceFactory" serviceClass="com.beiyang.jpos192.BasePrinterService"/>
+        <vendor name="SNBC Co., Ltd." url="http://www.newbeiyang.com"/>
+        <jpos category="POSPrinter" version="1.9a"/>
+        <product description="POS Printer " name="By2002cp" url="http://www.newbeiyang.com"/>
+
+        <!--Other non JavaPOS required property (mostly vendor properties and bus specific properties i.e. RS232 )-->
+        <prop name="portName" type="String" value="LPT3"/>
+        <prop name="errorResponseTimeout" type="Long" value="5000"/>
+        <prop name="statusTimeout" type="Long" value="500"/>
+        <prop name="timeout" type="Long" value="10000"/>
+        <prop name="starModel" type="String" value="By2002N"/>
+        <prop name="deviceClassName" type="String" value="By2002NP"/>
+        <prop name="portSettings" type="String" value="57096"/>
+        <prop name="statusTimeDelay" type="Long" value="500"/>
+        <prop name="cashDrawer1" type="Boolean" value="true"/>
+        <prop name="drawerClosedOnSignalLow" type="Boolean" value="false"/>
+    </JposEntry>
+       <JposEntry logicalName="byprnusb">
+        <creation factoryClass="com.beiyang.jpos192.ByJposServiceInstanceFactory" serviceClass="com.beiyang.jpos192.BasePrinterService"/>
+        <vendor name="SNBC Co., Ltd." url="http://www.newbeiyang.com"/>
+        <jpos category="POSPrinter" version="1.9a"/>
+        <product description="POS Printer " name="By2002cp" url="http://www.newbeiyang.com"/>
+
+        <!--Other non JavaPOS required property (mostly vendor properties and bus specific properties i.e. RS232 )-->
+        <prop name="portName" type="String" value="USB1"/>
+        <prop name="errorResponseTimeout" type="Long" value="5000"/>
+        <prop name="statusTimeout" type="Long" value="500"/>
+        <prop name="timeout" type="Long" value="10000"/>
+        <prop name="starModel" type="String" value="By2002N"/>
+        <prop name="deviceClassName" type="String" value="By2002NP"/>
+        <prop name="portSettings" type="String" value="224"/>
+        <prop name="statusTimeDelay" type="Long" value="500"/>
+        <prop name="cashDrawer1" type="Boolean" value="true"/>
+        <prop name="drawerClosedOnSignalLow" type="Boolean" value="false"/>
+    </JposEntry>
+           <JposEntry logicalName="byprnnet">
+        <creation factoryClass="com.beiyang.jpos192.ByJposServiceInstanceFactory" serviceClass="com.beiyang.jpos192.BasePrinterService"/>
+        <vendor name="SNBC Co., Ltd." url="http://www.newbeiyang.com"/>
+        <jpos category="POSPrinter" version="1.9a"/>
+        <product description="POS Printer " name="By2002cp" url="http://www.newbeiyang.com"/>
+
+        <!--Other non JavaPOS required property (mostly vendor properties and bus specific properties i.e. RS232 )-->
+        <prop name="portName" type="String" value="SOCKET:192.168.19.220"/>
+        <prop name="errorResponseTimeout" type="Long" value="5000"/>
+        <prop name="statusTimeout" type="Long" value="500"/>
+        <prop name="timeout" type="Long" value="10000"/>
+        <prop name="starModel" type="String" value="By2002N"/>
+        <prop name="deviceClassName" type="String" value="By2002NP"/>
+        <prop name="portSettings" type="String" value="224"/>
+        <prop name="statusTimeDelay" type="Long" value="500"/>
+        <prop name="cashDrawer1" type="Boolean" value="true"/>
+        <prop name="drawerClosedOnSignalLow" type="Boolean" value="false"/>
+    </JposEntry>
+       <JposEntry logicalName="bycash">
+        <creation factoryClass="com.beiyang.jpos192.ByJposServiceInstanceFactory" serviceClass="com.beiyang.jpos192.cash.BaseCashDrawerService"/>
+        <vendor name="SNBC Co., Ltd." url="http://www.newbeiyang.com"/>
+        <jpos category="CashDrawer" version="1.9a"/>
+        <product description="Standerd CashDrawer" name="ByCashDrawer" url="http://www.newbeiyang.com"/>
+
+        <!--Other non JavaPOS required property (mostly vendor properties and bus specific properties i.e. RS232 )-->
+        <prop name="portName" type="String" value="COM1"/>
+        <prop name="errorResponseTimeout" type="Long" value="5000"/>
+        <prop name="statusTimeout" type="Long" value="500"/>
+        <prop name="timeout" type="Long" value="10000"/>
+        <prop name="starModel" type="String" value="ByCash"/>
+        <prop name="deviceClassName" type="String" value="ByCash"/>
+        <prop name="portSettings" type="String" value="19200,1,0"/>
+        <prop name="statusTimeDelay" type="Long" value="500"/>
+        <prop name="cashDrawer1" type="Boolean" value="true"/>
+        <prop name="drawerClosedOnSignalLow" type="Boolean" value="false"/>
+    </JposEntry>
+       <JposEntry logicalName="bycashusb">
+        <creation factoryClass="com.beiyang.jpos192.ByJposServiceInstanceFactory" serviceClass="com.beiyang.jpos192.cash.BaseCashDrawerService"/>
+        <vendor name="SNBC Co., Ltd." url="http://www.newbeiyang.com"/>
+        <jpos category="CashDrawer" version="1.9a"/>
+        <product description="Standerd CashDrawer" name="ByCashDrawer" url="http://www.newbeiyang.com"/>
+
+        <!--Other non JavaPOS required property (mostly vendor properties and bus specific properties i.e. RS232 )-->
+        <prop name="portName" type="String" value="USB1"/>
+        <prop name="errorResponseTimeout" type="Long" value="5000"/>
+        <prop name="statusTimeout" type="Long" value="500"/>
+        <prop name="timeout" type="Long" value="10000"/>
+        <prop name="starModel" type="String" value="ByCash"/>
+        <prop name="deviceClassName" type="String" value="ByCash"/>
+        <prop name="portSettings" type="String" value="224"/>
+        <prop name="statusTimeDelay" type="Long" value="500"/>
+        <prop name="cashDrawer1" type="Boolean" value="true"/>
+        <prop name="drawerClosedOnSignalLow" type="Boolean" value="false"/>
+    </JposEntry>
+     <JposEntry logicalName="byprn2">
+        <creation factoryClass="com.beiyang.jpos192.ByJposServiceInstanceFactory" serviceClass="com.beiyang.jpos192.ptr.By2002cp"/>
+        <vendor name="SNBC Co., Ltd." url="http://www.newbeiyang.com"/>
+        <jpos category="POSPrinter" version="1.9a"/>
+        <product description="POS Printer " name="By2002cp" url="http://www.newbeiyang.com"/>
+        
+        <!--Other non JavaPOS required property (mostly vendor properties and bus specific properties i.e. RS232 )-->
+        <prop name="portName" type="String" value="LPT1"/>
+        <prop name="errorResponseTimeout" type="Long" value="5000"/>
+        <prop name="statusTimeout" type="Long" value="500"/>
+        <prop name="timeout" type="Long" value="10000"/>
+        <prop name="starModel" type="String" value="TSP1000"/>
+        <prop name="deviceClassName" type="String" value="com.beiyang.jpos192.ptr.By2002cp"/>
+        <prop name="portSettings" type="String" value="no settings required or accepted"/>
+        <prop name="statusTimeDelay" type="Long" value="500"/>
+        <prop name="cashDrawer1" type="Boolean" value="true"/>
+        <prop name="drawerClosedOnSignalLow" type="Boolean" value="false"/>
+    </JposEntry>
+       
+</JposEntries>
