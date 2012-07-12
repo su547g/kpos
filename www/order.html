@@ -266,10 +266,10 @@
 			listCatOptions(catId);
 		}
 		function clickGlobalOption(id, price, name) {
-			alert(id + " " + price + " " + name);
+			//alert(id + " " + price + " " + name);
 			if(selectedItemIndex >= 0) {
 				var orderItem = orderItems[selectedItemIndex];
-				alert(orderItem.displayText + ", " + orderItem.price + ", " + orderItem.quantity);
+				//alert(orderItem.displayText + ", " + orderItem.price + ", " + orderItem.quantity);
 				var optionItem = new OrderOption(name, price, 1, id, GLOBAL_OP);
 				orderItem.childItems.push(optionItem);
 				refreshOrderTable();
@@ -319,10 +319,10 @@
 			}
 		}
 		function clickCategoryOption(id, price, name) {
-			alert(id + " " + name + " " + price);
+			//alert(id + " " + name + " " + price);
 			if(selectedItemIndex >= 0) {
 				var orderItem = orderItems[selectedItemIndex];
-				alert(orderItem.displayText + ", " + orderItem.price + ", " + orderItem.quantity);
+				//alert(orderItem.displayText + ", " + orderItem.price + ", " + orderItem.quantity);
 				var optionItem = new OrderOption(name, price, 1, id, CAT_OP);//aDisplayText, aPrice, aQuantity, aId, aType
 				orderItem.childItems.push(optionItem);
 				refreshOrderTable();
@@ -508,7 +508,7 @@
 	   			var quantity = document.menuItemForm.menuItemQuantity.value;
 	   			
 	   			var item = new OrderItem(name, price, quantity, itemId);
-	   			var options = document.getElementById(name+"_option");
+	   			var options = document.getElementsByName(name+"_option");
 	   			if(options != null) {
 	   				if(document.menuItemForm.optionsSize.value > 1) {
 		   				for (var i=0; i < options.length; i++) {
@@ -559,7 +559,7 @@
 	        }
 	   	}
 	   	function clickOrderItem(index) {
-	   		alert(index);
+	   		//alert(index);
 	   		selectedItemIndex = index;
 	   		selectedOptionIndex = -1;
 	   		var cell = document.getElementById("btmQty");
@@ -570,7 +570,7 @@
 	   	function clickOptionItem(itemIndex, optionIndex) {
 	   		selectedItemIndex = itemIndex;
 	   		selectedOptionIndex = optionIndex;
-	   		alert(itemIndex + " - " + optionIndex);
+	   		//alert(itemIndex + " - " + optionIndex);
 	   		var cell = document.getElementById("btmQty");
 	   		cell.innerText = orderItems[itemIndex].childItems[optionIndex].quantity;
 	   		highlightOrderRow(itemIndex + "-" + optionIndex);
