@@ -91,6 +91,7 @@
 				window.location.href = targetURL;
 			} else {
 				alert("You don't have access to this function!");
+				clearCache();
 			}
 	    }
 	    function clearCache() {
@@ -129,7 +130,7 @@
 		<table width="100%">
 			<tr>
 				<td width="100%" align="left">
-					<input type="button" value="OK" onclick="confirmTable()"/>
+					<!--<input type="button" value="OK" onclick="confirmTable()"/>-->
 					<input type="button" value="Cancel" onclick="Popup.hide('pickTable')"/>
 				</td>
 			</tr>
@@ -293,11 +294,12 @@
 			selected = tableDiv.id;
 			document.getElementById("tableId").value = tables[selected].id;
 			document.getElementById("tableName").value = tableDiv.id;
-			for(var t in tables) {
+			confirmTable();
+			/*for(var t in tables) {
 				if(tables[t].name != tableDiv.id && document.getElementById(t)!=null) {
 					document.getElementById(t).style.backgroundColor = "brown";
 				}
-			}
+			}*/
 		}
 		function confirmTable() {
 			localStorage.setItem("tableId", document.getElementById("tableId").value);
