@@ -156,6 +156,11 @@
                 document.getElementById("orderHeader").innerText = "Order " + order.id;
                 document.orderForm.orderType = order.type;
                 document.orderForm.totalCharge = order.charge;
+                TableId = order.tableid;
+                TableName = order.tablename;
+                if(TableName!=null && TableName!="") {
+					document.getElementById("tableNameCell").innerText = TableName;
+				}
                 var items = order.orderitems;
                 if(items.length != undefined && items.length != null) {
                 	for(var i = 0; i < items.length; i++) {
@@ -701,20 +706,12 @@
 	   		total += charge;
 	   		var tax = (document.orderForm.totalTax.value==null||document.orderForm.totalTax.value=="")?0:parseFloat(document.orderForm.totalTax.value);
 	   		total += tax;
-	   		document.payForm.saleAmt.value = total;
-	   		//document.payForm.taxAmt.value = tax;
+	   		document.payForm.saleAmt.value = total.toFixed(2);
 	   		var tips = (document.payForm.tipsAmt.value==""||document.payForm.tipsAmt.value==null)?0:parseFloat(document.payForm.tipsAmt.value);
 	   		document.payForm.dueAmt.value = (total + tips).toFixed(2);
 	   		Popup.showModal('payment');
 	   	}
     	function changeBackground(textField) {
-    		/*resetBackground(document.getElementById('taxAmt'));
-    		resetBackground(document.getElementById('tipsAmt'));
-    		resetBackground(document.getElementById('dueAmt'));
-    		resetBackground(document.getElementById('payAmt'));
-    		resetBackground(document.getElementById('changeAmt'));
-    		resetBackground(document.getElementById('discAmt'));
-    		resetBackground(document.getElementById('discPercent'));*/
     		textField.style.backgroundColor = "#72A4D2";
     		textField.style.color = "#FFFFFF";
     		selectedField = textField;
@@ -1111,19 +1108,7 @@
   </div>
 	<div id="payment" style="width:650px; height: 400px; border:2px solid #CC6600; background-color:white; padding:2px; font-size:100%; display:none;">
 		<table width="100%">
-			<tr>
-				<td width="100%" align="left">
-					<table border="0" width="100%">
-						<tr>
-							<td width="20%"><strong>Payment Options:</strong></td>
-							<td>
-								<input type="button" name="btnCash" value="Cash" class="paymentbutton" onclick=""/>
-								<input type="button" name="btnCredit" value="Credit Card" class="creditbutton" onclick=""/>
-							</td>
-						</tr>
-					</table>
-				</td>
-			</tr>
+			
 			<tr>
 				<td width="100%">
 					<div style="float:left">
@@ -1133,18 +1118,6 @@
 								<td align="left"><strong>Sale:</strong></td>
 								<td align="left"><input type="text" id="saleAmt" name="saleAmt" style="font-size:14px;font-weight:bold" onfocus="changeBackground(this)"/></td>
 							</tr>
-							<!--
-							<tr>
-								<td align="left"><strong><font color="#6600FF">Discount:</font></strong></td>
-								<td align="left">
-									$<input type="text" id="discAmt" value='' size="3" style="font-size:14px;font-weight:bold" onfocus="changeBackground(this)" onkeyup="calcDiscount('discAmt')"/> or 
-									<input type="text" id="discPercent" value='' size="3" style="font-size:14px;font-weight:bold" onfocus="changeBackground(this)" onkeyup="calcDiscount('discPercent')"/>%</td>
-							</tr>
-							<tr>
-								<td align="left"><strong>Tax:</strong></td>
-								<td align="left"><input type="text" id="taxAmt" name="taxAmt" style="font-size:14px;font-weight:bold" onfocus="changeBackground(this)" onkeyup="updateAmt()"/></td>
-							</tr>
-							-->
 							<tr>
 								<td align="left"><strong><font color="#6600FF">Tips:</font></strong></td>
 								<td align="left"><input type="text" id="tipsAmt" name="tipsAmt" style="font-size: 14px;font-weight:bold" onfocus="changeBackground(this)" onkeyup="updateAmt()"/></td>
@@ -1217,12 +1190,14 @@
 			</tr>
 			<tr><td><hr></td></tr>
 			<tr>
-				<td align="center" width="100%">
-					<table width="100%">
+				<td width="100%" align="left">
+					<table border="0" width="100%">
 						<tr>
-							<td align="center" width="100%">
-								<input type="button" name="btnSettle" value="Settle Payment" class="settlebutton" onclick="calcChange()"/>
-								<input type="button" name="btnClose" value="Close" class="settlebutton" onclick="Popup.hide('payment')"/>
+							<td width="20%"><strong>Payment Options:</strong></td>
+							<td>
+								<input type="button" name="btnCash" value="Cash" class="paymentbutton" onclick="calcChange()"/>
+								<input type="button" name="btnCredit" value="Credit Card" class="creditbutton" onclick=""/>
+								<input type="button" name="btnClose" value="Close" class="creditbutton" onclick="Popup.hide('payment')"/>
 							</td>
 						</tr>
 					</table>
