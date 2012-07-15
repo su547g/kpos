@@ -1473,9 +1473,9 @@ public class KPosPortImpl implements KPosPortType {
     }
 
     @Override
-    public ListRatesResponseType listRates(
-            @WebParam(partName = "parameters", name = "ListRatesType", targetNamespace = NS) ListRatesType parameters) {
-        ListRatesResponseType responseType = new ListRatesResponseType();
+    public ListDiscountRatesResponseType listDiscountRates(
+            @WebParam(partName = "parameters", name = "ListDiscountRatesType", targetNamespace = NS) ListDiscountRatesType parameters) {
+        ListDiscountRatesResponseType responseType = new ListDiscountRatesResponseType();
         if(parameters.getType().equalsIgnoreCase("DISCOUNT")) {
             FetchResult<List<CompanyDiscount>> result = contentManagementService.fetchDiscountRates();
             if(result.isSuccessful()) {
@@ -1490,6 +1490,18 @@ public class KPosPortImpl implements KPosPortType {
             
         }
         return responseType;
+    }
+
+    @Override
+    public SaveDiscountRateResponseType saveDiscountRate(
+            @WebParam(partName = "parameters", name = "SaveDiscountRateType", targetNamespace = NS) SaveDiscountRateType parameters) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public DeleteDiscountRateResponseType deleteDiscountRate(
+            @WebParam(partName = "parameters", name = "DeleteDiscountRateType", targetNamespace = NS) DeleteDiscountRateType parameters) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

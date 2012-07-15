@@ -151,8 +151,12 @@
             <xs:element name="GetRoleFunctionsHTMLType" type="tns:GetRoleFunctionsHTMLType"/>
             <xs:element name="GetRoleFunctionsHTMLResponseType" type="tns:GetRoleFunctionsHTMLResponseType"/>
 
-            <xs:element name="ListRatesType" type="tns:ListRatesType"/>
-            <xs:element name="ListRatesResponseType" type="tns:ListRatesResponseType"/>
+            <xs:element name="ListDiscountRatesType" type="tns:ListDiscountRatesType"/>
+            <xs:element name="ListDiscountRatesResponseType" type="tns:ListDiscountRatesResponseType"/>
+            <xs:element name="SaveDiscountRateType" type="tns:SaveDiscountRateType"/>
+            <xs:element name="SaveDiscountRateResponseType" type="tns:SaveDiscountRateResponseType"/>
+            <xs:element name="DeleteDiscountRateType" type="tns:DeleteDiscountRateType"/>
+            <xs:element name="DeleteDiscountRateResponseType" type="tns:DeleteDiscountRateResponseType"/>
 
             <!--Result object-->
             <xs:complexType name="ResultType">
@@ -1108,16 +1112,37 @@
                     <xs:element name="html" type="xsd:string"/>
                 </xs:sequence>
             </xs:complexType>
-            <xs:complexType name="ListRatesType">
+            <xs:complexType name="ListDiscountRatesType">
                 <xs:sequence>
                     <xs:element name="type" type="xsd:string" minOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
-            <xs:complexType name="ListRatesResponseType">
+            <xs:complexType name="ListDiscountRatesResponseType">
                 <xs:sequence>
                     <xs:element name="Result" type="tns:ResultType"/>
                     <xs:element name="rate" type="xsd:double" maxOccurs="unbounded"/>
                     <xs:element name="count" type="xsd:int"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="SaveDiscountRateType">
+                <xs:sequence>
+                    <xs:element name="rateId" type="xsd:long" maxOccurs="1" minOccurs="0"/>
+                    <xs:element name="rate" type="xsd:double" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="SaveDiscountRateResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeleteDiscountRateType">
+                <xs:sequence>
+                    <xs:element name="rateId" type="xsd:long" maxOccurs="1" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeleteDiscountRateResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
                 </xs:sequence>
             </xs:complexType>
             <!--End of operations-->
@@ -1493,11 +1518,23 @@
     <wsdl:message name="GetRoleFunctionsHTMLResponseMessage">
         <wsdl:part name="parameters" element="tns:GetRoleFunctionsHTMLResponseType"/>
     </wsdl:message>
-    <wsdl:message name="ListRatesMessage">
-        <wsdl:part name="parameters" element="tns:ListRatesType"/>
+    <wsdl:message name="ListDiscountRatesMessage">
+        <wsdl:part name="parameters" element="tns:ListDiscountRatesType"/>
     </wsdl:message>
-    <wsdl:message name="ListRatesResponseMessage">
-        <wsdl:part name="parameters" element="tns:ListRatesResponseType"/>
+    <wsdl:message name="ListDiscountRatesResponseMessage">
+        <wsdl:part name="parameters" element="tns:ListDiscountRatesResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="SaveDiscountRateMessage">
+        <wsdl:part name="parameters" element="tns:SaveDiscountRateType"/>
+    </wsdl:message>
+    <wsdl:message name="SaveDiscountRateResponseMessage">
+        <wsdl:part name="parameters" element="tns:SaveDiscountRateResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="DeleteDiscountRateMessage">
+        <wsdl:part name="parameters" element="tns:DeleteDiscountRateType"/>
+    </wsdl:message>
+    <wsdl:message name="DeleteDiscountRateResponseMessage">
+        <wsdl:part name="parameters" element="tns:DeleteDiscountRateResponseType"/>
     </wsdl:message>
     <!--End of messages-->
 
@@ -1759,9 +1796,17 @@
             <wsdl:input message="tns:GetRoleFunctionsHTMLMessage" name="GetRoleFunctionsHTML"/>
             <wsdl:output message="tns:GetRoleFunctionsHTMLResponseMessage" name="GetRoleFunctionsHTMLResponse"/>
         </wsdl:operation>
-        <wsdl:operation name="ListRates">
-            <wsdl:input message="tns:ListRatesMessage" name="ListRates"/>
-            <wsdl:output message="tns:ListRatesResponseMessage" name="ListRatesResponse"/>
+        <wsdl:operation name="ListDiscountRates">
+            <wsdl:input message="tns:ListDiscountRatesMessage" name="ListDiscountRates"/>
+            <wsdl:output message="tns:ListDiscountRatesResponseMessage" name="ListDiscountRatesResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="SaveDiscountRate">
+            <wsdl:input message="tns:SaveDiscountRateMessage" name="SaveDiscountRate"/>
+            <wsdl:output message="tns:SaveDiscountRateResponseMessage" name="SaveDiscountRateResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="DeleteDiscountRate">
+            <wsdl:input message="tns:DeleteDiscountRateMessage" name="DeleteDiscountRate"/>
+            <wsdl:output message="tns:DeleteDiscountRateResponseMessage" name="DeleteDiscountRateResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -2329,12 +2374,30 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="ListRates">
-            <soap:operation soapAction="http://ws.kpos.com/ListRates" style="document"/>
-            <wsdl:input name="ListRates">
+        <wsdl:operation name="ListDiscountRates">
+            <soap:operation soapAction="http://ws.kpos.com/ListDiscountRates" style="document"/>
+            <wsdl:input name="ListDiscountRates">
                 <soap:body use="literal"/>
             </wsdl:input>
-            <wsdl:output name="ListRatesResponse">
+            <wsdl:output name="ListDiscountRatesResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="SaveDiscountRate">
+            <soap:operation soapAction="http://ws.kpos.com/SaveDiscountRate" style="document"/>
+            <wsdl:input name="SaveDiscountRate">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="SaveDiscountRateResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="DeleteDiscountRate">
+            <soap:operation soapAction="http://ws.kpos.com/DeleteDiscountRate" style="document"/>
+            <wsdl:input name="DeleteDiscountRate">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DeleteDiscountRateResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
