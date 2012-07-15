@@ -111,6 +111,8 @@ public interface IContentManagementService {
 
     FetchResult<CompanyProfile> fetchCompanyProfile();
     FetchResult<List<CompanyDiscount>> fetchDiscountRates();
-
+    CreateResult<CompanyDiscount> addDiscountRate(double aRate);
+    UpdateResult<CompanyDiscount> updateDiscountRate(double aRate, double newRate);
+    DeleteResult deleteDiscountRate(double aRate);
     //FetchResult<Order> findTodayOrderByNumber(long aId, long aBase);
 }

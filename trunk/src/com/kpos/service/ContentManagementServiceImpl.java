@@ -1285,6 +1285,43 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         fetchResult.setTarget(discounts);
         return fetchResult;
     }
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public DeleteResult deleteDiscountRate(double aRate) {
+        DeleteResult result = new DeleteResult();
+        CompanyDiscount discount = discountDao.findDiscountByRate(aRate);
+        if(discount != null) {
+            boolean isSuccessful = discountDao.delete(discount);
+            result.setSuccessful(isSuccessful);
+        } else {
+            result.setSuccessful(false);
+        }
+        return result;
+    }
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public CreateResult<CompanyDiscount> addDiscountRate(double aRate) {
+        CreateResult<CompanyDiscount> result = new CreateResult<CompanyDiscount>();
+        CompanyDiscount discount = new CompanyDiscount();
+        discount.setAmount(0);
+        discount.setRate(aRate);
+        discount.setCreatedOn(new Date());
+        discount.setLastUpdated(new Date());
+        discountDao.insert(discount);
+        result.setCreated(discount);
+        result.setSuccessful(true);
+        return result;
+    }
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public UpdateResult<CompanyDiscount> updateDiscountRate(double aRate, double newRate) {
+        UpdateResult<CompanyDiscount> result = new UpdateResult<CompanyDiscount>();
+        CompanyDiscount discount = discountDao.findDiscountByRate(aRate);
+        if(discount != null) {
+            discount.setRate(newRate);
+            discountDao.merge(discount);
+        } else {
+            result.setSuccessful(false);
+        }
+        return result;
+    }
     /*
     public FetchResult<Order> findTodayOrderByNumber(long aId, long aBase) {
         FetchResult<Order> fetchResult = new FetchResult<Order>();

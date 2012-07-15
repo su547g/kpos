@@ -1126,8 +1126,8 @@
             </xs:complexType>
             <xs:complexType name="SaveDiscountRateType">
                 <xs:sequence>
-                    <xs:element name="rateId" type="xsd:long" maxOccurs="1" minOccurs="0"/>
-                    <xs:element name="rate" type="xsd:double" maxOccurs="1"/>
+                    <xs:element name="rate" type="xsd:double" maxOccurs="1" minOccurs="0"/>
+                    <xs:element name="newRate" type="xsd:double" minOccurs="1" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="SaveDiscountRateResponseType">
@@ -1137,7 +1137,7 @@
             </xs:complexType>
             <xs:complexType name="DeleteDiscountRateType">
                 <xs:sequence>
-                    <xs:element name="rateId" type="xsd:long" maxOccurs="1" minOccurs="0"/>
+                    <xs:element name="rate" type="xsd:double" maxOccurs="1" minOccurs="0"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="DeleteDiscountRateResponseType">
