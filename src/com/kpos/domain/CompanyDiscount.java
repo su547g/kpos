@@ -7,6 +7,12 @@ import javax.persistence.*;
  * Author: kkwang
  * Date: 6/8/12 12:35 AM
  */
+@NamedQueries({
+        @NamedQuery(
+                name = "CompanyDiscount.findDiscountRate",
+                query = "from CompanyDiscount where rate = :aRate"
+        )
+})
 @Entity
 @Table(name = "company_discount")
 public class CompanyDiscount extends AbstractDomainObject {

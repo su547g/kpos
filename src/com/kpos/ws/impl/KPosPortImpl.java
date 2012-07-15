@@ -1493,15 +1493,33 @@ public class KPosPortImpl implements KPosPortType {
     }
 
     @Override
-    public SaveDiscountRateResponseType saveDiscountRate(
-            @WebParam(partName = "parameters", name = "SaveDiscountRateType", targetNamespace = NS) SaveDiscountRateType parameters) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public SaveDiscountRateResponseType saveDiscountRate(@WebParam(partName = "parameters", name = "SaveDiscountRateType", targetNamespace = "http://ws.kpos.com/app") SaveDiscountRateType parameters) {
+        SaveDiscountRateResponseType responseType = new SaveDiscountRateResponseType();
+        Double rate = parameters.getRate();
+        double newRate = parameters.getNewRate();
+        if(rate == null) {
+            CreateResult<CompanyDiscount> result = contentManagementService.addDiscountRate(newRate);
+            responseType.setResult(getSoapResult(result));
+        } else {
+            UpdateResult<CompanyDiscount> result = contentManagementService.updateDiscountRate(rate, newRate);
+            responseType.setResult(getSoapResult(result));
+        }
+        return responseType;
     }
 
     @Override
     public DeleteDiscountRateResponseType deleteDiscountRate(
             @WebParam(partName = "parameters", name = "DeleteDiscountRateType", targetNamespace = NS) DeleteDiscountRateType parameters) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        DeleteDiscountRateResponseType responseType = new DeleteDiscountRateResponseType();
+        try {
+            DeleteResult result = contentManagementService.deleteDiscountRate(parameters.getRate());
+            responseType.setResult(getSoapResult(result));
+        } catch(Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in deleteDiscountRate", e);
+        }
+        return responseType;
     }
 
     @Override
