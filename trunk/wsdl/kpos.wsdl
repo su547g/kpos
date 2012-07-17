@@ -158,6 +158,10 @@
             <xs:element name="DeleteDiscountRateType" type="tns:DeleteDiscountRateType"/>
             <xs:element name="DeleteDiscountRateResponseType" type="tns:DeleteDiscountRateResponseType"/>
 
+            <xs:element name="SaveCompanyProfileType" type="tns:SaveCompanyProfileType"/>
+            <xs:element name="SaveCompanyProfileResponseType" type="tns:SaveCompanyProfileResponseType"/>
+            <xs:element name="FetchCompanyProfileType" type="tns:FetchCompanyProfileType"/>
+            <xs:element name="FetchCompanyProfileResponseType" type="tns:FetchCompanyProfileResponseType"/>
             <!--Result object-->
             <xs:complexType name="ResultType">
                 <xs:sequence>
@@ -1145,6 +1149,26 @@
                     <xs:element name="Result" type="tns:ResultType"/>
                 </xs:sequence>
             </xs:complexType>
+            <xs:complexType name="SaveCompanyProfileType">
+                <xs:sequence>
+                    <xs:element name="company" type="tns:CompanyProfileType" minOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="SaveCompanyProfileResponseType">
+                <xs:sequence>
+                    <xs:element name="result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="FetchCompanyProfileType">
+                <xs:sequence>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="FetchCompanyProfileResponseType">
+                <xs:sequence>
+                    <xs:element name="result" type="tns:ResultType"/>
+                    <xs:element name="company" type="tns:CompanyProfileType" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
             <!--End of operations-->
         </xs:schema>
     </wsdl:types>
@@ -1536,6 +1560,18 @@
     <wsdl:message name="DeleteDiscountRateResponseMessage">
         <wsdl:part name="parameters" element="tns:DeleteDiscountRateResponseType"/>
     </wsdl:message>
+    <wsdl:message name="SaveCompanyProfileMessage">
+        <wsdl:part name="parameters" element="tns:SaveCompanyProfileType"/>
+    </wsdl:message>
+    <wsdl:message name="SaveCompanyProfileResponseMessage">
+        <wsdl:part name="parameters" element="tns:SaveCompanyProfileResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="FetchCompanyProfileMessage">
+        <wsdl:part name="parameters" element="tns:FetchCompanyProfileType"/>
+    </wsdl:message>
+    <wsdl:message name="FetchCompanyProfileResponseMessage">
+        <wsdl:part name="parameters" element="tns:FetchCompanyProfileResponseType"/>
+    </wsdl:message>
     <!--End of messages-->
 
     <wsdl:portType name="KPosPortType">
@@ -1807,6 +1843,14 @@
         <wsdl:operation name="DeleteDiscountRate">
             <wsdl:input message="tns:DeleteDiscountRateMessage" name="DeleteDiscountRate"/>
             <wsdl:output message="tns:DeleteDiscountRateResponseMessage" name="DeleteDiscountRateResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="SaveCompanyProfile">
+            <wsdl:input message="tns:SaveCompanyProfileMessage" name="SaveCompanyProfile"/>
+            <wsdl:output message="tns:SaveCompanyProfileResponseMessage" name="SaveCompanyProfileResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="FetchCompanyProfile">
+            <wsdl:input message="tns:FetchCompanyProfileMessage" name="FetchCompanyProfile"/>
+            <wsdl:output message="tns:FetchCompanyProfileResponseMessage" name="FetchCompanyProfileResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -2398,6 +2442,24 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="DeleteDiscountRateResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="SaveCompanyProfile">
+            <soap:operation soapAction="http://ws.kpos.com/SaveCompanyProfile" style="document"/>
+            <wsdl:input name="SaveCompanyProfile">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="SaveCompanyProfileResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="FetchCompanyProfile">
+            <soap:operation soapAction="http://ws.kpos.com/FetchCompanyProfile" style="document"/>
+            <wsdl:input name="FetchCompanyProfile">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="FetchCompanyProfileResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>

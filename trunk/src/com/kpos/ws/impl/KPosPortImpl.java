@@ -46,6 +46,9 @@ public class KPosPortImpl implements KPosPortType {
     @Autowired
     private IRoleDao roleDao;
     
+    @Autowired
+    private ICompanyDao companyDao;
+    
     /**
      * returns the soap ResultType for a BaseResult
      *
@@ -1541,6 +1544,59 @@ public class KPosPortImpl implements KPosPortType {
             e.printStackTrace();
             log.error("Error in fetchOrderByNumber", e);
         }    
+        return responseType;
+    }
+
+    @Override
+    public SaveCompanyProfileResponseType saveCompanyProfile(
+            @WebParam(partName = "parameters", name = "SaveCompanyProfileType", targetNamespace = NS) SaveCompanyProfileType parameters) {
+        SaveCompanyProfileResponseType responseType = new SaveCompanyProfileResponseType();
+        try {
+            if(parameters.getCompany().getId() == null) {
+                CreateResult<CompanyProfile> result = contentManagementService.createCompanyProfile(parameters.getCompany());
+                responseType.setResult(getSoapResult(result));
+            } else {
+                UpdateResult<CompanyProfile> result = contentManagementService.updateCompanyProfile(parameters.getCompany());
+                responseType.setResult(getSoapResult(result));
+            }
+        } catch(Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in saveCompanyProfile", e);
+        }
+        return responseType;
+    }
+
+    @Override
+    public FetchCompanyProfileResponseType fetchCompanyProfile(
+            @WebParam(partName = "parameters", name = "FetchCompanyProfileType", targetNamespace = NS) FetchCompanyProfileType parameters) {
+        FetchCompanyProfileResponseType responseType = new FetchCompanyProfileResponseType();
+        try {
+            ResultType resultType = new ResultType();
+            resultType.setSuccessful(true);
+            List results = companyDao.findAll();
+            if(!results.isEmpty()) {
+                CompanyProfile companyProfile = (CompanyProfile)results.get(0);
+                CompanyProfileType soapType = new CompanyProfileType();
+                soapType.setAddress1(companyProfile.getAddress1());
+                soapType.setAddress2(companyProfile.getAddress2());
+                soapType.setCity(companyProfile.getCity());
+                soapType.setEmail(companyProfile.getEmail());
+                soapType.setId(companyProfile.getId());
+                soapType.setName(companyProfile.getName());
+                soapType.setState(companyProfile.getState());
+                soapType.setTelephone1(companyProfile.getTelephone1());
+                soapType.setTelephone2(companyProfile.getTelephone2());
+                soapType.setWebsite(companyProfile.getWebsite());
+                soapType.setZipcode(companyProfile.getZipcode());
+                responseType.setCompany(soapType);
+            }
+            responseType.setResult(resultType);
+        } catch(Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in fetchCompanyProfile", e);
+        }
         return responseType;
     }
 }

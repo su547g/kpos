@@ -1322,6 +1322,41 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         }
         return result;
     }
+
+    private void populateCompany(CompanyProfile companyProfile, CompanyProfileType soapType) {
+        companyProfile.setAddress1(soapType.getAddress1());
+        companyProfile.setAddress2(soapType.getAddress2());
+        companyProfile.setCity(soapType.getCity());
+        companyProfile.setEmail(soapType.getEmail());
+        companyProfile.setName(soapType.getName());
+        companyProfile.setState(soapType.getState());
+        companyProfile.setTelephone1(soapType.getTelephone1());
+        companyProfile.setTelephone2(soapType.getTelephone2());
+        companyProfile.setWebsite(soapType.getWebsite());
+        companyProfile.setZipcode(soapType.getZipcode());
+    }
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public CreateResult<CompanyProfile> createCompanyProfile(CompanyProfileType soapType) {
+        CreateResult<CompanyProfile> result = new CreateResult<CompanyProfile>();
+        CompanyProfile companyProfile = new CompanyProfile();
+        populateCompany(companyProfile, soapType);
+        companyDao.insert(companyProfile);
+        result.setSuccessful(true);
+        result.setCreated(companyProfile);
+        return result;
+    }
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public UpdateResult<CompanyProfile> updateCompanyProfile(CompanyProfileType soapType) {
+        UpdateResult<CompanyProfile> result = new UpdateResult<CompanyProfile>();
+        CompanyProfile companyProfile = companyDao.findById(soapType.getId());
+        if(companyProfile != null) {
+            populateCompany(companyProfile, soapType);
+            companyDao.merge(companyProfile);
+        } else {
+            result.setSuccessful(false);
+        }
+        return result;
+    }
     /*
     public FetchResult<Order> findTodayOrderByNumber(long aId, long aBase) {
         FetchResult<Order> fetchResult = new FetchResult<Order>();

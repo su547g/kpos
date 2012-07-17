@@ -114,5 +114,8 @@ public interface IContentManagementService {
     CreateResult<CompanyDiscount> addDiscountRate(double aRate);
     UpdateResult<CompanyDiscount> updateDiscountRate(double aRate, double newRate);
     DeleteResult deleteDiscountRate(double aRate);
+
+    CreateResult<CompanyProfile> createCompanyProfile(CompanyProfileType soapType);
+    UpdateResult<CompanyProfile> updateCompanyProfile(CompanyProfileType soapType);
     //FetchResult<Order> findTodayOrderByNumber(long aId, long aBase);
 }
