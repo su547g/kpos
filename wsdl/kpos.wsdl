@@ -113,6 +113,8 @@
             <xs:element name="FetchOrderResponseType" type="tns:FetchOrderResponseType"/>
             <xs:element name="FetchOrderByNumberType" type="tns:FetchOrderByNumberType"/>
             <xs:element name="FetchOrderByNumberResponseType" type="tns:FetchOrderByNumberResponseType"/>
+            <xs:element name="FetchOrdersByUserType" type="tns:FetchOrdersByUserType"/>
+            <xs:element name="FetchOrdersByUserResponseType" type="tns:FetchOrdersByUserResponseType"/>
             <xs:element name="DeleteOrderType" type="tns:DeleteOrderType"/>
             <xs:element name="DeleteOrderResponseType" type="tns:DeleteOrderResponseType"/>
             <xs:element name="SettleOrderType" type="tns:SettleOrderType"/>
@@ -919,6 +921,17 @@
                     <xs:element name="order" type="tns:OrderType" minOccurs="1" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
+            <xs:complexType name="FetchOrdersByUserType">
+                <xs:sequence>
+                    <xs:element name="passcode" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="FetchOrdersByUserResponseType">
+                <xs:sequence>
+                    <xs:element name="result" type="tns:ResultType"/>
+                    <xs:element name="order" type="tns:OrderType" maxOccurs="unbounded" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
             <xs:complexType name="DeleteOrderType">
                 <xs:sequence>
                     <xs:element name="userId" type="xsd:long" minOccurs="1"/>
@@ -1141,7 +1154,7 @@
             </xs:complexType>
             <xs:complexType name="DeleteDiscountRateType">
                 <xs:sequence>
-                    <xs:element name="rate" type="xsd:double" maxOccurs="1" minOccurs="0"/>
+                    <xs:element name="rate" type="xsd:double" maxOccurs="1" minOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="DeleteDiscountRateResponseType">
@@ -1431,6 +1444,12 @@
     </wsdl:message>
     <wsdl:message name="FetchOrderResponseMessage">
         <wsdl:part name="parameters" element="tns:FetchOrderResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="FetchOrdersByUserMessage">
+        <wsdl:part name="parameters" element="tns:FetchOrdersByUserType"/>
+    </wsdl:message>
+    <wsdl:message name="FetchOrdersByUserResponseMessage">
+        <wsdl:part name="parameters" element="tns:FetchOrdersByUserResponseType"/>
     </wsdl:message>
     <wsdl:message name="FetchOrderByNumberMessage">
         <wsdl:part name="parameters" element="tns:FetchOrderByNumberType"/>
@@ -1762,6 +1781,10 @@
         <wsdl:operation name="FetchOrderByNumber">
             <wsdl:input message="tns:FetchOrderByNumberMessage" name="FetchOrderByNumber"/>
             <wsdl:output message="tns:FetchOrderByNumberResponseMessage" name="FetchOrderByNumberResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="FetchOrdersByUser">
+            <wsdl:input message="tns:FetchOrdersByUserMessage" name="FetchOrdersByUser"/>
+            <wsdl:output message="tns:FetchOrdersByUserResponseMessage" name="FetchOrdersByUserResponse"/>
         </wsdl:operation>
         <wsdl:operation name="DeleteOrder">
             <wsdl:input message="tns:DeleteOrderMessage" name="DeleteOrder"/>
@@ -2261,6 +2284,15 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="FetchOrderByNumberResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="FetchOrdersByUser">
+            <soap:operation soapAction="http://ws.kpos.com/FetchOrdersByUser" style="document"/>
+            <wsdl:input name="FetchOrdersByUser">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="FetchOrdersByUserResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>

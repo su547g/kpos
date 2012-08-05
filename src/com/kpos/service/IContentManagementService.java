@@ -92,6 +92,8 @@ public interface IContentManagementService {
 
     FetchResult<Order> fetchOrderById(long aId);
 
+    FetchResult<List<Order>> fetchOrdersByUser(String password) throws Exception;
+
     DeleteResult deleteOrder(long userId, long orderId);
 
     UpdateResult<Order> settleOrder(long userId, long orderId, double saleAmt, double tax, double tips, List<PaymentRecordType> paymentRecordTypes);

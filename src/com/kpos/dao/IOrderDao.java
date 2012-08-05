@@ -25,4 +25,6 @@ public interface IOrderDao extends IDao<Order> {
     List<Order> fetchUnservedOrders(boolean isAsc);
 
     List<Order> findTodayOrderByNumber(long aId, long aBase);
+
+    List<Order> fetchOrdersByServer(long userId);
 }

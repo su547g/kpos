@@ -47,7 +47,7 @@ import java.util.List;
         ),
         @NamedQuery(
                 name = "listOrdersForServer",
-                query = "from Order o where o.createdBy = :aUserId order by createdOn ASC"
+                query = "from Order o where o.createdBy = :aUserId and o.status>=0 and o.status<=2 and o.createdOn between :aStart and :aEnd order by createdOn ASC"
         ),
         @NamedQuery(
                 name = "listOrdersForDateRange",

@@ -1140,3 +1140,98 @@ function ListDiscountsType() {
         return xml;
     }
 }
+function SaveDiscountType(aRate, aNewRate) {
+    this.rate = aRate;
+    this.newRate = aNewRate;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:SaveDiscountRateType>";
+        xml += "<app:newRate>" + this.aNewRate + "</app:newRate>";
+        if(this.rate != null && this.rate != "") {
+            xml += "<app:rate>" + this.rate + "</app:rate>";
+        }
+        xml += "</app:SaveDiscountRateType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function DeleteDiscountType(aRate) {
+    this.rate = aRate;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:DeleteDiscountRateType><app:rate>" + this.rate + "</app:rate>";
+        xml += "</app:DeleteDiscountRateType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function CompanyProfileType(aId, aName, aAddress1, aAddress2, aCity, aState, aZipcode, aTelephone1, aTelephone2, aEmail, aWebsite) {
+    this.id = aId;
+    this.name = aName;
+    this.address1 = aAddress1;
+    this.address2 = aAddress2;
+    this.city = aCity;
+    this.state = aState;
+    this.zipcode = aZipcode;
+    this.telephone1 = aTelephone1;
+    this.telephone2 = aTelephone2;
+    this.email = aEmail;
+    this.website = aWebsite;
+    this.getXML = function() {
+        var xml = "";
+        if(this.id != null && this.id != '') {
+            xml += "<app:id>" + this.id + "</app:id>";
+        }
+        xml += "<app:name>" + this.name + "</app:name>";
+        xml += "<app:address1>" + this.address1 + "</app:address1>";
+        xml += "<app:address2>" + this.address2 + "</app:address2>";
+        if(this.city != null && this.city != "") {
+            xml += "<app:city>" + this.city + "</app:city>";
+        }
+        if(this.state != null && this.state != "") {
+            xml += "<app:state>" + this.state + "</app:state>";
+        }
+        if(this.zipcode != null && this.zipcode != "") {
+            xml += "<app:zipcode>" + this.zipcode + "</app:zipcode>";
+        }
+        if(this.telephone1 != null && this.telephone1 != "") {
+            xml += "<app:telephone1>" + this.telephone1 + "</app:telephone1>";
+        }
+        if(this.telephone2 != null && this.telephone2 != "") {
+            xml += "<app:telephone2>" + this.telephone2 + "</app:telephone2>";
+        }
+        if(this.email != null && this.email != "") {
+            xml += "<app:email>" + this.email + "</app:email>";
+        }
+        if(this.website != null && this.website != "") {
+            xml += "<app:website>" + this.website + "</app:website>";
+        }
+        return xml;
+    }
+}
+function FetchCompanyProfileType() {
+    this.getXML = function() {
+        var xml = soapXMLBegin + "<app:FetchCompanyProfileType/>" + soapXMLEnd;
+        return xml;
+    }
+}
+function SaveCompanyProfileType(aId, aName, aAddress1, aAddress2, aCity, aState, aZipcode, aTelephone1, aTelephone2, aEmail, aWebsite) {
+    this.company = new CompanyProfileType(aId, aName, aAddress1, aAddress2, aCity, aState, aZipcode, aTelephone1, aTelephone2, aEmail, aWebsite);
+    this.getXML() = function() {
+        var xml = soapXMLBegin();
+        xml += "<app:SaveCompanyProfileType><app:company>";
+        xml += this.company.getXML();
+        xml += "</app:company></app:SaveCompanyProfileType>";
+        return xml;
+    }
+}
+function FetchOrdersByUserType(aPwd) {
+    this.passcode = aPwd;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:FetchOrdersByUserType><app:passcode>" + this.passcode + "</app:passcode>";
+        xml += "</app:FetchOrdersByUserType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
