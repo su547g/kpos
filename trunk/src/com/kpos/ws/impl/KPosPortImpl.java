@@ -955,7 +955,27 @@ public class KPosPortImpl implements KPosPortType {
             responseType.setResult(result);
         } catch(Exception e) {
             e.printStackTrace();
-            log.error("Error in saveOrder", e);
+            log.error("Error in fetchOrder", e);
+            responseType.setResult(getSoapFaultResult(e));
+        }
+        return responseType;
+    }
+
+    @Override
+    public FetchOrdersByUserResponseType fetchOrdersByUser(
+            @WebParam(partName = "parameters", name = "FetchOrdersByUserType", targetNamespace = NS) FetchOrdersByUserType parameters) {
+        FetchOrdersByUserResponseType responseType = new FetchOrdersByUserResponseType();
+        try {
+            FetchResult<List<Order>> result = contentManagementService.fetchOrdersByUser(parameters.getPasscode());
+            List<Order> orders = result.getTarget();
+            for(Order order : orders) {
+                OrderType soapType = convertToOrderType(order);
+                responseType.getOrder().add(soapType);
+            }
+            responseType.setResult(getSoapResult(result));
+        }  catch(Exception e) {
+            e.printStackTrace();
+            log.error("Error in fetchOrdersByUser", e);
             responseType.setResult(getSoapFaultResult(e));
         }
         return responseType;

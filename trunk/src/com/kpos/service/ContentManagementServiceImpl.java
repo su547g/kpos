@@ -1012,6 +1012,19 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     }
 
     @Override
+    public FetchResult<List<Order>> fetchOrdersByUser(String password) throws Exception {
+        FetchResult<List<Order>> fetchResult = new FetchResult<List<Order>>();
+        User user = userDao.findByPasscode(password);
+        if(user == null) {
+            throw new Exception("Invalid user");
+        } else {
+            List<Order> orders = orderDao.fetchOrdersByServer(user.getId());
+            fetchResult.setTarget(orders);
+        }
+        return fetchResult;
+    }
+
+    @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public UpdateResult<Order> settleOrder(long userId, long orderId, double saleAmt, double tax, double tips, List<PaymentRecordType> paymentRecordTypes) {
         UpdateResult<Order> result = new UpdateResult<Order>();
@@ -1116,8 +1129,11 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
-    private User insertNewUser(UserType soapUser, StaffMember member) {
+    private User insertNewUser(UserType soapUser, StaffMember member) throws Exception {
         if(member.getUser() == null) {
+            if(userDao.findByPasscode(soapUser.getPasscode()) != null) {
+                throw new Exception("Passcode is already in use.");
+            }
             User user = new User();
             user.setStaff(member);
             user.setPasscode(soapUser.getPasscode());
