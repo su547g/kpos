@@ -46,7 +46,7 @@ import java.util.List;
                 query = "from Order o where o.table.id = :aId and o.status = :aStatus order by createdOn ASC"
         ),
         @NamedQuery(
-                name = "listOrdersForServer",
+                name = "listOpenOrdersForServer",
                 query = "from Order o where o.createdBy = :aUserId and o.status>=0 and o.status<=2 and o.createdOn between :aStart and :aEnd order by createdOn ASC"
         ),
         @NamedQuery(
@@ -77,6 +77,9 @@ public class Order extends AbstractDomainObject {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "order_num")
+    private Long orderNumber;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order", orphanRemoval = true, fetch = FetchType.LAZY)
     @ForeignKey(name = "ITEM_2_ORDER_FK")
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -129,6 +132,14 @@ public class Order extends AbstractDomainObject {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(long aNumber) {
+        orderNumber = aNumber;
     }
 
     public List<OrderItem> getOrderItems() {

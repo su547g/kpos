@@ -164,6 +164,7 @@
             <xs:element name="SaveCompanyProfileResponseType" type="tns:SaveCompanyProfileResponseType"/>
             <xs:element name="FetchCompanyProfileType" type="tns:FetchCompanyProfileType"/>
             <xs:element name="FetchCompanyProfileResponseType" type="tns:FetchCompanyProfileResponseType"/>
+
             <!--Result object-->
             <xs:complexType name="ResultType">
                 <xs:sequence>
@@ -325,6 +326,7 @@
                     <xs:element name="numOfGuests" type="xsd:int" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="customer" type="tns:CustomerInfoType" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="userId" type="xsd:long" minOccurs="1"/>
+                    <xs:element name="orderNumber" type="xsd:long" maxOccurs="1" minOccurs="0"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="CustomerInfoType">
@@ -923,7 +925,7 @@
             </xs:complexType>
             <xs:complexType name="FetchOrdersByUserType">
                 <xs:sequence>
-                    <xs:element name="passcode" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="passcode" type="xsd:string" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="FetchOrdersByUserResponseType">

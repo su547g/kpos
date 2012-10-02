@@ -92,7 +92,7 @@ public interface IContentManagementService {
 
     FetchResult<Order> fetchOrderById(long aId);
 
-    FetchResult<List<Order>> fetchOrdersByUser(String password) throws Exception;
+    FetchResult<List<Order>> fetchOpenOrdersByUser(String password) throws Exception;
 
     DeleteResult deleteOrder(long userId, long orderId);
 
@@ -120,4 +120,6 @@ public interface IContentManagementService {
     CreateResult<CompanyProfile> createCompanyProfile(CompanyProfileType soapType);
     UpdateResult<CompanyProfile> updateCompanyProfile(CompanyProfileType soapType);
     //FetchResult<Order> findTodayOrderByNumber(long aId, long aBase);
+
+    UpdateResult<Order> updateOrderNumber(Order order);
 }
