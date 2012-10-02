@@ -833,6 +833,14 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         return fetchResult;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public UpdateResult<Order> updateOrderNumber(Order order) {
+        UpdateResult<Order> result = new UpdateResult<Order>();
+        long number = order.getId() % 500;
+        order.setOrderNumber(number);
+        return result;
+    }
+    
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public CreateResult<Order> createNewOrder(OrderType orderType) {
@@ -1012,13 +1020,13 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     }
 
     @Override
-    public FetchResult<List<Order>> fetchOrdersByUser(String password) throws Exception {
+    public FetchResult<List<Order>> fetchOpenOrdersByUser(String password) throws Exception {
         FetchResult<List<Order>> fetchResult = new FetchResult<List<Order>>();
         User user = userDao.findByPasscode(password);
         if(user == null) {
             throw new Exception("Invalid user");
         } else {
-            List<Order> orders = orderDao.fetchOrdersByServer(user.getId());
+            List<Order> orders = orderDao.fetchOpenOrdersByServer(user.getId());
             fetchResult.setTarget(orders);
         }
         return fetchResult;

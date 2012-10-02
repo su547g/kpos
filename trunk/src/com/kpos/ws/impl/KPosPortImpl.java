@@ -881,6 +881,7 @@ public class KPosPortImpl implements KPosPortType {
                 responseType.setResult(getSoapResult(result));
                 if(result.isSuccessful()) {
                     responseType.setId(result.getCreated().getId());
+                    UpdateResult<Order> updateResult = contentManagementService.updateOrderNumber(result.getCreated());
                 }
                 responseType.setResult(getSoapResult(result));
             } else {
@@ -902,6 +903,7 @@ public class KPosPortImpl implements KPosPortType {
         SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss yyyy-MM-dd");
         soapType.setCreateTime(dateFormat.format(order.getCreatedOn()));
         soapType.setId(order.getId());
+        soapType.setOrderNumber(order.getOrderNumber());
         soapType.setNotes(order.getNotes());
         soapType.setNumOfGuests(order.getNumOfGuests());
         soapType.setStatus(order.getStatus().toString());
@@ -966,7 +968,7 @@ public class KPosPortImpl implements KPosPortType {
             @WebParam(partName = "parameters", name = "FetchOrdersByUserType", targetNamespace = NS) FetchOrdersByUserType parameters) {
         FetchOrdersByUserResponseType responseType = new FetchOrdersByUserResponseType();
         try {
-            FetchResult<List<Order>> result = contentManagementService.fetchOrdersByUser(parameters.getPasscode());
+            FetchResult<List<Order>> result = contentManagementService.fetchOpenOrdersByUser(parameters.getPasscode());
             List<Order> orders = result.getTarget();
             for(Order order : orders) {
                 OrderType soapType = convertToOrderType(order);

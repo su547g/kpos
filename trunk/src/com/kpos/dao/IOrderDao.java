@@ -26,5 +26,5 @@ public interface IOrderDao extends IDao<Order> {
 
     List<Order> findTodayOrderByNumber(long aId, long aBase);
 
-    List<Order> fetchOrdersByServer(long userId);
+    List<Order> fetchOpenOrdersByServer(long userId);
 }

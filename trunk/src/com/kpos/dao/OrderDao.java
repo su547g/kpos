@@ -74,8 +74,8 @@ public class OrderDao extends AbstractJpaDao<Order> implements IOrderDao {
         return (List<Order>)namedQuery.getResultList();
     }
     
-    public List<Order> fetchOrdersByServer(long userId) {
-        Query namedQuery = entityManager.createNamedQuery("listOrdersForServer");
+    public List<Order> fetchOpenOrdersByServer(long userId) {
+        Query namedQuery = entityManager.createNamedQuery("listOpenOrdersForServer");
         namedQuery.setParameter("aUserId", userId);
 
         Date today = new Date();
