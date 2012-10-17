@@ -121,6 +121,8 @@
             <xs:element name="SettleOrderResponseType" type="tns:SettleOrderResponseType"/>
             <xs:element name="FetchUnservedOrdersType" type="tns:FetchUnservedOrdersType"/>
             <xs:element name="FetchUnservedOrdersResponseType" type="tns:FetchUnservedOrdersResponseType"/>
+            <xs:element name="FetchSaleSummaryType" type="tns:FetchSaleSummaryType"/>
+            <xs:element name="FetchSaleSummaryResponseType" type="tns:FetchSaleSummaryResponseType"/>
 
             <xs:element name="ListPrintersHTMLType" type="tns:ListPrintersHTMLType"/>
             <xs:element name="ListPrintersHTMLResponseType" type="tns:ListPrintersHTMLResponseType"/>
@@ -972,7 +974,20 @@
                     <xs:element name="count" type="xsd:int"/>
                 </xs:sequence>
             </xs:complexType>
-
+            <xs:complexType name="FetchSaleSummaryType">
+                <xs:sequence>
+                    <xs:element name="from" type="xsd:date" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="to" type="xsd:date" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="FetchSaleSummaryResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="totalSale" type="xsd:double"/>
+                    <xs:element name="tax" type="xsd:double" minOccurs="1"/>
+                    <xs:element name="tips" type="xsd:double" minOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
             <xs:complexType name="ListPrintersHTMLType">
                 <xs:sequence>
                     <xs:element name="prefix" type="xsd:string" minOccurs="1" maxOccurs="1"/>
@@ -1477,7 +1492,12 @@
     <wsdl:message name="FetchUnservedOrdersResponseMessage">
         <wsdl:part name="parameters" element="tns:FetchUnservedOrdersResponseType"/>
     </wsdl:message>
-
+    <wsdl:message name="FetchSaleSummaryMessage">
+        <wsdl:part name="parameters" element="tns:FetchSaleSummaryType"/>
+    </wsdl:message>
+    <wsdl:message name="FetchSaleSummaryResponseMessage">
+        <wsdl:part name="parameters" element="tns:FetchSaleSummaryResponseType"/>
+    </wsdl:message>
     <wsdl:message name="ListPrintersHTMLMessage">
         <wsdl:part name="parameters" element="tns:ListPrintersHTMLType"/>
     </wsdl:message>
@@ -1799,6 +1819,10 @@
         <wsdl:operation name="FetchUnservedOrders">
             <wsdl:input message="tns:FetchUnservedOrdersMessage" name="FetchUnservedOrders"/>
             <wsdl:output message="tns:FetchUnservedOrdersResponseMessage" name="FetchUnservedOrdersResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="FetchSaleSummary">
+            <wsdl:input message="tns:FetchSaleSummaryMessage" name="FetchSaleSummary"/>
+            <wsdl:output message="tns:FetchSaleSummaryResponseMessage" name="FetchSaleSummaryResponse"/>
         </wsdl:operation>
         <wsdl:operation name="ListPrintersHTML">
             <wsdl:input message="tns:ListPrintersHTMLMessage" name="ListPrintersHTML"/>
@@ -2322,6 +2346,15 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="FetchUnservedOrdersResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="FetchSaleSummary">
+            <soap:operation soapAction="http://ws.kpos.com/FetchSaleSummary" style="document"/>
+            <wsdl:input name="FetchSaleSummary">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="FetchSaleSummaryResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>

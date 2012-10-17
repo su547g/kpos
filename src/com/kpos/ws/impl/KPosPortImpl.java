@@ -49,6 +49,9 @@ public class KPosPortImpl implements KPosPortType {
     @Autowired
     private ICompanyDao companyDao;
     
+    @Autowired
+    private IFinanceService financeService;
+    
     /**
      * returns the soap ResultType for a BaseResult
      *
@@ -1618,6 +1621,36 @@ public class KPosPortImpl implements KPosPortType {
             responseType.setResult(getSoapFaultResult(e));
             e.printStackTrace();
             log.error("Error in fetchCompanyProfile", e);
+        }
+        return responseType;
+    }
+
+    @Override
+    public FetchSaleSummaryResponseType fetchSaleSummary(
+            @WebParam(partName = "parameters", name = "FetchSaleSummaryType", targetNamespace = NS) FetchSaleSummaryType parameters) {
+        FetchSaleSummaryResponseType responseType = new FetchSaleSummaryResponseType();
+        try {
+            ResultType resultType = new ResultType();
+            resultType.setSuccessful(true);
+
+            GregorianCalendar fromCal = parameters.getFrom().toGregorianCalendar();
+            fromCal.set(GregorianCalendar.HOUR_OF_DAY, 0);
+            fromCal.set(GregorianCalendar.MINUTE, 0);
+            fromCal.set(GregorianCalendar.SECOND, 0);
+            GregorianCalendar toCal = parameters.getTo().toGregorianCalendar();
+            toCal.set(GregorianCalendar.HOUR_OF_DAY, 23);
+            toCal.set(GregorianCalendar.MINUTE, 59);
+            toCal.set(GregorianCalendar.SECOND, 59);
+
+            SaleSummary summary = financeService.computeSales(fromCal.getTime(), toCal.getTime());
+            responseType.setTax(summary.getTax());
+            responseType.setTips(summary.getTips());
+            responseType.setTotalSale(summary.getTotalSale());
+            responseType.setResult(resultType);
+        } catch(Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in fetchSaleSummary", e);
         }
         return responseType;
     }
