@@ -6,7 +6,6 @@ import com.kpos.domain.Order;
 import com.kpos.domain.OrderItemOption;
 import com.kpos.service.*;
 import com.kpos.ws.app.*;
-import com.kpos.ws.app.OrderItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
