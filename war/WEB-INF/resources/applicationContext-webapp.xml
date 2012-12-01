@@ -17,5 +17,5 @@
         <property name="basename" value="messages"/>
     </bean>
 
-	<bean name="/home.htm" class="com.kpos.webapp.HomeController"/>
+	<bean name="/index.html" class="com.kpos.webapp.HomeController"/>
 </beans>

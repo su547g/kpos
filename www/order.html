@@ -686,7 +686,7 @@
 	   			var soapType = new DeleteOrderType(orderId, UserId);
 	   			call_web_service(soapType, deleteOrderHandler);
 	   		} else {
-	   			window.location.href = "home.html";
+	   			window.location.href = "index.html";
 	   		}
 	   	}
 	   	function deleteOrderHandler(jsonObj) {
@@ -695,7 +695,7 @@
 				jsonObj.deleteorderresponsetype.result.successful == "true") {
 				document.orderForm.orderId.value = "";
 				localStorage.setItem('curr_order_id', 0);
-				window.location.href = "home.html";
+				window.location.href = "index.html";
 			}
 	   	}
 	   	
@@ -839,7 +839,7 @@
 <body onload="initializeCategories();initializeOrder();" onunload="clearOrder()">
    <div style="position:absolute; left:10px; top:10px; width:95%">
    	<table>
-		<tr><td><input type="button" class="navibutton" onclick="window.location.href='home.html';" value="<< Back"></td>
+		<tr><td><input type="button" class="navibutton" onclick="window.location.href='index.html';" value="<< Back"></td>
 	</table>
       <table width="100%" style="border:1px solid gray; border-spacing:2px">
          <tr>
