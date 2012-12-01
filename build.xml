@@ -9,11 +9,10 @@
 	
 	<property name="appserver.lib" value="${appserver.home}/lib"/>
 	<property name="deploy.path" value="${appserver.home}/webapps"/>
-	<property name="deploy-front.path" value="${apache.home}/${name}"/>
 	
     <property name="src.dir" value="src"/>
     <property name="web.dir" value="war"/>
-	<property name="front.dir" value="kposFront"/>
+	<property name="front.dir" value="www"/>
     <property name="build.dir" value="${web.dir}/WEB-INF/classes"/>
 	<property name="lib.dir" value="${web.dir}/WEB-INF/lib"/>
 	<property name="staging.dir" value="staging/apache-tomcat-6.0.32"/>
@@ -70,7 +69,7 @@
         <echo message="Available targets are:"/>
         <echo message=""/>
         <echo message="build     --> Build the application"/>
-    	<echo message="deployFront --> Deploy front-end PHP site to Apache server"/>
+        <echo message="deployFront --> Deploy front-end html and js files to Tomcat server"/>
         <echo message="deployWS    --> Deploy web service application to tomcat"/>
         <echo message="deployWar --> Deploy web service as a WAR file"/>
     	<echo message="undeploy --> Remove application from Tomcat"/>
@@ -110,16 +109,6 @@
             <classpath refid="master-classpath"/>
         </javac>
     </target>
-
-	<target name="deployFront" description="Deploy front-end PHP files">
-		<copy todir="${deploy-front.path}" preservelastmodified="true">
-			<fileset dir="${front.dir}">
-				<include name="**/*.php"/>
-			</fileset>
-		</copy>
-		<copy file="${wsdl.dir}/ebizcard.wsdl" toFile="${deploy-front.path}/ebizcard.wsdl" overwrite="true"/>
-		<copy file="${wsdl.dir}/ebizcard-internal.wsdl" toFile="${deploy-front.path}/ebizcard-internal.wsdl" overwrite="true"/>
-	</target>
 	
     <target name="deployWS" depends="build" description="Deploy web service application">
         <copy todir="${deploy.path}/${name}" preservelastmodified="true">
@@ -141,6 +130,14 @@
         <copy todir="${deploy.path}" preservelastmodified="true">
             <fileset dir=".">
                 <include name="*.war"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="deployFront" description="Deploy front-end html and javascript files">
+        <copy todir="${deploy.path}/${name}" preservelastmodified="true">
+            <fileset dir="${front.dir}">
+                <include name="**/*.*"/>
             </fileset>
         </copy>
     </target>
