@@ -19,7 +19,7 @@
     <script>
     	var OUT = "OUT", DINE_IN = "DINE_IN", DELIVERY = "DELIVERY";
     
-    	var targetURL = "home.html";
+    	var targetURL = "index.html";
     	var moduleId = 0;
     	var MODULE_MAP = {
     		"order.html" : 1,
@@ -35,7 +35,7 @@
     	function goToPage(url) {
     		targetURL = url;
     		moduleId = MODULE_MAP[url];
-    		alert(moduleId);
+    		//alert(moduleId);
     		showLogin();
     	}
     	function placeOrder(type) {
