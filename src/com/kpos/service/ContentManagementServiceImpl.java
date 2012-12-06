@@ -1309,10 +1309,22 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         fetchResult.setTarget(discounts);
         return fetchResult;
     }
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    /*@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public DeleteResult deleteDiscountRate(double aRate) {
         DeleteResult result = new DeleteResult();
         CompanyDiscount discount = discountDao.findDiscountByRate(aRate);
+        if(discount != null) {
+            boolean isSuccessful = discountDao.delete(discount);
+            result.setSuccessful(isSuccessful);
+        } else {
+            result.setSuccessful(false);
+        }
+        return result;
+    }*/
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public DeleteResult deleteDiscountRate(long discountId) {
+        DeleteResult result = new DeleteResult();
+        CompanyDiscount discount = discountDao.findById(discountId);
         if(discount != null) {
             boolean isSuccessful = discountDao.delete(discount);
             result.setSuccessful(isSuccessful);

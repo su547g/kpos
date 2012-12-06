@@ -115,7 +115,7 @@ public interface IContentManagementService {
     FetchResult<List<CompanyDiscount>> fetchDiscountRates();
     CreateResult<CompanyDiscount> addDiscountRate(double aRate);
     UpdateResult<CompanyDiscount> updateDiscountRate(double aRate, double newRate);
-    DeleteResult deleteDiscountRate(double aRate);
+    DeleteResult deleteDiscountRate(long id);
 
     CreateResult<CompanyProfile> createCompanyProfile(CompanyProfileType soapType);
     UpdateResult<CompanyProfile> updateCompanyProfile(CompanyProfileType soapType);

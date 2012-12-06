@@ -167,6 +167,13 @@
             <xs:element name="FetchCompanyProfileType" type="tns:FetchCompanyProfileType"/>
             <xs:element name="FetchCompanyProfileResponseType" type="tns:FetchCompanyProfileResponseType"/>
 
+            <xs:element name="ListTaxesType" type="tns:ListTaxesType"/>
+            <xs:element name="ListTaxesResponseType" type="tns:ListTaxesResponseType"/>
+            <xs:element name="SaveTaxType" type="tns:SaveTaxType"/>
+            <xs:element name="SaveTaxResponseType" type="tns:SaveTaxResponseType"/>
+            <xs:element name="DeleteTaxType" type="tns:DeleteTaxType"/>
+            <xs:element name="DeleteTaxResponseType" type="tns:DeleteTaxResponseType"/>
+
             <!--Result object-->
             <xs:complexType name="ResultType">
                 <xs:sequence>
@@ -1146,15 +1153,23 @@
                     <xs:element name="html" type="xsd:string"/>
                 </xs:sequence>
             </xs:complexType>
+            <xs:complexType name="DiscountType">
+                <xs:sequence>
+                    <xs:element name="rate" type="xsd:double"/>
+                    <xs:element name="amount" type="xsd:double"/>
+                    <xs:element name="name" type="xsd:string"/>
+                    <xs:element name="description" type="xsd:string"/>
+                </xs:sequence>
+            </xs:complexType>
             <xs:complexType name="ListDiscountRatesType">
                 <xs:sequence>
-                    <xs:element name="type" type="xsd:string" minOccurs="1"/>
+                    <xs:element name="type" type="xsd:int" minOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="ListDiscountRatesResponseType">
                 <xs:sequence>
                     <xs:element name="Result" type="tns:ResultType"/>
-                    <xs:element name="rate" type="xsd:double" maxOccurs="unbounded"/>
+                    <xs:element name="rate" type="tns:DiscountType" maxOccurs="unbounded"/>
                     <xs:element name="count" type="xsd:int"/>
                 </xs:sequence>
             </xs:complexType>
@@ -1162,6 +1177,9 @@
                 <xs:sequence>
                     <xs:element name="rate" type="xsd:double" maxOccurs="1" minOccurs="0"/>
                     <xs:element name="newRate" type="xsd:double" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="rateType" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="name" type="xsd:string"/>
+                    <xs:element name="description" type="xsd:string"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="SaveDiscountRateResponseType">
@@ -1171,7 +1189,7 @@
             </xs:complexType>
             <xs:complexType name="DeleteDiscountRateType">
                 <xs:sequence>
-                    <xs:element name="rate" type="xsd:double" maxOccurs="1" minOccurs="1"/>
+                    <xs:element name="discountId" type="xsd:long" maxOccurs="1" minOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="DeleteDiscountRateResponseType">
@@ -1197,6 +1215,47 @@
                 <xs:sequence>
                     <xs:element name="result" type="tns:ResultType"/>
                     <xs:element name="company" type="tns:CompanyProfileType" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="TaxType">
+                <xs:sequence>
+                    <xs:element name="rate" type="xsd:double"/>
+                    <xs:element name="name" type="xsd:string"/>
+                    <xs:element name="description" type="xsd:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListTaxesType">
+                <xs:sequence>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListTaxesResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="taxes" type="tns:TaxType" maxOccurs="unbounded"/>
+                    <xs:element name="count" type="xsd:int"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="SaveTaxType">
+                <xs:sequence>
+                    <xs:element name="rate" type="xsd:double" maxOccurs="1" minOccurs="0"/>
+                    <xs:element name="newRate" type="xsd:double" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="name" type="xsd:string"/>
+                    <xs:element name="description" type="xsd:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="SaveTaxResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeleteTaxType">
+                <xs:sequence>
+                    <xs:element name="taxId" type="xsd:long" maxOccurs="1" minOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeleteTaxResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
                 </xs:sequence>
             </xs:complexType>
             <!--End of operations-->
@@ -1613,6 +1672,24 @@
     <wsdl:message name="FetchCompanyProfileResponseMessage">
         <wsdl:part name="parameters" element="tns:FetchCompanyProfileResponseType"/>
     </wsdl:message>
+    <wsdl:message name="ListTaxesMessage">
+        <wsdl:part name="parameters" element="tns:ListTaxesType"/>
+    </wsdl:message>
+    <wsdl:message name="ListTaxesResponseMessage">
+        <wsdl:part name="parameters" element="tns:ListTaxesResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="SaveTaxMessage">
+        <wsdl:part name="parameters" element="tns:SaveTaxType"/>
+    </wsdl:message>
+    <wsdl:message name="SaveTaxResponseMessage">
+        <wsdl:part name="parameters" element="tns:SaveTaxResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="DeleteTaxMessage">
+        <wsdl:part name="parameters" element="tns:DeleteTaxType"/>
+    </wsdl:message>
+    <wsdl:message name="DeleteTaxResponseMessage">
+        <wsdl:part name="parameters" element="tns:DeleteTaxResponseType"/>
+    </wsdl:message>
     <!--End of messages-->
 
     <wsdl:portType name="KPosPortType">
@@ -1900,6 +1977,18 @@
         <wsdl:operation name="FetchCompanyProfile">
             <wsdl:input message="tns:FetchCompanyProfileMessage" name="FetchCompanyProfile"/>
             <wsdl:output message="tns:FetchCompanyProfileResponseMessage" name="FetchCompanyProfileResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="ListTaxes">
+            <wsdl:input message="tns:ListTaxesMessage" name="ListTaxes"/>
+            <wsdl:output message="tns:ListTaxesResponseMessage" name="ListTaxesResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="SaveTax">
+            <wsdl:input message="tns:SaveTaxMessage" name="SaveTax"/>
+            <wsdl:output message="tns:SaveTaxResponseMessage" name="SaveTaxResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="DeleteTax">
+            <wsdl:input message="tns:DeleteTaxMessage" name="DeleteTax"/>
+            <wsdl:output message="tns:DeleteTaxResponseMessage" name="DeleteTaxResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -2527,6 +2616,33 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="FetchCompanyProfileResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="ListTaxes">
+            <soap:operation soapAction="http://ws.kpos.com/ListTaxes" style="document"/>
+            <wsdl:input name="ListTaxes">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="ListTaxesResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="SaveTax">
+            <soap:operation soapAction="http://ws.kpos.com/SaveTax" style="document"/>
+            <wsdl:input name="SaveTax">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="SaveTaxResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="DeleteTax">
+            <soap:operation soapAction="http://ws.kpos.com/DeleteTax" style="document"/>
+            <wsdl:input name="DeleteTax">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DeleteTaxResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
