@@ -194,6 +194,8 @@ CREATE TABLE `company_discount` (
   `last_updated` datetime DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
   `last_updated_by` int(11) DEFAULT NULL,
+  `name` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -204,7 +206,7 @@ CREATE TABLE `company_discount` (
 
 LOCK TABLES `company_discount` WRITE;
 /*!40000 ALTER TABLE `company_discount` DISABLE KEYS */;
-INSERT INTO `company_discount` VALUES (1,5,0,0,'2012-06-22 22:47:35','2012-06-22 22:47:35',NULL,NULL),(2,10,0,0,'2012-06-22 22:48:18','2012-06-22 22:48:18',NULL,NULL),(3,15,0,0,'2012-06-22 22:48:23','2012-06-22 22:48:23',NULL,NULL),(4,20,0,0,'2012-06-22 22:48:24','2012-06-22 22:48:24',NULL,NULL);
+INSERT INTO `company_discount` VALUES (1,5,0,0,'2012-06-22 22:47:35','2012-06-22 22:47:35',NULL,NULL,'',NULL),(2,10,0,0,'2012-06-22 22:48:18','2012-06-22 22:48:18',NULL,NULL,'',NULL),(3,15,0,0,'2012-06-22 22:48:23','2012-06-22 22:48:23',NULL,NULL,'',NULL),(4,20,0,0,'2012-06-22 22:48:24','2012-06-22 22:48:24',NULL,NULL,'',NULL);
 /*!40000 ALTER TABLE `company_discount` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -243,6 +245,36 @@ CREATE TABLE `company_profile` (
 LOCK TABLES `company_profile` WRITE;
 /*!40000 ALTER TABLE `company_profile` DISABLE KEYS */;
 /*!40000 ALTER TABLE `company_profile` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `company_tax`
+--
+
+DROP TABLE IF EXISTS `company_tax`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `company_tax` (
+  `id` int(11) NOT NULL,
+  `name` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `tax_rate` double NOT NULL,
+  `version` int(11) DEFAULT NULL,
+  `created_on` datetime DEFAULT NULL,
+  `last_updated` datetime DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `last_updated_by` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `company_tax`
+--
+
+LOCK TABLES `company_tax` WRITE;
+/*!40000 ALTER TABLE `company_tax` DISABLE KEYS */;
+/*!40000 ALTER TABLE `company_tax` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -905,4 +937,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-10-01 23:07:02
+-- Dump completed on 2012-12-05 23:04:18

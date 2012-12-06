@@ -15,8 +15,11 @@ public class CompanyTax extends AbstractDomainObject {
     @Column(name = "id")
     private Long id;
     
-    @Column(name = "tax_name")
+    @Column(name = "name")
     private String tax;
+
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "tax_rate")
     private double rate;
@@ -42,6 +45,14 @@ public class CompanyTax extends AbstractDomainObject {
         this.rate = rate;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -52,7 +63,7 @@ public class CompanyTax extends AbstractDomainObject {
         if (Double.compare(that.rate, rate) != 0) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (tax != null ? !tax.equals(that.tax) : that.tax != null) return false;
-
+        if (description != null ? !description.equals(that.description) : that.description != null) return false;
         return true;
     }
 
@@ -62,6 +73,7 @@ public class CompanyTax extends AbstractDomainObject {
         long temp;
         result = id != null ? id.hashCode() : 0;
         result = 31 * result + (tax != null ? tax.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         temp = rate != +0.0d ? Double.doubleToLongBits(rate) : 0L;
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;

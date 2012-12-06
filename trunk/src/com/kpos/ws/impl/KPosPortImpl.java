@@ -1503,19 +1503,22 @@ public class KPosPortImpl implements KPosPortType {
     public ListDiscountRatesResponseType listDiscountRates(
             @WebParam(partName = "parameters", name = "ListDiscountRatesType", targetNamespace = NS) ListDiscountRatesType parameters) {
         ListDiscountRatesResponseType responseType = new ListDiscountRatesResponseType();
-        if(parameters.getType().equalsIgnoreCase("DISCOUNT")) {
-            FetchResult<List<CompanyDiscount>> result = contentManagementService.fetchDiscountRates();
-            if(result.isSuccessful()) {
-                List<CompanyDiscount> discounts = result.getTarget();
-                for(CompanyDiscount discount : discounts) {
-                    responseType.getRate().add(discount.getRate());
-                }
-                responseType.setCount(discounts.size());
+
+        FetchResult<List<CompanyDiscount>> result = contentManagementService.fetchDiscountRates();
+        if(result.isSuccessful()) {
+            List<CompanyDiscount> discounts = result.getTarget();
+            for(CompanyDiscount discount : discounts) {
+                DiscountType discountType = new DiscountType();
+                discountType.setDescription(discount.getDescription());
+                discountType.setName(discount.getName());
+                discountType.setRate(discount.getRate());
+                discountType.setAmount(discount.getAmount());
+                responseType.getRate().add(discountType);
             }
-            responseType.setResult(getSoapResult(result));
-        } else if(parameters.getType().equalsIgnoreCase("TAX")) {
-            
+            responseType.setCount(discounts.size());
         }
+        responseType.setResult(getSoapResult(result));
+
         return responseType;
     }
 
@@ -1539,7 +1542,7 @@ public class KPosPortImpl implements KPosPortType {
             @WebParam(partName = "parameters", name = "DeleteDiscountRateType", targetNamespace = NS) DeleteDiscountRateType parameters) {
         DeleteDiscountRateResponseType responseType = new DeleteDiscountRateResponseType();
         try {
-            DeleteResult result = contentManagementService.deleteDiscountRate(parameters.getRate());
+            DeleteResult result = contentManagementService.deleteDiscountRate(parameters.getDiscountId());
             responseType.setResult(getSoapResult(result));
         } catch(Exception e) {
             responseType.setResult(getSoapFaultResult(e));
@@ -1652,5 +1655,23 @@ public class KPosPortImpl implements KPosPortType {
             log.error("Error in fetchSaleSummary", e);
         }
         return responseType;
+    }
+
+    @Override
+    public SaveTaxResponseType saveTax(
+            @WebParam(partName = "parameters", name = "SaveTaxType", targetNamespace = NS) SaveTaxType parameters) {
+        return null;
+    }
+
+    @Override
+    public DeleteTaxResponseType deleteTax(
+            @WebParam(partName = "parameters", name = "DeleteTaxType", targetNamespace = NS) DeleteTaxType parameters) {
+        return null;
+    }
+
+    @Override
+    public ListTaxesResponseType listTaxes(
+            @WebParam(partName = "parameters", name = "ListTaxesType", targetNamespace = NS) ListTaxesType parameters) {
+        return null;
     }
 }
