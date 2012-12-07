@@ -402,22 +402,6 @@
                     <xs:element name="telephone2" type="xsd:string" minOccurs="0"/>
                     <xs:element name="email" type="xsd:string" minOccurs="0"/>
                     <xs:element name="website" type="xsd:string" minOccurs="0"/>
-                    <xs:element name="discounts" type="tns:CompanyDiscountType" maxOccurs="unbounded"/>
-                    <xs:element name="taxes" type="tns:CompanyTaxType" maxOccurs="unbounded"/>
-                </xs:sequence>
-            </xs:complexType>
-            <xs:complexType name="CompanyTaxType">
-                <xs:sequence>
-                    <xs:element name="id" type="xsd:long" minOccurs="0"/>
-                    <xs:element name="name" type="xsd:string"/>
-                    <xs:element name="rate" type="xsd:double" minOccurs="1"/>
-                </xs:sequence>
-            </xs:complexType>
-            <xs:complexType name="CompanyDiscountType">
-                <xs:sequence>
-                    <xs:element name="id" type="xsd:long" minOccurs="0"/>
-                    <xs:element name="rate" type="xsd:double" minOccurs="0"/>
-                    <xs:element name="amount" type="xsd:double" minOccurs="0"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="RoleType">
@@ -1155,6 +1139,7 @@
             </xs:complexType>
             <xs:complexType name="DiscountType">
                 <xs:sequence>
+                    <xs:element name="id" type="xsd:long"/>
                     <xs:element name="rate" type="xsd:double"/>
                     <xs:element name="amount" type="xsd:double"/>
                     <xs:element name="name" type="xsd:string"/>
@@ -1219,6 +1204,7 @@
             </xs:complexType>
             <xs:complexType name="TaxType">
                 <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="0"/>
                     <xs:element name="rate" type="xsd:double"/>
                     <xs:element name="name" type="xsd:string"/>
                     <xs:element name="description" type="xsd:string"/>
@@ -1237,15 +1223,13 @@
             </xs:complexType>
             <xs:complexType name="SaveTaxType">
                 <xs:sequence>
-                    <xs:element name="rate" type="xsd:double" maxOccurs="1" minOccurs="0"/>
-                    <xs:element name="newRate" type="xsd:double" minOccurs="1" maxOccurs="1"/>
-                    <xs:element name="name" type="xsd:string"/>
-                    <xs:element name="description" type="xsd:string"/>
+                    <xs:element name="tax" type="tns:TaxType" maxOccurs="1" minOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="SaveTaxResponseType">
                 <xs:sequence>
                     <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="id" type="xsd:long"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="DeleteTaxType">

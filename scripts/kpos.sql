@@ -255,7 +255,7 @@ DROP TABLE IF EXISTS `company_tax`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `company_tax` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
   `tax_rate` double NOT NULL,
@@ -265,7 +265,7 @@ CREATE TABLE `company_tax` (
   `created_by` int(11) DEFAULT NULL,
   `last_updated_by` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -274,6 +274,7 @@ CREATE TABLE `company_tax` (
 
 LOCK TABLES `company_tax` WRITE;
 /*!40000 ALTER TABLE `company_tax` DISABLE KEYS */;
+INSERT INTO `company_tax` VALUES (1,'sales tax','state sales tax',0.075,1,'2012-12-06 21:10:26','2012-12-06 21:12:09',NULL,NULL);
 /*!40000 ALTER TABLE `company_tax` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -937,4 +938,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-12-05 23:04:18
+-- Dump completed on 2012-12-06 21:24:48
