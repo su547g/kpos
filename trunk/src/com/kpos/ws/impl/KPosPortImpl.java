@@ -51,6 +51,9 @@ public class KPosPortImpl implements KPosPortType {
     @Autowired
     private IFinanceService financeService;
     
+    @Autowired
+    private IAdminService adminService;
+    
     /**
      * returns the soap ResultType for a BaseResult
      *
@@ -1509,6 +1512,7 @@ public class KPosPortImpl implements KPosPortType {
             List<CompanyDiscount> discounts = result.getTarget();
             for(CompanyDiscount discount : discounts) {
                 DiscountType discountType = new DiscountType();
+                discountType.setId(discount.getId());
                 discountType.setDescription(discount.getDescription());
                 discountType.setName(discount.getName());
                 discountType.setRate(discount.getRate());
@@ -1660,18 +1664,70 @@ public class KPosPortImpl implements KPosPortType {
     @Override
     public SaveTaxResponseType saveTax(
             @WebParam(partName = "parameters", name = "SaveTaxType", targetNamespace = NS) SaveTaxType parameters) {
-        return null;
+        SaveTaxResponseType responseType = new SaveTaxResponseType();
+        try {
+            ResultType resultType = new ResultType();
+
+            CompanyTax tax = new CompanyTax();
+            tax.setId(parameters.getTax().getId());
+            tax.setDescription(parameters.getTax().getDescription());
+            tax.setName(parameters.getTax().getName());
+            tax.setRate(parameters.getTax().getRate());
+
+            long id = adminService.saveCompanyTax(tax);
+            responseType.setId(id);
+            resultType.setSuccessful(id > 0);
+            responseType.setResult(resultType);
+        } catch(Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in saveTax", e);
+        }
+        return responseType;
     }
 
     @Override
     public DeleteTaxResponseType deleteTax(
             @WebParam(partName = "parameters", name = "DeleteTaxType", targetNamespace = NS) DeleteTaxType parameters) {
-        return null;
+        DeleteTaxResponseType responseType = new DeleteTaxResponseType();
+        try {
+            ResultType resultType = new ResultType();
+            if(parameters.getTaxId() > 0) {
+                boolean isSuccess = adminService.deleteTax(parameters.getTaxId());
+                resultType.setSuccessful(isSuccess);
+            }
+            responseType.setResult(resultType);
+        } catch(Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in deleteTax", e);
+        }
+        return responseType;
     }
 
     @Override
     public ListTaxesResponseType listTaxes(
             @WebParam(partName = "parameters", name = "ListTaxesType", targetNamespace = NS) ListTaxesType parameters) {
-        return null;
+        ListTaxesResponseType responseType = new ListTaxesResponseType();
+        try {
+            List<CompanyTax> taxes = adminService.listCompanyTaxes();
+            
+            for(CompanyTax tax : taxes) {
+                TaxType taxType = new TaxType();
+                taxType.setId(tax.getId());
+                taxType.setName(tax.getName());
+                taxType.setDescription(tax.getDescription());
+                taxType.setRate(tax.getRate());
+                responseType.getTaxes().add(taxType);
+            }
+            responseType.setCount(taxes.size());
+            ResultType resultType = new ResultType();
+            resultType.setSuccessful(true);
+        } catch(Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in listTaxes", e);
+        }
+        return responseType;
     }
 }
