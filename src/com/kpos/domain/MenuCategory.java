@@ -23,6 +23,10 @@ import java.util.Set;
         @NamedQuery(
                 name = "listCategoriesByNameAsc",
                 query = "from MenuCategory c order by c.name asc"
+        ),
+        @NamedQuery(
+                name = "listCategoriesByGroup",
+                query = "from MenuCategory c where c.group.id = :aGroupId"
         )
 })
 @Entity
@@ -44,6 +48,10 @@ public class MenuCategory extends AbstractDomainObject {
 
     @Column(name = "hh_rate", nullable = true)
     private double hhRate = 1; //happy hour rate
+
+    @ManyToOne(cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "group_id")
+    private MenuGroup group;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "menuCategory", orphanRemoval = true, fetch = FetchType.LAZY)
     @ForeignKey(name = "OPTION_2_CAT_FK")
@@ -148,6 +156,14 @@ public class MenuCategory extends AbstractDomainObject {
 
     public void setPrinters(Set<Printer> printers) {
         this.printers = printers;
+    }
+
+    public MenuGroup getGroup() {
+        return group;
+    }
+
+    public void setGroup(MenuGroup group) {
+        this.group = group;
     }
 
     @Override

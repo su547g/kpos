@@ -1730,4 +1730,28 @@ public class KPosPortImpl implements KPosPortType {
         }
         return responseType;
     }
+
+    @Override
+    public CreateCategoryGroupResponseType createCategoryGroup(
+            @WebParam(partName = "parameters", name = "CreateCategoryGroupType", targetNamespace = NS) CreateCategoryGroupType parameters) {
+        return null;
+    }
+
+    @Override
+    public UpdateCategoryGroupResponseType updateCategoryGroup(
+            @WebParam(partName = "parameters", name = "UpdateCategoryGroupType", targetNamespace = NS) UpdateCategoryGroupType parameters) {
+        return null;
+    }
+
+    @Override
+    public DeleteCategoryGroupResponseType deleteCategoryGroup(
+            @WebParam(partName = "parameters", name = "DeleteCategoryGroupType", targetNamespace = NS) DeleteCategoryGroupType parameters) {
+        return null;
+    }
+
+    @Override
+    public ListCategoryGroupResponseType listCategoryGroup(
+            @WebParam(partName = "parameters", name = "ListCategoryGroupType", targetNamespace = NS) ListCategoryGroupType parameters) {
+        return null;
+    }
 }

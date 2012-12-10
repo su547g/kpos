@@ -24,4 +24,8 @@ public interface ICategoryDao {
     List<MenuCategory> listCategories();
 
     MenuCategory findCategory(long aId);
+
+    List<MenuCategory> findCategoriesInGroup(long aGroupId);
+
+    List<MenuCategory> findCategoriesInGroup(long aGroupId, int start, int maxSize);
 }
