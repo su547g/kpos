@@ -130,10 +130,19 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         return true;
     }  */
     
+    public FetchResult<List<MenuCategory>> listCategoriesForGroup(long aGroupId, int begin, int maxSize) {
+        FetchResult<List<MenuCategory>> fetchResult = new FetchResult<List<MenuCategory>>();
+        List<MenuCategory> categories = categoryDao.findCategoriesInGroup(aGroupId, begin, maxSize);
+        fetchResult.setTarget(categories);
+        fetchResult.setSuccessful(true);
+        return fetchResult;
+    }
+    
     @Override
     public FetchResult<List<MenuCategory>> listAllCategories() {
         FetchResult<List<MenuCategory>> fetchResult = new FetchResult<List<MenuCategory>>();
         fetchResult.setTarget(categoryDao.listCategoriesByNameAsc());
+        fetchResult.setSuccessful(true);
         return fetchResult;
     }
 
@@ -141,6 +150,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     public FetchResult<List<MenuCategory>> listAllCategories(int begin, int maxSize) {
         FetchResult<List<MenuCategory>> fetchResult = new FetchResult<List<MenuCategory>>();
         fetchResult.setTarget(categoryDao.listCategoriesByNameAsc(begin, maxSize));
+        fetchResult.setSuccessful(true);
         return fetchResult;
     }
 

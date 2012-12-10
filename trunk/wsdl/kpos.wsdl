@@ -30,15 +30,21 @@
             <xs:element name="ListTablesType" type="tns:ListTablesType"/>
             <xs:element name="ListTablesResponseType" type="tns:ListTablesResponseType"/>
 
+            <xs:element name="CreateCategoryGroupType" type="tns:CreateCategoryGroupType"/>
+            <xs:element name="CreateCategoryGroupResponseType" type="tns:CreateCategoryGroupResponseType"/>
+            <xs:element name="UpdateCategoryGroupType" type="tns:UpdateCategoryGroupType"/>
+            <xs:element name="UpdateCategoryGroupResponseType" type="tns:UpdateCategoryGroupResponseType"/>
+            <xs:element name="DeleteCategoryGroupType" type="tns:DeleteCategoryGroupType"/>
+            <xs:element name="DeleteCategoryGroupResponseType" type="tns:DeleteCategoryGroupResponseType"/>
+            <xs:element name="ListCategoryGroupType" type="tns:ListCategoryGroupType"/>
+            <xs:element name="ListCategoryGroupResponseType" type="tns:ListCategoryGroupResponseType"/>
+
             <xs:element name="CreateCategoryType" type="tns:CreateCategoryType"/>
             <xs:element name="CreateCategoryResponseType" type="tns:CreateCategoryResponseType"/>
-
             <xs:element name="UpdateCategoryType" type="tns:UpdateCategoryType"/>
             <xs:element name="UpdateCategoryResponseType" type="tns:UpdateCategoryResponseType"/>
-
             <xs:element name="DeleteCategoryType" type="tns:DeleteCategoryType"/>
             <xs:element name="DeleteCategoryResponseType" type="tns:DeleteCategoryResponseType"/>
-
             <xs:element name="ListCategoryType" type="tns:ListCategoryType"/>
             <xs:element name="ListCategoryResponseType" type="tns:ListCategoryResponseType"/>
             <xs:element name="ListCategoryHTMLType" type="tns:ListCategoryHTMLType"/>
@@ -202,7 +208,12 @@
                     <xs:element name="tables" type="tns:TableType" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:complexType>
-
+            <xs:complexType name="CategoryGroupType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
             <xs:complexType name="CategoryType">
                 <xs:sequence>
                     <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
@@ -500,6 +511,46 @@
                 </xs:sequence>
             </xs:complexType>
 
+            <xs:complexType name="CreateCategoryGroupType">
+                <xs:sequence>
+                    <xs:element name="catGroup" type="tns:CategoryGroupType" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="CreateCategoryGroupResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="groupId" type="xs:long" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="UpdateCategoryGroupType">
+                <xs:sequence>
+                    <xs:element name="catGroup" type="tns:CategoryGroupType" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="UpdateCategoryGroupResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeleteCategoryGroupType">
+                <xs:sequence>
+                    <xs:element name="groupId" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeleteCategoryGroupResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListCategoryGroupType">
+                <xs:sequence>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListCategoryGroupResponseType">
+                <xs:sequence>
+                    <xs:element name="catGroup" type="tns:CategoryGroupType" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:complexType>
             <xs:complexType name="CreateCategoryType">
                 <xs:sequence>
                     <xs:element name="category" type="tns:CategoryType" minOccurs="1" maxOccurs="1"/>
@@ -1295,6 +1346,30 @@
     <wsdl:message name="ListTablesResponseMessage">
         <wsdl:part name="parameters" element="tns:ListTablesResponseType"/>
     </wsdl:message>
+    <wsdl:message name="CreateCategoryGroupMessage">
+        <wsdl:part name="parameters" element="tns:CreateCategoryGroupType"/>
+    </wsdl:message>
+    <wsdl:message name="CreateCategoryGroupResponseMessage">
+        <wsdl:part name="parameters" element="tns:CreateCategoryGroupResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="UpdateCategoryGroupMessage">
+        <wsdl:part name="parameters" element="tns:UpdateCategoryGroupType"/>
+    </wsdl:message>
+    <wsdl:message name="UpdateCategoryGroupResponseMessage">
+        <wsdl:part name="parameters" element="tns:UpdateCategoryGroupResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="DeleteCategoryGroupMessage">
+        <wsdl:part name="parameters" element="tns:DeleteCategoryGroupType"/>
+    </wsdl:message>
+    <wsdl:message name="DeleteCategoryGroupResponseMessage">
+        <wsdl:part name="parameters" element="tns:DeleteCategoryGroupResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="ListCategoryGroupMessage">
+        <wsdl:part name="parameters" element="tns:ListCategoryGroupType"/>
+    </wsdl:message>
+    <wsdl:message name="ListCategoryGroupResponseMessage">
+        <wsdl:part name="parameters" element="tns:ListCategoryGroupResponseType"/>
+    </wsdl:message>
     <wsdl:message name="CreateCategoryMessage">
         <wsdl:part name="parameters" element="tns:CreateCategoryType"/>
     </wsdl:message>
@@ -1713,6 +1788,23 @@
             <wsdl:output message="tns:ListTablesResponseMessage" name="ListTablesResponse"/>
         </wsdl:operation>
 
+        <wsdl:operation name="CreateCategoryGroup">
+            <wsdl:input message="tns:CreateCategoryGroupMessage" name="CreateCategoryGroup"/>
+            <wsdl:output message="tns:CreateCategoryGroupResponseMessage" name="CreateCategoryGroupResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="UpdateCategoryGroup">
+            <wsdl:input message="tns:UpdateCategoryGroupMessage" name="UpdateCategoryGroup"/>
+            <wsdl:output message="tns:UpdateCategoryGroupResponseMessage" name="UpdateCategoryGroupResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="DeleteCategoryGroup">
+            <wsdl:input message="tns:DeleteCategoryGroupMessage" name="DeleteCategoryGroup"/>
+            <wsdl:output message="tns:DeleteCategoryGroupResponseMessage" name="DeleteCategoryGroupResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="ListCategoryGroup">
+            <wsdl:input message="tns:ListCategoryGroupMessage" name="ListCategoryGroup"/>
+            <wsdl:output message="tns:ListCategoryGroupResponseMessage" name="ListCategoryGroupResponse"/>
+        </wsdl:operation>
+
         <wsdl:operation name="CreateCategory">
             <wsdl:input message="tns:CreateCategoryMessage" name="CreateCategory"/>
             <wsdl:output message="tns:CreateCategoryResponseMessage" name="CreateCategoryResponse"/>
@@ -2052,6 +2144,43 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="ListTablesResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="CreateCategoryGroup">
+            <soap:operation soapAction="http://ws.kpos.com/CreateCategoryGroup" style="document"/>
+            <wsdl:input name="CreateCategoryGroup">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="CreateCategoryGroupResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="UpdateCategoryGroup">
+            <soap:operation soapAction="http://ws.kpos.com/UpdateCategoryGroup" style="document"/>
+            <wsdl:input name="UpdateCategoryGroup">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="UpdateCategoryGroupResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="DeleteCategoryGroup">
+            <soap:operation soapAction="http://ws.kpos.com/DeleteCategoryGroup" style="document"/>
+            <wsdl:input name="DeleteCategoryGroup">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DeleteCategoryGroupResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="ListCategoryGroup">
+            <soap:operation soapAction="http://ws.kpos.com/ListCategoryGroup" style="document"/>
+            <wsdl:input name="ListCategoryGroup">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="ListCategoryGroupResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>

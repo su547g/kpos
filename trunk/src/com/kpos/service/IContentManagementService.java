@@ -18,6 +18,7 @@ public interface IContentManagementService {
     
     FetchResult<List<MenuCategory>> listAllCategories();
     FetchResult<List<MenuCategory>> listAllCategories(int begin, int maxSize);
+    FetchResult<List<MenuCategory>> listCategoriesForGroup(long aGroupId, int begin, int maxSize);
 
     FetchResult<MenuCategory> fetchCategory(long aCategoryId);
 

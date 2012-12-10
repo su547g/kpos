@@ -85,4 +85,24 @@ public class CategoryDao extends AbstractJpaDao<MenuCategory> implements ICatego
     public MenuCategory findCategory(long aId) {
         return this.findById(aId);
     }
+
+    @Override
+    public List<MenuCategory> findCategoriesInGroup(long aGroupId) {
+        Query namedQuery = this.entityManager.createNamedQuery("listCategoriesByGroup");
+        namedQuery.setParameter("aGroupId", aGroupId);
+        return (List<MenuCategory>)namedQuery.getResultList();
+    }
+
+    @Override
+    public List<MenuCategory> findCategoriesInGroup(long aGroupId, int start, int maxSize) {
+        Query namedQuery = this.entityManager.createNamedQuery("listCategoriesByGroup");
+        namedQuery.setParameter("aGroupId", aGroupId);
+        if(start >= 0) {
+            namedQuery.setFirstResult(start);
+        }
+        if(maxSize >= 0) {
+            namedQuery.setMaxResults(maxSize);
+        }
+        return (List<MenuCategory>)namedQuery.getResultList();
+    }
 }
