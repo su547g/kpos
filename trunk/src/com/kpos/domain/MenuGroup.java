@@ -13,6 +13,12 @@ import java.util.List;
  * Author: kkwang
  * Date: 12/6/12 10:31 PM
  */
+@NamedQueries({
+        @NamedQuery(
+                name = "findMenuGroupByName",
+                query = "from MenuGroup g where g.name = :aName"
+        )
+})
 @Entity
 @Table(name = "MENU_GROUP")
 public class MenuGroup extends AbstractDomainObject {

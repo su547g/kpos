@@ -26,7 +26,7 @@ import java.util.Set;
         ),
         @NamedQuery(
                 name = "listCategoriesByGroup",
-                query = "from MenuCategory c where c.group.id = :aGroupId"
+                query = "from MenuCategory c where c.menuGroup.id = :aGroupId"
         )
 })
 @Entity
@@ -51,7 +51,7 @@ public class MenuCategory extends AbstractDomainObject {
 
     @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "group_id")
-    private MenuGroup group;
+    private MenuGroup menuGroup;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "menuCategory", orphanRemoval = true, fetch = FetchType.LAZY)
     @ForeignKey(name = "OPTION_2_CAT_FK")
@@ -158,12 +158,12 @@ public class MenuCategory extends AbstractDomainObject {
         this.printers = printers;
     }
 
-    public MenuGroup getGroup() {
-        return group;
+    public MenuGroup getMenuGroup() {
+        return menuGroup;
     }
 
-    public void setGroup(MenuGroup group) {
-        this.group = group;
+    public void setMenuGroup(MenuGroup group) {
+        this.menuGroup = group;
     }
 
     @Override

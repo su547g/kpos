@@ -13,7 +13,13 @@ import java.util.List;
  * Date: 3/14/12 11:08 PM
  */
 public interface IContentManagementService {
-    CreateResult<MenuCategory> createMenuCategory(MenuCategory aCategory, List<Long> printerIds);
+    CreateResult<MenuGroup> createMenuGroup(MenuGroup aGroup);
+    DeleteResult deleteMenuGroup(long aId);
+    FetchResult<List<MenuGroup>> listMenuGroups();
+    UpdateResult<MenuGroup> updateMenuGroup(long aId, String name);
+    
+    CreateResult<MenuCategory> createMenuCategory(MenuCategory aCategory, Long aGroupId, List<Long> printerIds);
+    
     //boolean addPrintersToCategory(MenuCategory category, List<Long> printerIds);
     
     FetchResult<List<MenuCategory>> listAllCategories();

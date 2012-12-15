@@ -245,7 +245,7 @@ public class KPosPortImpl implements KPosPortType {
             }
             category.setCreatedOn(new Date());
             category.setLastUpdated(new Date());
-            CreateResult<MenuCategory> result = contentManagementService.createMenuCategory(category, soapType.getPrinterIds());
+            CreateResult<MenuCategory> result = contentManagementService.createMenuCategory(category, soapType.getGroupId(), soapType.getPrinterIds());
             if(result.isSuccessful() && result.getCreated() != null) {
                 responseType.setCategoryId(result.getCreated().getId());
             }
@@ -1734,24 +1734,69 @@ public class KPosPortImpl implements KPosPortType {
     @Override
     public CreateCategoryGroupResponseType createCategoryGroup(
             @WebParam(partName = "parameters", name = "CreateCategoryGroupType", targetNamespace = NS) CreateCategoryGroupType parameters) {
-        return null;
+        CreateCategoryGroupResponseType responseType = new CreateCategoryGroupResponseType();
+        try {
+            MenuGroup group = new MenuGroup();
+            group.setName(parameters.getCatGroup().getName());
+            CreateResult<MenuGroup> result = contentManagementService.createMenuGroup(group);
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in createCategoryGroup", e);
+        }
+        return responseType;
     }
 
     @Override
     public UpdateCategoryGroupResponseType updateCategoryGroup(
             @WebParam(partName = "parameters", name = "UpdateCategoryGroupType", targetNamespace = NS) UpdateCategoryGroupType parameters) {
-        return null;
+        UpdateCategoryGroupResponseType responseType = new UpdateCategoryGroupResponseType();
+        try {
+            UpdateResult<MenuGroup> result = contentManagementService.updateMenuGroup(parameters.getCatGroup().getId(), parameters.getCatGroup().getName());
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in updateCategoryGroup", e);
+        }
+        return responseType;
     }
 
     @Override
     public DeleteCategoryGroupResponseType deleteCategoryGroup(
             @WebParam(partName = "parameters", name = "DeleteCategoryGroupType", targetNamespace = NS) DeleteCategoryGroupType parameters) {
-        return null;
+        DeleteCategoryGroupResponseType responseType = new DeleteCategoryGroupResponseType();
+        try {
+            DeleteResult result = contentManagementService.deleteMenuGroup(parameters.getGroupId());
+            responseType.setResult(getSoapResult(result));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in deleteCategoryGroup", e);
+        }
+        return responseType;
     }
 
     @Override
     public ListCategoryGroupResponseType listCategoryGroup(
             @WebParam(partName = "parameters", name = "ListCategoryGroupType", targetNamespace = NS) ListCategoryGroupType parameters) {
-        return null;
+        ListCategoryGroupResponseType responseType = new ListCategoryGroupResponseType();
+        try {
+            FetchResult<List<MenuGroup>> fetchResult = contentManagementService.listMenuGroups();
+            for(MenuGroup group : fetchResult.getTarget()) {
+                CategoryGroupType groupType = new CategoryGroupType();
+                groupType.setId(group.getId());
+                groupType.setName(group.getName());
+                responseType.getCatGroup().add(groupType);
+            }
+            responseType.setCount(fetchResult.getTarget().size());
+            responseType.setResult(getSoapResult(fetchResult));
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in listCategoryGroup", e);
+        }
+        return responseType;
     }
 }

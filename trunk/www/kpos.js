@@ -181,13 +181,79 @@ function ws_delete_printer(deletePrinterType, handler) {
 	alert(soapXML);
 	callWebService(soapXML, handler);
 }
+function MenuGroupType(aId, aName) {
+    this.myId = aId;
+    this.myName = aName;
+    this.tag = "<app:catGroup>";
+    this.endTag = "</app:catGroup>";
+    this.getXML = function() {
+        var xml = this.tag;
+        if(this.myId != null && this.myId != "") {
+            xml += "<app:id>" + this.myId + "</app:id>";
+        }
+        xml += "<app:name>" + this.myName + "</app:name>";
+        xml += this.endTag;
+        return xml;
+    };
+}
+function CreateMenuGroupType(name) {
+    this.myGroup = new MenuGroupType(null, name);
+    this.tag = "<app:CreateCategoryGroupType>";
+    this.endTag = "</app:CreateCategoryGroupType>";
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += this.tag + this.myGroup.getXML() + this.endTag;
+        xml += soapXMLEnd;
+        return xml;
+    };
+}
+function ws_create_menugroup(aName, handler) {
+    var createMenuGroupType = new CreateMenuGroupType(aName);
+    var soapXML = createMenuGroupType.getXML();
+	callWebService(soapXML, handler);
+}
+function UpdateMenuGroupType(id, name) {
+    this.myMenuGroup = new MenuGroupType(id, name);
+    this.tag = "<app:UpdateCategoryGroupType>";
+    this.endTag = "</app:UpdateCategoryGroupType>";
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += this.tag + this.myMenuGroup.getXML() + this.endTag;
+        xml += soapXMLEnd;
+        return xml;
+    };
+}
+function ws_update_menugroup(aId, aName, handler) {
+    var updateMenuGroupType = new UpdateMenuGroupType(aId, aName);
+    var soapXML = updateMenuGroupType.getXML();
+    callWebService(soapXML, handler);
+}
+function DeleteMenuGroupType(id) {
+    this.myId = id;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:DeleteCategoryGroupType><app:groupId>"+this.myId+"</app:groupId></app:DeleteCategoryGroupType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function ws_delete_menugroup(aId, handler) {
+    var soapType = new DeleteMenuGroupType(aId);
+    var soapXML = soapType.getXML();
+    callWebService(soapXML, handler);
+}
+function ws_list_menugroups() {
+    var soapXML = soapXMLBegin + "<app:ListCategoryGroupType/>" + soapXMLEnd;
+    callWebService(soapXML, handler);
+}
 
-function Category(id, name, notes, thumb, printerIds) {
+function Category(id, name, notes, thumb, printerIds, groupId) {
 	this.myId = id;
 	this.myName = name;
 	this.myNotes = notes;
 	this.myThumb = thumb;
 	this.myPrinterIds = printerIds;
+	this.myGroupId = groupId;
 	this.tag = "<app:category>";
 	this.endTag = "</app:category>";
 	this.getXML = function() {
@@ -206,6 +272,9 @@ function Category(id, name, notes, thumb, printerIds) {
         	for(var i = 0; i < this.myPrinterIds.length; i++){
         		xml += "<app:printerIds>" + this.myPrinterIds[i] + "</app:printerIds>";
         	}
+        }
+        if(this.myGroupId != null && this.myGroupId != "") {
+            xml += "<app:groupId>" + this.myGroupId + "</app:groupId>";
         }
 		xml += this.endTag;
 		return xml;

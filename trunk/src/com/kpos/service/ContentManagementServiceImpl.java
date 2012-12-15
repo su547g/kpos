@@ -32,6 +32,9 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     private final static Logger log = LoggerFactory.getLogger(ContentManagementServiceImpl.class);
 
     @Autowired
+    private IMenuGroupDao menuGroupDao;
+
+    @Autowired
     private ICategoryDao categoryDao;
     
     @Autowired
@@ -90,9 +93,79 @@ public class ContentManagementServiceImpl implements IContentManagementService {
 
     @Autowired
     private IDiscountDao discountDao;
+
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public CreateResult<MenuGroup> createMenuGroup(MenuGroup aGroup) {
+        try {
+            CreateResult<MenuGroup> result = new CreateResult<MenuGroup>();
+            aGroup.setCreatedOn(new Date());
+            aGroup.setLastUpdated(new Date());
+            MenuGroup group = menuGroupDao.findMenuGroupByName(aGroup.getName());
+            if(group != null) {
+                result.setCreated(null);
+                result.setSuccessful(false);
+                result.setException(new Exception("Category group name already exists!"));
+            } else {
+                menuGroupDao.insert(aGroup);
+            }
+            return result;
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return new CreateResult<MenuGroup>(e);
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public UpdateResult<MenuGroup> updateMenuGroup(long aId, String name) {
+        UpdateResult<MenuGroup> result = new UpdateResult<MenuGroup>();
+        MenuGroup group = menuGroupDao.findById(aId);
+        if(group != null) {
+            group.setName(name);
+            group.setLastUpdated(new Date());
+            result.setSuccessful(true);
+            result.setManagedObject(group);
+        } else {
+            result.setSuccessful(false);
+            log.debug("can't find menu group with id [" + aId + "]");
+        }
+        return result;
+    }
     
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
-    public CreateResult<MenuCategory> createMenuCategory(MenuCategory aCategory, List<Long> printerIds) {
+    public DeleteResult deleteMenuGroup(long aId) {
+        DeleteResult result = new DeleteResult();
+        MenuGroup group = menuGroupDao.findById(aId);
+        if(group != null) {
+            List categories = categoryDao.findCategoriesInGroup(aId);
+            if(categories.isEmpty()) {
+                menuGroupDao.delete(group);
+                result.setSuccessful(true);
+            } else {
+                result.setSuccessful(false);
+                result.setFailure(1, "Group has categories.");
+            }
+        } else {
+            result.setSuccessful(false);
+            log.warn("can't find category group with id " + aId);
+        }
+        return result;
+    }
+    
+    @Override
+    public FetchResult<List<MenuGroup>> listMenuGroups() {
+        FetchResult<List<MenuGroup>> fetchResult = new FetchResult<List<MenuGroup>>();
+        try {
+            fetchResult.setTarget(menuGroupDao.findAll());
+            fetchResult.setSuccessful(true);
+        } catch(Exception e) {
+            fetchResult.setSuccessful(false);
+            fetchResult.setException(e);
+        }
+        return fetchResult;
+    }
+    
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
+    public CreateResult<MenuCategory> createMenuCategory(MenuCategory aCategory, Long groupId, List<Long> printerIds) {
         try {
             CreateResult<MenuCategory> result = new CreateResult<MenuCategory>();
             aCategory.setCreatedOn(new Date());
@@ -102,6 +175,9 @@ public class ContentManagementServiceImpl implements IContentManagementService {
                 result.setSuccessful(false);
                 result.setException(new Exception("MenuCategory name already exists!"));
             } else {
+                if(groupId == null || groupId <= 0) groupId = menuGroupDao.getDefaultGroupId();
+                MenuGroup group = menuGroupDao.findById(groupId);
+                aCategory.setGroup(group);
                 categoryDao.insertCategory(aCategory);
                 for(Long id : printerIds) {
                     Printer printer = printerDao.findById(id);
@@ -176,6 +252,10 @@ public class ContentManagementServiceImpl implements IContentManagementService {
                 updateResult.setException(new Exception("Different category with the same name already exists!"));
             } else {
                 MenuCategory aCategory = categoryDao.findCategory(aCategoryType.getId());
+                long groupId = aCategoryType.getGroupId();
+                MenuGroup group = menuGroupDao.findById(groupId);
+                if(group == null) group = menuGroupDao.getDefaultGroup();
+                aCategory.setGroup(group);
                 if(aCategoryType.getIsAllowedHappyHour() != null) aCategory.setAllowedHH(aCategoryType.getIsAllowedHappyHour());
                 if(aCategoryType.getHappyHourRate() != null) aCategory.setHhRate(aCategoryType.getHappyHourRate());
                 aCategory.setName(aCategoryType.getName());
