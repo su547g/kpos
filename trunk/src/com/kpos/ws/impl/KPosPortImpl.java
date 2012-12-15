@@ -214,6 +214,7 @@ public class KPosPortImpl implements KPosPortType {
                 type.setName(category.getName());
                 type.setNotes(category.getNotes());
                 type.setThumbPath(category.getThumbPath());
+                type.setGroupId(category.getMenuGroup().getId());
                 categoryTypes.add(type);
                 for(Printer printer : category.getPrinters()) {
                     type.getPrinterIds().add(printer.getId());

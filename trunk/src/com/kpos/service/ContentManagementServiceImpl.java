@@ -177,7 +177,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             } else {
                 if(groupId == null || groupId <= 0) groupId = menuGroupDao.getDefaultGroupId();
                 MenuGroup group = menuGroupDao.findById(groupId);
-                aCategory.setGroup(group);
+                aCategory.setMenuGroup(group);
                 categoryDao.insertCategory(aCategory);
                 for(Long id : printerIds) {
                     Printer printer = printerDao.findById(id);
@@ -255,7 +255,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
                 long groupId = aCategoryType.getGroupId();
                 MenuGroup group = menuGroupDao.findById(groupId);
                 if(group == null) group = menuGroupDao.getDefaultGroup();
-                aCategory.setGroup(group);
+                aCategory.setMenuGroup(group);
                 if(aCategoryType.getIsAllowedHappyHour() != null) aCategory.setAllowedHH(aCategoryType.getIsAllowedHappyHour());
                 if(aCategoryType.getHappyHourRate() != null) aCategory.setHhRate(aCategoryType.getHappyHourRate());
                 aCategory.setName(aCategoryType.getName());
