@@ -20,7 +20,7 @@ import java.util.List;
 public class AdminServiceImpl implements IAdminService {
     @Autowired
     private ITaxDao taxDao;
-    
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
     public long saveCompanyTax(CompanyTax aTax) {
