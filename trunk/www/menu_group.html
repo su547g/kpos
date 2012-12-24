@@ -1,0 +1,305 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta id="viewport" name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-touch-fullscreen" content="yes">
+
+    <script type="text/javascript" src="xml2json.js"></script>
+    <script type="text/javascript" src="kpos.js"></script>
+    <script type="text/javascript" src="popup.js"></script>
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.min.js"></script>
+
+    <link rel="stylesheet" href="example.css" type="text/css" media="screen">
+    <style type="text/css">
+        body{
+        font-size:14px;
+        background:#c4f0f1;
+        text-align:center;
+        }
+
+        .tableone {width:250px; border-collapse:collapse; margin:0 auto;}
+        .tabletwo {width:220px; margin:2px; border:1px solid #B3B1B1; border-spacing: 1px; border-style:outset}
+
+        .th1 {width:149px;}
+        .th2 {width:99px;}
+        .th3 {width:99px;}
+        .th4 {width:99px;}
+        .th5 {width:200px;}
+
+        .td1 {width:149px;border:1px solid #B3B1B1;}
+        .td2 {width:99px;}
+        .td3 {width:99px;}
+        .td4 {width:99px;}
+        .td5 {width:170px;}
+
+        .tableone {background:#697210; border:1px solid #fff; color:#fff;}
+        .tableone td {border:1px solid #fff; color:#fff;}
+        .tableone tbody {background:#eee; color:#000;}
+        .tableone caption {background:#fff; color:#697210; font-size:1.2em; margin:0 auto;}
+        .tableone th, .tabletwo th {text-align:left;}
+
+        .tabletwo td {background:#eee; color:#000;}
+        .tabletwo tr.dk th {background:#ddd; color:#000;}
+        .tabletwo tr.dk td {background:#ddd; color:#000;}
+
+        .innerb {height:30em; overflow:auto;}
+
+        .optionsTable {width:"50px"; overflow:auto;}
+    </style>
+    <script language="javascript">
+        var currentRow=-1;
+
+        var ADD = "ADD";
+        var UPDATE = "UPDATE";
+
+        var v_selected_group_rowid = "";
+
+        var curr_group = localStorage.getItem('curr_group');
+
+        var operation = "";
+
+        var deletedRowId = "";
+
+        function setCurrentGroup(group) {
+            curr_group = group;
+            var jsonString = obj2str(curr_group);
+            localStorage.setItem('curr_group', jsonString);
+        }
+        function getCurrentGroup() {
+            curr_group = strToObj(localStorage.getItem('curr_group'));
+            return curr_group;
+        }
+        function getMenuGroups() {
+            var groups = strToObj(localStorage.getItem('v_groups'));
+            if(groups == null || groups.length == undefined) {
+                var group_array = new Array();
+                group_array.push(groups);
+                return group_array;
+            }
+            return groups;
+        }
+        function setMenuGroups(groups) {
+            var jsonString = obj2str(groups);
+            localStorage.setItem('v_groups', jsonString);
+        }
+        function newGroup() {
+            document.getElementById("groupName").value = "";
+            document.getElementById("groupName").readOnly = false;
+            document.getElementById("groupDescription").value = "";
+            document.getElementById("groupDescription").readOnly = false;
+            operation = ADD;
+            setCurrentGroup(null);
+        }
+        function listMenuGroups(){
+            ws_list_menugroups(listMenuGroupsHandler);
+        }
+        function listMenuGroupsHandler(jsonObj) {
+            if(jsonObj != undefined && jsonObj != null &&
+                jsonObj.listcategorygroupresponsetype != undefined && jsonObj.listcategorygroupresponsetype != null &&
+                jsonObj.listcategorygroupresponsetype.result.successful == 'true') {
+                //Clear the table
+                document.getElementById("group").innerHTML = "";
+                var groups = jsonObj.listcategorygroupresponsetype.catgroup;
+                var count = jsonObj.listcategorygroupresponsetype.count;
+                setMenuGroups(groups);
+                if(groups != undefined && groups != null) {
+                    if(count > 1) {
+                        for(var i = 0; i < groups.length; i++) {
+                            addGroupRow("menuGroup", groups[i], "selectRow", "deleteGroupRow");
+                        }
+                    } else if(count == 1){
+                        //Only one group
+                        addGroupRow("menuGroup", groups, "selectRow", "deleteGroupRow");
+                    }
+                }
+            }
+        }
+        function createMenuGroup() {
+            var name = document.getElementById("groupName").value;
+            //var description = document.getElementById("categoryNotes").value;
+            ws_create_menugroup(name, addMenuGroupHandler);
+        }
+        function addMenuGroupHandler(jsonObj) {
+            if(jsonObj != undefined && jsonObj != null &&
+                jsonObj.createcategorygroupresponsetype != undefined && jsonObj.createcategorygroupresponsetype != null &&
+                jsonObj.createcategorygroupresponsetype.result.successful == "true") {
+                listMenuGroups();
+            } else {
+                alert("failed to add menu group!");
+            }
+            operation = "";
+        }
+        function updateCategory() {
+            var name = document.getElementById("groupName").value;
+
+            curr_group.name = name;
+            setCurrentGroup(curr_group);
+
+            ws_update_menugroup(curr_group.id, name, updateMenuGroupHandler);
+        }
+        function updateMenuGroupHandler(jsonObj) {
+            if(jsonObj != undefined && jsonObj != null &&
+                jsonObj.updatecategorygroupresponsetype != undefined && jsonObj.updatecategorygroupresponsetype != null &&
+                jsonObj.updatecategorygroupresponsetype.result.successful == "true") {
+                var selectedRow = document.getElementById(v_selected_group_rowid);
+                if(selectedRow != null && selectedRow.cells != null) {
+                    selectedRow.cells[0].innerText = document.getElementById("groupName").value;
+                    var groups = getMenuGroups();
+                    for(var i = 0; i < groups.length; i++) {
+                        if(groups[i].id == curr_group.id) {
+                            groups[i] = curr_group;
+                            setMenuGroups(groups);
+                            break;
+                        }
+                    }
+                }
+                alert("Save successful!");
+            } else {
+                alert("Failed to update menu group!");
+            }
+            operation = "";
+        }
+        function selectRow(tableID, selectedRowID) {
+            var table = document.getElementById(tableID);
+            v_selected_cat_rowid = selectedRowID;
+            var rowCount = table.rows.length;
+            operation = UPDATE;
+            for(var i = 0; i < rowCount; i++) {
+                var row = table.rows[i];
+                if(row.id == selectedRowID) {
+                    row.style.background = '#dcfac9';
+                    row.cells[0].style.background = '#dcfac9';
+                    row.cells[1].style.background = '#dcfac9';
+                    currentRow = i;
+
+                    var v_groups = getGroups();
+                    if(v_groups.length != undefined) {
+                        setCurrentGroup(v_groups[i]);
+                    } else {
+                        setCurrentGroup(v_groups);
+                    }
+                    if(curr_group != null) {
+                        document.getElementById("curMenuGroupId").value = curr_group.id;
+                        document.getElementById("menuGroupName").value = curr_group.name;
+                        document.getElementById("menuGroupName").readOnly = false;
+                    }
+                    document.getElementById("btnNewItem").disabled = false;
+                } else {
+                    row.style.background = ''; //'#f0c992';
+                    row.cells[0].style.background = ''; //'#f0c992';
+                    row.cells[1].style.background = ''; //'#f0c992';
+                }
+            }
+        }
+        function addMenuGroupRow(tableID, groupObj, selectRowFunc, deleteRowFunc) {
+            var table = document.getElementById(tableID);
+
+            var rowCount = table.rows.length;
+            var rowId = tableID + "_r" + rowCount;
+
+            var row = table.insertRow(rowCount);
+            row.id = rowId;
+            row.name = rowId;
+
+            var innerHTML = "<td onclick='"+selectRowFunc+"(\""+tableID+"\", \""+rowId+"\");'>"+groupObj.name+"</td><td><a href='javascript:"+deleteRowFunc+"(\""+tableID+"\",\""+rowId+"\","+groupObj.id+");'><img src=\"img\\delete-icon-small.jpg\"/></a></td>";
+            row.innerHTML = innerHTML;
+            row.onmouseover = function(){ highlightRow(this, true); };
+            row.onmouseout = function(){ highlightRow(this, false); };
+        }
+        function deleteMenuGroupRow(groupId) {
+            ws_delete_menugroup(groupId, deleteMenuGroupHandler);
+        }
+        function deleteMenuGroupHandler(jsonObj) {
+            if(jsonObj != undefined && jsonObj != null &&
+                jsonObj.deletecategorygroupresponsetype != undefined && jsonObj.deletecategorygroupresponsetype != null &&
+                jsonObj.deletecategorygroupresponsetype.result.successful == "true") {
+                listMenuGroups();
+            } else {
+                alert("failed to delete menu group!");
+            }
+            deletedRowId = "";
+        }
+        function saveMenuGroup() {
+            if(operation == ADD){
+                createMenuGroup();
+            } else if(operation == UPDATE) {
+                updateMenuGroup();
+            }
+        }
+    </script>
+</head>
+
+<body onload="javascript:listMenuGroups();">
+    <table>
+        <tbody>
+            <tr>
+                <td><input class="navibutton" onclick="window.location.href='index.html';" value="&lt;&lt; Back" type="button"></td>
+            </tr>
+        </tbody>
+    </table>
+    <table width="100%">
+        <tbody>
+            <tr>
+                <td align="left" valign="top" width="18%">
+                    <table class="tableone" align="left" width="100%">
+                        <caption>Menu Groups</caption>
+                        <thead>
+                            <tr>
+                                <th class="th1" scope="col">Name</th>
+                                <th class="th2" scope="col"><br>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2" align="center"><button onclick="javascript:newMenuGroup();">New Group</button></td>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" align="left" valign="top">
+                                    <div class="innerb">
+                                        <table id="group" class="tabletwo" width="100%">
+                                        </table>
+                                    </div>
+                                    <br>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td align="left" valign="top">
+                    <input id="curMenuGroupId" type="hidden">
+                    <table id="menuGroupInfo" width="70%">
+                        <tbody>
+                            <tr>
+                                <td align="left" valign="top">
+                                    Name: <input id="menuGroupName" readonly="readonly" value="" type="text">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" valign="top">
+                                    Description: <textarea id="menuGroupDescription" rows="3" cols="45" readonly="readonly" value=""></textarea>
+                                </td>
+                            </tr>
+                            <tr><td><button type="button" onclick="javascript:saveMenuGroup();">Save</button></td></tr>
+
+                            <tr>
+                                <td width="100%">
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
