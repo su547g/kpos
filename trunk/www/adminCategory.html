@@ -1,21 +1,21 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-    <title></title>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta id="viewport" name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title></title>
 
-    <meta name="apple-mobile-web-app-capable" content="yes"/>
-    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-    <meta name="apple-touch-fullscreen" content="yes" />
+
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta id="viewport" name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-touch-fullscreen" content="yes">
 
     <script type="text/javascript" src="xml2json.js"></script>
     <script type="text/javascript" src="kpos.js"></script>
     <script type="text/javascript" src="popup.js"></script>
     <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.min.js"></script>
     
-    <link rel="stylesheet" href="example.css" TYPE="text/css" MEDIA="screen">
+    <link rel="stylesheet" href="example.css" type="text/css" media="screen">
     
     <style type="text/css">
         body{
@@ -98,9 +98,9 @@
 		  /* Optional: set an ID for each tab navigation link */
 		  'addLinkId': true
 		};
-	</script>
+	</script><!-- Load the tabber code -->
 
-	<!-- Load the tabber code -->
+	
 	<script type="text/javascript" src="tabber.js"></script>
 	<script language="javascript">
 	    var currentRow=-1;
@@ -1026,22 +1026,20 @@
 	       	var innerHTML = "<td><a href='javascript:"+selectRowFunc+"("+optionObj.id+");'>"+optionObj.name+"</a></td>";
 	       	return innerHTML;
 	    }
-	</script>
-</head>
-
-<body onload="javascript:listAllCategories();">
+	</script></head><body onload="javascript:listAllCategories();">
 <table>
-	<tr><td><input type="button" class="navibutton" onclick="window.location.href='index.html';" value="<< Back"></td>
-</table>
+	<tbody><tr><td><input class="navibutton" onclick="window.location.href='index.html';" value="&lt;&lt; Back" type="button"></td>
+</tr></tbody></table>
 <table width="100%">
-    <tr>
-        <td width="18%" valign="top" align="left">
-            <table width="100%" class="tableone" align="left">
+    <tbody><tr>
+        <td align="left" valign="top" width="18%">
+            <table class="tableone" align="left" width="100%">
                 <caption>Categories</caption>
                 <thead>
                 <tr>
                     <th class="th1" scope="col">Name</th>
-                    <th class="th2" scope="col"></th>
+                    <th class="th2" scope="col"><br>
+</th>
                 </tr>
                 </thead>
                 <tfoot>
@@ -1051,22 +1049,26 @@
                 </tfoot>
                 <tbody>
 	                <tr>
-	                    <td colspan="5" valign="top" align="left">
+	                    <td colspan="5" align="left" valign="top">
 	                        <div class="innerb">
-	                            <table id ="category" class="tabletwo" width="100%">
+	                            <table id="category" class="tabletwo" width="100%">
 	                            </table>
 	                        </div>
-	                    </td>
+	                    <br>
+</td>
 	                </tr>
                 </tbody>
             </table>
         </td>
-        <td valign="top" align="left">
-        	<table id="categoryInfo" width="70%">
-        		<input type="hidden" id="curCatId"/>
-        		<tr>
+        <td align="left" valign="top">
+        	<input id="curCatId" type="hidden">
+        		<table id="categoryInfo" width="70%">
+        		<tbody><tr>
+            <td style="vertical-align: top;">Group: <select name="menuGroup"></select><br></td>
+          </tr>
+<tr>
         			<td align="left" valign="top">
-        				Name: <input type="text" id="categoryName" readonly="readonly" value=""/>
+        				Name: <input id="categoryName" readonly="readonly" value="" type="text">
         			</td>
         		</tr>
         		<tr>
@@ -1076,19 +1078,20 @@
         		</tr>
         		<tr>
         			<td>
-        				Thumbnail: <input type="file" id="catThumb2" accept="image/*" disabled="disabled" onchange="updatePicture('categoryImg', this.value);"/>
-        				<img id="categoryImg" src=""/>
-        				<input type="hidden" id="catThumb" readonly="readonly">
+        				Thumbnail: <input id="catThumb2" accept="image/*" disabled="disabled" onchange="updatePicture('categoryImg', this.value);" type="file">
+        				<img id="categoryImg" src="">
+        				<input id="catThumb" readonly="readonly" type="hidden">
         			</td>
         		</tr>
 				<tr>
 					<td>
 						<table>
-							<tr>
+							<tbody><tr>
 								<td>Printers:</td>
-								<td id="catPrinterCell"></td>
+								<td id="catPrinterCell"><br>
+</td>
 							</tr>
-						</table>
+						</tbody></table>
 					</td>
 				</tr>
         		<tr><td><button type="button" onclick="javascript:saveCategoryInfo();">Save</button></td></tr>
@@ -1099,30 +1102,32 @@
         			<td width="100%">
         				<div class="tabber" id="tab1">
 							<div id="mainTab" class="tabbertab">
-							    <h2 style="font-size: 20px"><a name="tab1">Menu Items</a></h2>
+							    <h2 style="font-size: 20px;"><a name="tab1">Menu Items</a></h2>
 							    <table width="100%">
-							    	<tr>
+							    	<tbody><tr>
 							    		<td width="20%">
 							    			<table class="tableone" align="left">
 								                <thead>
 									                <tr>
 									                    <th class="th1" scope="col">Name</th>
-									                    <th class="th2" scope="col"></th>
+									                    <th class="th2" scope="col"><br>
+</th>
 									                </tr>
 								                </thead>
 								                <tfoot>
 									                <tr>
-									                    <td align="center" colspan="2"><button id="btnNewItem"  onclick="javascript:newItem();">New Item</button></td>
+									                    <td colspan="2" align="center"><button id="btnNewItem" onclick="javascript:newItem();">New Item</button></td>
 									                </tr>
 								                </tfoot>
 								                <tbody>
 									                <tr>
 									                    <td colspan="5">
 									                        <div class="innerb">
-									                            <table id ="menuItem" class="tabletwo">
+									                            <table id="menuItem" class="tabletwo">
 									                            </table>
 									                        </div>
-									                    </td>
+									                    <br>
+</td>
 									                </tr>
 							                	</tbody>
 							            	</table>
@@ -1130,12 +1135,12 @@
 							    		<td valign="top">
 							    			Item Details:
 							    			<form name="itemDetails">
-							    				<input type="hidden" name="itemId"/>
-							            	<table name="itemTable" style="border:1px solid gray" width="100%">
-					                    		<tr>
+							    				<input name="itemId" type="hidden">
+							            	<table name="itemTable" style="border: 1px solid gray;" width="100%">
+					                    		<tbody><tr>
 					                    			<td>
-					                    				Name: <input type="text" id="itemName" name="itemName" value=""> <input type="checkbox" id="itemTaxable" name="itemTaxable" checked value="1"/>Taxable
-					                    				<input type="checkbox" id="singleOption" name="singleOption" value="1"/>Allow only 1 option
+					                    				Name: <input id="itemName" name="itemName" value="" type="text"> <input id="itemTaxable" name="itemTaxable" checked="checked" value="1" type="checkbox">Taxable
+					                    				<input id="singleOption" name="singleOption" value="1" type="checkbox">Allow only 1 option
 					                    			</td>
 					                    		</tr>
 					                    		<tr>
@@ -1143,99 +1148,102 @@
 					                    		</tr>
 					                    		<tr>
 					                    			<td>
-					                    				<input type="checkbox" id="hasSeasonPrice" name="hasSeasonPrice" value="1" onclick="javascript:enableSeasonalPrice();"/>Seasonal price
-					                    				<input type="text" id="seasonPrice" name="seasonPrice" value="" />
+					                    				<input id="hasSeasonPrice" name="hasSeasonPrice" value="1" onclick="javascript:enableSeasonalPrice();" type="checkbox">Seasonal price
+					                    				<input id="seasonPrice" name="seasonPrice" value="" type="text">
 					                    			</td>
 					                    		</tr>
 					                    		<tr>
-					                    			<td>Default Price: <input type="text" id="defaultItemPrice" name="defaultItemPrice"></td>
+					                    			<td>Default Price: <input id="defaultItemPrice" name="defaultItemPrice" type="text"></td>
 					                    		</tr>
 					                    		<tr>
-					                    			<td>Default Takeout Price: <input type="text" id="defaultItemOutPrice" name="defaultItemOutPrice"></td>
+					                    			<td>Default Takeout Price: <input id="defaultItemOutPrice" name="defaultItemOutPrice" type="text"></td>
 					                    		</tr>
 												<tr>
 													<td>
-														<table border="0" cellspacing="0" cellpadding="0">
-															<tr>
+														<table border="0" cellpadding="0" cellspacing="0">
+															<tbody><tr>
 																<td>Size</td>
-																<td><input type="checkbox" id="hasDineInSizes" name="hasDineInSizes" onclick="javascript:enableDineInSizes(this.checked);"/>Dine-in</td>
-																<td><input type="checkbox" id="hasTakeOutSizes" name="hasTakeOutSizes" onclick="javascript:enableTakeoutSizes(this.checked);"/>Take-out</td>
+																<td><input id="hasDineInSizes" name="hasDineInSizes" onclick="javascript:enableDineInSizes(this.checked);" type="checkbox">Dine-in</td>
+																<td><input id="hasTakeOutSizes" name="hasTakeOutSizes" onclick="javascript:enableTakeoutSizes(this.checked);" type="checkbox">Take-out</td>
 															</tr>
 															<tr>
 																<td>Small</td>
-																<td><input id="smallPrice" name="smallPrice" type="text"/></td>
-																<td><input id="smallOutPrice" name="smallOutPrice" type="text"/></td>
+																<td><input id="smallPrice" name="smallPrice" type="text"></td>
+																<td><input id="smallOutPrice" name="smallOutPrice" type="text"></td>
 															</tr>
 															<tr>
 																<td>Medium</td>
-																<td><input id="mediumPrice" name="mediumPrice" type="text"/></td>
-																<td><input id="mediumOutPrice" name="mediumOutPrice" type="text"/></td>
+																<td><input id="mediumPrice" name="mediumPrice" type="text"></td>
+																<td><input id="mediumOutPrice" name="mediumOutPrice" type="text"></td>
 															</tr>
 															<tr>
 																<td>Large</td>
-																<td><input id="largePrice" name="largePrice" type="text"/></td>
-																<td><input id="largeOutPrice" name="largeOutPrice" type="text"/></td>
+																<td><input id="largePrice" name="largePrice" type="text"></td>
+																<td><input id="largeOutPrice" name="largeOutPrice" type="text"></td>
 															</tr>
-														</table>
+														</tbody></table>
 													</td>
 												</tr>
 					                    		<tr>
 								        			<td>
-								        				Thumbnail: <input type="file" id="itemThumb2" onchange="updatePicture('itemImg', this.value);"/><img id="itemImg" src=""/>
-								        				<input type="hidden" id="itemThumb" value=""/>
+								        				Thumbnail: <input id="itemThumb2" onchange="updatePicture('itemImg', this.value);" type="file"><img id="itemImg" src="">
+								        				<input id="itemThumb" value="" type="hidden">
 								        			</td>
 								        		</tr>
 								        		<tr>
 													<td>
 														<table>
-															<tr>
+															<tbody><tr>
 																<td>Printers:</td>
-																<td id="itemPrinterCell"></td>
+																<td id="itemPrinterCell"><br>
+</td>
 															</tr>
-														</table>
+														</tbody></table>
 													</td>
 												</tr>
 								        		<tr><td><button type="button" id="btnSaveItem" name="btnSaveItem" onclick="javascript:saveItemInfo();">Save</button></td></tr>
 												<script language="javascript">setPrintersHTML("itemPrinters", setItemPrintersHTMLHandler)</script>
-								            </table>
+								            </tbody></table>
 								            </form>
 								            <br>
 								            <div class="optionsTable">
 								            	<table id="itemOptionsTable" border="1">
 								            	</table>
 								            	<br>
-								            	<button id="btnAddItemOpt" disabled=true onclick="javasccript:newItemOption();">Add Option</button>
+								            	<button id="btnAddItemOpt" disabled="true" onclick="javasccript:newItemOption();">Add Option</button>
 								            </div>
 							    		</td>
 							    	</tr>
-							    </table>
+							    </tbody></table>
 							</div>
 							
 							<div id="adminTab" class="tabbertab">
-							    <h2 style="font-size: 20px">Category Options</h2>
+							    <h2 style="font-size: 20px;">Category Options</h2>
 							    <table width="100%">
-							    	<tr>
+							    	<tbody><tr>
 							    		<td width="20%">
 							    			<table class="tableone" align="left">
 								                <thead>
 									                <tr>
 									                    <th class="th1" scope="col">Name</th>
-									                    <th class="th2" scope="col"></th>
+									                    <th class="th2" scope="col"><br>
+</th>
 									                </tr>
 								                </thead>
 								                <tfoot>
 									                <tr>
-									                    <td align="center" colspan="2"><button id="btnNewCatOption"  onclick="javascript:newCatOption();">New Option</button></td>
+									                    <td colspan="2" align="center"><button id="btnNewCatOption" onclick="javascript:newCatOption();">New Option</button></td>
 									                </tr>
 								                </tfoot>
 								                <tbody>
 									                <tr>
 									                    <td colspan="5">
 									                        <div class="innerb">
-									                            <table id ="categoryOption" class="tabletwo">
+									                            <table id="categoryOption" class="tabletwo">
 									                            </table>
 									                        </div>
-									                    </td>
+									                    <br>
+</td>
 									                </tr>
 							                	</tbody>
 							            	</table>
@@ -1243,76 +1251,91 @@
 							    		<td valign="top">
 							    			Option Details:
 							    			<form name="optionDetails">
-							    			<input type="hidden" name="catOptionId"/>
-							            	<table name="itemTable" style="border:1px solid gray" width="100%">
-					                    		<tr>
+							    			<input name="catOptionId" type="hidden">
+							            	<table name="itemTable" style="border: 1px solid gray;" width="100%">
+					                    		<tbody><tr>
 					                    			<td>
-					                    				Name: <input type="text" id="catOptionName" name="catOptionName" value=""> <input type="checkbox" id="catOptionTaxable" name="catOptionTaxable" value="1"/>Taxable
+					                    				Name: <input id="catOptionName" name="catOptionName" value="" type="text"> <input id="catOptionTaxable" name="catOptionTaxable" value="1" type="checkbox">Taxable
 					                    			</td>
 					                    		</tr>
 					                    		<tr>
 					                    			<td valign="top">Description: <textarea name="catOptionDescription" id="catOptionDescription" rows="3" cols="45" value=""></textarea></td>
 					                    		</tr>
 					                    		<tr>
-					                    			<td>Default Price: <input type="text" id="catOptionPrice" name="catOptionPrice"></td>
+					                    			<td>Default Price: <input id="catOptionPrice" name="catOptionPrice" type="text"></td>
 					                    		</tr>
 					                    		<tr>
-					                    			<td>Default Takeout Price: <input type="text" id="catOptionOutPrice" name="catOptionOutPrice"></td>
+					                    			<td>Default Takeout Price: <input id="catOptionOutPrice" name="catOptionOutPrice" type="text"></td>
 					                    		</tr>
 					                    		<tr>
 								        			<td>
-								        				Thumbnail: <input type="file" id="catOptionThumb2" onchange="updatePicture('itemImg', this.value);"/><img id="catOptionImg" src=""/>
-								        				<input type="hidden" id="catOptionThumb" value=""/>
+								        				Thumbnail: <input id="catOptionThumb2" onchange="updatePicture('itemImg', this.value);" type="file"><img id="catOptionImg" src="">
+								        				<input id="catOptionThumb" value="" type="hidden">
 								        			</td>
 								        		</tr>
 								        		<tr><td><button type="button" id="btnSaveCatOption" name="btnSaveCatOption" onclick="javascript:saveCatOptionInfo();">Save</button></td></tr>
-								            </table>
+								            </tbody></table>
 								            </form>
 							    		</td>
 							    	</tr>
-							    </table>
+							    </tbody></table>
 							</div>
 						</div>
 					</td>
 		    	</tr>
-            </table>
+            </tbody></table>
         </td>
     </tr>
-</table>
+</tbody></table>
 
-<div id="modal" style="border:3px solid black; background-color:#90CADE; padding:5px; font-size:100%; text-align:center; display:none;">
+<div id="modal" style="border: 3px solid black; padding: 5px; background-color: rgb(144, 202, 222); font-size: 100%; text-align: center; display: none;">
 	Sale Item Option<br>
-	<table border="1">
-		<form name="itemOptionForm" id="itemOptionForm">
-		<input type="hidden" name="itemOptionId"/>
-		<tr>
-			<td align="left" valign="top">Name</td><td align="left" valign="top"><input type="text" name="itemOptionName" /></td>
+	<input name="itemOptionId" type="hidden">
+		<table border="1">
+		<form name="itemOptionForm" id="itemOptionForm"></form>
+		<tbody><tr>
+			<td align="left" valign="top">Name<br>
+</td><td align="left" valign="top"><input name="itemOptionName" type="text"><br>
+</td>
 		</tr>
 		<tr>
-			<td align="left" valign="top">Description</td><td align="left" valign="top"><textarea name="itemOptionDesc" cols="20" rows="3"></textarea></td>
+			<td align="left" valign="top">Description<br>
+</td><td align="left" valign="top"><textarea name="itemOptionDesc" cols="20" rows="3"></textarea><br>
+</td>
 		</tr>
 		<tr>
-			<td align="left" valign="top">Price</td><td align="left" valign="top"><input type="text" name="itemOptionPrice"/></td>
+			<td align="left" valign="top">Price<br>
+</td><td align="left" valign="top"><input name="itemOptionPrice" type="text"><br>
+</td>
 		</tr>
 		<tr>
-			<td align="left" valign="top">Takeout Price</td><td align="left" valign="top"><input type="text" name="itemOptionOutPrice"/></td>
+			<td align="left" valign="top">Takeout Price<br>
+</td><td align="left" valign="top"><input name="itemOptionOutPrice" type="text"><br>
+</td>
 		</tr>
 		<tr>
-			<td align="left" valign="top">Required</td><td align="left" valign="top"><input type="checkbox" name="itemOptionRequired"/></td>
+			<td align="left" valign="top">Required<br>
+</td><td align="left" valign="top"><input name="itemOptionRequired" type="checkbox"><br>
+</td>
 		</tr>
 		<tr>
-			<td align="left" valign="top">Taxable</td><td align="left" valign="top"><input type="checkbox" name="itemOptionTaxable"/></td>
+			<td align="left" valign="top">Taxable<br>
+</td><td align="left" valign="top"><input name="itemOptionTaxable" type="checkbox"><br>
+</td>
 		</tr>
 		<tr>
-			<td align="left" valign="top">Thumbnail</td><td align="left" valign="top"><input type="file" id="itemOptionThumb" onchange="updatePicture('itemImg', this.value);"/><img id="itemOptionImg" src=""/></td>
+			<td align="left" valign="top">Thumbnail<br>
+</td><td align="left" valign="top"><input id="itemOptionThumb" onchange="updatePicture('itemImg', this.value);" type="file"><img id="itemOptionImg" src=""><br>
+</td>
 		</tr>
-		</form>
+		
 		<tr>
 			<td colspan="2" align="left">
-				<button onClick="saveItemOptionInfo();">Save</button><button id="btnDeleteItemOption" onclick="deleteItemOption();">Delete</button><button onclick="Popup.hide('modal')">Cancel</button>
-			</td>
+				<button onclick="saveItemOptionInfo();">Save</button><button id="btnDeleteItemOption" onclick="deleteItemOption();">Delete</button><button onclick="Popup.hide('modal')">Cancel</button>
+			<br>
+</td>
 		</tr>
-	</table>
+	</tbody></table>
 </div>
 
 <script type="text/javascript">
@@ -1324,5 +1347,4 @@
    tabberAutomatic(tabberOptions);
 						
 </script>
-</body>
-</html>
+</body></html>
