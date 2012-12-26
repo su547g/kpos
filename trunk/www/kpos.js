@@ -242,7 +242,7 @@ function ws_delete_menugroup(aId, handler) {
     var soapXML = soapType.getXML();
     callWebService(soapXML, handler);
 }
-function ws_list_menugroups() {
+function ws_list_menugroups(handler) {
     var soapXML = soapXMLBegin + "<app:ListCategoryGroupType/>" + soapXMLEnd;
     callWebService(soapXML, handler);
 }
