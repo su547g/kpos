@@ -88,11 +88,11 @@
             var jsonString = obj2str(groups);
             localStorage.setItem('v_groups', jsonString);
         }
-        function newGroup() {
-            document.getElementById("groupName").value = "";
-            document.getElementById("groupName").readOnly = false;
-            document.getElementById("groupDescription").value = "";
-            document.getElementById("groupDescription").readOnly = false;
+        function newMenuGroup() {
+            document.getElementById("menuGroupName").value = "";
+            document.getElementById("menuGroupName").readOnly = false;
+            document.getElementById("menuGroupDescription").value = "";
+            document.getElementById("menuGroupDescription").readOnly = false;
             operation = ADD;
             setCurrentGroup(null);
         }
@@ -104,25 +104,24 @@
                 jsonObj.listcategorygroupresponsetype != undefined && jsonObj.listcategorygroupresponsetype != null &&
                 jsonObj.listcategorygroupresponsetype.result.successful == 'true') {
                 //Clear the table
-                document.getElementById("group").innerHTML = "";
+                document.getElementById("menuGroup").innerHTML = "";
                 var groups = jsonObj.listcategorygroupresponsetype.catgroup;
                 var count = jsonObj.listcategorygroupresponsetype.count;
                 setMenuGroups(groups);
                 if(groups != undefined && groups != null) {
                     if(count > 1) {
                         for(var i = 0; i < groups.length; i++) {
-                            addGroupRow("menuGroup", groups[i], "selectRow", "deleteGroupRow");
+                            addMenuGroupRow("menuGroup", groups[i], "selectRow", "deleteMenuGroupRow");
                         }
                     } else if(count == 1){
                         //Only one group
-                        addGroupRow("menuGroup", groups, "selectRow", "deleteGroupRow");
+                        addMenuGroupRow("menuGroup", groups, "selectRow", "deleteMenuGroupRow");
                     }
                 }
             }
         }
         function createMenuGroup() {
-            var name = document.getElementById("groupName").value;
-            //var description = document.getElementById("categoryNotes").value;
+            var name = document.getElementById("menuGroupName").value;
             ws_create_menugroup(name, addMenuGroupHandler);
         }
         function addMenuGroupHandler(jsonObj) {
@@ -135,8 +134,8 @@
             }
             operation = "";
         }
-        function updateCategory() {
-            var name = document.getElementById("groupName").value;
+        function updateMenuGroup() {
+            var name = document.getElementById("menuGroupName").value;
 
             curr_group.name = name;
             setCurrentGroup(curr_group);
@@ -149,7 +148,7 @@
                 jsonObj.updatecategorygroupresponsetype.result.successful == "true") {
                 var selectedRow = document.getElementById(v_selected_group_rowid);
                 if(selectedRow != null && selectedRow.cells != null) {
-                    selectedRow.cells[0].innerText = document.getElementById("groupName").value;
+                    selectedRow.cells[0].innerText = document.getElementById("menuGroupName").value;
                     var groups = getMenuGroups();
                     for(var i = 0; i < groups.length; i++) {
                         if(groups[i].id == curr_group.id) {
@@ -167,7 +166,7 @@
         }
         function selectRow(tableID, selectedRowID) {
             var table = document.getElementById(tableID);
-            v_selected_cat_rowid = selectedRowID;
+            v_selected_group_rowid = selectedRowID;
             var rowCount = table.rows.length;
             operation = UPDATE;
             for(var i = 0; i < rowCount; i++) {
@@ -178,7 +177,7 @@
                     row.cells[1].style.background = '#dcfac9';
                     currentRow = i;
 
-                    var v_groups = getGroups();
+                    var v_groups = getMenuGroups();
                     if(v_groups.length != undefined) {
                         setCurrentGroup(v_groups[i]);
                     } else {
@@ -189,7 +188,7 @@
                         document.getElementById("menuGroupName").value = curr_group.name;
                         document.getElementById("menuGroupName").readOnly = false;
                     }
-                    document.getElementById("btnNewItem").disabled = false;
+                    //document.getElementById("btnNewItem").disabled = false;
                 } else {
                     row.style.background = ''; //'#f0c992';
                     row.cells[0].style.background = ''; //'#f0c992';
@@ -207,7 +206,7 @@
             row.id = rowId;
             row.name = rowId;
 
-            var innerHTML = "<td onclick='"+selectRowFunc+"(\""+tableID+"\", \""+rowId+"\");'>"+groupObj.name+"</td><td><a href='javascript:"+deleteRowFunc+"(\""+tableID+"\",\""+rowId+"\","+groupObj.id+");'><img src=\"img\\delete-icon-small.jpg\"/></a></td>";
+            var innerHTML = "<td onclick='"+selectRowFunc+"(\""+tableID+"\", \""+rowId+"\");'>"+groupObj.name+"</td><td><a href='javascript:"+deleteRowFunc+"("+groupObj.id+");'><img src=\"img\\delete-icon-small.jpg\"/></a></td>";
             row.innerHTML = innerHTML;
             row.onmouseover = function(){ highlightRow(this, true); };
             row.onmouseout = function(){ highlightRow(this, false); };
@@ -265,7 +264,7 @@
                             <tr>
                                 <td colspan="5" align="left" valign="top">
                                     <div class="innerb">
-                                        <table id="group" class="tabletwo" width="100%">
+                                        <table id="menuGroup" class="tabletwo" width="100%">
                                         </table>
                                     </div>
                                     <br>
