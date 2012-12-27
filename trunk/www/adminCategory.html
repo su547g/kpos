@@ -115,7 +115,28 @@
 		var operation = "";
 		
 		var deletedRowId = "";
-		
+
+        function listMenuGroups(){
+            ws_list_menugroups(listMenuGroupsHandler);
+        }
+        function listMenuGroupsHandler(jsonObj) {
+            if(jsonObj != undefined && jsonObj != null &&
+                jsonObj.listcategorygroupresponsetype != undefined && jsonObj.listcategorygroupresponsetype != null &&
+                jsonObj.listcategorygroupresponsetype.result.successful == 'true') {
+                    var groupSelect = document.getElementById("menuGroup");
+                    var groups = jsonObj.listcategorygroupresponsetype.catgroup;
+                    var count = jsonObj.listcategorygroupresponsetype.count;
+                    if(groups != undefined && groups != null) {
+                        if(count > 1) {
+                            for(var i = 0; i < groups.length; i++) {
+                                groupSelect.add(new Option(groups[i].name, groups[i].id), null);
+                            }
+                        } else if(count == 1){
+                            groupSelect.add(new Option(groups.name, groups.id), null);
+                    }
+                }
+            }
+        }
 		function setCurrentCategory(category) {
 			curr_category = category;
 			var jsonString = obj2str(curr_category);
@@ -1026,7 +1047,7 @@
 	       	var innerHTML = "<td><a href='javascript:"+selectRowFunc+"("+optionObj.id+");'>"+optionObj.name+"</a></td>";
 	       	return innerHTML;
 	    }
-	</script></head><body onload="javascript:listAllCategories();">
+	</script></head><body onload="javascript:listAllCategories();listMenuGroups();">
 <table>
 	<tbody><tr><td><input class="navibutton" onclick="window.location.href='index.html';" value="&lt;&lt; Back" type="button"></td>
 </tr></tbody></table>
@@ -1064,7 +1085,7 @@
         	<input id="curCatId" type="hidden">
         		<table id="categoryInfo" width="70%">
         		<tbody><tr>
-            <td style="vertical-align: top;">Group: <select name="menuGroup"></select><br></td>
+            <td style="vertical-align: top;">Group: <select id="menuGroup"><option value="1">Default Group</option></select><br></td>
           </tr>
 <tr>
         			<td align="left" valign="top">
