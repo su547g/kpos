@@ -46,7 +46,7 @@ CREATE TABLE `cat_printer_assoc` (
 
 LOCK TABLES `cat_printer_assoc` WRITE;
 /*!40000 ALTER TABLE `cat_printer_assoc` DISABLE KEYS */;
-INSERT INTO `cat_printer_assoc` VALUES (3,1),(10,1),(10,2),(11,1),(11,2),(11,4),(12,5),(12,3),(12,1),(12,2),(13,5),(13,3),(13,4);
+INSERT INTO `cat_printer_assoc` VALUES (3,1),(10,1),(11,1),(11,2),(11,4),(12,5),(12,3),(12,1),(12,2),(13,5),(13,3),(13,4);
 /*!40000 ALTER TABLE `cat_printer_assoc` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -84,7 +84,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (3,'Rice',0,0,1,'all rice dishes','C:\\kpos\\img\\rice.jpg','2012-04-20 21:54:16','2012-04-20 21:54:16',NULL,NULL,1,NULL),(4,'Beef',0,0,1,'Beef','Beef','2012-05-04 23:33:13','2012-05-04 23:33:13',NULL,NULL,0,NULL),(5,'Pork',0,0,1,'aaaahflfhashl','aaaahflfhashl','2012-05-05 00:06:16','2012-05-05 00:06:16',NULL,NULL,0,NULL),(9,'fsadfafa23',0,0,1,'fdfdsfsda','fdfdsfsda','2012-05-05 00:15:01','2012-05-05 00:15:01',NULL,NULL,0,NULL),(10,'AAAA',0,0,1,'fsdafagfdgfafdsa','fsdafagfdgfafdsa','2012-05-05 00:16:27','2012-05-05 00:16:27',NULL,NULL,1,NULL),(11,'C1',0,0,1,'c1ffafasdfc2c3','file:///C:/Projects/kpos/www/undefined','2012-05-05 16:57:32','2012-05-05 21:35:41',NULL,NULL,8,NULL),(12,'DDD',0,0,1,'d hfalfhal','file:///C:/Projects/kpos/www/undefined','2012-05-05 22:19:52','2012-05-05 22:19:52',NULL,NULL,1,NULL),(13,'TEst',0,0,1,'test','file:///C:/Projects/kpos/www/adminCategory.html','2012-05-05 22:55:05','2012-05-05 22:55:05',NULL,NULL,1,NULL);
+INSERT INTO `category` VALUES (3,'Rice',0,0,1,'all rice dishes','C:\\kpos\\img\\rice.jpg','2012-04-20 21:54:16','2012-04-20 21:54:16',NULL,NULL,1,NULL),(4,'Beef',0,0,1,'Beef','Beef','2012-05-04 23:33:13','2012-05-04 23:33:13',NULL,NULL,0,NULL),(5,'Pork',0,0,1,'aaaahflfhashl','aaaahflfhashl','2012-05-05 00:06:16','2012-05-05 00:06:16',NULL,NULL,0,NULL),(9,'fsadfafa23',0,0,1,'fdfdsfsda','fdfdsfsda','2012-05-05 00:15:01','2012-05-05 00:15:01',NULL,NULL,0,NULL),(10,'AAAA',0,0,1,'fsdafagfdgfafdsa','fsdafagfdgfafdsa','2012-05-05 00:16:27','2012-12-18 22:29:54',NULL,NULL,2,1),(11,'C1',0,0,1,'c1ffafasdfc2c3','file:///C:/Projects/kpos/www/undefined','2012-05-05 16:57:32','2012-05-05 21:35:41',NULL,NULL,8,NULL),(12,'DDD',0,0,1,'d hfalfhal','file:///C:/Projects/kpos/www/undefined','2012-05-05 22:19:52','2012-05-05 22:19:52',NULL,NULL,1,NULL),(13,'TEst',0,0,1,'test','file:///C:/Projects/kpos/www/adminCategory.html','2012-05-05 22:55:05','2012-05-05 22:55:05',NULL,NULL,1,NULL);
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -268,7 +268,7 @@ CREATE TABLE `company_tax` (
   `created_by` int(11) DEFAULT NULL,
   `last_updated_by` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -419,7 +419,7 @@ CREATE TABLE `menu_group` (
   `last_updated_by` int(11) DEFAULT NULL,
   `version` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -428,6 +428,7 @@ CREATE TABLE `menu_group` (
 
 LOCK TABLES `menu_group` WRITE;
 /*!40000 ALTER TABLE `menu_group` DISABLE KEYS */;
+INSERT INTO `menu_group` VALUES (1,'Default 1','2012-12-14 22:06:13',NULL,'2012-12-25 23:13:41',NULL,4);
 /*!40000 ALTER TABLE `menu_group` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -969,4 +970,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-12-06 22:45:24
+-- Dump completed on 2012-12-27 23:26:01
