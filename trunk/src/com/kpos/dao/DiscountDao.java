@@ -29,4 +29,16 @@ public class DiscountDao extends AbstractJpaDao<CompanyDiscount> implements IDis
             return (CompanyDiscount)results.get(0);
         }
     }
+
+    @Override
+    public CompanyDiscount findDiscountByName(String aName) {
+        Query namedQuery = this.entityManager.createNamedQuery("CompanyDiscount.findDiscountByName");
+        namedQuery.setParameter("aName", aName);
+        List results = namedQuery.getResultList();
+        if(results.isEmpty()) {
+            return null;
+        } else {
+            return (CompanyDiscount)results.get(0);
+        }
+    }
 }

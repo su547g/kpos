@@ -1204,20 +1204,26 @@ function GetRoleFunctionsHTMLType(aId) {
 function ListDiscountsType() {
     this.getXML = function() {
         var xml = soapXMLBegin;
-        xml += "<app:ListRatesType><app:type>DISCOUNT</app:type></app:ListRatesType>";
+        xml += "<app:ListDiscountRatesType></app:ListDiscountRatesType>";
         xml += soapXMLEnd;
         return xml;
     }
 }
-function SaveDiscountType(aRate, aNewRate) {
+function SaveDiscountType(aId, aRate, aRateType, aName, aDescription) {
+    this.id = aId;
     this.rate = aRate;
-    this.newRate = aNewRate;
+    this.rateType = aRateType;
+    this.name = aName;
+    this.description = aDescription;
     this.getXML = function() {
         var xml = soapXMLBegin;
         xml += "<app:SaveDiscountRateType>";
-        xml += "<app:newRate>" + this.aNewRate + "</app:newRate>";
-        if(this.rate != null && this.rate != "") {
-            xml += "<app:rate>" + this.rate + "</app:rate>";
+        xml += "<app:rate>" + this.rate + "</app:rate>";
+        xml += "<app:rateType>" + this.rateType + "</app:rateType>";
+        xml += "<app:name>" + this.name + "</app:name>";
+        xml += "<app:description>" + this.description + "</app:description>";
+        if(this.id != null && this.id != "") {
+            xml += "<app:id>" + this.id + "</app:id>";
         }
         xml += "</app:SaveDiscountRateType>";
         xml += soapXMLEnd;
@@ -1230,6 +1236,42 @@ function DeleteDiscountType(aRate) {
         var xml = soapXMLBegin;
         xml += "<app:DeleteDiscountRateType><app:rate>" + this.rate + "</app:rate>";
         xml += "</app:DeleteDiscountRateType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function SaveTaxType(aId, aRate, aName, aDescription) {
+    this.id = aId;
+    this.rate = aRate;
+    this.name = aName;
+    this.description = aDescription;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:SaveTaxType><app:tax>";
+        if(this.id != null && this.id != "") {
+            xml += "<app:id>" + this.id + "</app:id>";
+        }
+        xml += "<app:rate>" + this.rate + "</app:rate>";
+        xml += "<app:name>" + this.name + "</app:name>";
+        xml += "<app:description>" + this.description + "</app:description>";
+        xml += "</app:tax></app:SaveTaxType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function ListTaxesType() {
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:ListTaxesType/>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+function DeleteTaxType(aId) {
+    this.id = aId;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:DeleteTaxType><app:taxId>" + this.id + "</app:taxId></app:DeleteTaxType>";
         xml += soapXMLEnd;
         return xml;
     }

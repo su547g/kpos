@@ -120,8 +120,8 @@ public interface IContentManagementService {
 
     FetchResult<CompanyProfile> fetchCompanyProfile();
     FetchResult<List<CompanyDiscount>> fetchDiscountRates();
-    CreateResult<CompanyDiscount> addDiscountRate(double aRate);
-    UpdateResult<CompanyDiscount> updateDiscountRate(double aRate, double newRate);
+    CreateResult<CompanyDiscount> addDiscountRate(double aRate, CompanyDiscount.DiscountTypeEnum typeEnum, String name, String description);
+    UpdateResult<CompanyDiscount> updateDiscountRate(long id, double aRate, CompanyDiscount.DiscountTypeEnum typeEnum, String name, String description);
     DeleteResult deleteDiscountRate(long id);
 
     CreateResult<CompanyProfile> createCompanyProfile(CompanyProfileType soapType);
