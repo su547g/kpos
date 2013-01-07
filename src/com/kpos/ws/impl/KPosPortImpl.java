@@ -1517,7 +1517,7 @@ public class KPosPortImpl implements KPosPortType {
                 discountType.setDescription(discount.getDescription());
                 discountType.setName(discount.getName());
                 discountType.setRate(discount.getRate());
-                discountType.setAmount(discount.getAmount());
+                discountType.setRateType(discount.getType());
                 responseType.getRate().add(discountType);
             }
             responseType.setCount(discounts.size());
@@ -1528,15 +1528,20 @@ public class KPosPortImpl implements KPosPortType {
     }
 
     @Override
-    public SaveDiscountRateResponseType saveDiscountRate(@WebParam(partName = "parameters", name = "SaveDiscountRateType", targetNamespace = "http://ws.kpos.com/app") SaveDiscountRateType parameters) {
+    public SaveDiscountRateResponseType saveDiscountRate(
+            @WebParam(partName = "parameters", name = "SaveDiscountRateType",
+                    targetNamespace = NS) SaveDiscountRateType parameters) {
         SaveDiscountRateResponseType responseType = new SaveDiscountRateResponseType();
         Double rate = parameters.getRate();
-        double newRate = parameters.getNewRate();
-        if(rate == null) {
-            CreateResult<CompanyDiscount> result = contentManagementService.addDiscountRate(newRate);
+        int rateType = parameters.getRateType();
+        String name = parameters.getName();
+        String description = parameters.getDescription();
+        Long id = parameters.getId();
+        if(id == null || id <= 0) {
+            CreateResult<CompanyDiscount> result = contentManagementService.addDiscountRate(rate, CompanyDiscount.DiscountTypeEnum.getType(rateType), name, description);
             responseType.setResult(getSoapResult(result));
         } else {
-            UpdateResult<CompanyDiscount> result = contentManagementService.updateDiscountRate(rate, newRate);
+            UpdateResult<CompanyDiscount> result = contentManagementService.updateDiscountRate(id, rate, CompanyDiscount.DiscountTypeEnum.getType(rateType), name, description);
             responseType.setResult(getSoapResult(result));
         }
         return responseType;

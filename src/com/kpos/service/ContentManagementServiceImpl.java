@@ -1424,11 +1424,18 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         return result;
     }
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
-    public CreateResult<CompanyDiscount> addDiscountRate(double aRate) {
+    public CreateResult<CompanyDiscount> addDiscountRate(double aRate, CompanyDiscount.DiscountTypeEnum typeEnum, String name, String description) {
         CreateResult<CompanyDiscount> result = new CreateResult<CompanyDiscount>();
+        if(null != discountDao.findDiscountByName(name)) {
+            result.setSuccessful(false);
+            result.setFailure(1, "Discount name already exists!");
+            return result;
+        }
         CompanyDiscount discount = new CompanyDiscount();
-        discount.setAmount(0);
+        discount.setType(typeEnum.getStatusCode());
         discount.setRate(aRate);
+        discount.setName(name);
+        discount.setDescription(description);
         discount.setCreatedOn(new Date());
         discount.setLastUpdated(new Date());
         discountDao.insert(discount);
@@ -1437,12 +1444,21 @@ public class ContentManagementServiceImpl implements IContentManagementService {
         return result;
     }
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
-    public UpdateResult<CompanyDiscount> updateDiscountRate(double aRate, double newRate) {
+    public UpdateResult<CompanyDiscount> updateDiscountRate(long id, double aRate, CompanyDiscount.DiscountTypeEnum typeEnum, String name, String description) {
         UpdateResult<CompanyDiscount> result = new UpdateResult<CompanyDiscount>();
-        CompanyDiscount discount = discountDao.findDiscountByRate(aRate);
+        CompanyDiscount discount = discountDao.findById(id);
         if(discount != null) {
-            discount.setRate(newRate);
-            discountDao.merge(discount);
+            if(!name.equalsIgnoreCase(discount.getName()) && discountDao.findDiscountByName(name) != null) {
+                result.setSuccessful(false);
+                result.setFailure(1, "Discount name already exists!");
+            } else {
+                discount.setRate(aRate);
+                discount.setType(typeEnum.getStatusCode());
+                discount.setName(name);
+                discount.setDescription(description);
+                discount.setLastUpdated(new Date());
+                //discountDao.merge(discount);
+            }
         } else {
             result.setSuccessful(false);
         }

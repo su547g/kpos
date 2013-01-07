@@ -9,4 +9,5 @@ import com.kpos.domain.CompanyDiscount;
  */
 public interface IDiscountDao extends IDao<CompanyDiscount> {
     CompanyDiscount findDiscountByRate(double aRate);
+    CompanyDiscount findDiscountByName(String aName);
 }
