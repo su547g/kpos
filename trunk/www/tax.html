@@ -1,0 +1,317 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta id="viewport" name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-touch-fullscreen" content="yes">
+
+    <script type="text/javascript" src="xml2json.js"></script>
+    <script type="text/javascript" src="kpos.js"></script>
+    <script type="text/javascript" src="popup.js"></script>
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.min.js"></script>
+    <style type="text/css">
+        body{
+            font-size:14px;
+            background:#c4f0f1;
+            text-align:center;
+        }
+
+        .tableone {width:250px; border-collapse:collapse; margin:0 auto;}
+        .tabletwo {width:220px; margin:2px; border:1px solid #B3B1B1; border-spacing: 1px; border-style:outset}
+
+        .th1 {width:149px;}
+        .th2 {width:99px;}
+        .th3 {width:99px;}
+        .th4 {width:99px;}
+        .th5 {width:200px;}
+
+        .td1 {width:149px;border:1px solid #B3B1B1;}
+        .td2 {width:99px;}
+        .td3 {width:99px;}
+        .td4 {width:99px;}
+        .td5 {width:170px;}
+
+        .tableone {background:#697210; border:1px solid #fff; color:#fff;}
+        .tableone td {border:1px solid #fff; color:#fff;}
+        .tableone tbody {background:#eee; color:#000;}
+        .tableone caption {background:#fff; color:#697210; font-size:1.2em; margin:0 auto;}
+        .tableone th, .tabletwo th {text-align:left;}
+
+        .tabletwo td {background:#eee; color:#000;}
+        .tabletwo tr.dk th {background:#ddd; color:#000;}
+        .tabletwo tr.dk td {background:#ddd; color:#000;}
+
+        .innerb {height:10em; overflow:auto;}
+
+        .optionsTable {width:"50px"; overflow:auto;}
+    </style>
+	<script language="javascript">
+        var currentRow=-1;
+
+        var ADD = "ADD";
+        var UPDATE = "UPDATE";
+
+        var v_selected_tax_rowid = "";
+
+        var curr_tax = localStorage.getItem('curr_tax');
+
+        var operation = "";
+
+        var deletedRowId = "";
+
+        function setCurrentTax(tax) {
+            curr_tax = tax;
+            var jsonString = obj2str(curr_tax);
+            localStorage.setItem('curr_tax', jsonString);
+        }
+		function getCurrentTax() {
+            curr_tax = strToObj(localStorage.getItem('curr_tax));
+            return curr_tax;
+        }
+        function getTaxes() {
+            var taxes = strToObj(localStorage.getItem('v_taxes'));
+            if(taxes == null || taxes.length == undefined) {
+                var tax_array = new Array();
+                tax_array.push(taxes);
+                return tax_array;
+            }
+            return taxes;
+        }
+        function setTaxes(taxes) {
+            var jsonString = obj2str(taxes);
+            localStorage.setItem('v_taxes', jsonString);
+        }
+        function newTax() {
+            document.getElementById("taxName").value = "";
+            document.getElementById("taxName").readOnly = false;
+            document.getElementById("taxDescription").value = "";
+            document.getElementById("taxDescription").readOnly = false;
+            operation = ADD;
+            setCurrentGroup(null);
+        }
+        function listTaxes(){
+			var listTaxesType = new ListTaxesType();
+            var soapXML = listTaxesType.getXML();
+			alert(soapXML);
+			callWebService(soapXML, listTaxessHandler);
+        }
+        function listTaxesHandler(jsonObj) {
+            if(jsonObj != undefined && jsonObj != null &&
+                jsonObj.listtaxesresponsetype != undefined && jsonObj.listtaxesresponsetype != null &&
+                jsonObj.listtaxesresponsetype.result.successful == 'true') {
+                //Clear the table
+                document.getElementById("tax").innerHTML = "";
+                var taxes = jsonObj.listtaxesresponsetype.taxes;
+                var count = jsonObj.listtaxesresponsetype.count;
+                setTaxes(taxes);
+                if(taxes != undefined && taxes != null) {
+                    if(count > 1) {
+                        for(var i = 0; i < taxes.length; i++) {
+                            addTaxRow("tax", taxes[i], "selectRow", "deleteTaxRow");
+                        }
+                    } else if(count == 1){
+                        //Only one group
+                        addTaxRow("tax", taxes, "selectRow", "deleteTaxRow");
+                    }
+                }
+            }
+        }
+		function selectRow(tableID, selectedRowID) {
+            var table = document.getElementById(tableID);
+            v_selected_tax_rowid = selectedRowID;
+            var rowCount = table.rows.length;
+            operation = UPDATE;
+            for(var i = 0; i < rowCount; i++) {
+                var row = table.rows[i];
+                if(row.id == selectedRowID) {
+                    row.style.background = '#dcfac9';
+                    row.cells[0].style.background = '#dcfac9';
+                    row.cells[1].style.background = '#dcfac9';
+                    currentRow = i;
+
+                    var v_taxes = getTaxes();
+                    if(v_taxes.length != undefined) {
+                        setCurrentTax(v_taxes[i]);
+                    } else {
+                        setCurrentTax(v_taxes);
+                    }
+                    if(curr_group != null) {
+                        document.getElementById("curTaxId").value = curr_group.id;
+                        document.getElementById("taxName").value = curr_group.name;
+                        document.getElementById("taxName").readOnly = false;
+                    }
+                } else {
+                    row.style.background = ''; //'#f0c992';
+                    row.cells[0].style.background = ''; //'#f0c992';
+                    row.cells[1].style.background = ''; //'#f0c992';
+                }
+            }
+        }
+        function addTaxRow(tableID, taxObj, selectRowFunc, deleteRowFunc) {
+            var table = document.getElementById(tableID);
+
+            var rowCount = table.rows.length;
+            var rowId = tableID + "_r" + rowCount;
+
+            var row = table.insertRow(rowCount);
+            row.id = rowId;
+            row.name = rowId;
+
+            var innerHTML = "<td onclick='"+selectRowFunc+"(\""+tableID+"\", \""+rowId+"\");'>"+taxObj.name+"</td><td><a href='javascript:"+deleteRowFunc+"("+taxObj.id+");'><img src=\"img\\delete-icon-small.jpg\"/></a></td>";
+            row.innerHTML = innerHTML;
+            row.onmouseover = function(){ highlightRow(this, true); };
+            row.onmouseout = function(){ highlightRow(this, false); };
+        }
+        function deleteTaxRow(taxId) {
+			var deleteTax = new DeleteTaxType(taxId);
+            var soapXML = deleteTax.getXML();
+			alert(soapXML);
+			callWebService(soapXML, deleteTaxHandler);
+        }
+        function deleteTaxHandler(jsonObj) {
+            if(jsonObj != undefined && jsonObj != null &&
+                jsonObj.deletetaxresponsetype != undefined && jsonObj.deletetaxresponsetype != null &&
+                jsonObj.deletetaxresponsetype.result.successful == "true") {
+                listTaxes();
+            } else {
+                alert("failed to delete tax!");
+            }
+            deletedRowId = "";
+        }
+        function saveTax() {
+            if(operation == ADD){
+                createTax();
+            } else if(operation == UPDATE) {
+                updateTax();
+            }
+        }
+		function createTax() {
+            var name = document.getElementById("taxName").value;
+			var description = document.getElementById("taxDescription").value;
+			var rate = document.getElementById("taxRate").value;
+			var saveTaxType = new SaveTaxType(null, rate, name, description);
+			var xml = saveTaxType.getXML();
+            callWebService(xml, addTaxHandler);
+        }
+        function addTaxHandler(jsonObj) {
+            if(jsonObj != undefined && jsonObj != null &&
+                jsonObj.savetaxresponsetype != undefined && jsonObj.savetaxresponsetype != null &&
+                jsonObj.savetaxresponsetype.result.successful == "true") {
+                listMenuGroups();
+            } else {
+                alert("failed to add tax!");
+            }
+            operation = "";
+        }
+        function updateTax() {
+			var taxId = document.getElementById("curTaxId").value;
+            var name = document.getElementById("taxName").value;
+			var description = document.getElementById("taxDescription").value;
+			var rate = document.getElementById("taxRate").value;
+            curr_tax.name = name;
+            setCurrentTax(curr_tax);
+			var saveTaxType = new SaveTaxType(taxId, rate, name, description);
+			var xml = saveTaxType.getXML();
+            callWebService(xml, updateTaxHandler);
+        }
+        function updateTaxHandler(jsonObj) {
+            if(jsonObj != undefined && jsonObj != null &&
+                jsonObj.savetaxresponsetype != undefined && jsonObj.savetaxresponsetype != null &&
+                jsonObj.savetaxresponsetype.result.successful == "true") {
+                var selectedRow = document.getElementById(v_selected_tax_rowid);
+                if(selectedRow != null && selectedRow.cells != null) {
+                    selectedRow.cells[0].innerText = document.getElementById("taxName").value;
+                    var taxes = getTaxes();
+                    for(var i = 0; i < taxes.length; i++) {
+                        if(taxes[i].id == curr_tax.id) {
+                            taxes[i] = curr_tax;
+                            setTaxes(taxes);
+                            break;
+                        }
+                    }
+                }
+                alert("Save successful!");
+            } else {
+                alert("Failed to update tax!");
+            }
+            operation = "";
+        }
+	</script>
+</head>
+<body>
+    <table>
+        <tbody>
+        <tr>
+            <td><input class="navibutton" onclick="window.location.href='index.html';" value="&lt;&lt; Back" type="button"></td>
+        </tr>
+        </tbody>
+    </table>
+    <table width="100%">
+        <tbody>
+        <tr>
+            <td align="left" valign="top" width="18%">
+                <table class="tableone" align="left" width="100%">
+                    <caption>Taxes</caption>
+                    <thead>
+                    <tr>
+                        <th class="th1" scope="col">Name</th>
+                        <th class="th2" scope="col"><br>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <td colspan="2" align="center"><button onclick="javascript:newTax();">New Tax</button></td>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <tr>
+                        <td colspan="5" align="left" valign="top">
+                            <div class="innerb">
+                                <table id="tax" class="tabletwo" width="100%">
+                                </table>
+                            </div>
+                            <br>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+            <td align="left" valign="top">
+                <input id="curTaxId" type="hidden">
+                <table id="taxInfo" width="70%">
+                    <tbody>
+                    <tr>
+                        <td align="left" valign="top">
+                            Name: <input id="taxName" readonly="readonly" value="" type="text"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" valign="top">
+                            Rate: <input id="taxRate" readonly="readonly" value="" type="text"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" valign="top">
+                            Description: <textarea id="taxDescription" rows="3" cols="45" readonly="readonly" value=""></textarea>
+                        </td>
+                    </tr>
+                    <tr><td><button type="button" onclick="javascript:saveTax();">Save</button></td></tr>
+                    <tr>
+                        <td width="100%">
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>
