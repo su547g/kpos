@@ -16,7 +16,7 @@ public interface IContentManagementService {
     CreateResult<MenuGroup> createMenuGroup(MenuGroup aGroup);
     DeleteResult deleteMenuGroup(long aId);
     FetchResult<List<MenuGroup>> listMenuGroups();
-    UpdateResult<MenuGroup> updateMenuGroup(long aId, String name);
+    UpdateResult<MenuGroup> updateMenuGroup(long aId, String aName, String aDescription);
     
     CreateResult<MenuCategory> createMenuCategory(MenuCategory aCategory, Long aGroupId, List<Long> printerIds);
     

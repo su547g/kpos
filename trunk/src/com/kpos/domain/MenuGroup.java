@@ -29,6 +29,9 @@ public class MenuGroup extends AbstractDomainObject {
 
     @Column(name = "name", nullable = false)
     private String name;
+    
+    @Column(name = "description", nullable = true)
+    private String description = "";
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "menuGroup", orphanRemoval = true, fetch = FetchType.LAZY)
     @ForeignKey(name = "CATEGORY_2_GROUP_FK")
@@ -52,6 +55,14 @@ public class MenuGroup extends AbstractDomainObject {
         this.name = name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public List<MenuCategory> getCategories() {
         return categories;
     }
@@ -69,7 +80,7 @@ public class MenuGroup extends AbstractDomainObject {
 
         if (id != null ? !id.equals(menuGroup.id) : menuGroup.id != null) return false;
         if (name != null ? !name.equals(menuGroup.name) : menuGroup.name != null) return false;
-
+        if (description != null ? !description.equals(menuGroup.description) : menuGroup.description != null) return false;
         return true;
     }
 
@@ -77,6 +88,7 @@ public class MenuGroup extends AbstractDomainObject {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
     }
 }

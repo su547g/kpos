@@ -181,9 +181,10 @@ function ws_delete_printer(deletePrinterType, handler) {
 	alert(soapXML);
 	callWebService(soapXML, handler);
 }
-function MenuGroupType(aId, aName) {
+function MenuGroupType(aId, aName, aDescription) {
     this.myId = aId;
     this.myName = aName;
+	this.myDescription = aDescription;
     this.tag = "<app:catGroup>";
     this.endTag = "</app:catGroup>";
     this.getXML = function() {
@@ -192,12 +193,15 @@ function MenuGroupType(aId, aName) {
             xml += "<app:id>" + this.myId + "</app:id>";
         }
         xml += "<app:name>" + this.myName + "</app:name>";
+		if(this.myDescription != null && this.myDescription != "") {
+			xml += "<app:description>" + this.myDescription + "</app:description>";
+		}
         xml += this.endTag;
         return xml;
     };
 }
-function CreateMenuGroupType(name) {
-    this.myGroup = new MenuGroupType(null, name);
+function CreateMenuGroupType(name, description) {
+    this.myGroup = new MenuGroupType(null, name, description);
     this.tag = "<app:CreateCategoryGroupType>";
     this.endTag = "</app:CreateCategoryGroupType>";
     this.getXML = function() {
@@ -207,13 +211,13 @@ function CreateMenuGroupType(name) {
         return xml;
     };
 }
-function ws_create_menugroup(aName, handler) {
-    var createMenuGroupType = new CreateMenuGroupType(aName);
+function ws_create_menugroup(aName, aDescription, handler) {
+    var createMenuGroupType = new CreateMenuGroupType(aName, aDescription);
     var soapXML = createMenuGroupType.getXML();
 	callWebService(soapXML, handler);
 }
-function UpdateMenuGroupType(id, name) {
-    this.myMenuGroup = new MenuGroupType(id, name);
+function UpdateMenuGroupType(id, name, description) {
+    this.myMenuGroup = new MenuGroupType(id, name, description);
     this.tag = "<app:UpdateCategoryGroupType>";
     this.endTag = "</app:UpdateCategoryGroupType>";
     this.getXML = function() {
@@ -223,8 +227,8 @@ function UpdateMenuGroupType(id, name) {
         return xml;
     };
 }
-function ws_update_menugroup(aId, aName, handler) {
-    var updateMenuGroupType = new UpdateMenuGroupType(aId, aName);
+function ws_update_menugroup(aId, aName, aDescription, handler) {
+    var updateMenuGroupType = new UpdateMenuGroupType(aId, aName, aDescription);
     var soapXML = updateMenuGroupType.getXML();
     callWebService(soapXML, handler);
 }
@@ -280,8 +284,8 @@ function Category(id, name, notes, thumb, printerIds, groupId) {
 		return xml;
 	};
 }
-function CreateCategoryType(name, notes, thumb, printerIds) {
-	this.myCategory = new Category(null, name, notes, thumb, printerIds);
+function CreateCategoryType(name, notes, thumb, printerIds, groupId) {
+	this.myCategory = new Category(null, name, notes, thumb, printerIds, groupId);
 	this.tag = "<app:CreateCategoryType>";
     this.endTag = "</app:CreateCategoryType>";
     this.getXML = function() {
@@ -297,8 +301,8 @@ function ws_create_category(createCategoryType, handler) {
 	callWebService(soapXML, handler);
 }
 
-function UpdateCategoryType(id, name, notes, thumb, printerIds) {
-    this.myCategory = new Category(id, name, notes, thumb, printerIds);
+function UpdateCategoryType(id, name, notes, thumb, printerIds, groupId) {
+    this.myCategory = new Category(id, name, notes, thumb, printerIds, groupId);
     this.tag = "<app:UpdateCategoryType>";
     this.endTag = "</app:UpdateCategoryType>";
     this.getXML = function() {

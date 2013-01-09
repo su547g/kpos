@@ -1744,6 +1744,9 @@ public class KPosPortImpl implements KPosPortType {
         try {
             MenuGroup group = new MenuGroup();
             group.setName(parameters.getCatGroup().getName());
+            if(parameters.getCatGroup().getDescription() != null) {
+                group.setDescription(parameters.getCatGroup().getDescription());
+            }
             CreateResult<MenuGroup> result = contentManagementService.createMenuGroup(group);
             responseType.setResult(getSoapResult(result));
         } catch (Exception e) {
@@ -1759,7 +1762,7 @@ public class KPosPortImpl implements KPosPortType {
             @WebParam(partName = "parameters", name = "UpdateCategoryGroupType", targetNamespace = NS) UpdateCategoryGroupType parameters) {
         UpdateCategoryGroupResponseType responseType = new UpdateCategoryGroupResponseType();
         try {
-            UpdateResult<MenuGroup> result = contentManagementService.updateMenuGroup(parameters.getCatGroup().getId(), parameters.getCatGroup().getName());
+            UpdateResult<MenuGroup> result = contentManagementService.updateMenuGroup(parameters.getCatGroup().getId(), parameters.getCatGroup().getName(), parameters.getCatGroup().getDescription());
             responseType.setResult(getSoapResult(result));
         } catch (Exception e) {
             responseType.setResult(getSoapFaultResult(e));
@@ -1794,6 +1797,7 @@ public class KPosPortImpl implements KPosPortType {
                 CategoryGroupType groupType = new CategoryGroupType();
                 groupType.setId(group.getId());
                 groupType.setName(group.getName());
+                groupType.setDescription(group.getDescription());
                 responseType.getCatGroup().add(groupType);
             }
             responseType.setCount(fetchResult.getTarget().size());
