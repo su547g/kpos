@@ -200,6 +200,13 @@
 	        			document.getElementById("categoryName").readOnly = false;
 	        			document.getElementById("categoryNotes").readOnly = false;
 	        			document.getElementById("catThumb2").disabled = false;
+						var groupSelObj = document.getElementById("menuGroup");
+						for(var i=0,sL=groupSelObj.length;i<sL;i++) {
+						  if(groupSelObj.options[i].value == curr_category.groupid) {
+							groupSelObj.selectedIndex = i;
+							break;
+						  }
+						}
 	        			//Set selected pritners
 	        			var printers = document.getElementsByName("catPrinters");
 	        			uncheckPrinters(printers);
@@ -291,8 +298,8 @@
 	        var thumb = document.getElementById("categoryImg").src;
 	        var notes = document.getElementById("categoryNotes").value;
 	        var catPrinterIds = getPrinterIds("catPrinters");
-			
-	        var categoryType = new CreateCategoryType(name, notes, thumb, catPrinterIds);
+			var groupId = document.getElementById("menuGroup").value;
+	        var categoryType = new CreateCategoryType(name, notes, thumb, catPrinterIds, groupId);
 	        ws_create_category(categoryType, addCategoryHandler);
 	    }
 	    function addCategoryHandler(jsonObj) {
@@ -310,13 +317,15 @@
 	        var thumb = document.getElementById("categoryImg").src;
 	        var notes = document.getElementById("categoryNotes").value;
 	        var catPrinterIds = getPrinterIds("catPrinters");
+			var groupId = document.getElementById("menuGroup").value;
 	        curr_category.name = name;
 	        curr_category.thumb = thumb;
 	        curr_category.notes = notes;
 	        curr_category.printerids = catPrinterIds;
+			curr_category.groupid = groupId;
 	        setCurrentCategory(curr_category);
 	        
-	        var categoryType = new UpdateCategoryType(curr_category.id, name, notes, thumb, catPrinterIds);
+	        var categoryType = new UpdateCategoryType(curr_category.id, name, notes, thumb, catPrinterIds, groupId);
 	        ws_update_category(categoryType, updateCategoryHandler);
 		}
 		function updateCategoryHandler(jsonObj) {
@@ -1047,7 +1056,8 @@
 	       	var innerHTML = "<td><a href='javascript:"+selectRowFunc+"("+optionObj.id+");'>"+optionObj.name+"</a></td>";
 	       	return innerHTML;
 	    }
-	</script></head><body onload="javascript:listAllCategories();listMenuGroups();">
+	</script></head>
+<body onload="javascript:listAllCategories();listMenuGroups();">
 <table>
 	<tbody><tr><td><input class="navibutton" onclick="window.location.href='index.html';" value="&lt;&lt; Back" type="button"></td>
 </tr></tbody></table>
@@ -1085,7 +1095,7 @@
         	<input id="curCatId" type="hidden">
         		<table id="categoryInfo" width="70%">
         		<tbody><tr>
-            <td style="vertical-align: top;">Group: <select id="menuGroup"><option value="1">Default Group</option></select><br></td>
+            <td style="vertical-align: top;">Group: <select id="menuGroup"><option value="0">Default Group</option></select><br></td>
           </tr>
 <tr>
         			<td align="left" valign="top">

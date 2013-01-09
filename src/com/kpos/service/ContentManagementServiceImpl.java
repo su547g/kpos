@@ -116,11 +116,12 @@ public class ContentManagementServiceImpl implements IContentManagementService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = java.lang.Throwable.class)
-    public UpdateResult<MenuGroup> updateMenuGroup(long aId, String name) {
+    public UpdateResult<MenuGroup> updateMenuGroup(long aId, String name, String description) {
         UpdateResult<MenuGroup> result = new UpdateResult<MenuGroup>();
         MenuGroup group = menuGroupDao.findById(aId);
         if(group != null) {
             group.setName(name);
+            if(description != null) group.setDescription(description);
             group.setLastUpdated(new Date());
             result.setSuccessful(true);
             result.setManagedObject(group);

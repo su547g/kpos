@@ -89,6 +89,8 @@
         function newTax() {
             document.getElementById("taxName").value = "";
             document.getElementById("taxName").readOnly = false;
+			document.getElementById("taxRate").value = "";
+			document.getElementById("taxRate").readOnly = false;
             document.getElementById("taxDescription").value = "";
             document.getElementById("taxDescription").readOnly = false;
             operation = ADD;
@@ -140,10 +142,14 @@
                     } else {
                         setCurrentTax(v_taxes);
                     }
-                    if(curr_group != null) {
-                        document.getElementById("curTaxId").value = curr_group.id;
-                        document.getElementById("taxName").value = curr_group.name;
+                    if(curr_tax != null) {
+                        document.getElementById("curTaxId").value = curr_tax.id;
+                        document.getElementById("taxName").value = curr_tax.name;
                         document.getElementById("taxName").readOnly = false;
+						document.getElementById("taxRate").value = curr_tax.rate;
+						document.getElementById("taxRate").readOnly = false;
+						document.getElementById("taxDescription").value = curr_tax.description;
+						document.getElementById("taxDescription").readOnly = false;
                     }
                 } else {
                     row.style.background = ''; //'#f0c992';
