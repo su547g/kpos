@@ -99,10 +99,11 @@ function call_web_service(soapType, handler) {
     callWebService(soapXML, handler);
 }
 
-function Printer(id, name, ip) {
+function Printer(id, name, ip, realName) {
     this.myId = id;
     this.myName = name;
     this.myIP = ip;
+    this.realName = realName;
     this.tag = "<app:printer>";
     this.endTag = "</app:printer>";
     this.getXML = function() {
@@ -111,14 +112,41 @@ function Printer(id, name, ip) {
             xml += "<app:id>" + this.myId + "</app:id>";
         }
         xml += "<app:name>" + this.myName + "</app:name>";
-        xml += "<app:ipAddr>" + this.myIP + "</app:ipAddr>";
-        xml += this.endTag;
+		if(this.myId != null && this.myId != "") {
+			xml += "<app:ipAddr>" + this.myIP + "</app:ipAddr>";
+		}
+		xml += "<app:realName>" + this.myRealName + "</app:realName>";
+		xml += this.endTag;
         return xml;
     };
 }
 
-function AddPrinterType(id, name, ip) {
-    this.myPrinter = new Printer(id, name, ip);
+function PrintJob(id, name, printerId, printerName) {
+    this.id = id;
+    this.name = name;
+    this.printerId = printerId;
+    this.printerName = printerName;
+    this.tag = "<app:printJob>";
+    this.endTag = "</app:printJob>";
+    this.getXML = function() {
+        var xml = this.tag;
+        if(this.id != null && this.id != "") {
+            xml += "<app:id>" + this.id + "</app:id>";
+        }
+        xml += "<app:name>" + this.name + "</app:name>";
+		if(this.printerId != null && this.printerId != "") {
+			xml += "<app:printerId>" + this.printerId + "</app:printerId>";
+		}
+		if(this.printerName != null && this.printerName != "") {
+            xml += "<app:printerName>" + this.printerName + "</app:printerName>";
+        }
+		xml += this.endTag;
+        return xml;
+    };
+}
+
+function AddPrinterType(id, name, ip, realName) {
+    this.myPrinter = new Printer(id, name, ip, realName);
     this.tag = "<app:CreatePrinterType>";
     this.endTag = "</app:CreatePrinterType>";
     this.getXML = function() {
@@ -143,14 +171,46 @@ function ListPrintersType() {
     };
 }
 
+function ListAvailablePrintersType() {
+    this.tag = "<app:ListAvailablePrintersType/>";
+    this.getXML = function() {
+        var xml = soapXMLBegin + this.tag + soapXMLEnd;
+        return xml;
+    };
+}
+
+function SetPrinterForPrintJob(id, printerId) {
+    var printJob = new PrintJob(id, null, printerId, null);
+    this.tag = "<app:SetPrinterForPrintJobType/>";
+    this.endTag = "</app:SetPrinterForPrintJobType>";
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += this.tag + this.printJob.getXML() + this.endTag;
+        xml += soapXMLEnd;
+        return xml;
+    };
+}
+
 function ws_list_printers(handler) {
     var soapType = new ListPrintersType();
     var soapXML = soapType.getXML();
     callWebService(soapXML, handler);
 }
 
-function UpdatePrinterType(id, name, ip) {
-	this.myPrinter = new Printer(id, name, ip);
+function ws_list_available_printers(handler) {
+    var soapType = new ListAvailablePrintersType();
+    var soapXML = soapType.getXML();
+    callWebService(soapXML, handler);
+}
+
+function ws_set_printer_for_print_job(id, printerId, handler) {
+    var soapType = new SetPrinterForPrintJob(id, printerId);
+    var soapXML = soapType.getXML();
+    callWebService(soapXML, handler);
+}
+
+function UpdatePrinterType(id, name, ip, realName) {
+	this.myPrinter = new Printer(id, name, ip, realName);
     this.tag = "<app:UpdatePrinterType>";
     this.endTag = "</app:UpdatePrinterType>";
     this.getXML = function() {
@@ -1346,6 +1406,17 @@ function FetchOrdersByUserType(aPwd) {
         var xml = soapXMLBegin;
         xml += "<app:FetchOrdersByUserType><app:passcode>" + this.passcode + "</app:passcode>";
         xml += "</app:FetchOrdersByUserType>";
+        xml += soapXMLEnd;
+        return xml;
+    }
+}
+
+function PrintTicketReceipt(orderID) {
+    this.orderID = orderID;
+    this.getXML = function() {
+        var xml = soapXMLBegin;
+        xml += "<app:PrintReceiptType><app:orderId>" + this.orderID + "</app:orderId>";
+        xml += "</app:PrintReceiptType>";
         xml += soapXMLEnd;
         return xml;
     }

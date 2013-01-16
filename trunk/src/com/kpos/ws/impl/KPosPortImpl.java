@@ -12,6 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import javax.jws.WebParam;
+import javax.print.PrintService;
+import javax.print.attribute.PrintServiceAttribute;
+import javax.print.attribute.standard.PrinterName;
+import javax.print.attribute.standard.PrinterURI;
 import javax.xml.ws.Holder;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -32,28 +36,37 @@ public class KPosPortImpl implements KPosPortType {
 
     @Autowired
     private IStaffMemberDao staffMemberDao;
-    
+
     @Autowired
     private IUserDao userDao;
-    
+
     @Autowired
     private IFunctionModuleDao functionModuleDao;
-    
+
     @Autowired
     private IOrderDao orderDao;
-    
+
     @Autowired
     private IRoleDao roleDao;
-    
+
     @Autowired
     private ICompanyDao companyDao;
-    
+
     @Autowired
     private IFinanceService financeService;
-    
+
     @Autowired
     private IAdminService adminService;
-    
+
+    @Autowired
+    private IJReportPrintingService jReportPrintingService;
+
+    @Autowired
+    private IPrinterDao printerDao;
+
+    @Autowired
+    private IPrintJobDao printJobDao;
+
     /**
      * returns the soap ResultType for a BaseResult
      *
@@ -112,17 +125,24 @@ public class KPosPortImpl implements KPosPortType {
     }
 
     protected void setSoapFaultHolder (Holder<ResultType> holder, Throwable t) {
-      holder.value = getSoapFaultResult(t);
+        holder.value = getSoapFaultResult(t);
     }
 
     protected ResultType getSoapFaultResult (Throwable t) {
-      ResultType result = new ResultType();
-      result.setFailureReason(t.getMessage());
-      result.setSuccessful(false);
-      result.setException(t.getClass().toString());
-      return result;
+        ResultType result = new ResultType();
+        result.setFailureReason(t.getMessage());
+        result.setSuccessful(false);
+        result.setException(t.getClass().toString());
+        return result;
     }
-   
+
+    protected ResultType getSoapFaultResult(String failureReason) {
+        ResultType result = new ResultType();
+        result.setFailureReason(failureReason);
+        result.setSuccessful(false);
+        return result;
+    }
+
     private SaleItemType convertSaleItemToSoap(SaleItem item, boolean fetchOptions) {
         SaleItemType itemType = new SaleItemType();
         itemType.setHhPrice(item.getHh_price());
@@ -477,6 +497,7 @@ public class KPosPortImpl implements KPosPortType {
                 soapType.setId(printer.getId());
                 soapType.setIpAddr(printer.getIpAddress());
                 soapType.setName(printer.getName());
+                soapType.setRealName(printer.getRealName());
                 soapTypes.add(soapType);
             }
             responseType.setResult(getSoapResult(result));
@@ -723,8 +744,8 @@ public class KPosPortImpl implements KPosPortType {
             @WebParam(partName = "parameters", name = "DeleteGlobalOptionType", targetNamespace = NS) DeleteGlobalOptionType parameters) {
         DeleteGlobalOptionResponseType responseType = new DeleteGlobalOptionResponseType();
         try {
-          DeleteResult result = contentManagementService.deleteGlobalOption(parameters.getId());
-          responseType.setResult(getSoapResult(result));
+            DeleteResult result = contentManagementService.deleteGlobalOption(parameters.getId());
+            responseType.setResult(getSoapResult(result));
         } catch (Exception e) {
             responseType.setResult(getSoapFaultResult(e));
         }
@@ -745,7 +766,7 @@ public class KPosPortImpl implements KPosPortType {
         } catch (Exception e) {
             responseType.setResult(getSoapFaultResult(e));
         }
-        
+
         return responseType;
     }
 
@@ -945,7 +966,7 @@ public class KPosPortImpl implements KPosPortType {
         }
         return soapType;
     }
-    
+
     @Override
     public FetchOrderResponseType fetchOrder(
             @WebParam(partName = "parameters", name = "FetchOrderType", targetNamespace = NS) FetchOrderType parameters) {
@@ -1038,7 +1059,7 @@ public class KPosPortImpl implements KPosPortType {
         responseType.setResult(getSoapResult(result));
         return responseType;
     }
-    
+
     private String listItemTableHTML(List<SaleItem> items, String tableId, String onclick) {
         StringBuilder htmlBuilder = new StringBuilder("<table><tbody>");
         int index = 0;
@@ -1323,7 +1344,7 @@ public class KPosPortImpl implements KPosPortType {
             e.printStackTrace();
             log.error("Error in getUserFunctionsHTML", e);
         }
-        
+
         return responseType;
     }
 
@@ -1340,7 +1361,7 @@ public class KPosPortImpl implements KPosPortType {
         }
         return html;
     }
-    
+
     @Override
     public AddAttendanceResponseType addAttendance(
             @WebParam(partName = "parameters", name = "AddAttendanceType", targetNamespace = NS) AddAttendanceType parameters) {
@@ -1580,7 +1601,7 @@ public class KPosPortImpl implements KPosPortType {
             responseType.setResult(getSoapFaultResult(e));
             e.printStackTrace();
             log.error("Error in fetchOrderByNumber", e);
-        }    
+        }
         return responseType;
     }
 
@@ -1717,7 +1738,7 @@ public class KPosPortImpl implements KPosPortType {
         ListTaxesResponseType responseType = new ListTaxesResponseType();
         try {
             List<CompanyTax> taxes = adminService.listCompanyTaxes();
-            
+
             for(CompanyTax tax : taxes) {
                 TaxType taxType = new TaxType();
                 taxType.setId(tax.getId());
@@ -1807,6 +1828,161 @@ public class KPosPortImpl implements KPosPortType {
             e.printStackTrace();
             log.error("Error in listCategoryGroup", e);
         }
+        return responseType;
+    }
+    @Override
+    public PrintReceiptResponseType printReceipt(
+            @WebParam(partName = "parameters", name = "PrintReceiptType", targetNamespace = NS) PrintReceiptType parameters) {
+        PrintReceiptResponseType responseType = new PrintReceiptResponseType();
+        List results = companyDao.findAll();
+        if(results.isEmpty()) {
+            String errorText = "No company info found";
+            log.error(errorText);
+            responseType.setResult(getSoapFaultResult(errorText));
+            return responseType;
+        }
+        CompanyProfile companyProfile = (CompanyProfile)results.get(0);
+        Order order = orderDao.findById(parameters.getOrderId());
+        if (order == null) {
+            log.error("order not found by id {}", parameters.getOrderId());
+            responseType.setResult(getSoapFaultResult("Order not found by id " + parameters.getOrderId()));
+            return responseType;
+        }
+        PrintJob printJob = printJobDao.findByName("Global Print Receipt");
+        if (printJob == null) {
+            log.error("Print job not found");
+            responseType.setResult(getSoapFaultResult("Print job not found: Global Print Receipt"));
+            return responseType;
+        }
+        Printer printer = printJob.getPrinter();
+        if (printer == null) {
+            log.error("Print not found for printing receipt");
+            responseType.setResult(getSoapFaultResult("Print not found for printing receipt"));
+            return responseType;
+        }
+        try {
+            boolean successful = jReportPrintingService.printReceipt(printer, companyProfile, order);
+            ResultType resultType = new ResultType();
+            resultType.setSuccessful(successful);
+            responseType.setResult(resultType);
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in printReceipt", e);
+        }
+        return responseType;
+    }
+
+    @Override
+    public PrintItemToKitchenResponseType printItemToKitchen(
+            @WebParam(partName = "parameters", name = "PrintItemToKitchenType", targetNamespace = NS) PrintItemToKitchenType parameters) {
+        PrintItemToKitchenResponseType responseType = new PrintItemToKitchenResponseType();
+        Order order = orderDao.findById(parameters.getOrderId());
+        if (order == null) {
+            log.error("order not found by id {}", parameters.getOrderId());
+            responseType.setResult(getSoapFaultResult("Order not found by id " + parameters.getOrderId()));
+            return responseType;
+        }
+        PrintJob printJob = printJobDao.findByName("Global Print items to kitchen");
+        if (printJob == null) {
+            log.error("Print job not found");
+            responseType.setResult(getSoapFaultResult("Print job not found: Global Print items to kitchen"));
+            return responseType;
+        }
+        Printer printer = printJob.getPrinter();
+        if (printer == null) {
+            log.error("Print not found for printing to kitchen");
+            responseType.setResult(getSoapFaultResult("Print not found for printing to kitchen"));
+            return responseType;
+        }
+        try {
+            boolean successful = jReportPrintingService.printTicketToKitchen(order);
+            ResultType resultType = new ResultType();
+            resultType.setSuccessful(successful);
+            responseType.setResult(resultType);
+        } catch (Exception e) {
+            responseType.setResult(getSoapFaultResult(e));
+            e.printStackTrace();
+            log.error("Error in printItemToKitchen", e);
+        }
+        return responseType;
+    }
+
+    @Override
+    public ListAvailablePrintersResponseType listAvailablePrinters(
+            @WebParam(partName = "parameters", name = "ListAvailablePrintersType", targetNamespace = NS) ListAvailablePrintersType parameters) {
+        ListAvailablePrintersResponseType responseType = new ListAvailablePrintersResponseType();
+        List<PrintService> printerList = jReportPrintingService.findAllAvailablePrinters();
+        for (PrintService printService : printerList) {
+            PrinterType printerType = new PrinterType();
+            printerType.setId(null);
+            printerType.setName("");
+            printerType.setIpAddr("");
+            printerType.setRealName(printService.getAttribute(PrinterName.class).getValue());
+            responseType.getPrinters().add(printerType);
+        }
+        ResultType resultType = new ResultType();
+        resultType.setSuccessful(true);
+        responseType.setResult(resultType);
+        return responseType;
+    }
+
+    @Override
+    public SetPrinterForPrintJobResponseType setPrinterForPrintJob(
+            @WebParam(partName = "parameters", name = "SetPrinterForPrintJobType", targetNamespace = NS) SetPrinterForPrintJobType parameters) {
+        SetPrinterForPrintJobResponseType responseType = new SetPrinterForPrintJobResponseType();
+        List<PrintJobType> printJobTypes = parameters.getPrintJob();
+        if (printJobTypes.isEmpty()) {
+            String errorText = "No print job type specified";
+            log.error(errorText);
+            responseType.setResult(getSoapFaultResult(errorText));
+            return responseType;
+        }
+        for (PrintJobType printJobType : printJobTypes) {
+            PrintJob printJob = printJobDao.findByName(printJobType.getName());
+            if (printJob == null) {
+                String errorText = "No print job found";
+                log.error(errorText);
+                responseType.setResult(getSoapFaultResult(errorText));
+                return responseType;
+            }
+
+            Printer printer = printerDao.findByName(printJobType.getPrinterName());
+            if (printer == null) {
+                String errorText = "No printer found";
+                log.error(errorText);
+                responseType.setResult(getSoapFaultResult(errorText));
+                return responseType;
+            }
+
+            printJob.setPrinter(printer);
+        }
+        ResultType resultType = new ResultType();
+        resultType.setSuccessful(true);
+        responseType.setResult(resultType);
+        return responseType;
+    }
+
+    @Override
+    public GetPrintJobsResponseType getPrintJobs(
+            @WebParam(partName = "parameters", name = "GetPrintJobsType", targetNamespace = NS) GetPrintJobsType parameters) {
+        GetPrintJobsResponseType responseType = new GetPrintJobsResponseType();
+        List<PrintJob> printJobList = printJobDao.listByNameAsc();
+
+        for (PrintJob printJob : printJobList) {
+            PrintJobType printJobType = new PrintJobType();
+            printJobType.setId(printJob.getId());
+            printJobType.setName(printJob.getName());
+            if (printJob.getPrinter() != null) {
+                printJobType.setPrinterId(printJob.getPrinter().getId());
+                printJobType.setPrinterName(printJob.getPrinter().getName());
+            }
+            responseType.getPrintJob().add(printJobType);
+        }
+
+        ResultType resultType = new ResultType();
+        resultType.setSuccessful(true);
+        responseType.setResult(resultType);
         return responseType;
     }
 }

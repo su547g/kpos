@@ -1,5 +1,6 @@
 package com.kpos.dao;
 
+import com.kpos.domain.PrintJob;
 import com.kpos.domain.Printer;
 import org.springframework.stereotype.Repository;
 

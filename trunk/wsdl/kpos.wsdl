@@ -180,6 +180,17 @@
             <xs:element name="DeleteTaxType" type="tns:DeleteTaxType"/>
             <xs:element name="DeleteTaxResponseType" type="tns:DeleteTaxResponseType"/>
 
+            <xs:element name="PrintReceiptType" type="tns:PrintReceiptType"/>
+            <xs:element name="PrintReceiptResponseType" type="tns:PrintReceiptResponseType"/>
+            <xs:element name="PrintItemToKitchenType" type="tns:PrintItemToKitchenType"/>
+            <xs:element name="PrintItemToKitchenResponseType" type="tns:PrintItemToKitchenResponseType"/>
+            <xs:element name="ListAvailablePrintersType" type="tns:ListAvailablePrintersType"/>
+            <xs:element name="ListAvailablePrintersResponseType" type="tns:ListAvailablePrintersResponseType"/>
+            <xs:element name="SetPrinterForPrintJobType" type="tns:SetPrinterForPrintJobType"/>
+            <xs:element name="SetPrinterForPrintJobResponseType" type="tns:SetPrinterForPrintJobResponseType"/>
+            <xs:element name="GetPrintJobsType" type="tns:GetPrintJobsType"/>
+            <xs:element name="GetPrintJobsResponseType" type="tns:GetPrintJobsResponseType"/>
+
             <!--Result object-->
             <xs:complexType name="ResultType">
                 <xs:sequence>
@@ -244,6 +255,16 @@
                     <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="name" type="xsd:string" minOccurs="1"/>
                     <xs:element name="ipAddr" type="xsd:string" minOccurs="1"/>
+                    <xs:element name="realName" type="xsd:string" minOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="PrintJobType">
+                <xs:sequence>
+                    <xs:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="name" type="xsd:string" minOccurs="1"/>
+                    <xs:element name="printerId" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="printerName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
                 </xs:sequence>
             </xs:complexType>
 
@@ -1295,6 +1316,57 @@
                     <xs:element name="Result" type="tns:ResultType"/>
                 </xs:sequence>
             </xs:complexType>
+            <xs:complexType name="PrintReceiptType">
+                <xs:sequence>
+                    <xs:element name="orderId" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="PrintReceiptResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="PrintItemToKitchenType">
+            <xs:sequence>
+                <xs:element name="orderId" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+            </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="PrintItemToKitchenResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListAvailablePrintersType">
+                <xs:sequence>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListAvailablePrintersResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="printers" type="tns:PrinterType" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="SetPrinterForPrintJobType">
+                <xs:sequence>
+                    <xs:element name="printJob" type="tns:PrintJobType" minOccurs="1" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="SetPrinterForPrintJobResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="GetPrintJobsType">
+                <xs:sequence>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="GetPrintJobsResponseType">
+                <xs:sequence>
+                    <xs:element name="Result" type="tns:ResultType"/>
+                    <xs:element name="printJob" type="tns:PrintJobType" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:complexType>
+
             <!--End of operations-->
         </xs:schema>
     </wsdl:types>
@@ -1751,6 +1823,36 @@
     <wsdl:message name="DeleteTaxResponseMessage">
         <wsdl:part name="parameters" element="tns:DeleteTaxResponseType"/>
     </wsdl:message>
+    <wsdl:message name="PrintReceiptMessage">
+        <wsdl:part name="parameters" element="tns:PrintReceiptType"/>
+    </wsdl:message>
+    <wsdl:message name="PrintReceiptResponseMessage">
+        <wsdl:part name="parameters" element="tns:PrintReceiptResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="PrintItemToKitchenMessage">
+        <wsdl:part name="parameters" element="tns:PrintItemToKitchenType"/>
+    </wsdl:message>
+    <wsdl:message name="PrintItemToKitchenResponseMessage">
+        <wsdl:part name="parameters" element="tns:PrintItemToKitchenResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="ListAvailablePrintersMessage">
+        <wsdl:part name="parameters" element="tns:ListAvailablePrintersType"/>
+    </wsdl:message>
+    <wsdl:message name="ListAvailablePrintersResponseMessage">
+        <wsdl:part name="parameters" element="tns:ListAvailablePrintersResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="SetPrinterForPrintJobMessage">
+        <wsdl:part name="parameters" element="tns:SetPrinterForPrintJobType"/>
+    </wsdl:message>
+    <wsdl:message name="SetPrinterForPrintJobResponseMessage">
+        <wsdl:part name="parameters" element="tns:SetPrinterForPrintJobResponseType"/>
+    </wsdl:message>
+    <wsdl:message name="GetPrintJobsMessage">
+        <wsdl:part name="parameters" element="tns:GetPrintJobsType"/>
+    </wsdl:message>
+    <wsdl:message name="GetPrintJobsResponseMessage">
+        <wsdl:part name="parameters" element="tns:GetPrintJobsResponseType"/>
+    </wsdl:message>
     <!--End of messages-->
 
     <wsdl:portType name="KPosPortType">
@@ -2067,6 +2169,26 @@
         <wsdl:operation name="DeleteTax">
             <wsdl:input message="tns:DeleteTaxMessage" name="DeleteTax"/>
             <wsdl:output message="tns:DeleteTaxResponseMessage" name="DeleteTaxResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="PrintReceipt">
+            <wsdl:input message="tns:PrintReceiptMessage" name="PrintReceipt"/>
+            <wsdl:output message="tns:PrintReceiptResponseMessage" name="PrintReceiptResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="PrintItemToKitchen">
+            <wsdl:input message="tns:PrintItemToKitchenMessage" name="PrintItemToKitchen"/>
+            <wsdl:output message="tns:PrintItemToKitchenResponseMessage" name="PrintItemToKitchenResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="ListAvailablePrinters">
+            <wsdl:input message="tns:ListAvailablePrintersMessage" name="ListAvailablePrinters"/>
+            <wsdl:output message="tns:ListAvailablePrintersResponseMessage" name="ListAvailablePrintersResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="SetPrinterForPrintJob">
+            <wsdl:input message="tns:SetPrinterForPrintJobMessage" name="SetPrinterForPrintJob"/>
+            <wsdl:output message="tns:SetPrinterForPrintJobResponseMessage" name="SetPrinterForPrintJobResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetPrintJobs">
+            <wsdl:input message="tns:GetPrintJobsMessage" name="GetPrintJobs"/>
+            <wsdl:output message="tns:GetPrintJobsResponseMessage" name="GetPrintJobsResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -2758,6 +2880,51 @@
                 <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="DeleteTaxResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="PrintReceipt">
+            <soap:operation soapAction="http://ws.kpos.com/PrintReceipt" style="document"/>
+            <wsdl:input name="PrintReceipt">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="PrintReceiptResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="PrintItemToKitchen">
+            <soap:operation soapAction="http://ws.kpos.com/PrintItemToKitchen" style="document"/>
+            <wsdl:input name="PrintItemToKitchen">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="PrintItemToKitchenResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="ListAvailablePrinters">
+            <soap:operation soapAction="http://ws.kpos.com/ListAvailablePrinters" style="document"/>
+            <wsdl:input name="ListAvailablePrinters">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="ListAvailablePrintersResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="SetPrinterForPrintJob">
+            <soap:operation soapAction="http://ws.kpos.com/SetPrinterForPrintJob" style="document"/>
+            <wsdl:input name="SetPrinterForPrintJob">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="SetPrinterForPrintJobResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetPrintJobs">
+            <soap:operation soapAction="http://ws.kpos.com/GetPrintJobs" style="document"/>
+            <wsdl:input name="GetPrintJobs">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="GetPrintJobsResponse">
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
