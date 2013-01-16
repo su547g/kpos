@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta id="viewport" name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="apple-touch-fullscreen" content="yes" />
+
+    <script type="text/javascript" src="xml2json.js"></script>
+    <script type="text/javascript" src="kpos.js"></script>
+    <script type="text/javascript" src="popup.js"></script>
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="jsDatePick.min.1.3.js"></script>
+    
+    <link rel="stylesheet" type="text/css" media="all" href="jsDatePick_ltr.min.css" />
+    <link rel="stylesheet" href="example.css" type="text/css" media="screen">
+    
+    <style type="text/css">
+        body{
+            font-size:14px;
+            background:#c4f0f1;
+            text-align:center;
+        }
+		.tabberlive .tabbertabhide {
+		 display:none;
+		}
+		
+		.tabber {
+		}
+		.tabberlive {
+		 margin-top:1em;
+		}
+		
+		ul.tabbernav
+		{
+		 margin:0;
+		 padding: 3px 0;
+		 border-bottom: 1px solid #778;
+		 font: bold 12px Verdana, sans-serif;
+		}
+		
+		ul.tabbernav li
+		{
+		 list-style: none;
+		 margin: 0;
+		 display: inline;
+		}
+		
+		ul.tabbernav li a
+		{
+		 padding: 3px 0.5em;
+		 margin-left: 3px;
+		 border: 1px solid #778;
+		 border-bottom: none;
+		 background: #DDE;
+		 text-decoration: none;
+		}
+		
+		ul.tabbernav li a:link { color: #448; }
+		ul.tabbernav li a:visited { color: #667; }
+		
+		ul.tabbernav li a:hover
+		{
+		 color: #000;
+		 background: #AAE;
+		 border-color: #227;
+		}
+		
+		ul.tabbernav li.tabberactive a
+		{
+		 background-color: #fff;
+		 border-bottom: 1px solid #fff;
+		}
+		
+		ul.tabbernav li.tabberactive a:hover
+		{
+		 color: #000;
+		 background: white;
+		 border-bottom: 1px solid white;
+		}
+		
+		.tabberlive .tabbertab {
+		 padding:5px;
+		 border:1px solid #aaa;
+		 border-top:0;
+		 height:220px;
+		 overflow:auto;
+		}
+		
+		.tabberlive .tabbertab h2 {
+		 display:none;
+		}
+		.tabberlive .tabbertab h3 {
+		 display:none;
+		}
+		
+		.tabberlive#tab1 {
+		}
+		.tabberlive#tab2 {
+		}
+		.tabberlive#tab2 .tabbertab {
+		 height:400px;
+		 overflow:auto;
+		}
+		
+        .tableone {width:250px; border-collapse:collapse; margin:0 auto;}
+        .tabletwo {width:220px; margin:2px; border:1px solid #B3B1B1; border-spacing: 1px; border-style:outset}
+
+        .th1 {width:149px;}
+        .th2 {width:99px;}
+        .th3 {width:99px;}
+        .th4 {width:99px;}
+        .th5 {width:200px;}
+
+        .td1 {width:149px;border:1px solid #B3B1B1;}
+        .td2 {width:99px;}
+        .td3 {width:99px;}
+        .td4 {width:99px;}
+        .td5 {width:170px;}
+
+        .tableone {background:#697210; border:1px solid #fff; color:#fff;}
+        .tableone td {border:1px solid #fff; color:#fff;}
+        .tableone tbody {background:#eee; color:#000;}
+        .tableone caption {background:#fff; color:#697210; font-size:1.2em; margin:0 auto;}
+        .tableone th, .tabletwo th {text-align:left;}
+
+        .tabletwo td {background:#eee; color:#000;}
+        .tabletwo tr.dk th {background:#ddd; color:#000;}
+        .tabletwo tr.dk td {background:#ddd; color:#000;}
+
+        .innerb {height:450px; overflow:auto;}
+    </style>
+    
+	<script language="javascript">
+		function setWebServiceAddress() {
+			var ip = document.getElementById('inputServerIP').value;
+			var port = document.getElementById('inputServerPort').value;
+			alert("setWebServiceAddress: " + ip + ":" + "port" +port);
+			setWebServiceIP(ip);
+			alert("pass1")
+			setWebServicePort(port);
+		}
+		
+	</script>
+</head>
+
+<body onload="javascript:listAllStaff();listAllRoles();listAllFunctionModulesHTML();">
+<table>
+	<tr><td><input type="button" class="navibutton" onclick="window.location.href='index.html';" value="<< Back"></td>
+</table>
+<table width="100%">
+    <tr>
+         <td valign="top" align="left">
+        	<form name="settingsForm">
+				<input id="inputServerIP" name="inputServerIP" value="Server IP" size="15" type="text" />
+				<input id="inputServerPort" name="inputServerPort" value="Server Port" size="15" type="text" />
+				<input type="button" name="btnSubmit" value="Submit" onclick="setWebServiceAddress()"/></td>
+            </form>
+        </td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+   tabberAutomatic(tabberOptions);
+   
+   g_globalObject = new JsDatePick({
+			useMode:1,
+			isStripped:true,
+			target:"div4_example",
+			cellColorScheme:"beige"
+		});
+
+	g_globalObject.setOnSelectedDelegate(function(){
+		var obj = g_globalObject.getSelectedDay();
+		document.getElementById("date_result").value = obj.day + "/" + obj.month + "/" + obj.year;
+	});
+</script>
+</body>
+</html>

@@ -698,6 +698,21 @@
 				window.location.href = "index.html";
 			}
 	   	}
+        function printReceipt() {
+            if(orderItems != null && orderItems.length > 0) {
+                var orderId = document.orderForm.orderId.value;
+                var printTicketReceipt = new PrintTicketReceipt(orderId);
+                call_web_service(printTicketReceipt, printReceiptHandler);
+            }
+        }
+        function printReceiptHandler(jsonObj) {
+            if (jsonObj != undefined && jsonObj != null && jsonObj.PrintReceiptResponseType != undefined && jsonObj.PrintReceiptResponseType != null &&
+                    jsonObj.PrintReceiptResponseType.result.successful == "true") {
+                alert("Print successful!")
+            } else {
+                alert("Failed to print receipt!");
+            }
+        }
 	   	
 	   	var selectedField;
 	   	function showPayment() {
@@ -947,6 +962,7 @@
                    			<input type="button" name="btnSave" value="Save Order" class="groovybutton" onclick="saveOrder();"/>
                    			<input type="button" name="btnDelete" value="Void Order" class="groovybutton" onclick="deleteOrder();"/>
                    			<input type="button" name="btnPay" value="Pay" class="groovybutton" onclick="showPayment();"/>
+                            <input type="button" name="btnPrintReceipt" value="Print Receipt" class="groovybutton" onclick="printReceipt();"/>
                    		</td>
                    </tr>
                </table>

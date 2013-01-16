@@ -12,6 +12,7 @@
 
     <script type="text/javascript" src="xml2json.js"></script>
     <script type="text/javascript" src="kpos.js"></script>
+	<script type="text/javascript" src="util.js"></script>
 
     <style type="text/css">
         body{
@@ -80,6 +81,11 @@
 			var jsonString = obj2str(printers);
 			localStorage.setItem('v_printers', jsonString);
 		}
+
+        function setAvailablePrinters(printers) {
+            var jsonString = obj2str(printers);
+            localStorage.setItem('v_available_printers', jsonString);
+        }
 		
         function highlightRow(row, highLight) {
             row.style.cursor = 'pointer';
@@ -118,10 +124,12 @@
                     }
                     if(curr_printer != null) {
                     	document.getElementById("printer_name").value = curr_printer.name;
-            			document.getElementById("printer_ip").value = curr_printer.ipaddr;
+            			//document.getElementById("printer_ip").value = curr_printer.ipaddr;
+						printerSelect = document.getElementById("printer_list");
+						setOptionsToSelected(printerSelect, curr_printer.realname);
             			operation = UPDATE;
             			document.getElementById("printer_name").readOnly = false;
-            			document.getElementById("printer_ip").readOnly = false;
+            			//document.getElementById("printer_ip").readOnly = false;
             		}
                 } else {
                     row.style.background = ''; //'#f0c992';
@@ -150,14 +158,27 @@
             var element1 = document.createTextNode(printerObj.name); //document.createElement("th");
             cell1.appendChild(element1);//row.appendChild(element1);
         	
-        	cell2 = row.insertCell(1);
+        	/*var cell2 = row.insertCell(1);
         	cell2.setAttribute('onclick', 'selectRow("'+tableID+'", "'+rowId+'");');
         	var element2 = document.createTextNode(printerObj.ipaddr);
-        	cell2.appendChild(element2);
-        	
-            var cell3 = row.insertCell(2);
+        	cell2.appendChild(element2);*/
+
+            var cell3 = row.insertCell(1);
+            cell3.setAttribute('onclick', 'selectRow("'+tableID+'", "'+rowId+'");');
+            var element3 = document.createTextNode(printerObj.realname);
+            cell3.appendChild(element3);
+
+            var cell4 = row.insertCell(2);
             var temp = "<a href='javascript:deleteRow(\"" + rowId +"\");'>X</a>";
-            cell3.innerHTML = temp;
+            cell4.innerHTML = temp;
+        }
+
+        function addPrinterOption(selectItemID, printerObj) {
+            var x = document.getElementById(selectItemID);
+            var optn = document.createElement("option");
+            optn.text = printerObj.realname;
+            optn.value = printerObj.id;
+            x.add(optn);
         }
     
     	var deletedRowId = "";
@@ -215,11 +236,11 @@
         
         function newPrinter() {
         	document.getElementById("printer_name").value = "A";
-            document.getElementById("printer_ip").value = "A";
+            //document.getElementById("printer_ip").value = "A";
             document.getElementById("printer_name").readOnly = false;
             document.getElementById("printer_name").disabled = false;
-            document.getElementById("printer_ip").readOnly = false;
-            document.getElementById("printer_ip").disabled = false;
+            //document.getElementById("printer_ip").readOnly = false;
+            //document.getElementById("printer_ip").disabled = false;
             operation = ADD;
             setCurrentPrinter(null);
         }
@@ -231,10 +252,29 @@
         		updatePrinter();
         	}
         }
+
+        function savePrinterForPrintJob() {
+            var list0 = document.getElementById("configured_printer_list0");
+            var selectedOption = getSelectedOptions(list0);
+            var printJob0 = document.getElementById("printJob0Id");
+            ws_set_printer_for_print_job(printJob0.value, selectedOption.value, savePrinterForPrintJobHandler);
+            var list1 = document.getElementById("configured_printer_list1");
+            var printJob1 = document.getElementById("printJob1Id");
+            selectedOption = getSelectedOptions(list1);
+            ws_set_printer_for_print_job(printJob1.value, selectedOption.value, savePrinterForPrintJobHandler);
+        }
     
         function loadPrinters() {
             ws_list_printers(listPrintersHandler);
+            ws_list_available_printers(listAvailablePrintersHandler);
+            loadPrinterOptionsIntoList("configured_printer_list0");
+            loadPrinterOptionsIntoList("configured_printer_list1");
         }
+
+        function savePrinterForPrintJobHandler(jsonObj) {
+            //Do nothing for now
+        }
+
         function listPrintersHandler(jsonObj) {
             if(jsonObj != undefined && jsonObj != null &&
                 jsonObj.listprintersresponsetype != undefined && jsonObj.listprintersresponsetype != null &&
@@ -256,10 +296,53 @@
             }
         }
 
+        function listAvailablePrintersHandler(jsonObj) {
+            if(jsonObj != undefined && jsonObj != null &&
+                jsonObj.listavailableprintersresponsetype != undefined && jsonObj.listavailableprintersresponsetype != null &&
+                jsonObj.listavailableprintersresponsetype.result.successful == "true") {
+                var printers = jsonObj.listavailableprintersresponsetype.printers;
+                setAvailablePrinters(printers);
+                if(printers != undefined && printers != null) {
+                    if(printers.length != undefined) {
+                        for(var i = 0; i < printers.length; i++) {
+                            addPrinterOption("printer_list", printers[i]);
+                        }
+                    } else {
+                        //Only one printer
+                        addPrinterOption("printer_list", printers);
+                    }
+                }
+            } else {
+                alert("failed to load all available printer!");
+            }
+        }
+
+        function loadPrinterOptionsIntoList(listID) {
+            var printers = getPrinters();
+            if (printers != undefined && printers != null) {
+                if (printers.length != undefined) {
+                    for (var i = 0; i < printers.length; i++) {
+                        addPrinterOption(listID, printers[i]);
+                    }
+                } else {
+                    //Only one printer
+                    addPrinterOption(listID, printers);
+                }
+            }
+        }
+
         function addPrinter() {
             var name = document.getElementById("printer_name").value;
-            var ip = document.getElementById("printer_ip").value;
-            var printerType = new AddPrinterType("", name, ip);
+            //var ip = document.getElementById("printer_ip").value;
+			var ip = null;
+			var printerSelect = document.getElementById("printer_list");
+			var selectedPrinter = getSelectedOptions(printerSelect);
+			if (selectedPrinter == null) {
+				alert("No printer selected to add!");
+				return;
+			}
+			var realName = selectedPrinter.text;
+            var printerType = new AddPrinterType("", name, ip, realName);
             ws_add_printer(printerType, addPrinterHandler);
         }
         function addPrinterHandler(jsonObj) {
@@ -268,29 +351,46 @@
                 jsonObj.createprinterresponsetype.result.successful == "true") {
                 var newID = jsonObj.id;
                 var name = document.getElementById("printer_name").value;
-                var ip = document.getElementById("printer_ip").value;
+                //var ip = document.getElementById("printer_ip").value;
                 var printer = {};
                 printer["id"] = newID;
                 printer["name"] = name;
-                printer["ipaddr"] = ip;
+                //printer["ipaddr"] = ip;
+				var printerSelect = document.getElementById("printer_list");
+				var selectedPrinter = getSelectedOptions(printerSelect);
+				if (selectedPrinter == null) {
+					alert("No printer selected to add!");
+					return;
+				}
+				printer["realname"] = selectedPrinter.text;
                 setCurrentPrinter(printer);
                 var v_printers = getPrinters();
                 v_printers.push(printer);
                 setPrinters(v_printers);
                 addPrinterRow("printers");
+                addPrinterOption("configured_printer_list0", printer);
+                addPrinterOption("configured_printer_list1", printer);
             } else {
+				operation = "";
                 alert("failed to add printer!");
             }
-            operation = "";
         }
         
         function updatePrinter() {
         	var name = document.getElementById("printer_name").value;
-            var ip = document.getElementById("printer_ip").value;
+            //var ip = document.getElementById("printer_ip").value;
             curr_printer.name = name;
-            curr_printer.ipaddr = ip;
+            //curr_printer.ipaddr = ip;
+			curr_printer.ipaddr = null;
+			var printerSelect = document.getElementById("printer_list");
+			var selectedPrinter = getSelectedOptions(printerSelect);
+			if (selectedPrinter == null) {
+				alert("No printer selected to add!");
+				return;
+			}
+			curr_printer.realname = selectedPrinter.text;			
             setCurrentPrinter(curr_printer);
-            var updatePrinterType = new UpdatePrinterType(curr_printer.id, curr_printer.name, curr_printer.ipaddr);
+            var updatePrinterType = new UpdatePrinterType(curr_printer.id, curr_printer.name, curr_printer.ipaddr, curr_printer.realname);
             ws_update_printer(updatePrinterType, updatePrinterHandler);
         }
         function updatePrinterHandler(jsonObj) {
@@ -300,7 +400,7 @@
                 var selectedRow = document.getElementById(v_selected_rowid);
                 if(selectedRow != null && selectedRow.cells != null) {
                 	selectedRow.cells[0].innerText = document.getElementById("printer_name").value;
-                	selectedRow.cells[1].innerText = document.getElementById("printer_ip").value;
+                	//selectedRow.cells[1].innerText = document.getElementById("printer_ip").value;
                 	var printers = getPrinters();
                 	for(var i = 0; i < printers.length; i++) {
                 		if(pritners[i].id == curr_printer.id) {
@@ -327,7 +427,8 @@
                     <thead>
                     <tr>
                         <th class="th1" scope="col">Name</th>
-                        <th class="th2" scope="col">IP Address</th>
+                        <!--th class="th2" scope="col">IP Address</th-->
+						<th class="th3" scope="col">Real Name</th>
                         <th class="th2" scope="col"></th>
                     </tr>
                     </thead>
@@ -368,16 +469,52 @@
                     <caption>Printer Details</caption>
                     <tbody>
                         <tr>
+                            <td>Real Name</td>
+                            <td>
+                                <select name="printer_list" id="printer_list">
+                                    <option>Please select one</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
                             <td>Name:</td>
                             <td><input type="text" name="printer_name" id="printer_name" readonly="readonly"/></td>
                         </tr>
-                        <tr>
+                        <!--tr>
                             <td>IP Address: </td>
                             <td><input type="text" id="printer_ip" name="printer_ip" readonly="readonly"/></td>
-                        </tr>
+                        </tr-->
                         <tr>
                             <td colspan="2"><a href="" onclick="javascript:savePrinterInfo();">Save</a></td>
                         </tr>
+                    </tbody>
+                </table>
+            </td>
+            <td>
+                <table id="printerMapping" border="1">
+                    <caption>Printer Configuration</caption>
+                    <tbody>
+                    <tr>
+                        <td>Global Receipt Printer</td>
+                        <td>
+                            <select name="printer_list" id="configured_printer_list0">
+                                <option>Please select one</option>
+                            </select>
+                            <input type="hidden" name="printJob1Id" id="printJob1Id" value="1" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Bar Receipt Printer</td>
+                        <td>
+                            <select name="printer_list" id="configured_printer_list1">
+                                <option>Please select one</option>
+                            </select>
+                            <input type="hidden" name="printJob2Id" id="printJob2Id" value="2" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><a href="" onclick="javascript:savePrinterForPrintJob();">Save</a></td>
+                    </tr>
                     </tbody>
                 </table>
             </td>

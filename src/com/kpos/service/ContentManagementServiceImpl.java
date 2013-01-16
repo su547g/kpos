@@ -507,6 +507,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             Printer printer = new Printer();
             printer.setIpAddress(soapType.getIpAddr());
             printer.setName(soapType.getName());
+            printer.setRealName(soapType.getRealName());
             printer.setCreatedOn(new Date());
             printer.setLastUpdated(new Date());
             Printer newPrinter = printerDao.insert(printer);
@@ -545,6 +546,7 @@ public class ContentManagementServiceImpl implements IContentManagementService {
             }
             printer.setIpAddress(soapType.getIpAddr());
             printer.setName(soapType.getName());
+            printer.setRealName(soapType.getRealName());
             printer.setLastUpdated(new Date());
         } else {
             result.setSuccessful(false);
