@@ -177,7 +177,8 @@
 	        v_selected_cat_rowid = selectedRowID;
 	        var rowCount = table.rows.length;
 	        operation = UPDATE;
-	        for(var i = 0; i < rowCount; i++) {
+			var i = 0;
+	        for(; i < rowCount; i++) {
 	            var row = table.rows[i];
 	            if(row.id == selectedRowID) {
 	                row.style.background = '#dcfac9';
@@ -200,13 +201,7 @@
 	        			document.getElementById("categoryName").readOnly = false;
 	        			document.getElementById("categoryNotes").readOnly = false;
 	        			document.getElementById("catThumb2").disabled = false;
-						var groupSelObj = document.getElementById("menuGroup");
-						for(var i=0,sL=groupSelObj.length;i<sL;i++) {
-						  if(groupSelObj.options[i].value == curr_category.groupid) {
-							groupSelObj.selectedIndex = i;
-							break;
-						  }
-						}
+						
 	        			//Set selected pritners
 	        			var printers = document.getElementsByName("catPrinters");
 	        			uncheckPrinters(printers);
@@ -221,9 +216,10 @@
 		        				checkPrinters(printers, printerIds);
 		        			}
 	        			}
-	        			
 	        			listSaleItemsForCat(curr_category.id);
 	        			listCatOptions(curr_category.id);
+						/*
+						}*/
 	        		}
 	        		document.getElementById("btnNewItem").disabled = false;
 	            } else {
@@ -233,6 +229,15 @@
 	            }
 	        }
 	    }
+		function setMenuGroup() {
+			var groupSelObj = document.getElementById("menuGroup");
+			for(var i=0,sL=groupSelObj.length;i<sL;i++) {
+			  if(groupSelObj.options[i].value == curr_category.groupid) {
+				groupSelObj.selectedIndex = i;
+				break;
+			  }
+			}
+		}
 	    function addCategoryRow(tableID, categoryObj, selectRowFunc, deleteRowFunc) {
 	        var table = document.getElementById(tableID);
 	
@@ -243,7 +248,7 @@
 	       	row.id = rowId;
 	        row.name = rowId;
 	       	
-	       	var innerHTML = "<td onclick='"+selectRowFunc+"(\""+tableID+"\", \""+rowId+"\");'>"+categoryObj.name+"</td><td><a href='javascript:"+deleteRowFunc+"(\""+tableID+"\",\""+rowId+"\","+categoryObj.id+");'><img src=\"img\\delete-icon-small.jpg\"/></a></td>";
+	       	var innerHTML = "<td onclick='"+selectRowFunc+"(\""+tableID+"\", \""+rowId+"\");setMenuGroup();'>"+categoryObj.name+"</td><td><a href='javascript:"+deleteRowFunc+"(\""+tableID+"\",\""+rowId+"\","+categoryObj.id+");'><img src=\"img\\delete-icon-small.jpg\"/></a></td>";
 	       	row.innerHTML = innerHTML;
 	       	row.onmouseover = function(){ highlightRow(this, true); };
 	        row.onmouseout = function(){ highlightRow(this, false); };
